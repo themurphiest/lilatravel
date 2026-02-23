@@ -16,13 +16,11 @@ const C = {
 
 // ─── Photos (your photography) ───────────────────────────────────────────────
 const P = {
-  // ⬇️ REPLACE THESE with your hosted image URLs (Imgur, GitHub, Cloudflare, etc.)
-  // The extracted .jpg files are provided alongside this file — upload them and paste URLs here.
-  starry:  "YOUR_URL/starry.jpg",
-  sunset:  "YOUR_URL/sunset.jpg",
-  forest1: "YOUR_URL/forest1.jpg",
-  forest2: "YOUR_URL/forest2.jpg",
-  rainbow: "YOUR_URL/rainbow.jpg",
+  starry:  "https://raw.githubusercontent.com/themurphiest/lilatravel/main/starry.jpg",
+  sunset:  "https://raw.githubusercontent.com/themurphiest/lilatravel/main/sunset.jpg",
+  forest1: "https://raw.githubusercontent.com/themurphiest/lilatravel/main/forest1.jpg",
+  forest2: "https://raw.githubusercontent.com/themurphiest/lilatravel/main/forest2.jpg",
+  rainbow: "https://raw.githubusercontent.com/themurphiest/lilatravel/main/rainbow.jpg",
 };
 
 // ─── Placeholder photo (styled divs for destinations without photos yet) ────
