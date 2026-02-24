@@ -1,0 +1,68 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   GLOBAL STYLES — Lila Trips
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; font-family: 'Quicksand', sans-serif; }
+::selection { background: rgba(123, 184, 212, 0.25); }
+
+/* ─── Reusable utility classes ──────────────────────────────────────────────── */
+.eyebrow {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  display: block; margin-bottom: 16px;
+}
+
+.underline-link {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: #1a2530; text-decoration: none;
+  padding-bottom: 3px; border-bottom: 1px solid #1a2530;
+  display: inline-block; transition: opacity 0.2s;
+}
+.underline-link:hover { opacity: 0.55; }
+
+.underline-link-light {
+  color: white; border-bottom-color: rgba(255,255,255,0.5);
+}
+.underline-link-light:hover { opacity: 0.65; }
+
+.journey-card {
+  padding: 36px 28px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.3s;
+}
+.journey-card:hover { background: rgba(255,255,255,0.05); }
+
+/* ─── Responsive breakpoints ──────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .carousel-grid { grid-template-columns: 1fr !important; }
+  .story-grid { grid-template-columns: 1fr !important; gap: 0px !important; }
+  .journey-grid { grid-template-columns: 1fr 1fr !important; }
+  .rituals-grid { grid-template-columns: 1fr !important; }
+  .dest-landing-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+@media (max-width: 600px) {
+  .journey-grid { grid-template-columns: 1fr !important; }
+  .nav-links { display: none !important; }
+  nav { padding: 18px 24px !important; }
+  .hero-mountains { height: 45% !important; }
+  .hero-content { padding-bottom: 15vh !important; }
+  .dest-section { padding: 64px 0 !important; }
+  .dest-card-content { padding: 40px 28px !important; }
+  .rituals-grid > * { min-width: 260px !important; }
+  .story-panel { padding: 64px 28px !important; }
+  .story-panel-dark { padding: 64px 28px !important; }
+  .section-padded { padding-left: 24px !important; padding-right: 24px !important; }
+  .cta-inner { padding: 48px 32px !important; }
+  .offerings-section { padding: 64px 0 !important; }
+  .dest-pills { display: none !important; }
+  .carousel-grid { min-height: auto !important; }
+  .dest-landing-grid { grid-template-columns: 1fr !important; }
+  .page-hero { min-height: 50vh !important; }
+  .page-content { padding: 48px 24px !important; }
+}
