@@ -321,8 +321,8 @@ export default function HomePage() {
             margin-bottom: 20px;
           }
           .hero-subtitle {
-            font-size: 15px;
-            white-space: normal;
+            font-size: 13px;
+            white-space: nowrap;
             padding: 0 24px;
           }
         }
