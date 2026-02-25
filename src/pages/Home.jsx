@@ -317,33 +317,6 @@ export default function HomePage() {
           </FadeIn>
           <FadeIn from="bottom" delay={0.25}>
             <div style={{ position: "relative", height: "clamp(60px, 12vw, 120px)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 28 }}>
-              {heroCallouts.map((c, i) => {
-                const opacity = (() => {
-                  let dist = Math.abs(dayProgress - c.center);
-                  if (dist > 0.5) dist = 1 - dist;
-                  if (dist < 0.06) return 1;
-                  if (dist > 0.14) return 0;
-                  return Math.pow(1 - (dist - 0.06) / 0.08, 2);
-                })();
-                if (opacity <= 0) return null;
-                return (
-                  <h1 key={i} style={{
-                    position: "absolute", fontFamily: "'Quicksand', sans-serif",
-                    fontSize: "clamp(24px, 4.5vw, 44px)", fontWeight: 300, color: "white",
-                    lineHeight: 1.15, letterSpacing: "0.01em", opacity,
-                    textAlign: "center", margin: 0, whiteSpace: "nowrap",
-                  }}>
-                    {c.line1}<br />{c.line2}
-                  </h1>
-                );
-              })}
-            </div>
-          </FadeIn>
-          <FadeIn from="bottom" delay={0.45}>
-            <div style={{
-              position: "relative", height: 48,
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
               {magicMoments.map((m, i) => {
                 const opacity = (() => {
                   let dist = Math.abs(dayProgress - m.center);
@@ -354,20 +327,27 @@ export default function HomePage() {
                 })();
                 if (opacity <= 0) return null;
                 return (
-                  <p key={i} style={{
-                    position: "absolute",
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: "clamp(16px, 2.5vw, 22px)",
-                    fontWeight: 300, fontStyle: "italic",
-                    color: "rgba(255,255,255,0.7)",
-                    letterSpacing: "0.02em", opacity,
-                    whiteSpace: "nowrap", margin: 0,
+                  <h1 key={i} style={{
+                    position: "absolute", fontFamily: "'Quicksand', sans-serif",
+                    fontSize: "clamp(20px, 3.5vw, 36px)", fontWeight: 300,
+                    color: "rgba(255,255,255,0.85)",
+                    lineHeight: 1.25, letterSpacing: "0.01em", opacity,
+                    textAlign: "center", margin: 0, whiteSpace: "nowrap",
                   }}>
                     {m.text}
-                  </p>
+                  </h1>
                 );
               })}
             </div>
+          </FadeIn>
+          <FadeIn from="bottom" delay={0.45}>
+            <p style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: "clamp(16px, 2.5vw, 22px)", fontWeight: 300,
+              color: "rgba(255,255,255,0.7)", letterSpacing: "0.02em", whiteSpace: "nowrap",
+            }}>
+              Finding moments of <em style={{ color: C.skyBlue, fontStyle: "italic" }}>magic</em> that light up our souls.
+            </p>
           </FadeIn>
         </div>
       </section>
@@ -383,16 +363,16 @@ export default function HomePage() {
                 fontSize: "clamp(15px, 2vw, 22px)", fontWeight: 600, color: C.darkInk,
                 lineHeight: 1.6, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 48,
               }}>
-                Travel is about finding<br />moments of magic that<br />light up our souls.
+                Travel is about finding<br />the moments of magic that<br />light up our souls.
               </h2>
               <div style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(14px, 1.6vw, 16px)", fontWeight: 400,
                 color: "#5a6a78", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
-                <p style={{ marginBottom: 28 }}>Not weighed down by what brought us here. Not distracted by forces born of the modern world. Not stuck in a distant imagined future.</p>
-                <p style={{ marginBottom: 28 }}>We just are. Right here, right now. Connected to the whole universe through this moment. And man is it glorious… and free… and light.</p>
-                <p style={{ marginBottom: 40 }}>It reminds us of a truth we know deep down, but often forget — that life is not about conquering the mystery. It's about learning to dance with it.</p>
+                <p style={{ marginBottom: 28 }}>We're not weighed down by the past or anxious about a distant future.</p>
+                <p style={{ marginBottom: 28 }}>We just are. Right here. Right now.<br />We are connected to the whole universe through this moment.<br />And it is glorious…and light…and musical.</p>
+                <p style={{ marginBottom: 40 }}>Reminds us of a truth we know deep down, but easily forget — that life is not about conquering the mystery, it's about learning to dance with it.</p>
               </div>
               <Link to="/destinations" className="underline-link">Explore Destinations</Link>
             </FadeIn>
@@ -408,7 +388,7 @@ export default function HomePage() {
                 fontSize: "clamp(15px, 2vw, 22px)", fontWeight: 600, color: "white",
                 lineHeight: 1.6, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 48,
               }}>
-                We help you find the<br />moments that remind you<br />you're alive.
+                We help you plan the<br />trips that remind you<br />you're alive.
               </h2>
               <div style={{
                 fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(14px, 1.6vw, 16px)",
@@ -420,12 +400,15 @@ export default function HomePage() {
                   {" "}<span style={{ color: "rgba(255,255,255,0.35)", fontSize: "clamp(12px, 1.4vw, 14px)" }}>/lee·lah/</span>
                 </p>
                 <p style={{ marginBottom: 32, color: "rgba(255,255,255,0.7)" }}>
-                  Sanskrit for <span style={{ color: "rgba(212,168,83,0.9)" }}>"divine play"</span> — the universe as a light, joyous expression that arises the way music arises and inspires dance.
+                  is a Hindu concept meaning <span style={{ color: "rgba(212,168,83,0.9)" }}>"divine or cosmic play"</span> — suggesting the universe is like a dance — joyous and light.
+                </p>
+                <p style={{ marginBottom: 32, color: "rgba(255,255,255,0.7)" }}>
+                  Traveling light isn't about more options. It's about right ones. That's where we come in. Less like a tour guide and more like a short list from a local friend.
                 </p>
                 {[
-                  "Set deep in iconic outdoor destinations that inspire celestial wonder.",
-                  "Inspired itineraries designed to stoke the fire within.",
-                  "Steeped with ancient wellness practices for maximum expansion.",
+                  "Set deep in iconic destinations that inspire celestial wonder.",
+                  "Custom itineraries designed to spark the fire within.",
+                  "Infused with sacred wellness practices for maximum expansion.",
                 ].map((callout, i) => (
                   <p key={i} style={{
                     marginBottom: i < 2 ? 20 : 40, paddingLeft: 16,
