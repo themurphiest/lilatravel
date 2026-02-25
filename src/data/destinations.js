@@ -15,17 +15,6 @@ import { P } from './photos';
 
 export const destinations = [
   {
-    slug: "joshua-tree",
-    name: "Joshua Tree",
-    location: "California",
-    threshold: "Spring · Mar–May",
-    description: "After winter rains, the desert blooms. Ocotillo in scarlet. Clarity so sharp it rearranges something inside you.",
-    photo: P.joshuaTree,
-    gradient: "linear-gradient(165deg, #c17f43, #8b4513, #d4855a)",
-    accent: C.goldenAmber,
-    guideAvailable: false,
-  },
-  {
     slug: "zion-canyon",
     name: "Zion Canyon",
     location: "Utah",
@@ -35,6 +24,17 @@ export const destinations = [
     gradient: "linear-gradient(165deg, #a0522d, #6b3520, #c0714a)",
     accent: C.sunSalmon,
     guideAvailable: true,
+  },
+  {
+    slug: "joshua-tree",
+    name: "Joshua Tree",
+    location: "California",
+    threshold: "Spring · Mar–May",
+    description: "After winter rains, the desert blooms. Ocotillo in scarlet. Clarity so sharp it rearranges something inside you.",
+    photo: P.joshuaTree,
+    gradient: "linear-gradient(165deg, #c17f43, #8b4513, #d4855a)",
+    accent: C.goldenAmber,
+    guideAvailable: false,
   },
   {
     slug: "olympic-peninsula",
