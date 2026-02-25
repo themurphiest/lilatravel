@@ -401,18 +401,24 @@ export default function HomePage() {
                 fontSize: "clamp(15px, 2vw, 22px)", fontWeight: 600, color: C.darkInk,
                 lineHeight: 1.6, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 48,
               }}>
-                Travel is about finding<br />the moments of magic that<br />light up our souls.
+                Travel is about finding<br />moments of magic that<br />light up our souls.
               </h2>
               <div style={{
                 fontFamily: "'Quicksand', sans-serif",
-                fontSize: "clamp(14px, 1.6vw, 16px)", fontWeight: 400,
+                fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 400,
                 color: "#5a6a78", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
-                <p style={{ marginBottom: 28 }}>We're not weighed down by the past or anxious about a distant future.</p>
-                <p style={{ marginBottom: 28 }}>We just are. Right here. Right now.<br />We are connected to the whole universe through this moment.<br />And it is glorious…and light…and musical.</p>
-                <p style={{ marginBottom: 40 }}>Reminds us of a truth we know deep down, but easily forget — that life is not about conquering the mystery, it's about learning to dance with it.</p>
+                <p style={{ marginBottom: 28 }}>When we find ourselves there, we just are.<br />Not weighed down by the past or an imagined future.<br />Connected through it to the entire universe.<br />Oh boy is it glorious and light and musical.</p>
+                <p style={{ marginBottom: 32 }}>We're reminded of a truth we know, but often forget.<br />That life is not about conquering the mystery.<br />It's about learning to dance with it.</p>
+                <p style={{ marginBottom: 6 }}>
+                  <span style={{ fontStyle: "italic", color: C.skyBlue }}>Līlā</span>
+                  {" "}<span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 300, fontStyle: "italic", color: "rgba(90,106,120,0.55)" }}>लीला</span>
+                  {" "}<span style={{ color: "rgba(90,106,120,0.5)", fontSize: "clamp(12px, 1.4vw, 14px)" }}>/lee·lah/</span>
+                </p>
+                <p style={{ marginBottom: 0, color: "#5a6a78" }}>
+                  A Hindu concept meaning <span style={{ color: C.skyBlue }}>"divine or cosmic play"</span>.<br />It suggests life is like a dance — joyous and light.
+                </p>
               </div>
-              <Link to="/destinations" className="underline-link">Explore Destinations</Link>
             </FadeIn>
           </div>
           <div className="story-panel-dark" style={{
@@ -426,44 +432,31 @@ export default function HomePage() {
                 fontSize: "clamp(15px, 2vw, 22px)", fontWeight: 600, color: "white",
                 lineHeight: 1.6, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 48,
               }}>
-                We help you plan the<br />trips that remind you<br />you're alive.
+                We help you take amazing<br />trips and dance with<br />the mystery.
               </h2>
               <div style={{
-                fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(14px, 1.6vw, 16px)",
+                fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 1.4vw, 15px)",
                 fontWeight: 400, color: "rgba(255,255,255,0.55)", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
-                <p style={{ marginBottom: 6 }}>
-                  <span style={{ fontStyle: "italic", color: "rgba(212,168,83,0.9)" }}>Līlā</span>
-                  {" "}<span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 300, fontStyle: "italic", color: "rgba(212,168,83,0.55)" }}>लीला</span>
-                  {" "}<span style={{ color: "rgba(255,255,255,0.35)", fontSize: "clamp(12px, 1.4vw, 14px)" }}>/lee·lah/</span>
-                </p>
                 <p style={{ marginBottom: 32, color: "rgba(255,255,255,0.7)" }}>
-                  is a Hindu concept meaning <span style={{ color: "rgba(212,168,83,0.9)" }}>"divine or cosmic play"</span> — suggesting the universe is like a dance — joyous and light.
+                  We put you and the right pieces together. You don't need more options, you need the right ones.<br />We're not really travel agents. More like a local friend handing you a shortlist.
                 </p>
-                <p style={{ marginBottom: 32, color: "rgba(255,255,255,0.7)" }}>
-                  Traveling light isn't about more options. It's about right ones. That's where we come in. Less like a tour guide and more like a short list from a local friend.
+                <p style={{ marginBottom: 24, color: "rgba(255,255,255,0.45)", fontStyle: "italic", fontSize: "clamp(13px, 1.4vw, 15px)" }}>
+                  Our recipe for dance includes...
                 </p>
                 {[
-                  "Set deep in iconic destinations that inspire celestial wonder.",
-                  "Custom itineraries designed to spark the fire within.",
-                  "Infused with sacred wellness practices for maximum expansion.",
+                  "Sacred destinations with capacity for wonder.",
+                  "Unique stays that set the tone and let you rest.",
+                  "Wellness practices that invite expansion.",
+                  "Sensory-rich activities that stoke the fire.",
                 ].map((callout, i) => (
                   <p key={i} style={{
-                    marginBottom: i < 2 ? 20 : 40, paddingLeft: 16,
+                    marginBottom: i < 3 ? 20 : 0, paddingLeft: 16,
                     borderLeft: `2px solid ${C.skyBlue}`,
                     color: "rgba(255,255,255,0.7)", fontStyle: "italic",
                   }}>{callout}</p>
                 ))}
               </div>
-              <Link to="/destinations" style={{
-                fontFamily: "'Quicksand'", fontSize: 11, fontWeight: 700,
-                letterSpacing: "0.2em", textTransform: "uppercase",
-                color: "white", paddingBottom: 3, borderBottom: "1px solid rgba(255,255,255,0.5)",
-                display: "inline-block", transition: "opacity 0.2s", textDecoration: "none",
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.65"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-              >Plan a Trip</Link>
             </FadeIn>
           </div>
         </div>
