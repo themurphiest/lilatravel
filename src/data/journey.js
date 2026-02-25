@@ -33,10 +33,10 @@ export const journey = [
 ];
 
 export const magicMoments = [
-  { text: "Riding into the last light as the canyon catches fire.", color: C.goldenAmber },
-  { text: "Hiking mossy mountain trails alongside ancient spruce giants.", color: C.seaGlass },
-  { text: "Lying on warm rock gazing up at the universe and ten-thousand stars.", color: C.skyBlue },
-  { text: "Gentle waves crashing during fiery vinyasa flows.", color: C.sunSalmon },
+  { text: "Staring up at the universe and ten-thousand stars.", color: C.skyBlue, center: 0.0 },          // Night
+  { text: "Cool waves crashing during fiery vinyasa flows.", color: C.sunSalmon, center: 0.25 },          // Sunrise
+  { text: "Riding into the last light as the canyon catches fire.", color: C.goldenAmber, center: 0.75 },  // Sunset
+  { text: "Walking on misty mountain trails alongside ancient giants.", color: C.seaGlass, center: 0.5 }, // Midday
 ];
 
 export const heroCallouts = [

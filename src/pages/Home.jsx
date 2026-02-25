@@ -9,7 +9,7 @@ import { C } from '@data/brand';
 import { P } from '@data/photos';
 import { destinations } from '@data/destinations';
 import { ritualsPillars } from '@data/rituals';
-import { journey, heroCallouts } from '@data/journey';
+import { journey, heroCallouts, magicMoments } from '@data/journey';
 import { useDayCycle, interpolatePhase, useHorizontalSwipe } from '@utils/hooks';
 
 
@@ -340,13 +340,34 @@ export default function HomePage() {
             </div>
           </FadeIn>
           <FadeIn from="bottom" delay={0.45}>
-            <p style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: "clamp(16px, 2.5vw, 22px)", fontWeight: 300,
-              color: "rgba(255,255,255,0.7)", letterSpacing: "0.02em", whiteSpace: "nowrap",
+            <div style={{
+              position: "relative", height: 48,
+              display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              Finding moments of <em style={{ color: C.skyBlue, fontStyle: "italic" }}>magic</em> that light up our souls.
-            </p>
+              {magicMoments.map((m, i) => {
+                const opacity = (() => {
+                  let dist = Math.abs(dayProgress - m.center);
+                  if (dist > 0.5) dist = 1 - dist;
+                  if (dist < 0.06) return 1;
+                  if (dist > 0.14) return 0;
+                  return Math.pow(1 - (dist - 0.06) / 0.08, 2);
+                })();
+                if (opacity <= 0) return null;
+                return (
+                  <p key={i} style={{
+                    position: "absolute",
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: "clamp(16px, 2.5vw, 22px)",
+                    fontWeight: 300, fontStyle: "italic",
+                    color: "rgba(255,255,255,0.7)",
+                    letterSpacing: "0.02em", opacity,
+                    whiteSpace: "nowrap", margin: 0,
+                  }}>
+                    {m.text}
+                  </p>
+                );
+              })}
+            </div>
           </FadeIn>
         </div>
       </section>
