@@ -279,6 +279,54 @@ export default function HomePage() {
       <Nav transparent />
 
       {/* ══ 1. HERO — Animated Day Cycle ═════════════════════════════════ */}
+      <style>{`
+        .hero-moment {
+          position: absolute;
+          font-family: 'Quicksand', sans-serif;
+          font-weight: 300;
+          color: rgba(255,255,255,0.85);
+          letter-spacing: 0.01em;
+          text-align: center;
+          margin: 0;
+          white-space: nowrap;
+          font-size: 36px;
+          line-height: 1.2;
+        }
+        .hero-moment-wrap {
+          position: relative;
+          height: 100px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 28px;
+        }
+        .hero-subtitle {
+          font-family: 'Quicksand', sans-serif;
+          font-weight: 300;
+          color: rgba(255,255,255,0.7);
+          letter-spacing: 0.02em;
+          text-align: center;
+          font-size: 20px;
+          white-space: nowrap;
+        }
+        @media (max-width: 768px) {
+          .hero-moment {
+            font-size: 20px;
+            white-space: normal;
+            width: 85vw;
+            line-height: 1.35;
+          }
+          .hero-moment-wrap {
+            height: 70px;
+            margin-bottom: 20px;
+          }
+          .hero-subtitle {
+            font-size: 15px;
+            white-space: normal;
+            padding: 0 24px;
+          }
+        }
+      `}</style>
       <section style={{ position: "relative", height: "100vh", minHeight: 640, overflow: "hidden" }}>
         <div style={{
           position: "absolute", inset: 0,
@@ -316,7 +364,7 @@ export default function HomePage() {
             <span className="eyebrow" style={{ color: C.skyBlue }}>Wellness Travel for Adventure Seekers</span>
           </FadeIn>
           <FadeIn from="bottom" delay={0.25}>
-            <div style={{ position: "relative", height: "clamp(60px, 12vw, 120px)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 28 }}>
+            <div className="hero-moment-wrap">
               {magicMoments.map((m, i) => {
                 const opacity = (() => {
                   let dist = Math.abs(dayProgress - m.center);
@@ -327,13 +375,7 @@ export default function HomePage() {
                 })();
                 if (opacity <= 0) return null;
                 return (
-                  <h1 key={i} style={{
-                    position: "absolute", fontFamily: "'Quicksand', sans-serif",
-                    fontSize: "clamp(20px, 3.5vw, 36px)", fontWeight: 300,
-                    color: "rgba(255,255,255,0.85)",
-                    lineHeight: 1.25, letterSpacing: "0.01em", opacity,
-                    textAlign: "center", margin: 0, whiteSpace: "nowrap",
-                  }}>
+                  <h1 key={i} className="hero-moment" style={{ opacity }}>
                     {m.text}
                   </h1>
                 );
@@ -341,12 +383,8 @@ export default function HomePage() {
             </div>
           </FadeIn>
           <FadeIn from="bottom" delay={0.45}>
-            <p style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: "clamp(16px, 2.5vw, 22px)", fontWeight: 300,
-              color: "rgba(255,255,255,0.7)", letterSpacing: "0.02em", whiteSpace: "nowrap",
-            }}>
-              Finding moments of <em style={{ color: C.skyBlue, fontStyle: "italic" }}>magic</em> that light up our souls.
+            <p className="hero-subtitle">
+              Finding moments of <em style={{ color: C.skyBlue, fontStyle: "italic" }}>magic</em> that light up your soul.
             </p>
           </FadeIn>
         </div>
