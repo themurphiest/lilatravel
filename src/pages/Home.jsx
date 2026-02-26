@@ -383,9 +383,26 @@ export default function HomePage() {
             </div>
           </FadeIn>
           <FadeIn from="bottom" delay={0.45}>
-            <p className="hero-subtitle">
-              Finding moments of <em style={{ color: C.skyBlue, fontStyle: "italic" }}>magic</em> that light up your soul.
-            </p>
+            <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap" }}>
+              <Link to="/offerings" style={{
+                fontFamily: "'Quicksand'", fontSize: 11, fontWeight: 700,
+                letterSpacing: "0.2em", textTransform: "uppercase",
+                color: "white", paddingBottom: 3, borderBottom: "1px solid rgba(255,255,255,0.5)",
+                display: "inline-block", transition: "opacity 0.2s", textDecoration: "none",
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.65"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+              >Plan a Trip</Link>
+              <Link to="/destinations" style={{
+                fontFamily: "'Quicksand'", fontSize: 11, fontWeight: 700,
+                letterSpacing: "0.2em", textTransform: "uppercase",
+                color: "white", paddingBottom: 3, borderBottom: "1px solid rgba(255,255,255,0.5)",
+                display: "inline-block", transition: "opacity 0.2s", textDecoration: "none",
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.65"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+              >Explore Destinations</Link>
+            </div>
           </FadeIn>
         </div>
       </section>
@@ -401,14 +418,14 @@ export default function HomePage() {
                 fontSize: "clamp(15px, 2vw, 22px)", fontWeight: 600, color: C.darkInk,
                 lineHeight: 1.6, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 48,
               }}>
-                Travel is about finding<br />moments of magic that<br />light up our souls.
+                Travel is about finding<br />the moments of magic that<br />light up our souls.
               </h2>
               <div style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 400,
                 color: "#5a6a78", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
-                <p style={{ marginBottom: 28 }}>When we find ourselves there, we just are.<br />Not weighed down by the past or an imagined future.<br />Connected through it to the entire universe.<br />Oh boy is it glorious and light and musical.</p>
+                <p style={{ marginBottom: 28 }}>Moments when we find our truest and lightest selves.<br />Not weighed down by the past or an imagined future.<br />Connected to the whole universe through now.</p>
                 <p style={{ marginBottom: 32 }}>We're reminded of a truth we know, but often forget.<br />That life is not about conquering the mystery.<br />It's about learning to dance with it.</p>
                 <p style={{ marginBottom: 6 }}>
                   <span style={{ fontStyle: "italic", color: C.skyBlue }}>Līlā</span>
@@ -438,38 +455,147 @@ export default function HomePage() {
                 fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 1.4vw, 15px)",
                 fontWeight: 400, color: "rgba(255,255,255,0.55)", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
-                <p style={{ marginBottom: 32, color: "rgba(255,255,255,0.7)" }}>
-                  We put you and the right pieces together.<br />You don't need more options.<br />You need the right ones.
-                </p>
-                <p style={{ marginBottom: 32, color: "rgba(255,255,255,0.7)" }}>
-                  We're not really travel agents.<br />More like a local friend with a shortlist.<br />We eliminate everything not worth your time.
-                </p>
-                <p style={{ marginBottom: 24, color: "rgba(255,255,255,0.45)", fontStyle: "italic", fontSize: "clamp(13px, 1.4vw, 15px)" }}>
-                  We help you find…
-                </p>
                 {[
                   "Sacred destinations with capacity for wonder.",
-                  "Unique stays that set the tone and let you rest.",
-                  "Wellness practices that invite expansion.",
                   "Sensory-rich activities that stoke the fire.",
+                  "Wellness practices that invite expansion.",
                 ].map((callout, i) => (
                   <p key={i} style={{
-                    marginBottom: i < 3 ? 20 : 0, paddingLeft: 16,
+                    marginBottom: i < 2 ? 20 : 0, paddingLeft: 16,
                     borderLeft: `2px solid ${C.skyBlue}`,
                     color: "rgba(255,255,255,0.7)", fontStyle: "italic",
                   }}>{callout}</p>
                 ))}
+                <p style={{ marginTop: 36, marginBottom: 0, color: "rgba(255,255,255,0.7)" }}>
+                  Our tools and experts help you put it together.<br />Custom itineraries that match your intention.<br />We get rid of everything not worth your time.
+                </p>
+                <p style={{ marginTop: 28, marginBottom: 0, color: "rgba(255,255,255,0.7)" }}>
+                  Not really travel agents.<br />More like a local friend giving you the shortlist.<br />You can just focus on dancing with the mystery.
+                </p>
               </div>
             </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* ══ 3. DESTINATIONS CAROUSEL ═════════════════════════════════════ */}
-      <section className="dest-section" style={{ padding: "100px 0", background: C.cream }}>
-        <div className="section-padded" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 52px" }}>
-          <FadeIn><span className="eyebrow" style={{ color: "#9aabba", marginBottom: 48, display: "block" }}>Destinations</span></FadeIn>
-          <FadeIn delay={0.1}><DestCarousel /></FadeIn>
+      {/* ══ 3. DESTINATIONS — BENTO MOSAIC ═══════════════════════════════ */}
+      <style>{`
+        .bento-tile {
+          position: relative;
+          overflow: hidden;
+          display: block;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        .bento-tile img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s ease;
+        }
+        .bento-tile:hover img {
+          transform: scale(1.05);
+        }
+        .bento-tile .bento-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(10,18,26,0.75) 0%, rgba(10,18,26,0.1) 50%, transparent 100%);
+          transition: background 0.4s ease;
+        }
+        .bento-tile:hover .bento-overlay {
+          background: linear-gradient(to top, rgba(10,18,26,0.85) 0%, rgba(10,18,26,0.2) 60%, transparent 100%);
+        }
+        .bento-tile .bento-desc {
+          max-height: 0;
+          opacity: 0;
+          overflow: hidden;
+          transition: max-height 0.4s ease, opacity 0.3s ease;
+        }
+        .bento-tile:hover .bento-desc {
+          max-height: 80px;
+          opacity: 1;
+        }
+        .bento-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 400px 280px 280px;
+          gap: 4px;
+        }
+        @media (max-width: 860px) {
+          .bento-grid {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 280px 220px 220px;
+            gap: 3px;
+          }
+        }
+        @media (max-width: 540px) {
+          .bento-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(6, 240px);
+            gap: 3px;
+          }
+        }
+      `}</style>
+      <section style={{ padding: "0", background: C.cream }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <FadeIn>
+            <div className="bento-grid">
+              {[...destinations].sort((a, b) => {
+                const aHero = a.name === "Zion" || a.name === "Joshua Tree" ? 0 : 1;
+                const bHero = b.name === "Zion" || b.name === "Joshua Tree" ? 0 : 1;
+                return aHero - bHero;
+              }).map((d, i) => {
+                const isHero = i < 2; // first two after sort are the hero tiles
+                return (
+                  <Link
+                    key={d.slug}
+                    to={`/destinations/${d.slug}`}
+                    className="bento-tile"
+                    style={{
+                      gridColumn: isHero ? "span 1" : "span 1",
+                      gridRow: isHero ? "span 1" : "span 1",
+                    }}
+                  >
+                    {d.photo ? (
+                      <img src={d.photo} alt={d.name} />
+                    ) : (
+                      <div style={{ width: "100%", height: "100%", background: d.gradient }} />
+                    )}
+                    <div className="bento-overlay" />
+                    <div style={{
+                      position: "absolute", bottom: 0, left: 0, right: 0,
+                      padding: isHero ? "36px 32px" : "24px 24px",
+                    }}>
+                      <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                        <div style={{ width: 16, height: 1, background: d.accent }} />
+                        <span style={{
+                          fontFamily: "'Quicksand'", fontSize: 9, fontWeight: 700,
+                          letterSpacing: "0.22em", textTransform: "uppercase", color: d.accent,
+                        }}>{d.threshold}</span>
+                      </div>
+                      <h3 style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: isHero ? "clamp(28px, 4vw, 42px)" : "clamp(22px, 3vw, 30px)",
+                        fontWeight: 300, color: "white", lineHeight: 1.1, marginBottom: 4,
+                      }}>{d.name}</h3>
+                      <p style={{
+                        fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 600,
+                        letterSpacing: "0.18em", textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.5)", marginBottom: 8,
+                      }}>{d.location}</p>
+                      <div className="bento-desc">
+                        <p style={{
+                          fontFamily: "'Cormorant Garamond', serif",
+                          fontSize: isHero ? 16 : 14, fontWeight: 300, fontStyle: "italic",
+                          color: "rgba(255,255,255,0.7)", lineHeight: 1.6,
+                        }}>{d.description}</p>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </FadeIn>
         </div>
       </section>
 
@@ -544,7 +670,7 @@ export default function HomePage() {
               }}>We'll show you the way.</p>
               <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap" }}>
                 <Link to="/destinations" className="underline-link underline-link-light">Explore Destinations</Link>
-                <Link to="/plan" className="underline-link underline-link-light">Plan a Custom Trip</Link>
+                <Link to="/offerings" className="underline-link underline-link-light">Plan a Custom Trip</Link>
                 <Link to="/contact" className="underline-link underline-link-light">Contact Our Experts</Link>
               </div>
             </div>

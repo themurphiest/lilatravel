@@ -22,33 +22,245 @@ const C = {
   white:      "#FFFFFF",
 };
 
-// ─── Step Data ───────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// ICON SYSTEM — hand-drawn-feel SVGs from four traditions
+// Buddhism (ensō, lotus, dharma wheel, bodhi leaf)
+// Taoism (yin-yang, water/wave, mountain, bagua)
+// Yoga/Hinduism (om, unalome, mudra, bindu/third eye, flame)
+// Shinto (torii, magatama, shide)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function Icon({ children, size = 24, color = C.sage, ...props }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+      stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+      {...props}>
+      {children}
+    </svg>
+  );
+}
+
+// ─── Buddhism ───────────────────────────────────────────────────────────────
+function IconEnso({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M12 3 C17.5 3 21 7 21 12 C21 17 17.5 21 12 21 C6.5 21 3 17 3 12 C3 8.5 5 5.5 8 4" strokeWidth="2" fill="none" />
+    </Icon>
+  );
+}
+
+function IconLotus({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M12 20 C12 20 8 16 8 12 C8 8 10 5 12 3 C14 5 16 8 16 12 C16 16 12 20 12 20Z" fill={`${color}15`} />
+      <path d="M12 20 C12 20 5 15 4 11 C3 7 6 5 8 6" />
+      <path d="M12 20 C12 20 19 15 20 11 C21 7 18 5 16 6" />
+      <line x1="12" y1="20" x2="12" y2="8" strokeWidth="1" opacity="0.4" />
+    </Icon>
+  );
+}
+
+function IconDharmaWheel({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="3" />
+      {[0,45,90,135,180,225,270,315].map(a => {
+        const rad = a * Math.PI / 180;
+        return <line key={a} x1={12 + Math.cos(rad)*3} y1={12 + Math.sin(rad)*3} x2={12 + Math.cos(rad)*9} y2={12 + Math.sin(rad)*9} strokeWidth="1" />;
+      })}
+    </Icon>
+  );
+}
+
+function IconBodhiLeaf({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M12 2 C6 6 4 12 6 18 C8 20 10 21 12 22 C14 21 16 20 18 18 C20 12 18 6 12 2Z" fill={`${color}10`} />
+      <line x1="12" y1="6" x2="12" y2="22" strokeWidth="1" />
+      <path d="M12 10 L8 13" strokeWidth="1" />
+      <path d="M12 14 L16 17" strokeWidth="1" />
+      <path d="M12 12 L16 10" strokeWidth="1" />
+    </Icon>
+  );
+}
+
+// ─── Taoism ─────────────────────────────────────────────────────────────────
+function IconYinYang({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 3 C8 3 6 6.5 6 8 C6 11 9 12 12 12 C15 12 18 13 18 16 C18 19 15 21 12 21" fill={`${color}20`} />
+      <circle cx="12" cy="8" r="1.5" fill={`${color}20`} />
+      <circle cx="12" cy="16" r="1.5" fill="none" />
+    </Icon>
+  );
+}
+
+function IconWave({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M2 12 C4 8 6 8 8 12 C10 16 12 16 14 12 C16 8 18 8 22 12" />
+      <path d="M2 16 C4 12 6 12 8 16 C10 20 12 20 14 16" opacity="0.4" />
+    </Icon>
+  );
+}
+
+function IconMountain({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M3 20 L10 6 L14 13 L17 8 L21 20 Z" fill={`${color}10`} />
+      <path d="M3 20 L10 6 L14 13 L17 8 L21 20" />
+    </Icon>
+  );
+}
+
+// ─── Yoga / Hinduism ────────────────────────────────────────────────────────
+function IconUnalome({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M12 22 L12 10" />
+      <path d="M12 10 C12 10 15 9 15 7 C15 5 12 5 12 7 C12 5 9 5 9 7 C9 9 12 8 12 7" strokeWidth="1.3" />
+      <circle cx="12" cy="3" r="1" fill={color} stroke="none" />
+    </Icon>
+  );
+}
+
+function IconFlame({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M12 2 C12 2 18 8 18 14 C18 17.3 15.3 20 12 20 C8.7 20 6 17.3 6 14 C6 8 12 2 12 2Z" fill={`${color}12`} />
+      <path d="M12 10 C12 10 15 13 15 15.5 C15 17.4 13.6 19 12 19 C10.4 19 9 17.4 9 15.5 C9 13 12 10 12 10Z" fill={`${color}08`} />
+    </Icon>
+  );
+}
+
+function IconMudra({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <circle cx="12" cy="8" r="4" fill={`${color}08`} />
+      <path d="M8 12 C8 12 6 15 8 18" />
+      <path d="M16 12 C16 12 18 15 16 18" />
+      <path d="M10 18 L14 18" />
+      <circle cx="12" cy="7" r="0.8" fill={color} stroke="none" />
+    </Icon>
+  );
+}
+
+function IconBindu({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M6 16 C6 10 9 6 12 4 C15 6 18 10 18 16" />
+      <circle cx="12" cy="10" r="2" fill={`${color}25`} />
+      <circle cx="12" cy="10" r="0.8" fill={color} stroke="none" />
+    </Icon>
+  );
+}
+
+// ─── Shinto ─────────────────────────────────────────────────────────────────
+function IconTorii({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <line x1="5" y1="6" x2="19" y2="6" strokeWidth="2" />
+      <line x1="6" y1="10" x2="18" y2="10" />
+      <line x1="7" y1="6" x2="7" y2="21" />
+      <line x1="17" y1="6" x2="17" y2="21" />
+      <line x1="3" y1="5" x2="21" y2="5" strokeWidth="1" />
+    </Icon>
+  );
+}
+
+function IconMagatama({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M12 3 C7 3 4 7 4 11 C4 15 7 17 10 17 C13 17 14 15 14 13 C14 11 12 10 10 11" fill={`${color}12`} />
+      <circle cx="9" cy="8" r="1.5" fill={`${color}25`} />
+    </Icon>
+  );
+}
+
+function IconShide({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <line x1="12" y1="2" x2="12" y2="22" />
+      <path d="M12 5 L17 5 L17 9 L12 9" fill={`${color}08`} />
+      <path d="M12 9 L7 9 L7 13 L12 13" fill={`${color}08`} />
+      <path d="M12 13 L17 13 L17 17 L12 17" fill={`${color}08`} />
+    </Icon>
+  );
+}
+
+// ─── Compound: Stars ────────────────────────────────────────────────────────
+function IconStars({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <circle cx="6" cy="6" r="1" fill={color} stroke="none" />
+      <circle cx="18" cy="4" r="0.8" fill={color} stroke="none" />
+      <circle cx="12" cy="3" r="1.2" fill={color} stroke="none" />
+      <circle cx="4" cy="14" r="0.6" fill={color} stroke="none" />
+      <circle cx="20" cy="12" r="0.7" fill={color} stroke="none" />
+      <path d="M8 10 L9 8 L10 10 L8 10Z" fill={color} stroke="none" />
+      <path d="M14 14 L15.5 11 L17 14 L14 14Z" fill={color} stroke="none" />
+      <path d="M10 18 L11 16 L12 18 L10 18Z" fill={`${color}60`} stroke="none" />
+    </Icon>
+  );
+}
+
+function IconJournal({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <rect x="5" y="3" width="14" height="18" rx="2" fill={`${color}08`} />
+      <line x1="9" y1="3" x2="9" y2="21" strokeWidth="1" opacity="0.3" />
+      <line x1="11" y1="8" x2="16" y2="8" strokeWidth="1" />
+      <line x1="11" y1="11" x2="16" y2="11" strokeWidth="1" />
+      <line x1="11" y1="14" x2="14" y2="14" strokeWidth="1" />
+    </Icon>
+  );
+}
+
+function IconSoundBath({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M4 16 C4 16 8 4 12 4 C16 4 20 16 20 16" fill={`${color}10`} />
+      <path d="M4 16 L20 16" />
+      <path d="M7 16 L7 19" strokeWidth="1" opacity="0.4" />
+      <path d="M12 16 L12 20" strokeWidth="1" opacity="0.4" />
+      <path d="M17 16 L17 19" strokeWidth="1" opacity="0.4" />
+    </Icon>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STEP DATA
+// ═══════════════════════════════════════════════════════════════════════════════
+
 const DESTINATIONS = [
-  { id: "zion", name: "Zion", subtitle: "Red cathedral walls", emoji: "🏜️", gradient: `linear-gradient(135deg, ${C.sunSalmon}30, ${C.goldenAmber}20)` },
-  { id: "bigSur", name: "Big Sur", subtitle: "Where mountains meet the sea", emoji: "🌊", gradient: `linear-gradient(135deg, ${C.oceanTeal}30, ${C.skyBlue}20)` },
-  { id: "joshuaTree", name: "Joshua Tree", subtitle: "Desert silence & starlight", emoji: "🌵", gradient: `linear-gradient(135deg, ${C.goldenAmber}30, ${C.coralBlush}20)` },
-  { id: "olympic", name: "Olympic", subtitle: "Temperate rainforest magic", emoji: "🌲", gradient: `linear-gradient(135deg, ${C.seaGlass}30, ${C.sage}20)` },
-  { id: "kauai", name: "Kauaʻi", subtitle: "Garden isle, sacred coast", emoji: "🌺", gradient: `linear-gradient(135deg, ${C.seaGlass}20, ${C.oceanTeal}30)` },
-  { id: "vancouver", name: "Vancouver Island", subtitle: "Wild coast, ancient forest", emoji: "🌿", gradient: `linear-gradient(135deg, ${C.sage}25, ${C.seaGlass}20)` },
+  { id: "zion", name: "Zion", subtitle: "Red cathedral walls", icon: IconMountain, gradient: `linear-gradient(135deg, ${C.sunSalmon}30, ${C.goldenAmber}20)` },
+  { id: "bigSur", name: "Big Sur", subtitle: "Where mountains meet the sea", icon: IconWave, gradient: `linear-gradient(135deg, ${C.oceanTeal}30, ${C.skyBlue}20)` },
+  { id: "joshuaTree", name: "Joshua Tree", subtitle: "Desert silence & starlight", icon: IconStars, gradient: `linear-gradient(135deg, ${C.goldenAmber}30, ${C.coralBlush}20)` },
+  { id: "olympic", name: "Olympic", subtitle: "Temperate rainforest magic", icon: IconBodhiLeaf, gradient: `linear-gradient(135deg, ${C.seaGlass}30, ${C.sage}20)` },
+  { id: "kauai", name: "Kauaʻi", subtitle: "Garden isle, sacred coast", icon: IconLotus, gradient: `linear-gradient(135deg, ${C.seaGlass}20, ${C.oceanTeal}30)` },
+  { id: "vancouver", name: "Vancouver Island", subtitle: "Wild coast, ancient forest", icon: IconTorii, gradient: `linear-gradient(135deg, ${C.sage}25, ${C.seaGlass}20)` },
 ];
 
 const INTENTIONS = [
-  { id: "stillness", label: "Stillness", desc: "Quiet the noise. Find center.", icon: "◯", color: C.oceanTeal },
-  { id: "adventure", label: "Adventure", desc: "Push edges. Feel alive.", icon: "△", color: C.sunSalmon },
-  { id: "connection", label: "Connection", desc: "Deepen bonds. Open up.", icon: "◇", color: C.goldenAmber },
-  { id: "transformation", label: "Transformation", desc: "Shed the old. Come back different.", icon: "✦", color: C.skyBlue },
+  { id: "peace", label: "Peace", sanskrit: "Śānti", desc: "Quiet the noise. Find center.", icon: IconEnso, color: C.oceanTeal },
+  { id: "transformation", label: "Transformation", sanskrit: "Tapas", desc: "Burn through the old. Come back different.", icon: IconFlame, color: C.sunSalmon },
+  { id: "connection", label: "Connection", sanskrit: "Saṅgha", desc: "Deepen bonds. Open up.", icon: IconMagatama, color: C.goldenAmber },
+  { id: "liberation", label: "Liberation", sanskrit: "Mokṣa", desc: "Let go. Feel completely free.", icon: IconUnalome, color: C.skyBlue },
 ];
 
+
 const PRACTICES = [
-  { id: "yoga", label: "Yoga", icon: "🧘", color: C.oceanTeal },
-  { id: "breathwork", label: "Breathwork", icon: "🌬️", color: C.skyBlue },
-  { id: "coldPlunge", label: "Cold Plunge", icon: "🧊", color: C.seaGlass },
-  { id: "meditation", label: "Meditation", icon: "🪷", color: C.sage },
-  { id: "hiking", label: "Mindful Hiking", icon: "🥾", color: C.goldenAmber },
-  { id: "stargazing", label: "Stargazing", icon: "✨", color: C.slateLight },
-  { id: "journaling", label: "Journaling", icon: "📝", color: C.coralBlush },
-  { id: "soundBath", label: "Sound Bath", icon: "🔔", color: C.sageLight },
-  { id: "sauna", label: "Sauna", icon: "🔥", color: C.sunSalmon },
+  { id: "yoga", label: "Yoga", icon: IconLotus, color: C.oceanTeal },
+  { id: "breathwork", label: "Breathwork", icon: IconShide, color: C.skyBlue },
+  { id: "coldPlunge", label: "Cold Plunge", icon: IconWave, color: C.seaGlass },
+  { id: "meditation", label: "Meditation", icon: IconEnso, color: C.sage },
+  { id: "hiking", label: "Mindful Hiking", icon: IconMountain, color: C.goldenAmber },
+  { id: "stargazing", label: "Stargazing", icon: IconStars, color: C.slateLight },
+  { id: "journaling", label: "Journaling", icon: IconJournal, color: C.coralBlush },
+  { id: "soundBath", label: "Sound Bath", icon: IconSoundBath, color: C.sageLight },
+  { id: "sauna", label: "Sauna", icon: IconFlame, color: C.sunSalmon },
 ];
 
 const BUDGET_TIERS = [
@@ -67,6 +279,77 @@ const DIMENSIONS = [
   { key: "luxury", label: "Luxury" },
 ];
 
+// ─── Persona Engine ─────────────────────────────────────────────────────────
+const PERSONAS = [
+  {
+    id: "sadhaka", name: "The Sādhaka", subtitle: "The Practitioner",
+    desc: "Your journey is an extension of your practice. You're drawn to sacred spaces, intentional movement, and the kind of silence that teaches. We'll build your trip around the mat, the cushion, and the trail.",
+    color: C.oceanTeal, icon: IconEnso,
+    match: (d) => {
+      const pl = d.practiceLevel ?? 1;
+      
+      
+      const seeksPeace = (d.intentions || []).some(i => ["peace","liberation"].includes(i));
+      return (pl >= 3 && seeksPeace) ? 1 : (pl >= 2 && seeksPeace) ? 0.7 : (pl >= 3) ? 0.6 : 0;
+    },
+  },
+  {
+    id: "tapasvin", name: "The Tāpasvin", subtitle: "The One Who Burns",
+    desc: "You came to be challenged. Cold water, high ridgelines, dawn summits — you seek transformation through intensity. We'll push you to your edge and give you the space to integrate what you find there.",
+    color: C.sunSalmon, icon: IconFlame,
+    match: (d) => {
+      const movement = d.movement ?? 50;
+      const seeksTransformation = (d.intentions || []).includes("transformation");
+      const highPractice = (d.practiceLevel ?? 1) >= 2;
+      return (movement > 65 && seeksTransformation) ? 1 : (movement > 60 && highPractice) ? 0.7 : (movement > 70) ? 0.5 : 0;
+    },
+  },
+  {
+    id: "lilaPlayer", name: "The Līlā Player", subtitle: "The One Who Dances",
+    desc: "You travel with an open hand. No rigid plans — just a willingness to be surprised. You're here for the beauty, the flavor, the spontaneous conversation with a stranger. We'll create a journey that feels like play.",
+    color: C.goldenAmber, icon: IconMagatama,
+    match: (d) => {
+      const pacing = d.pacing ?? 50;
+      const balanced = pacing > 30 && pacing < 70;
+      const seeksConnection = (d.intentions || []).includes("connection");
+      const moderate = (d.movement ?? 50) > 30 && (d.movement ?? 50) < 70;
+      return (balanced && moderate) ? 0.8 : (seeksConnection && balanced) ? 0.7 : 0;
+    },
+  },
+  {
+    id: "rishi", name: "The Ṛṣi", subtitle: "The Seer",
+    desc: "You need wide horizons and quiet mornings. Books, views, long walks with no destination. You're not escaping — you're creating the conditions to see clearly. We'll give you the space and the stillness.",
+    color: C.skyBlue, icon: IconMountain,
+    match: (d) => {
+      const slowPace = (d.pacing ?? 50) < 40;
+      const seeksPeace = (d.intentions || []).some(i => ["peace","liberation"].includes(i));
+      const deepPractice = (d.practiceLevel ?? 1) >= 2;
+      return (slowPace && seeksPeace) ? 1 : (slowPace && deepPractice) ? 0.8 : seeksPeace ? 0.5 : 0;
+    },
+  },
+  {
+    id: "explorer", name: "The Explorer", subtitle: "The Trailblazer",
+    desc: "You want to see it all. The iconic overlook AND the hidden swimming hole. High energy, full days, a new adventure every morning. We'll pack your itinerary with the best of both worlds.",
+    color: C.seaGlass, icon: IconTorii,
+    match: (d) => {
+      const fullPace = (d.pacing ?? 50) > 60;
+      const active = (d.movement ?? 50) > 55;
+      const seeksTransformation = (d.intentions || []).includes("transformation");
+      return (fullPace && active) ? 0.9 : (active && seeksTransformation) ? 0.6 : 0;
+    },
+  },
+];
+
+function getPersona(data) {
+  let best = PERSONAS[2];
+  let bestScore = 0;
+  for (const p of PERSONAS) {
+    const score = p.match(data);
+    if (score > bestScore) { bestScore = score; best = p; }
+  }
+  return best;
+}
+
 // ─── Utilities ───────────────────────────────────────────────────────────────
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
@@ -74,12 +357,10 @@ function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
 function StepIndicator({ current, total }) {
   return (
-    <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 40 }}>
+    <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 32, padding: "0 24px" }}>
       {Array.from({ length: total }, (_, i) => (
         <div key={i} style={{
-          width: i === current ? 28 : 8,
-          height: 8,
-          borderRadius: 4,
+          width: i === current ? 28 : 8, height: 8, borderRadius: 4,
           background: i === current ? C.oceanTeal : i < current ? C.sage : `${C.sage}30`,
           transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
         }} />
@@ -90,45 +371,34 @@ function StepIndicator({ current, total }) {
 
 function NavButtons({ onBack, onNext, nextLabel = "Continue", nextDisabled = false, showBack = true }) {
   return (
-    <div style={{
-      display: "flex", gap: 16, justifyContent: "center",
-      marginTop: 48, paddingBottom: 40,
-    }}>
+    <div style={{ display: "flex", gap: 12, justifyContent: "center", padding: "40px 24px" }}>
       {showBack && (
         <button onClick={onBack} style={{
           fontFamily: "'Quicksand', sans-serif",
           fontSize: 13, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase",
           background: "none", border: `1.5px solid ${C.sage}40`,
-          color: C.sage, padding: "14px 32px", borderRadius: 40,
+          color: C.sage, padding: "14px 28px", borderRadius: 40,
           cursor: "pointer", transition: "all 0.3s",
-        }}
-        onMouseEnter={e => { e.target.style.borderColor = C.sage; e.target.style.background = `${C.sage}10`; }}
-        onMouseLeave={e => { e.target.style.borderColor = `${C.sage}40`; e.target.style.background = "none"; }}
-        >
-          Back
-        </button>
+          minHeight: 48, WebkitTapHighlightColor: "transparent",
+        }}>Back</button>
       )}
       <button onClick={onNext} disabled={nextDisabled} style={{
         fontFamily: "'Quicksand', sans-serif",
         fontSize: 13, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase",
         background: nextDisabled ? `${C.sage}30` : C.sage,
-        border: "none", color: C.white, padding: "14px 40px", borderRadius: 40,
+        border: "none", color: C.white, padding: "14px 36px", borderRadius: 40,
         cursor: nextDisabled ? "not-allowed" : "pointer",
         transition: "all 0.3s", opacity: nextDisabled ? 0.5 : 1,
         boxShadow: nextDisabled ? "none" : `0 4px 20px ${C.sage}30`,
-      }}
-      onMouseEnter={e => { if (!nextDisabled) e.target.style.background = C.sageDark; }}
-      onMouseLeave={e => { if (!nextDisabled) e.target.style.background = C.sage; }}
-      >
-        {nextLabel}
-      </button>
+        minHeight: 48, WebkitTapHighlightColor: "transparent",
+      }}>{nextLabel}</button>
     </div>
   );
 }
 
 function StepTitle({ eyebrow, title, subtitle }) {
   return (
-    <div style={{ textAlign: "center", marginBottom: 40 }}>
+    <div style={{ textAlign: "center", marginBottom: 32, padding: "0 24px" }}>
       {eyebrow && (
         <span style={{
           fontFamily: "'Quicksand', sans-serif",
@@ -138,13 +408,14 @@ function StepTitle({ eyebrow, title, subtitle }) {
       )}
       <h2 style={{
         fontFamily: "'Cormorant Garamond', serif",
-        fontSize: 36, fontWeight: 300, lineHeight: 1.2,
+        fontSize: "clamp(28px, 6vw, 36px)", fontWeight: 300, lineHeight: 1.2,
         color: C.slate, marginBottom: subtitle ? 12 : 0,
       }}>{title}</h2>
       {subtitle && (
         <p style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: 15, fontWeight: 400, color: `${C.slate}90`, lineHeight: 1.6, maxWidth: 480, margin: "0 auto",
+          fontSize: "clamp(13px, 3.5vw, 15px)", fontWeight: 400, color: `${C.slate}90`,
+          lineHeight: 1.6, maxWidth: 480, margin: "0 auto",
         }}>{subtitle}</p>
       )}
     </div>
@@ -152,8 +423,8 @@ function StepTitle({ eyebrow, title, subtitle }) {
 }
 
 // ─── Radar Chart ─────────────────────────────────────────────────────────────
-function RadarChart({ values, size = 280 }) {
-  const cx = size / 2, cy = size / 2, r = size * 0.38;
+function RadarChart({ values, size = 260 }) {
+  const cx = size / 2, cy = size / 2, r = size * 0.36;
   const n = DIMENSIONS.length;
   const angleStep = (Math.PI * 2) / n;
   const [animProgress, setAnimProgress] = useState(0);
@@ -181,8 +452,7 @@ function RadarChart({ values, size = 280 }) {
   const colors = [C.oceanTeal, C.skyBlue, C.sunSalmon, C.goldenAmber, C.seaGlass, C.sage];
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      {/* Grid */}
+    <svg width="100%" viewBox={`0 0 ${size} ${size}`} style={{ maxWidth: size }}>
       {gridLevels.map((level, li) => (
         <polygon key={li}
           points={Array.from({ length: n }, (_, i) => {
@@ -192,18 +462,10 @@ function RadarChart({ values, size = 280 }) {
           fill="none" stroke={`${C.sage}18`} strokeWidth={1}
         />
       ))}
-      {/* Axes */}
       {Array.from({ length: n }, (_, i) => {
         const angle = angleStep * i - Math.PI / 2;
-        return (
-          <line key={i}
-            x1={cx} y1={cy}
-            x2={cx + Math.cos(angle) * r} y2={cy + Math.sin(angle) * r}
-            stroke={`${C.sage}15`} strokeWidth={1}
-          />
-        );
+        return <line key={i} x1={cx} y1={cy} x2={cx + Math.cos(angle) * r} y2={cy + Math.sin(angle) * r} stroke={`${C.sage}15`} strokeWidth={1} />;
       })}
-      {/* Fill */}
       <polygon
         points={Array.from({ length: n }, (_, i) => {
           const p = getPoint(i, values[DIMENSIONS[i].key] || 0);
@@ -211,21 +473,14 @@ function RadarChart({ values, size = 280 }) {
         }).join(" ")}
         fill={`${C.oceanTeal}18`} stroke={C.oceanTeal} strokeWidth={2}
       />
-      {/* Points */}
       {DIMENSIONS.map((dim, i) => {
         const p = getPoint(i, values[dim.key] || 0);
         return (
           <g key={i}>
             <circle cx={p.x} cy={p.y} r={5} fill={colors[i]} stroke={C.white} strokeWidth={2} />
-            <text
-              x={cx + Math.cos(angleStep * i - Math.PI / 2) * (r + 22)}
-              y={cy + Math.sin(angleStep * i - Math.PI / 2) * (r + 22)}
+            <text x={cx + Math.cos(angleStep * i - Math.PI / 2) * (r + 20)} y={cy + Math.sin(angleStep * i - Math.PI / 2) * (r + 20)}
               textAnchor="middle" dominantBaseline="middle"
-              style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 10, fontWeight: 600, letterSpacing: "0.08em",
-                textTransform: "uppercase", fill: C.sage,
-              }}
+              style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", fill: C.sage }}
             >{dim.label}</text>
           </g>
         );
@@ -234,92 +489,70 @@ function RadarChart({ values, size = 280 }) {
   );
 }
 
-// ─── Step: Welcome ───────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// STEPS
+// ═══════════════════════════════════════════════════════════════════════════════
+
 function StepWelcome({ onNext }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
   return (
     <div style={{
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      minHeight: "100vh", padding: "60px 24px", textAlign: "center",
+      minHeight: "100vh", padding: "80px 28px 60px", textAlign: "center",
       opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
       transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
     }}>
-      <div style={{
-        width: 40, height: 1, background: `${C.sage}40`, margin: "0 auto 32px",
-      }} />
+      <div style={{ marginBottom: 24, opacity: 0.5 }}>
+        <IconEnso size={36} color={C.sage} />
+      </div>
       <h1 style={{
         fontFamily: "'Cormorant Garamond', serif",
-        fontSize: 44, fontWeight: 300, lineHeight: 1.15,
+        fontSize: "clamp(34px, 8vw, 44px)", fontWeight: 300, lineHeight: 1.15,
         color: C.slate, marginBottom: 20, maxWidth: 520,
-      }}>
-        Let's design<br />your journey
-      </h1>
+      }}>Let's design<br />your journey</h1>
       <p style={{
         fontFamily: "'Quicksand', sans-serif",
-        fontSize: 16, fontWeight: 400, color: `${C.slate}80`,
+        fontSize: "clamp(14px, 3.8vw, 16px)", fontWeight: 400, color: `${C.slate}80`,
         lineHeight: 1.7, maxWidth: 420, marginBottom: 48,
-      }}>
-        A few questions to understand what you're seeking — so we can craft something that feels like it was made for you.
-      </p>
+      }}>A few questions to understand what you're seeking — so we can craft something that feels like it was made for you.</p>
       <button onClick={onNext} style={{
         fontFamily: "'Quicksand', sans-serif",
         fontSize: 13, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase",
         background: C.sage, border: "none", color: C.white,
         padding: "16px 48px", borderRadius: 40, cursor: "pointer",
-        transition: "all 0.3s",
-        boxShadow: `0 4px 24px ${C.sage}30`,
-      }}
-      onMouseEnter={e => { e.target.style.background = C.sageDark; e.target.style.transform = "translateY(-1px)"; }}
-      onMouseLeave={e => { e.target.style.background = C.sage; e.target.style.transform = "translateY(0)"; }}
-      >
-        Begin
-      </button>
-      <p style={{
-        fontFamily: "'Quicksand', sans-serif",
-        fontSize: 12, color: `${C.sage}60`, marginTop: 24, letterSpacing: "0.04em",
-      }}>Takes about 2 minutes</p>
+        transition: "all 0.3s", boxShadow: `0 4px 24px ${C.sage}30`,
+        minHeight: 52, WebkitTapHighlightColor: "transparent",
+      }}>Begin</button>
+      <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: `${C.sage}60`, marginTop: 24 }}>Takes about 2 minutes</p>
     </div>
   );
 }
 
-// ─── Step: Destination ───────────────────────────────────────────────────────
 function StepDestination({ data, onChange, onNext, onBack }) {
   return (
     <div>
-      <StepTitle
-        eyebrow="Where"
-        title="Where is calling you?"
-        subtitle="Choose the landscape that stirs something. You can always explore others later."
-      />
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-        gap: 14, maxWidth: 560, margin: "0 auto", padding: "0 16px",
-      }}>
+      <StepTitle eyebrow="Where" title="Where is calling you?" subtitle="Choose the landscape that stirs something." />
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12, maxWidth: 560, margin: "0 auto", padding: "0 20px" }}>
         {DESTINATIONS.map(d => {
-          const selected = data.destination === d.id;
+          const sel = data.destination === d.id;
+          const Ic = d.icon;
           return (
             <button key={d.id} onClick={() => onChange({ destination: d.id })} style={{
-              background: selected ? d.gradient : C.white,
-              border: `2px solid ${selected ? C.sage : `${C.sage}18`}`,
-              borderRadius: 16, padding: "24px 16px",
+              background: sel ? d.gradient : C.white,
+              border: `2px solid ${sel ? C.sage : `${C.sage}18`}`,
+              borderRadius: 16, padding: "22px 14px",
               cursor: "pointer", transition: "all 0.3s",
-              textAlign: "center",
-              boxShadow: selected ? `0 4px 20px ${C.sage}15` : "0 1px 4px rgba(0,0,0,0.04)",
-              transform: selected ? "scale(1.02)" : "scale(1)",
-            }}
-            onMouseEnter={e => { if (!selected) e.target.style.borderColor = `${C.sage}50`; }}
-            onMouseLeave={e => { if (!selected) e.target.style.borderColor = `${C.sage}18`; }}
-            >
-              <div style={{ fontSize: 28, marginBottom: 10 }}>{d.emoji}</div>
-              <div style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 18, fontWeight: 600, color: C.slate, marginBottom: 4,
-              }}>{d.name}</div>
-              <div style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 11, color: `${C.slate}70`, fontWeight: 400,
-              }}>{d.subtitle}</div>
+              textAlign: "center", minHeight: 110,
+              boxShadow: sel ? `0 4px 20px ${C.sage}15` : "0 1px 4px rgba(0,0,0,0.04)",
+              transform: sel ? "scale(1.02)" : "scale(1)",
+              WebkitTapHighlightColor: "transparent",
+            }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+                <Ic size={28} color={sel ? C.sage : `${C.sage}80`} />
+              </div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(16px, 4vw, 18px)", fontWeight: 600, color: C.slate, marginBottom: 3 }}>{d.name}</div>
+              <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, color: `${C.slate}70`, lineHeight: 1.3 }}>{d.subtitle}</div>
             </button>
           );
         })}
@@ -329,7 +562,6 @@ function StepDestination({ data, onChange, onNext, onBack }) {
   );
 }
 
-// ─── Step: Intention ─────────────────────────────────────────────────────────
 function StepIntention({ data, onChange, onNext, onBack }) {
   const selected = data.intentions || [];
   const toggle = (id) => {
@@ -338,38 +570,27 @@ function StepIntention({ data, onChange, onNext, onBack }) {
   };
   return (
     <div>
-      <StepTitle
-        eyebrow="Intention"
-        title="What are you seeking?"
-        subtitle="Choose all that resonate. There are no wrong answers here."
-      />
-      <div style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14,
-        maxWidth: 480, margin: "0 auto", padding: "0 16px",
-      }}>
+      <StepTitle eyebrow="Intention" title="Set your intention" subtitle="What is this journey for? Choose all that resonate." />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, maxWidth: 480, margin: "0 auto", padding: "0 20px" }}>
         {INTENTIONS.map(item => {
           const active = selected.includes(item.id);
+          const Ic = item.icon;
           return (
             <button key={item.id} onClick={() => toggle(item.id)} style={{
               background: active ? `${item.color}12` : C.white,
               border: `2px solid ${active ? item.color : `${C.sage}18`}`,
-              borderRadius: 16, padding: "28px 20px",
+              borderRadius: 16, padding: "24px 16px",
               cursor: "pointer", transition: "all 0.35s",
-              textAlign: "center",
+              textAlign: "center", minHeight: 140,
               boxShadow: active ? `0 4px 20px ${item.color}20` : "0 1px 4px rgba(0,0,0,0.04)",
+              WebkitTapHighlightColor: "transparent",
             }}>
-              <div style={{
-                fontSize: 28, marginBottom: 12, color: active ? item.color : `${C.slate}40`,
-                transition: "color 0.3s",
-              }}>{item.icon}</div>
-              <div style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 20, fontWeight: 600, color: C.slate, marginBottom: 6,
-              }}>{item.label}</div>
-              <div style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 12, color: `${C.slate}70`, fontWeight: 400, lineHeight: 1.5,
-              }}>{item.desc}</div>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 10, transition: "opacity 0.3s", opacity: active ? 1 : 0.4 }}>
+                <Ic size={30} color={active ? item.color : C.sage} />
+              </div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 4.5vw, 20px)", fontWeight: 600, color: C.slate, marginBottom: 2 }}>{item.label}</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 12, fontWeight: 300, fontStyle: "italic", color: active ? item.color : `${C.sage}60`, marginBottom: 6, transition: "color 0.3s" }}>{item.sanskrit}</div>
+              <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, color: `${C.slate}70`, lineHeight: 1.4 }}>{item.desc}</div>
             </button>
           );
         })}
@@ -379,71 +600,42 @@ function StepIntention({ data, onChange, onNext, onBack }) {
   );
 }
 
-// ─── Step: Movement ──────────────────────────────────────────────────────────
 function StepMovement({ data, onChange, onNext, onBack }) {
   const val = data.movement ?? 50;
-  const labels = ["Gentle", "Moderate", "Active", "Vigorous"];
+  const labels = ["Yin", "Gentle", "Dynamic", "Yang"];
   const labelIndex = val < 25 ? 0 : val < 50 ? 1 : val < 75 ? 2 : 3;
   const descriptions = [
-    "Easy walks, gentle stretches, slow mornings",
-    "Light hikes, flowing yoga, comfortable pace",
-    "Full-day hikes, challenging trails, dynamic practice",
+    "Restorative. Easy walks, gentle stretches, slow mornings.",
+    "Light hikes, flowing yoga, comfortable pace.",
+    "Full-day hikes, challenging trails, dynamic practice.",
     "Push your limits. Summits. Trail runs. Max effort.",
   ];
 
   return (
     <div>
-      <StepTitle
-        eyebrow="Movement"
-        title="How do you want to move?"
-        subtitle="From gentle morning walks to summit pushes — set your pace."
-      />
-      <div style={{ maxWidth: 440, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{
-          textAlign: "center", marginBottom: 32,
-        }}>
-          <div style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 40, fontWeight: 300, color: C.sage,
-            marginBottom: 6,
-          }}>{labels[labelIndex]}</div>
-          <p style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 13, color: `${C.slate}70`, lineHeight: 1.6,
-          }}>{descriptions[labelIndex]}</p>
+      <StepTitle eyebrow="Movement" title="How do you want to move?" subtitle="From restorative mornings to summit pushes." />
+      <div style={{ maxWidth: 440, margin: "0 auto", padding: "0 28px" }}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(32px, 8vw, 40px)", fontWeight: 300, color: C.sage, marginBottom: 6 }}>{labels[labelIndex]}</div>
+          <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: `${C.slate}70`, lineHeight: 1.6 }}>{descriptions[labelIndex]}</p>
         </div>
-
-        <div style={{ position: "relative", padding: "12px 0" }}>
-          <div style={{
-            position: "absolute", top: "50%", left: 0, right: 0, height: 4,
-            background: `${C.sage}18`, borderRadius: 2, transform: "translateY(-50%)",
-          }} />
-          <div style={{
-            position: "absolute", top: "50%", left: 0, width: `${val}%`, height: 4,
-            background: `linear-gradient(90deg, ${C.seaGlass}, ${C.oceanTeal}, ${C.sunSalmon})`,
-            borderRadius: 2, transform: "translateY(-50%)", transition: "width 0.15s",
-          }} />
-          <input
-            type="range" min={0} max={100} value={val}
+        <div style={{ position: "relative", padding: "16px 0" }}>
+          <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: 6, background: `${C.sage}18`, borderRadius: 3, transform: "translateY(-50%)" }} />
+          <div style={{ position: "absolute", top: "50%", left: 0, width: `${val}%`, height: 6, background: `linear-gradient(90deg, ${C.oceanTeal}, ${C.goldenAmber}, ${C.sunSalmon})`, borderRadius: 3, transform: "translateY(-50%)", transition: "width 0.15s" }} />
+          <input type="range" min={0} max={100} value={val}
             onChange={e => onChange({ movement: Number(e.target.value) })}
-            style={{
-              width: "100%", appearance: "none", WebkitAppearance: "none",
-              background: "transparent", cursor: "pointer", position: "relative", zIndex: 2,
-              height: 28,
-            }}
+            style={{ width: "100%", appearance: "none", WebkitAppearance: "none", background: "transparent", cursor: "pointer", position: "relative", zIndex: 2, height: 44, WebkitTapHighlightColor: "transparent" }}
           />
         </div>
-
-        <div style={{
-          display: "flex", justifyContent: "space-between", marginTop: 8,
-        }}>
-          {labels.map(l => (
-            <span key={l} style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase",
-              color: `${C.sage}60`,
-            }}>{l}</span>
-          ))}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <IconYinYang size={16} color={C.oceanTeal} />
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: C.oceanTeal }}>Yin</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: C.sunSalmon }}>Yang</span>
+            <IconFlame size={16} color={C.sunSalmon} />
+          </div>
         </div>
       </div>
       <NavButtons onBack={onBack} onNext={onNext} />
@@ -451,53 +643,140 @@ function StepMovement({ data, onChange, onNext, onBack }) {
   );
 }
 
-// ─── Step: Practices ─────────────────────────────────────────────────────────
-function StepPractices({ data, onChange, onNext, onBack }) {
+
+// ─── Step: Practice (where are you at + what do you want) ───────────────────
+
+const PRACTICE_LEVELS = [
+  {
+    label: "I'm curious",
+    desc: "A gentle yoga class at a beautiful overlook, maybe a guided meditation at sunset. Easy to try, no experience needed.",
+    icon: IconBodhiLeaf,
+  },
+  {
+    label: "I've dabbled",
+    desc: "You've been to a few classes. We'll mix in some morning yoga, a breathwork session, maybe a sound bath — nothing too intense.",
+    icon: IconLotus,
+  },
+  {
+    label: "I've got a thing going",
+    desc: "Morning practice built into each day — yoga, breathwork, or meditation depending on the setting. Plus plenty of time to explore.",
+    icon: IconEnso,
+  },
+  {
+    label: "It's kind of my whole deal",
+    desc: "Your days are anchored by practice. Serious morning sessions, afternoon breathwork, evening stillness. The landscape becomes your teacher.",
+    icon: IconUnalome,
+  },
+];
+
+function StepPractice({ data, onChange, onNext, onBack }) {
+  const level = data.practiceLevel ?? 1;
+  const current = PRACTICE_LEVELS[level];
+  const Ic = current.icon;
+
   const selected = data.practices || [];
   const toggle = (id) => {
     const next = selected.includes(id) ? selected.filter(x => x !== id) : [...selected, id];
     onChange({ practices: next });
   };
+
   return (
     <div>
       <StepTitle
-        eyebrow="Practices"
-        title="What nourishes you?"
-        subtitle="Select the practices you'd like woven into your journey."
+        eyebrow="Practice"
+        title="Where are you at?"
+        subtitle="This helps us know how much yoga, meditation, and wellness to weave into your days."
       />
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))",
-        gap: 12, maxWidth: 560, margin: "0 auto", padding: "0 16px",
-      }}>
-        {PRACTICES.map(p => {
-          const active = selected.includes(p.id);
-          return (
-            <button key={p.id} onClick={() => toggle(p.id)} style={{
-              background: active ? `${p.color}12` : C.white,
-              border: `2px solid ${active ? p.color : `${C.sage}15`}`,
-              borderRadius: 14, padding: "20px 12px",
-              cursor: "pointer", transition: "all 0.3s",
-              textAlign: "center",
-              boxShadow: active ? `0 3px 14px ${p.color}18` : "none",
-            }}>
-              <div style={{ fontSize: 24, marginBottom: 8 }}>{p.icon}</div>
-              <div style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 12, fontWeight: 600, color: C.slate, letterSpacing: "0.02em",
-              }}>{p.label}</div>
-            </button>
-          );
-        })}
+      <div style={{ maxWidth: 460, margin: "0 auto", padding: "0 28px" }}>
+        {/* Current level display */}
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+            <Ic size={32} color={C.oceanTeal} />
+          </div>
+          <div style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "clamp(24px, 6vw, 32px)", fontWeight: 300, color: C.sage, marginBottom: 8,
+          }}>{current.label}</div>
+          <p style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: "clamp(12px, 3.2vw, 13px)", color: `${C.slate}80`, lineHeight: 1.65,
+            minHeight: 48,
+          }}>{current.desc}</p>
+        </div>
+
+        {/* Slider */}
+        <div style={{ position: "relative", padding: "16px 0" }}>
+          <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: 6, background: `${C.sage}18`, borderRadius: 3, transform: "translateY(-50%)" }} />
+          <div style={{
+            position: "absolute", top: "50%", left: 0,
+            width: `${(level / 3) * 100}%`, height: 6,
+            background: `linear-gradient(90deg, ${C.seaGlass}, ${C.oceanTeal})`,
+            borderRadius: 3, transform: "translateY(-50%)", transition: "width 0.2s",
+          }} />
+          <input type="range" min={0} max={3} step={1} value={level}
+            onChange={e => onChange({ practiceLevel: Number(e.target.value) })}
+            style={{
+              width: "100%", appearance: "none", WebkitAppearance: "none",
+              background: "transparent", cursor: "pointer", position: "relative", zIndex: 2,
+              height: 44, WebkitTapHighlightColor: "transparent",
+            }}
+          />
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 4 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <IconBodhiLeaf size={14} color={C.seaGlass} />
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: "0.06em", color: C.seaGlass }}>Curious</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: "0.06em", color: C.oceanTeal }}>Deep</span>
+            <IconUnalome size={14} color={C.oceanTeal} />
+          </div>
+        </div>
+
+        {/* Optional practice picks */}
+        <div style={{ marginTop: 36 }}>
+          <div style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
+            color: `${C.sage}80`, textAlign: "center", marginBottom: 14,
+          }}>Anything you especially want?</div>
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 8, maxWidth: 340, margin: "0 auto",
+          }}>
+            {PRACTICES.map(p => {
+              const active = selected.includes(p.id);
+              const Pic = p.icon;
+              return (
+                <button key={p.id} onClick={() => toggle(p.id)} style={{
+                  background: active ? `${p.color}12` : C.white,
+                  border: `1.5px solid ${active ? p.color : `${C.sage}12`}`,
+                  borderRadius: 12, padding: "14px 6px",
+                  cursor: "pointer", transition: "all 0.3s",
+                  textAlign: "center", minHeight: 68,
+                  boxShadow: active ? `0 2px 10px ${p.color}15` : "none",
+                  WebkitTapHighlightColor: "transparent",
+                }}>
+                  <div style={{ display: "flex", justifyContent: "center", marginBottom: 4 }}>
+                    <Pic size={20} color={active ? p.color : `${C.sage}50`} />
+                  </div>
+                  <div style={{
+                    fontFamily: "'Quicksand', sans-serif",
+                    fontSize: 10, fontWeight: 600, color: active ? C.slate : `${C.slate}90`, lineHeight: 1.2,
+                  }}>{p.label}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
-      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={selected.length === 0} />
+      <NavButtons onBack={onBack} onNext={onNext} />
     </div>
   );
 }
-
-// ─── Step: Pacing ────────────────────────────────────────────────────────────
 function StepPacing({ data, onChange, onNext, onBack }) {
   const val = data.pacing ?? 50;
-  const labels = ["Slow & Deep", "Unhurried", "Balanced", "Full & Rich"];
+  const labels = ["Spacious", "Unhurried", "Balanced", "Full"];
   const labelIndex = val < 25 ? 0 : val < 50 ? 1 : val < 75 ? 2 : 3;
   const descriptions = [
     "One or two experiences a day. Long mornings. Space to breathe.",
@@ -508,52 +787,29 @@ function StepPacing({ data, onChange, onNext, onBack }) {
 
   return (
     <div>
-      <StepTitle
-        eyebrow="Rhythm"
-        title="What's your rhythm?"
-        subtitle="Some travelers need space. Others want every moment filled."
-      />
-      <div style={{ maxWidth: 440, margin: "0 auto", padding: "0 24px" }}>
+      <StepTitle eyebrow="Rhythm" title="What's your rhythm?" subtitle="Some travelers need space. Others want every moment filled." />
+      <div style={{ maxWidth: 440, margin: "0 auto", padding: "0 28px" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 40, fontWeight: 300, color: C.sage, marginBottom: 6,
-          }}>{labels[labelIndex]}</div>
-          <p style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 13, color: `${C.slate}70`, lineHeight: 1.6,
-          }}>{descriptions[labelIndex]}</p>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(32px, 8vw, 40px)", fontWeight: 300, color: C.sage, marginBottom: 6 }}>{labels[labelIndex]}</div>
+          <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: `${C.slate}70`, lineHeight: 1.6 }}>{descriptions[labelIndex]}</p>
         </div>
-
-        <div style={{ position: "relative", padding: "12px 0" }}>
-          <div style={{
-            position: "absolute", top: "50%", left: 0, right: 0, height: 4,
-            background: `${C.sage}18`, borderRadius: 2, transform: "translateY(-50%)",
-          }} />
-          <div style={{
-            position: "absolute", top: "50%", left: 0, width: `${val}%`, height: 4,
-            background: `linear-gradient(90deg, ${C.oceanTeal}, ${C.goldenAmber})`,
-            borderRadius: 2, transform: "translateY(-50%)", transition: "width 0.15s",
-          }} />
-          <input
-            type="range" min={0} max={100} value={val}
+        <div style={{ position: "relative", padding: "16px 0" }}>
+          <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: 6, background: `${C.sage}18`, borderRadius: 3, transform: "translateY(-50%)" }} />
+          <div style={{ position: "absolute", top: "50%", left: 0, width: `${val}%`, height: 6, background: `linear-gradient(90deg, ${C.oceanTeal}, ${C.goldenAmber})`, borderRadius: 3, transform: "translateY(-50%)", transition: "width 0.15s" }} />
+          <input type="range" min={0} max={100} value={val}
             onChange={e => onChange({ pacing: Number(e.target.value) })}
-            style={{
-              width: "100%", appearance: "none", WebkitAppearance: "none",
-              background: "transparent", cursor: "pointer", position: "relative", zIndex: 2,
-              height: 28,
-            }}
+            style={{ width: "100%", appearance: "none", WebkitAppearance: "none", background: "transparent", cursor: "pointer", position: "relative", zIndex: 2, height: 44, WebkitTapHighlightColor: "transparent" }}
           />
         </div>
-
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-          {["Spacious", "", "", "Packed"].map((l, i) => (
-            <span key={i} style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase",
-              color: `${C.sage}60`,
-            }}>{l}</span>
-          ))}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <IconWave size={16} color={C.oceanTeal} />
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", color: C.oceanTeal }}>Spacious</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", color: C.goldenAmber }}>Full</span>
+            <IconFlame size={16} color={C.goldenAmber} />
+          </div>
         </div>
       </div>
       <NavButtons onBack={onBack} onNext={onNext} />
@@ -561,146 +817,135 @@ function StepPacing({ data, onChange, onNext, onBack }) {
   );
 }
 
-// ─── Step: Budget ────────────────────────────────────────────────────────────
-function StepBudget({ data, onChange, onNext, onBack }) {
+
+// ─── Step: Details (duration + budget combined) ─────────────────────────────
+
+function StepDetails({ data, onChange, onNext, onBack }) {
+  const days = data.duration || 4;
+
   return (
     <div>
       <StepTitle
-        eyebrow="Investment"
-        title="What feels right?"
-        subtitle="Every tier is intentionally designed. This just shapes the options."
+        eyebrow="Details"
+        title="Your window"
+        subtitle="How much time do you have, and what range feels right?"
       />
-      <div style={{
-        display: "flex", flexDirection: "column", gap: 12,
-        maxWidth: 440, margin: "0 auto", padding: "0 16px",
-      }}>
-        {BUDGET_TIERS.map(tier => {
-          const active = data.budget === tier.id;
-          return (
-            <button key={tier.id} onClick={() => onChange({ budget: tier.id })} style={{
-              display: "flex", alignItems: "center", gap: 16,
-              background: active ? `${tier.color}10` : C.white,
-              border: `2px solid ${active ? tier.color : `${C.sage}15`}`,
-              borderRadius: 16, padding: "20px 24px",
-              cursor: "pointer", transition: "all 0.3s", textAlign: "left",
-              boxShadow: active ? `0 3px 16px ${tier.color}18` : "0 1px 4px rgba(0,0,0,0.03)",
-            }}>
+      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px" }}>
+
+        {/* Duration */}
+        <div style={{
+          background: C.white, borderRadius: 18, padding: "28px 24px",
+          border: `1px solid ${C.sage}12`, marginBottom: 16,
+        }}>
+          <div style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 10, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase",
+            color: C.oceanTeal, marginBottom: 20, textAlign: "center",
+          }}>How many days?</div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 28 }}>
+            <button onClick={() => onChange({ duration: Math.max(2, days - 1) })} style={{
+              width: 48, height: 48, borderRadius: "50%",
+              background: "transparent", border: `2px solid ${C.sage}25`,
+              cursor: "pointer", fontSize: 20, color: C.sage,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "'Quicksand', sans-serif", WebkitTapHighlightColor: "transparent",
+            }}>−</button>
+            <div style={{ textAlign: "center", minWidth: 60 }}>
               <div style={{
-                width: 44, height: 44, borderRadius: 12,
-                background: active ? `${tier.color}20` : `${C.sage}10`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "background 0.3s", flexShrink: 0,
-              }}>
-                <div style={{
-                  width: 10, height: 10, borderRadius: "50%",
-                  background: active ? tier.color : `${C.sage}40`,
-                  transition: "background 0.3s",
-                }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 20, fontWeight: 600, color: C.slate, marginBottom: 2,
-                }}>{tier.label}</div>
-                <div style={{
-                  fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 12, color: `${C.slate}70`, fontWeight: 400,
-                }}>{tier.desc}</div>
-              </div>
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "clamp(48px, 12vw, 60px)", fontWeight: 300, color: C.slate, lineHeight: 1,
+              }}>{days}</div>
               <div style={{
                 fontFamily: "'Quicksand', sans-serif",
-                fontSize: 12, fontWeight: 600, color: active ? tier.color : `${C.sage}80`,
-                letterSpacing: "0.02em", flexShrink: 0,
-              }}>{tier.range}</div>
-            </button>
-          );
-        })}
+                fontSize: 11, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase",
+                color: `${C.sage}80`, marginTop: 2,
+              }}>days</div>
+            </div>
+            <button onClick={() => onChange({ duration: Math.min(14, days + 1) })} style={{
+              width: 48, height: 48, borderRadius: "50%",
+              background: "transparent", border: `2px solid ${C.sage}25`,
+              cursor: "pointer", fontSize: 20, color: C.sage,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "'Quicksand', sans-serif", WebkitTapHighlightColor: "transparent",
+            }}>+</button>
+          </div>
+          <div style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 11, color: `${C.sage}60`, textAlign: "center", marginTop: 12,
+          }}>We recommend 4–7 days for a transformative experience</div>
+        </div>
+
+        {/* Budget */}
+        <div style={{
+          background: C.white, borderRadius: 18, padding: "24px 20px",
+          border: `1px solid ${C.sage}12`,
+        }}>
+          <div style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 10, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase",
+            color: C.goldenAmber, marginBottom: 14, textAlign: "center",
+          }}>What range feels right?</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {BUDGET_TIERS.map(tier => {
+              const active = data.budget === tier.id;
+              return (
+                <button key={tier.id} onClick={() => onChange({ budget: tier.id })} style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  background: active ? `${tier.color}08` : "transparent",
+                  border: `1.5px solid ${active ? tier.color : `${C.sage}12`}`,
+                  borderRadius: 12, padding: "14px 16px",
+                  cursor: "pointer", transition: "all 0.25s",
+                  minHeight: 52, WebkitTapHighlightColor: "transparent",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{
+                      width: 8, height: 8, borderRadius: "50%",
+                      background: active ? tier.color : `${C.sage}30`,
+                      transition: "background 0.25s",
+                    }} />
+                    <div>
+                      <span style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "clamp(16px, 4vw, 18px)", fontWeight: 600, color: C.slate,
+                      }}>{tier.label}</span>
+                      <span style={{
+                        fontFamily: "'Quicksand', sans-serif",
+                        fontSize: 11, color: `${C.slate}60`, marginLeft: 8,
+                      }}>{tier.desc}</span>
+                    </div>
+                  </div>
+                  <div style={{
+                    fontFamily: "'Quicksand', sans-serif",
+                    fontSize: 11, fontWeight: 600, color: active ? tier.color : `${C.sage}70`,
+                    flexShrink: 0, whiteSpace: "nowrap",
+                  }}>{tier.range}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
       <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.budget} />
     </div>
   );
 }
 
-// ─── Step: Duration ──────────────────────────────────────────────────────────
-function StepDuration({ data, onChange, onNext, onBack }) {
-  const days = data.duration || 4;
-  return (
-    <div>
-      <StepTitle
-        eyebrow="Duration"
-        title="How many days?"
-        subtitle="We recommend 4–7 days for a truly transformative experience."
-      />
-      <div style={{ maxWidth: 360, margin: "0 auto", textAlign: "center", padding: "0 24px" }}>
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 32, marginBottom: 24,
-        }}>
-          <button onClick={() => onChange({ duration: Math.max(2, days - 1) })} style={{
-            width: 48, height: 48, borderRadius: "50%",
-            background: C.white, border: `2px solid ${C.sage}25`,
-            cursor: "pointer", fontSize: 22, color: C.sage,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            transition: "all 0.3s", fontFamily: "'Quicksand', sans-serif",
-          }}
-          onMouseEnter={e => e.target.style.borderColor = C.sage}
-          onMouseLeave={e => e.target.style.borderColor = `${C.sage}25`}
-          >−</button>
-          <div>
-            <div style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 72, fontWeight: 300, color: C.slate, lineHeight: 1,
-            }}>{days}</div>
-            <div style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: 12, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase",
-              color: `${C.sage}80`, marginTop: 4,
-            }}>days</div>
-          </div>
-          <button onClick={() => onChange({ duration: Math.min(14, days + 1) })} style={{
-            width: 48, height: 48, borderRadius: "50%",
-            background: C.white, border: `2px solid ${C.sage}25`,
-            cursor: "pointer", fontSize: 22, color: C.sage,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            transition: "all 0.3s", fontFamily: "'Quicksand', sans-serif",
-          }}
-          onMouseEnter={e => e.target.style.borderColor = C.sage}
-          onMouseLeave={e => e.target.style.borderColor = `${C.sage}25`}
-          >+</button>
-        </div>
-
-        {/* Visual day blocks */}
-        <div style={{
-          display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap", marginTop: 16,
-        }}>
-          {Array.from({ length: days }, (_, i) => (
-            <div key={i} style={{
-              width: 32, height: 32, borderRadius: 8,
-              background: `linear-gradient(135deg, ${C.oceanTeal}${(20 + i * 10).toString(16)}, ${C.goldenAmber}${(20 + i * 10).toString(16)})`,
-              border: `1px solid ${C.sage}15`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600, color: C.sage,
-              animation: `fadeScale 0.3s ${i * 0.05}s both`,
-            }}>{i + 1}</div>
-          ))}
-        </div>
-      </div>
-      <NavButtons onBack={onBack} onNext={onNext} nextLabel="See My Profile" />
-    </div>
-  );
-}
-
-// ─── Step: Spirit Profile ────────────────────────────────────────────────────
+// ─── Profile ─────────────────────────────────────────────────────────────────
 function StepProfile({ data, onBack, onUnlock }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => { setTimeout(() => setVisible(true), 200); }, []);
 
-  // Compute radar values from selections
+  const persona = getPersona(data);
+  const PersonaIcon = persona.icon;
+  const practiceLevel = data.practiceLevel ?? 1;
+  const practiceLevelLabel = PRACTICE_LEVELS[practiceLevel]?.label || "Curious";
+
   const radarValues = {
     movement: (data.movement ?? 50) / 100,
-    wellness: Math.min(1, (data.practices?.length || 0) / 5),
-    adventure: data.intentions?.includes("adventure") ? 0.85 : (data.movement ?? 50) > 65 ? 0.6 : 0.3,
-    stillness: data.intentions?.includes("stillness") ? 0.85 : (data.pacing ?? 50) < 40 ? 0.7 : 0.3,
-    social: data.intentions?.includes("connection") ? 0.85 : 0.4,
+    wellness: Math.min(1, (practiceLevel / 3) * 0.7 + ((data.practices?.length || 0) / 5) * 0.3),
+    adventure: (data.intentions || []).includes("transformation") ? 0.85 : (data.movement ?? 50) > 65 ? 0.6 : 0.3,
+    stillness: (data.intentions || []).some(i => ["peace","liberation"].includes(i)) ? 0.85 : (data.pacing ?? 50) < 40 ? 0.7 : 0.3,
+    social: (data.intentions || []).includes("connection") ? 0.85 : 0.4,
     luxury: data.budget === "noLimits" ? 1 : data.budget === "premium" ? 0.75 : data.budget === "balanced" ? 0.5 : 0.3,
   };
 
@@ -713,115 +958,74 @@ function StepProfile({ data, onBack, onUnlock }) {
       opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
       transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
     }}>
-      <StepTitle
-        eyebrow="Your Travel Spirit"
-        title="Here's what we see"
-        subtitle={`A ${data.duration || 4}-day journey to ${destName}, shaped by everything you've shared.`}
-      />
+      <StepTitle eyebrow="Your Travel Spirit" title="Here's what we see" />
 
-      {/* Radar */}
-      <div style={{
-        display: "flex", justifyContent: "center", marginBottom: 32,
-      }}>
-        <RadarChart values={radarValues} size={280} />
-      </div>
-
-      {/* Summary cards */}
-      <div style={{
-        maxWidth: 480, margin: "0 auto", padding: "0 16px",
-        display: "flex", flexDirection: "column", gap: 12,
-      }}>
+      {/* Persona card */}
+      <div style={{ maxWidth: 480, margin: "0 auto 28px", padding: "0 20px" }}>
         <div style={{
-          background: C.white, borderRadius: 14, padding: "18px 22px",
-          border: `1px solid ${C.sage}12`,
+          background: C.white, borderRadius: 18, padding: "28px 24px",
+          border: `2px solid ${persona.color}25`, boxShadow: `0 4px 24px ${persona.color}12`,
+          textAlign: "center",
         }}>
-          <div style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
-            color: C.oceanTeal, marginBottom: 8,
-          }}>Seeking</div>
-          <div style={{
-            display: "flex", gap: 8, flexWrap: "wrap",
-          }}>
-            {intentionLabels.map(l => (
-              <span key={l} style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 13, fontWeight: 500, color: C.slate,
-                background: `${C.oceanTeal}10`, padding: "4px 14px", borderRadius: 20,
-              }}>{l}</span>
-            ))}
-          </div>
-        </div>
-
-        <div style={{
-          background: C.white, borderRadius: 14, padding: "18px 22px",
-          border: `1px solid ${C.sage}12`,
-        }}>
-          <div style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
-            color: C.goldenAmber, marginBottom: 8,
-          }}>Practices</div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {practiceLabels.map(l => (
-              <span key={l} style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 13, fontWeight: 500, color: C.slate,
-                background: `${C.goldenAmber}10`, padding: "4px 14px", borderRadius: 20,
-              }}>{l}</span>
-            ))}
-          </div>
-        </div>
-
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12,
-        }}>
-          <div style={{
-            background: C.white, borderRadius: 14, padding: "18px 22px",
-            border: `1px solid ${C.sage}12`,
-          }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
             <div style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
-              color: C.sunSalmon, marginBottom: 6,
-            }}>Pace</div>
-            <div style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 22, fontWeight: 400, color: C.slate,
+              width: 52, height: 52, borderRadius: "50%",
+              background: `${persona.color}12`, border: `1.5px solid ${persona.color}30`,
+              display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              {(data.pacing ?? 50) < 35 ? "Slow & Deep" : (data.pacing ?? 50) < 65 ? "Balanced" : "Full & Rich"}
+              <PersonaIcon size={26} color={persona.color} />
             </div>
           </div>
-          <div style={{
-            background: C.white, borderRadius: 14, padding: "18px 22px",
-            border: `1px solid ${C.sage}12`,
-          }}>
-            <div style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
-              color: C.seaGlass, marginBottom: 6,
-            }}>Investment</div>
-            <div style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 22, fontWeight: 400, color: C.slate,
-            }}>
-              {BUDGET_TIERS.find(t => t.id === data.budget)?.label || "—"}
+          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: persona.color, marginBottom: 8 }}>{persona.subtitle}</div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 7vw, 36px)", fontWeight: 300, color: C.slate, marginBottom: 4, lineHeight: 1.1 }}>{persona.name}</div>
+          <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(12px, 3.2vw, 13px)", fontWeight: 400, color: `${C.slate}80`, lineHeight: 1.65, marginTop: 14 }}>{persona.desc}</p>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 24, padding: "0 20px" }}>
+        <RadarChart values={radarValues} />
+      </div>
+
+      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px", display: "flex", flexDirection: "column", gap: 10 }}>
+        {intentionLabels.length > 0 && (
+          <div style={{ background: C.white, borderRadius: 14, padding: "16px 20px", border: `1px solid ${C.sage}12` }}>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.oceanTeal, marginBottom: 8 }}>Seeking</div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {intentionLabels.map(l => (
+                <span key={l} style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 500, color: C.slate, background: `${C.oceanTeal}10`, padding: "4px 12px", borderRadius: 20 }}>{l}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        {practiceLabels.length > 0 && (
+          <div style={{ background: C.white, borderRadius: 14, padding: "16px 20px", border: `1px solid ${C.sage}12` }}>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.goldenAmber, marginBottom: 8 }}>Practices</div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {practiceLabels.map(l => (
+                <span key={l} style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 500, color: C.slate, background: `${C.goldenAmber}10`, padding: "4px 12px", borderRadius: 20 }}>{l}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ background: C.white, borderRadius: 14, padding: "16px 18px", border: `1px solid ${C.sage}12` }}>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.sunSalmon, marginBottom: 4 }}>Rhythm</div>
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 4.5vw, 22px)", fontWeight: 400, color: C.slate }}>
+              {(data.pacing ?? 50) < 35 ? "Spacious" : (data.pacing ?? 50) < 65 ? "Balanced" : "Full"}
+            </div>
+          </div>
+          <div style={{ background: C.white, borderRadius: 14, padding: "16px 18px", border: `1px solid ${C.sage}12` }}>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.seaGlass, marginBottom: 4 }}>Practice</div>
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 4.5vw, 22px)", fontWeight: 400, color: C.slate }}>
+              {practiceLevel === 0 ? "Curious" : practiceLevel === 1 ? "Dabbling" : practiceLevel === 2 ? "Regular" : "Deep"}
             </div>
           </div>
         </div>
       </div>
 
-      {/* CTA */}
-      <div style={{ textAlign: "center", marginTop: 48, paddingBottom: 48 }}>
-        <div style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 26, fontWeight: 300, color: C.slate, marginBottom: 8,
-        }}>Your itinerary is ready</div>
-        <p style={{
-          fontFamily: "'Quicksand', sans-serif",
-          fontSize: 14, color: `${C.slate}70`, marginBottom: 28, maxWidth: 380, margin: "0 auto 28px",
-          lineHeight: 1.6,
-        }}>
+      <div style={{ textAlign: "center", marginTop: 40, padding: "0 28px 48px" }}>
+        <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px, 5.5vw, 26px)", fontWeight: 300, color: C.slate, marginBottom: 8 }}>Your itinerary is ready</div>
+        <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 3.5vw, 14px)", color: `${C.slate}70`, maxWidth: 380, margin: "0 auto 28px", lineHeight: 1.6 }}>
           A custom {data.duration || 4}-day plan for {destName} — built around your pace, your practices, and your intentions.
         </p>
         <button onClick={onUnlock} style={{
@@ -829,25 +1033,17 @@ function StepProfile({ data, onBack, onUnlock }) {
           fontSize: 14, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase",
           background: `linear-gradient(135deg, ${C.sage}, ${C.oceanTeal})`,
           border: "none", color: C.white,
-          padding: "18px 52px", borderRadius: 40, cursor: "pointer",
-          transition: "all 0.3s",
-          boxShadow: `0 6px 28px ${C.oceanTeal}30`,
-        }}
-        onMouseEnter={e => { e.target.style.transform = "translateY(-2px)"; e.target.style.boxShadow = `0 8px 36px ${C.oceanTeal}40`; }}
-        onMouseLeave={e => { e.target.style.transform = "translateY(0)"; e.target.style.boxShadow = `0 6px 28px ${C.oceanTeal}30`; }}
-        >
-          Unlock My Itinerary
-        </button>
-        <div style={{
-          fontFamily: "'Quicksand', sans-serif",
-          fontSize: 12, color: `${C.sage}60`, marginTop: 16,
-        }}>Starting at $29 · Fully customizable</div>
+          padding: "18px 44px", borderRadius: 40, cursor: "pointer",
+          transition: "all 0.3s", boxShadow: `0 6px 28px ${C.oceanTeal}30`,
+          minHeight: 56, WebkitTapHighlightColor: "transparent",
+        }}>Unlock My Itinerary</button>
+        <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: `${C.sage}60`, marginTop: 16 }}>Starting at $29 · Fully customizable</div>
         <div style={{ marginTop: 20 }}>
           <button onClick={onBack} style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 12, fontWeight: 500, color: `${C.sage}80`,
+            fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 500, color: `${C.sage}80`,
             background: "none", border: "none", cursor: "pointer",
-            textDecoration: "underline", textUnderlineOffset: 3,
+            textDecoration: "underline", textUnderlineOffset: 3, padding: 12, minHeight: 44,
+            WebkitTapHighlightColor: "transparent",
           }}>← Adjust my preferences</button>
         </div>
       </div>
@@ -855,65 +1051,49 @@ function StepProfile({ data, onBack, onUnlock }) {
   );
 }
 
-// ─── Main App ────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// MAIN
+// ═══════════════════════════════════════════════════════════════════════════════
 
 export default function PlanMyTrip() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
-    destination: null,
-    intentions: [],
-    movement: 50,
-    practices: [],
-    pacing: 50,
-    budget: null,
-    duration: 4,
+    destination: null, intentions: [], movement: 50,
+    pacing: 50, duration: 4, budget: null,
+    practiceLevel: 1, practices: [],
   });
   const [transitioning, setTransitioning] = useState(false);
   const containerRef = useRef(null);
 
   const updateData = (patch) => setData(prev => ({ ...prev, ...patch }));
-
   const handleClose = () => {
     if (step > 0 && !window.confirm("Leave trip planner? Your selections won't be saved.")) return;
     navigate('/');
   };
-
   const goNext = () => {
     setTransitioning(true);
-    setTimeout(() => {
-      setStep(s => s + 1);
-      setTransitioning(false);
-      containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-    }, 300);
+    setTimeout(() => { setStep(s => s + 1); setTransitioning(false); if (containerRef.current) containerRef.current.scrollTop = 0; }, 300);
   };
-
   const goBack = () => {
     setTransitioning(true);
-    setTimeout(() => {
-      setStep(s => s - 1);
-      setTransitioning(false);
-      containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-    }, 300);
+    setTimeout(() => { setStep(s => s - 1); setTransitioning(false); if (containerRef.current) containerRef.current.scrollTop = 0; }, 300);
   };
-
   const handleUnlock = () => {
-    alert("🎉 This would navigate to the payment / itinerary unlock flow!\n\nTrip data collected:\n" + JSON.stringify(data, null, 2));
+    alert("This would navigate to the payment / itinerary unlock flow!\n\nTrip data collected:\n" + JSON.stringify(data, null, 2));
   };
 
-  const TOTAL_STEPS = 8;
-
+  // 8 screens: welcome → destination → intention → movement → rhythm → details → practice → profile
   const renderStep = () => {
     switch (step) {
       case 0: return <StepWelcome onNext={goNext} />;
       case 1: return <StepDestination data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 2: return <StepIntention data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 3: return <StepMovement data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 4: return <StepPractices data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 5: return <StepPacing data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 6: return <StepBudget data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 7: return <StepDuration data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 8: return <StepProfile data={data} onBack={goBack} onUnlock={handleUnlock} />;
+      case 4: return <StepPacing data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 5: return <StepDetails data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 6: return <StepPractice data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 7: return <StepProfile data={data} onBack={goBack} onUnlock={handleUnlock} />;
       default: return null;
     }
   };
@@ -922,82 +1102,60 @@ export default function PlanMyTrip() {
     <div ref={containerRef} style={{
       fontFamily: "'Quicksand', sans-serif",
       background: `linear-gradient(180deg, ${C.cream} 0%, ${C.white} 50%, ${C.cream} 100%)`,
-      minHeight: "100vh", overflowY: "auto",
-      position: "relative",
+      minHeight: "100vh", overflowY: "auto", position: "relative",
     }}>
-
-      {/* ── Fixed Top Bar: Logo + close ── */}
-        <div style={{
-          position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          padding: "20px 28px",
-          background: step === 0 ? "transparent" : `linear-gradient(180deg, ${C.cream}ee 0%, ${C.cream}00 100%)`,
-          pointerEvents: "none",
-          transition: "background 0.4s",
+      <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        padding: "16px 20px",
+        background: step === 0 ? "transparent" : `linear-gradient(180deg, ${C.cream}ee 0%, ${C.cream}00 100%)`,
+        pointerEvents: "none", transition: "background 0.4s",
+      }}>
+        <Link to="/" style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: "clamp(18px, 4.5vw, 22px)", fontWeight: 500, letterSpacing: "0.08em",
+          color: C.slate, pointerEvents: "auto", textDecoration: "none",
+        }}>Lila Trips</Link>
+        <button onClick={handleClose} aria-label="Close" style={{
+          pointerEvents: "auto", width: 40, height: 40, borderRadius: "50%",
+          background: `${C.white}90`, border: `1px solid ${C.sage}18`,
+          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+          backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+          WebkitTapHighlightColor: "transparent",
         }}>
-          <Link to="/" style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 22, fontWeight: 500, letterSpacing: "0.08em",
-            color: C.slate, pointerEvents: "auto", cursor: "pointer",
-            transition: "opacity 0.3s", textDecoration: "none",
-          }}
-          onMouseEnter={e => e.currentTarget.style.opacity = "0.6"}
-          onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-          >
-            Lila Trips
-          </Link>
-          <button onClick={handleClose} aria-label="Close" style={{
-            pointerEvents: "auto",
-            width: 36, height: 36, borderRadius: "50%",
-            background: `${C.white}90`, border: `1px solid ${C.sage}18`,
-            cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-            transition: "all 0.3s", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = C.white; e.currentTarget.style.borderColor = `${C.sage}40`; }}
-          onMouseLeave={e => { e.currentTarget.style.background = `${C.white}90`; e.currentTarget.style.borderColor = `${C.sage}18`; }}
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke={C.sage} strokeWidth="1.8" strokeLinecap="round">
-              <line x1="1" y1="1" x2="13" y2="13" /><line x1="13" y1="1" x2="1" y2="13" />
-            </svg>
-          </button>
-        </div>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke={C.sage} strokeWidth="1.8" strokeLinecap="round">
+            <line x1="1" y1="1" x2="13" y2="13" /><line x1="13" y1="1" x2="1" y2="13" />
+          </svg>
+        </button>
+      </div>
+
       <style>{`
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        ::selection { background: ${C.oceanTeal}30; }
+        input[type="range"] { -webkit-tap-highlight-color: transparent; }
         input[type="range"]::-webkit-slider-thumb {
           -webkit-appearance: none; appearance: none;
-          width: 24px; height: 24px; border-radius: 50%;
+          width: 32px; height: 32px; border-radius: 50%;
           background: ${C.white}; border: 3px solid ${C.sage};
-          box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-          cursor: pointer; transition: transform 0.2s;
-        }
-        input[type="range"]::-webkit-slider-thumb:hover {
-          transform: scale(1.15);
+          box-shadow: 0 2px 10px rgba(0,0,0,0.15); cursor: pointer;
         }
         input[type="range"]::-moz-range-thumb {
-          width: 24px; height: 24px; border-radius: 50%;
+          width: 32px; height: 32px; border-radius: 50%;
           background: ${C.white}; border: 3px solid ${C.sage};
-          box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-          cursor: pointer;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.15); cursor: pointer;
         }
         @keyframes fadeScale {
-          from { opacity: 0; transform: scale(0.8); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from { opacity: 0; transform: scale(0.95) translateY(4px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
 
       <div style={{
         maxWidth: 640, margin: "0 auto",
-        padding: step === 0 ? 0 : "80px 0 0",
+        padding: step === 0 ? 0 : "76px 0 0",
         opacity: transitioning ? 0 : 1,
         transform: transitioning ? "translateY(12px)" : "translateY(0)",
         transition: "opacity 0.3s, transform 0.3s",
       }}>
-        {step > 0 && step < 8 && <StepIndicator current={step - 1} total={7} />}
+        {step > 0 && step < 7 && <StepIndicator current={step - 1} total={6} />}
         {renderStep()}
       </div>
     </div>
