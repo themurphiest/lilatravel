@@ -5,6 +5,7 @@
 // SITE MAP:
 //
 //   /                              → Homepage
+//   /plan                          → Trip Planner (full-screen onboarding flow)
 //   /destinations                  → Destinations landing (grid of all destinations)
 //   /destinations/zion-canyon      → Dedicated Zion guide (custom page)
 //   /destinations/:slug            → Generic destination guide (auto-generated)
@@ -43,6 +44,7 @@ import RitualsPage from '@pages/Rituals';
 import RitualDetail from '@pages/RitualDetail';
 import OfferingsPage from '@pages/Offerings';
 import ContactPage from '@pages/Contact';
+import PlanMyTrip from '@pages/PlanMyTrip';
 import NotFound from '@pages/NotFound';
 
 // ─── Dedicated Guides ───────────────────────────────────────────────────────
@@ -73,6 +75,9 @@ export default function App() {
         <Routes>
           {/* Homepage */}
           <Route path="/" element={<HomePage />} />
+
+          {/* Trip Planner — full-screen onboarding (no Nav/Footer) */}
+          <Route path="/plan" element={<PlanMyTrip />} />
 
           {/* Destinations */}
           <Route path="/destinations" element={<DestinationsPage />} />

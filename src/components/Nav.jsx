@@ -60,7 +60,7 @@ export default function Nav({ transparent = false }) {
           </Link>
         ))}
 
-        <Link to="/destinations" style={{
+        <Link to="/plan" style={{
           fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 700,
           letterSpacing: "0.2em", textTransform: "uppercase",
           color: showSolid ? C.darkInk : "white",

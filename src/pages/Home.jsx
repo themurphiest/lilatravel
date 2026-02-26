@@ -416,7 +416,7 @@ export default function HomePage() {
                   {" "}<span style={{ color: "rgba(90,106,120,0.5)", fontSize: "clamp(12px, 1.4vw, 14px)" }}>/lee·lah/</span>
                 </p>
                 <p style={{ marginBottom: 0, color: "#5a6a78" }}>
-                  A Hindu concept meaning <span style={{ color: C.skyBlue }}>"divine or cosmic play"</span>.<br />It suggests life is like a dance — joyous and light.
+                  A Hindu concept meaning <span style={{ color: C.skyBlue }}>"divine or cosmic play"</span>.<br />It suggests life is like a dance — joyous and light.<br />Learning to live this way is our living practice.
                 </p>
               </div>
             </FadeIn>
@@ -426,23 +426,26 @@ export default function HomePage() {
             display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: 680,
           }}>
             <FadeIn from="right" delay={0.15}>
-              <span className="eyebrow" style={{ color: C.skyBlue }}>Travel with Lila</span>
+              <span className="eyebrow" style={{ color: C.skyBlue }}>Introducing Lila Trips</span>
               <h2 style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(15px, 2vw, 22px)", fontWeight: 600, color: "white",
                 lineHeight: 1.6, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 48,
               }}>
-                We help you take amazing<br />trips and dance with<br />the mystery.
+                We help put people,<br />place and practice<br />together.
               </h2>
               <div style={{
                 fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 1.4vw, 15px)",
                 fontWeight: 400, color: "rgba(255,255,255,0.55)", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
                 <p style={{ marginBottom: 32, color: "rgba(255,255,255,0.7)" }}>
-                  We put you and the right pieces together. You don't need more options, you need the right ones.<br />We're not really travel agents. More like a local friend handing you a shortlist.
+                  We put you and the right pieces together.<br />You don't need more options.<br />You need the right ones.
+                </p>
+                <p style={{ marginBottom: 32, color: "rgba(255,255,255,0.7)" }}>
+                  We're not really travel agents.<br />More like a local friend with a shortlist.<br />We eliminate everything not worth your time.
                 </p>
                 <p style={{ marginBottom: 24, color: "rgba(255,255,255,0.45)", fontStyle: "italic", fontSize: "clamp(13px, 1.4vw, 15px)" }}>
-                  Our recipe for dance includes...
+                  We help you find…
                 </p>
                 {[
                   "Sacred destinations with capacity for wonder.",
@@ -541,7 +544,7 @@ export default function HomePage() {
               }}>We'll show you the way.</p>
               <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap" }}>
                 <Link to="/destinations" className="underline-link underline-link-light">Explore Destinations</Link>
-                <Link to="/offerings" className="underline-link underline-link-light">Plan a Custom Trip</Link>
+                <Link to="/plan" className="underline-link underline-link-light">Plan a Custom Trip</Link>
                 <Link to="/contact" className="underline-link underline-link-light">Contact Our Experts</Link>
               </div>
             </div>

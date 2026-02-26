@@ -10,7 +10,7 @@
 //
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Nav, Footer, FadeIn, Breadcrumb } from '@components';
 import { C } from '@data/brand';
 import { P } from '@data/photos';
@@ -110,6 +110,21 @@ function SectionIcon({ type }) {
           stroke={C.sunSalmon} strokeWidth="1.5" fill="none" />
       </svg>
     ),
+    // Compass — plan
+    plan: (
+      <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="11" stroke={C.oceanTeal} strokeWidth="1.5" fill="none" />
+        <path d="M11 17 L13 13 L17 11 L15 15 Z" stroke={C.oceanTeal} strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+      </svg>
+    ),
+    // People — group
+    group: (
+      <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
+        <circle cx="10" cy="10" r="3.5" stroke={C.sunSalmon} strokeWidth="1.5" fill="none" />
+        <circle cx="18" cy="10" r="3.5" stroke={C.sunSalmon} strokeWidth="1.5" fill="none" />
+        <path d="M4 22 C4 17 7 15 10 15 C11.5 15 12.5 15.5 14 16.5 C15.5 15.5 16.5 15 18 15 C21 15 24 17 24 22" stroke={C.sunSalmon} strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      </svg>
+    ),
   };
   return (
     <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
@@ -119,6 +134,7 @@ function SectionIcon({ type }) {
 }
 
 function AddToTripButton({ name }) {
+  const navigate = useNavigate();
   const [added, setAdded] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
 
@@ -192,9 +208,9 @@ function AddToTripButton({ name }) {
               fontFamily: "'Cormorant Garamond', serif",
               fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 300, fontStyle: "italic",
               color: "#5a7080", lineHeight: 1.65, marginBottom: 28,
-            }}>Create a free account to save your trip, get personalized recommendations, and unlock custom itineraries.</div>
+            }}>Unlock the Zion Trip Planner to save your picks, build a day-by-day itinerary, and access everything offline.</div>
             <button
-              onClick={() => setShowPrompt(false)}
+              onClick={() => { setShowPrompt(false); navigate('/plan'); }}
               style={{
                 width: "100%", padding: "13px 28px",
                 background: C.darkInk, color: "#fff", border: "none",
@@ -205,7 +221,7 @@ function AddToTripButton({ name }) {
               }}
               onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-            >Create Free Account</button>
+            >Unlock Trip Planner — $39</button>
             <button
               onClick={() => setShowPrompt(false)}
               style={{
@@ -383,6 +399,330 @@ function ExpandableList({ children, initialCount = 5, label = "more" }) {
 }
 
 
+// ─── Offering Cards (new) ────────────────────────────────────────────────────
+
+function OfferingCard({ icon, label, title, description, cta, ctaAction, accent, secondary }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        padding: "24px 20px",
+        background: hovered ? `${accent}08` : "transparent",
+        border: `1px solid ${hovered ? accent : C.stone}`,
+        transition: "all 0.3s ease",
+        display: "flex", flexDirection: "column",
+        cursor: "default",
+        minWidth: 0,
+      }}
+    >
+      <div style={{ marginBottom: 14 }}>{icon}</div>
+      <div style={{
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: 9, fontWeight: 700,
+        letterSpacing: "0.22em", textTransform: "uppercase",
+        color: accent, marginBottom: 6,
+      }}>{label}</div>
+      <div style={{
+        fontFamily: "'Cormorant Garamond', serif",
+        fontSize: "clamp(18px, 2.5vw, 22px)", fontWeight: 400,
+        color: C.darkInk, lineHeight: 1.2, marginBottom: 8,
+      }}>{title}</div>
+      <p style={{
+        fontFamily: "'Cormorant Garamond', serif",
+        fontSize: 14, fontWeight: 300, fontStyle: "italic",
+        color: "#5a7080", lineHeight: 1.55, margin: "0 0 18px",
+        flex: 1,
+      }}>{description}</p>
+      <button
+        onClick={ctaAction}
+        style={{
+          alignSelf: "flex-start",
+          padding: "9px 18px",
+          background: "transparent",
+          border: `1.5px solid ${accent}`,
+          color: accent,
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 9, fontWeight: 700,
+          letterSpacing: "0.16em", textTransform: "uppercase",
+          cursor: "pointer", transition: "all 0.25s",
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = accent; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = accent; }}
+      >{cta}</button>
+      {secondary && (
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 9, fontWeight: 500, color: "#9aabba",
+          marginTop: 8, letterSpacing: "0.04em",
+        }}>{secondary}</div>
+      )}
+    </div>
+  );
+}
+
+
+// ─── Plan My Trip CTA (contextual mid-page prompt) ──────────────────────────
+
+function PlanMyTripCTA({ variant = "default" }) {
+  const navigate = useNavigate();
+  const [hovered, setHovered] = useState(false);
+
+  const variants = {
+    default: {
+      heading: "Ready to build your trip?",
+      body: "Unlock the Zion Trip Planner — turn your favorite picks into a day-by-day itinerary with booking links, optimal timing, and offline access.",
+      cta: "Unlock Trip Planner — $39",
+      bg: C.cream,
+      border: C.stone,
+    },
+    afterStay: {
+      heading: "Found your place to stay?",
+      body: "The Trip Planner pairs your accommodation with curated daily itineraries — trails, meals, and golden-hour timing built around where you're sleeping.",
+      cta: "Unlock Trip Planner — $39",
+      bg: C.cream,
+      border: C.stone,
+    },
+    afterMove: {
+      heading: "That's a lot of trails.",
+      body: "The Trip Planner sequences the best hikes by day, handles permit timing, and builds in recovery between the big ones. We've done this route dozens of times.",
+      cta: "Unlock Trip Planner — $39",
+      bg: C.cream,
+      border: C.stone,
+    },
+    custom: {
+      heading: "Want someone to build it for you?",
+      body: "Tell us your dates, your group, and what matters most. We'll create a personalized Zion itinerary — every detail handled.",
+      cta: "Request Custom Itinerary — from $199",
+      bg: C.darkInk,
+      border: "transparent",
+    },
+  };
+
+  const v = variants[variant] || variants.default;
+  const isDark = variant === "custom";
+
+  return (
+    <FadeIn>
+      <div style={{
+        padding: "32px 28px",
+        background: v.bg,
+        border: `1px solid ${v.border}`,
+        margin: "8px 0",
+        textAlign: "center",
+      }}>
+        {!isDark && (
+          <div style={{ marginBottom: 12 }}>
+            <SectionIcon type="plan" />
+          </div>
+        )}
+        <div style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: "clamp(20px, 3vw, 26px)", fontWeight: 400,
+          color: isDark ? "#fff" : C.darkInk, lineHeight: 1.2,
+          marginBottom: 8,
+        }}>{v.heading}</div>
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: "clamp(14px, 1.8vw, 16px)", fontWeight: 300, fontStyle: "italic",
+          color: isDark ? "rgba(255,255,255,0.55)" : "#5a7080",
+          lineHeight: 1.65, maxWidth: 480, margin: "0 auto 24px",
+        }}>{v.body}</p>
+        <button
+          onClick={() => navigate('/plan')}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          style={{
+            padding: "12px 32px",
+            background: isDark
+              ? (hovered ? "#fff" : "transparent")
+              : (hovered ? C.darkInk : "transparent"),
+            border: isDark
+              ? "1.5px solid rgba(255,255,255,0.4)"
+              : `1.5px solid ${C.darkInk}`,
+            color: isDark
+              ? (hovered ? C.darkInk : "#fff")
+              : (hovered ? "#fff" : C.darkInk),
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 10, fontWeight: 700,
+            letterSpacing: "0.18em", textTransform: "uppercase",
+            cursor: "pointer", transition: "all 0.3s",
+          }}
+        >{v.cta}</button>
+        {!isDark && (
+          <div style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 10, fontWeight: 500, color: "#9aabba",
+            marginTop: 12, letterSpacing: "0.04em",
+          }}>One-time purchase · Includes offline access</div>
+        )}
+      </div>
+    </FadeIn>
+  );
+}
+
+
+// ─── Threshold Trip Card (new) ───────────────────────────────────────────────
+
+function ThresholdTripCard({ title, dates, duration, description, spotsLeft, accent = C.sunSalmon }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div style={{
+      padding: 28, background: C.darkInk,
+      marginBottom: 12,
+      transition: "all 0.3s",
+    }}>
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10, marginBottom: 12,
+      }}>
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 10, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase",
+          color: accent,
+        }}>Threshold Trip</div>
+        {spotsLeft && (
+          <div style={{
+            padding: "2px 10px",
+            border: `1px solid ${accent}40`,
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 9, fontWeight: 700,
+            letterSpacing: "0.14em", textTransform: "uppercase",
+            color: accent,
+          }}>{spotsLeft} spots left</div>
+        )}
+      </div>
+      <div style={{
+        fontFamily: "'Cormorant Garamond', serif",
+        fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 300, color: "white", marginBottom: 4, lineHeight: 1.2,
+      }}>{title}</div>
+      <div style={{
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+        color: accent, marginBottom: 16,
+      }}>{dates} · {duration} · Guided group</div>
+      <p style={{
+        fontFamily: "'Cormorant Garamond', serif",
+        fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 300, fontStyle: "italic",
+        lineHeight: 1.7, color: "rgba(255,255,255,0.55)", margin: "0 0 24px",
+      }}>{description}</p>
+      <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+        <button
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          style={{
+            padding: "11px 28px",
+            border: `1px solid rgba(255,255,255,0.4)`,
+            background: hovered ? "white" : "transparent",
+            color: hovered ? C.darkInk : "white",
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 10, fontWeight: 700,
+            letterSpacing: "0.2em", textTransform: "uppercase",
+            cursor: "pointer", transition: "all 0.3s",
+          }}
+        >Express Interest</button>
+        <span style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.35)",
+          letterSpacing: "0.04em",
+        }}>From $895 per person</span>
+      </div>
+    </div>
+  );
+}
+
+
+// ─── Email Capture (lightweight) ─────────────────────────────────────────────
+
+function TimingAlertCapture() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <FadeIn>
+      <div style={{
+        padding: "28px 24px",
+        background: `${C.goldenAmber}08`,
+        border: `1px solid ${C.goldenAmber}30`,
+        textAlign: "center",
+        margin: "8px 0",
+      }}>
+        {submitted ? (
+          <>
+            <div style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 11, fontWeight: 700,
+              letterSpacing: "0.2em", textTransform: "uppercase",
+              color: C.goldenAmber, marginBottom: 8,
+            }}>You're on the list</div>
+            <div style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 16, fontWeight: 300, fontStyle: "italic",
+              color: "#5a7080", lineHeight: 1.6,
+            }}>We'll let you know when the golden window opens.</div>
+          </>
+        ) : (
+          <>
+            <SectionIcon type="windows" />
+            <div style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(18px, 2.5vw, 22px)", fontWeight: 400,
+              color: C.darkInk, marginBottom: 6,
+            }}>Get Zion timing alerts</div>
+            <p style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 15, fontWeight: 300, fontStyle: "italic",
+              color: "#5a7080", lineHeight: 1.6,
+              maxWidth: 420, margin: "0 auto 20px",
+            }}>We track conditions, seasonal windows, and threshold moments — and let you know when it's time to go.</p>
+            <div style={{
+              display: "flex", gap: 8, maxWidth: 380,
+              margin: "0 auto", flexWrap: "wrap", justifyContent: "center",
+            }}>
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                style={{
+                  flex: "1 1 200px",
+                  padding: "10px 16px",
+                  border: `1px solid ${C.stone}`,
+                  background: "#fff",
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 13, fontWeight: 400, color: C.darkInk,
+                  outline: "none",
+                }}
+              />
+              <button
+                onClick={() => { if (email) setSubmitted(true); }}
+                style={{
+                  padding: "10px 20px",
+                  background: C.goldenAmber,
+                  border: "none", color: "#fff",
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 10, fontWeight: 700,
+                  letterSpacing: "0.16em", textTransform: "uppercase",
+                  cursor: "pointer", transition: "opacity 0.2s",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+                onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+              >Notify Me</button>
+            </div>
+            <div style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 10, fontWeight: 400, color: "#9aabba",
+              marginTop: 10, letterSpacing: "0.04em",
+            }}>No spam. Just timing.</div>
+          </>
+        )}
+      </div>
+    </FadeIn>
+  );
+}
+
+
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 export default function ZionGuide() {
@@ -476,7 +816,7 @@ export default function ZionGuide() {
               }}>Autumn · Sep–Nov</span>
             </div>
 
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 48 }}>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 40 }}>
               {["Springdale to Torrey", "Free Guide", "Updated 2026"].map((t, i) => (
                 <span key={i} style={{
                   padding: "5px 14px", border: `1px solid ${C.stone}`,
@@ -488,12 +828,98 @@ export default function ZionGuide() {
           </FadeIn>
 
 
+          {/* ══════════════════════════════════════════════════════════════ */}
+          {/* HOW LILA HELPS — FOUR PATHWAYS (front and center)             */}
+          {/* ══════════════════════════════════════════════════════════════ */}
+          <section style={{ padding: "0 0 48px" }}>
+            <FadeIn>
+              <SectionLabel>How Lila Helps</SectionLabel>
+              <SectionTitle>Four ways to experience Zion</SectionTitle>
+              <SectionSub>
+                Start by exploring our free guide below — or jump straight to the path that fits.
+              </SectionSub>
+            </FadeIn>
+
+            <FadeIn delay={0.08}>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                gap: 12,
+              }}>
+                <OfferingCard
+                  icon={
+                    <svg width={24} height={24} viewBox="0 0 28 28" fill="none">
+                      <path d="M5 4 L5 24 L23 24" stroke={C.skyBlue} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M5 4 L15 4 L15 16 L5 16" stroke={C.skyBlue} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      <line x1="8" y1="8" x2="12" y2="8" stroke={C.skyBlue} strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="8" y1="12" x2="12" y2="12" stroke={C.skyBlue} strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  }
+                  label="DIY"
+                  title="Explore the Guide"
+                  description="Browse our curated picks for free — where to stay, what to hike, where to eat, and when the light is best."
+                  cta="Start Reading ↓"
+                  accent={C.skyBlue}
+                  secondary="Free · No account needed"
+                  ctaAction={() => {
+                    document.getElementById('guide-start')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                />
+                <OfferingCard
+                  icon={
+                    <svg width={24} height={24} viewBox="0 0 28 28" fill="none">
+                      <circle cx="14" cy="14" r="11" stroke={C.oceanTeal} strokeWidth="1.5" fill="none" />
+                      <path d="M11 17 L13 13 L17 11 L15 15 Z" stroke={C.oceanTeal} strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+                    </svg>
+                  }
+                  label="Plan a Trip"
+                  title="Trip Planner"
+                  description="Turn your favorites into a day-by-day itinerary with booking links, permit timing, and offline access."
+                  cta="Unlock — $39"
+                  accent={C.oceanTeal}
+                  secondary="One-time purchase · Offline access"
+                />
+                <OfferingCard
+                  icon={
+                    <svg width={24} height={24} viewBox="0 0 28 28" fill="none">
+                      <path d="M18 6 A10 10 0 1 0 18 22 A7 7 0 1 1 18 6 Z" stroke={C.sunSalmon} strokeWidth="1.5" fill="none" />
+                    </svg>
+                  }
+                  label="Join a Group"
+                  title="Threshold Trips"
+                  description="Small group journeys timed to natural crescendos. Guided, curated, eight travelers maximum."
+                  cta="View Trips"
+                  accent={C.sunSalmon}
+                  secondary="From $895 per person"
+                  ctaAction={() => {
+                    document.getElementById('threshold-trips')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                />
+                <OfferingCard
+                  icon={
+                    <svg width={24} height={24} viewBox="0 0 28 28" fill="none">
+                      <path d="M4 20 L14 6 L24 20" stroke={C.goldenAmber} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      <line x1="9" y1="13" x2="19" y2="13" stroke={C.goldenAmber} strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  }
+                  label="Designed for You"
+                  title="Custom Itinerary"
+                  description="Tell us your dates, group, and vibe. A real person builds a Zion itinerary around your trip."
+                  cta="Start — from $199"
+                  accent={C.goldenAmber}
+                  secondary="Personalized · Human-crafted"
+                />
+              </div>
+            </FadeIn>
+          </section>
+
+
           <Divider />
 
           {/* ══════════════════════════════════════════════════════════════ */}
           {/* SENSE OF PLACE                                                */}
           {/* ══════════════════════════════════════════════════════════════ */}
-          <section style={{ padding: "44px 0" }}>
+          <section id="guide-start" style={{ padding: "44px 0" }}>
             <FadeIn>
               <SectionLabel>Sense of Place</SectionLabel>
               <p style={{
@@ -563,6 +989,9 @@ export default function ZionGuide() {
               </div>
             </FadeIn>
           </section>
+
+          {/* ── Plan My Trip CTA: After Magic Windows ────────────────── */}
+          <PlanMyTripCTA variant="default" />
 
 
           <Divider />
@@ -639,6 +1068,9 @@ export default function ZionGuide() {
             </FadeIn>
           </section>
 
+          {/* ── Plan My Trip CTA: After Stay ───────────────────────────── */}
+          <PlanMyTripCTA variant="afterStay" />
+
 
           <Divider />
 
@@ -703,6 +1135,9 @@ export default function ZionGuide() {
               </ExpandableList>
             </FadeIn>
           </section>
+
+          {/* ── Plan My Trip CTA: After Move ───────────────────────────── */}
+          <PlanMyTripCTA variant="afterMove" />
 
 
           <Divider />
@@ -794,6 +1229,9 @@ export default function ZionGuide() {
             </FadeIn>
           </section>
 
+          {/* ── Custom Itinerary CTA ─────────────────────────────────────── */}
+          <PlanMyTripCTA variant="custom" />
+
 
           <Divider />
 
@@ -878,50 +1316,71 @@ export default function ZionGuide() {
           <Divider />
 
           {/* ══════════════════════════════════════════════════════════════ */}
-          {/* THRESHOLD EXPERIENCES                                         */}
+          {/* THRESHOLD EXPERIENCES (expanded)                              */}
           {/* ══════════════════════════════════════════════════════════════ */}
-          <section style={{ padding: "44px 0" }}>
+          <section id="threshold-trips" style={{ padding: "48px 0" }}>
             <FadeIn>
               <SectionIcon type="threshold" />
-              <SectionLabel>Threshold Experiences</SectionLabel>
+              <SectionLabel>Threshold Trips</SectionLabel>
               <SectionTitle>Join a curated journey</SectionTitle>
-              <SectionSub>Guided group trips timed to natural crescendos. Small groups, expert guides, meaningful connection.</SectionSub>
+              <SectionSub>Small group trips timed to natural crescendos. Expert guides, meaningful connection, transformative terrain. Eight travelers maximum.</SectionSub>
             </FadeIn>
+
             <FadeIn delay={0.08}>
-              <div style={{ padding: 28, background: C.darkInk }}>
-                <div style={{
-                  fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 10, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase",
-                  color: C.sunSalmon, marginBottom: 10,
-                }}>Coming Soon</div>
-                <div style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 300, color: "white", marginBottom: 4, lineHeight: 1.2,
-                }}>Autumn Equinox in Zion</div>
-                <div style={{
-                  fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
-                  color: C.sunSalmon, marginBottom: 16,
-                }}>{"September 20–24 · 5 days · Guided group"}</div>
+              <ThresholdTripCard
+                title="Autumn Equinox in Zion"
+                dates="September 20–24"
+                duration="5 days"
+                description="The cottonwoods begin their turn. Light shifts from summer's intensity to something golden and forgiving. A small group, guided through canyon trails at dawn, evening ceremonies as day and night find balance. The land at its most generous."
+                spotsLeft="6"
+              />
+            </FadeIn>
+
+            <FadeIn delay={0.14}>
+              <ThresholdTripCard
+                title="Winter Solstice — Canyon Light"
+                dates="December 19–22"
+                duration="4 days"
+                description="The shortest days cast the longest shadows. Snow dusts the upper walls. We gather at the stillest point of the year — morning breathwork in frozen air, evening fires under the darkest skies. A journey inward."
+                spotsLeft="8"
+              />
+            </FadeIn>
+
+            <FadeIn delay={0.2}>
+              <ThresholdTripCard
+                title="Desert Bloom — Spring Awakening"
+                dates="Late March (exact dates TBD)"
+                duration="4 days"
+                description="After winter rain, the desert erupts. Wildflowers carpet the canyon floor, cacti crown themselves, and the air smells sweet. Timing is everything — we watch the conditions and go when the land says go."
+                accent={C.seaGlass}
+              />
+            </FadeIn>
+
+            <FadeIn delay={0.24}>
+              <div style={{
+                padding: "20px 24px",
+                border: `1px solid ${C.stone}`,
+                textAlign: "center",
+                marginTop: 4,
+              }}>
                 <p style={{
                   fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 300, fontStyle: "italic",
-                  lineHeight: 1.7, color: "rgba(255,255,255,0.55)", margin: "0 0 24px",
-                }}>
-                  {"The cottonwoods begin their turn. Light shifts from summer's intensity to something golden and forgiving. A small group, guided through canyon trails at dawn, evening ceremonies as day and night find balance. The land at its most generous."}
-                </p>
+                  fontSize: 15, fontWeight: 300, fontStyle: "italic",
+                  color: "#5a7080", lineHeight: 1.6, margin: "0 0 16px",
+                }}>Want to be first to know when new Threshold Trips are announced?</p>
                 <button style={{
-                  padding: "11px 28px",
-                  border: `1px solid rgba(255,255,255,0.4)`,
-                  background: "transparent", color: "white",
+                  padding: "10px 24px",
+                  background: "transparent",
+                  border: `1.5px solid ${C.sunSalmon}`,
+                  color: C.sunSalmon,
                   fontFamily: "'Quicksand', sans-serif",
                   fontSize: 10, fontWeight: 700,
-                  letterSpacing: "0.2em", textTransform: "uppercase",
-                  cursor: "pointer", transition: "all 0.3s",
+                  letterSpacing: "0.18em", textTransform: "uppercase",
+                  cursor: "pointer", transition: "all 0.25s",
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = "white"; e.currentTarget.style.color = C.darkInk; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "white"; }}
-                >Express Interest</button>
+                onMouseEnter={e => { e.currentTarget.style.background = C.sunSalmon; e.currentTarget.style.color = "#fff"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = C.sunSalmon; }}
+                >Get Threshold Alerts</button>
               </div>
             </FadeIn>
           </section>
@@ -930,7 +1389,7 @@ export default function ZionGuide() {
           <Divider />
 
           {/* ══════════════════════════════════════════════════════════════ */}
-          {/* CTA                                                           */}
+          {/* CTA — DUAL PATH                                               */}
           {/* ══════════════════════════════════════════════════════════════ */}
           <section id="cta" style={{ padding: "56px 0 72px", textAlign: "center" }}>
             <FadeIn>
@@ -944,32 +1403,54 @@ export default function ZionGuide() {
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 300,
                 color: C.darkInk, margin: "0 0 10px", lineHeight: 1.2,
-              }}>Build your own<br />Zion adventure</h3>
+              }}>Your Zion trip starts here</h3>
               <p style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 300, fontStyle: "italic",
-                color: "#5a7080", maxWidth: 420,
-                margin: "0 auto 32px", lineHeight: 1.65,
+                color: "#5a7080", maxWidth: 460,
+                margin: "0 auto 36px", lineHeight: 1.65,
               }}>
-                Create an account to unlock custom itineraries, golden window timing, offline access, and insider notes.
+                Choose your path — build it yourself with our Trip Planner, or let us craft something personalized for you.
               </p>
-              <button style={{
-                padding: "13px 36px", border: "none",
-                background: C.darkInk, color: "#fff",
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 10, fontWeight: 700,
-                letterSpacing: "0.2em", textTransform: "uppercase",
-                cursor: "pointer", transition: "opacity 0.2s",
-                marginBottom: 10,
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-              >{"Create My Account →"}</button>
+
+              {/* Dual CTA buttons */}
+              <div style={{
+                display: "flex", gap: 16, justifyContent: "center",
+                flexWrap: "wrap", marginBottom: 16,
+              }}>
+                <Link to="/plan" style={{
+                  padding: "14px 36px", border: "none",
+                  background: C.darkInk, color: "#fff",
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 10, fontWeight: 700,
+                  letterSpacing: "0.2em", textTransform: "uppercase",
+                  cursor: "pointer", transition: "opacity 0.2s",
+                  textDecoration: "none",
+                }}
+                onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+                onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                >{"Unlock Trip Planner — $39"}</Link>
+
+                <Link to="/contact" style={{
+                  padding: "14px 36px",
+                  border: `1.5px solid ${C.darkInk}`, background: "transparent",
+                  color: C.darkInk,
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 10, fontWeight: 700,
+                  letterSpacing: "0.2em", textTransform: "uppercase",
+                  cursor: "pointer", transition: "all 0.2s",
+                  textDecoration: "none",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = C.darkInk; e.currentTarget.style.color = "#fff"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = C.darkInk; }}
+                >{"Request Custom Itinerary →"}</Link>
+              </div>
+
               <div style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: 11, fontWeight: 400, color: "#9aabba", marginTop: 12,
                 letterSpacing: "0.04em",
-              }}>{"Free to start · No credit card required"}</div>
+              }}>{"Trip Planner: one-time purchase · Custom Itinerary: from $199"}</div>
             </FadeIn>
           </section>
 
@@ -977,7 +1458,14 @@ export default function ZionGuide() {
           <Divider />
           <FadeIn>
             <div style={{ padding: "44px 0" }}>
-              <span className="eyebrow" style={{ color: "#9aabba" }}>Also Explore</span>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 16 }}>
+                <span className="eyebrow" style={{ color: "#9aabba" }}>Also Explore</span>
+                <span style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 10, fontWeight: 600,
+                  letterSpacing: "0.1em", color: "#9aabba",
+                }}>Guides available for each destination</span>
+              </div>
               <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 16 }}>
                 {[
                   { name: "Joshua Tree", slug: "joshua-tree", accent: C.goldenAmber },
