@@ -244,10 +244,10 @@ const DESTINATIONS = [
 ];
 
 const INTENTIONS = [
-  { id: "peace", label: "Peace", sanskrit: "Śānti", desc: "Quiet the noise. Find center.", icon: IconEnso, color: C.oceanTeal },
-  { id: "transformation", label: "Transformation", sanskrit: "Tapas", desc: "Burn through the old. Come back different.", icon: IconFlame, color: C.sunSalmon },
-  { id: "connection", label: "Connection", sanskrit: "Saṅgha", desc: "Deepen bonds. Open up.", icon: IconMagatama, color: C.goldenAmber },
-  { id: "liberation", label: "Liberation", sanskrit: "Mokṣa", desc: "Let go. Feel completely free.", icon: IconUnalome, color: C.skyBlue },
+  { id: "peace", label: "Peace", desc: "Quiet the noise. Find center.", icon: IconEnso, color: C.oceanTeal },
+  { id: "transformation", label: "Transformation", desc: "Burn through the old. Come back different.", icon: IconFlame, color: C.sunSalmon },
+  { id: "connection", label: "Connection", desc: "Deepen bonds. Open up.", icon: IconMagatama, color: C.goldenAmber },
+  { id: "liberation", label: "Liberation", desc: "Let go. Feel completely free.", icon: IconUnalome, color: C.skyBlue },
 ];
 
 
@@ -588,9 +588,8 @@ function StepIntention({ data, onChange, onNext, onBack }) {
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 10, transition: "opacity 0.3s", opacity: active ? 1 : 0.4 }}>
                 <Ic size={30} color={active ? item.color : C.sage} />
               </div>
-              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 4.5vw, 20px)", fontWeight: 600, color: C.slate, marginBottom: 2 }}>{item.label}</div>
-              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 12, fontWeight: 300, fontStyle: "italic", color: active ? item.color : `${C.sage}60`, marginBottom: 6, transition: "color 0.3s" }}>{item.sanskrit}</div>
-              <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, color: `${C.slate}70`, lineHeight: 1.4 }}>{item.desc}</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 5vw, 24px)", fontWeight: 600, color: C.slate, marginBottom: 8 }}>{item.label}</div>
+              <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(12px, 3.2vw, 14px)", color: `${C.slate}80`, lineHeight: 1.5 }}>{item.desc}</div>
             </button>
           );
         })}

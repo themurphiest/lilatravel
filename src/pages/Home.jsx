@@ -384,7 +384,7 @@ export default function HomePage() {
           </FadeIn>
           <FadeIn from="bottom" delay={0.45}>
             <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap" }}>
-              <Link to="/offerings" style={{
+              <Link to="/plan" style={{
                 fontFamily: "'Quicksand'", fontSize: 11, fontWeight: 700,
                 letterSpacing: "0.2em", textTransform: "uppercase",
                 color: "white", paddingBottom: 3, borderBottom: "1px solid rgba(255,255,255,0.5)",
@@ -456,15 +456,19 @@ export default function HomePage() {
                 fontWeight: 400, color: "rgba(255,255,255,0.55)", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
                 {[
-                  "Sacred destinations with capacity for wonder.",
-                  "Sensory-rich activities that stoke the fire.",
-                  "Wellness practices that invite expansion.",
+                  { text: "Sacred destinations with capacity for wonder.", icon: "△", color: "#7DB8A0" },
+                  { text: "Sensory-rich activities that stoke the fire.", icon: "〰", color: "#E8956A" },
+                  { text: "Wellness practices that invite expansion.", icon: "●", color: "#D4A853" },
                 ].map((callout, i) => (
-                  <p key={i} style={{
+                  <div key={i} style={{
+                    display: "flex", alignItems: "flex-start", gap: 14,
                     marginBottom: i < 2 ? 20 : 0, paddingLeft: 16,
-                    borderLeft: `2px solid ${C.skyBlue}`,
-                    color: "rgba(255,255,255,0.7)", fontStyle: "italic",
-                  }}>{callout}</p>
+                  }}>
+                    <span style={{ color: callout.color, fontSize: 14, lineHeight: 1, marginTop: 3, flexShrink: 0 }}>{callout.icon}</span>
+                    <p style={{
+                      color: "rgba(255,255,255,0.7)", fontStyle: "italic", margin: 0,
+                    }}>{callout.text}</p>
+                  </div>
                 ))}
                 <p style={{ marginTop: 36, marginBottom: 0, color: "rgba(255,255,255,0.7)" }}>
                   Our tools and experts help you put it together.<br />Custom itineraries that match your intention.<br />We get rid of everything not worth your time.

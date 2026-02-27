@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { Link } from 'react-router-dom';
-import { Nav, Footer, FadeIn, PageHero } from '@components';
+import { Nav, Footer, FadeIn } from '@components';
 import { C } from '@data/brand';
 import { ritualsPillars, traditions, ritualsIntro } from '@data/rituals';
 
@@ -11,12 +11,46 @@ export default function RitualsPage() {
   return (
     <>
       <Nav />
-      <PageHero
-        eyebrow="Rituals"
-        title={ritualsIntro.headline}
-        subtitle={ritualsIntro.subtitle}
-        gradient={`linear-gradient(165deg, ${C.darkInk}, #1a3040, #2a4555)`}
-      />
+      {/* ── Hero with background image ─────────────────────────────────── */}
+      <section style={{
+        position: "relative", minHeight: "55vh", overflow: "hidden",
+        display: "flex", alignItems: "flex-end", background: C.darkInk,
+      }}>
+        <img
+          src="/images/rituals-hero.jpg"
+          alt=""
+          style={{
+            position: "absolute", inset: 0, width: "100%", height: "100%",
+            objectFit: "cover", objectPosition: "center 70%",
+          }}
+        />
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to bottom, rgba(15,30,42,0.3) 0%, rgba(15,30,42,0.65) 70%, rgba(15,30,42,0.85) 100%)",
+        }} />
+        <div style={{
+          position: "relative", zIndex: 2,
+          padding: "64px 52px", maxWidth: 900, width: "100%",
+        }}>
+          <FadeIn from="bottom" delay={0.1}>
+            <span className="eyebrow" style={{ color: "#6BA4B8" }}>Rituals</span>
+            <h1 style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: "clamp(32px, 5vw, 52px)", fontWeight: 300,
+              color: "white", lineHeight: 1.2, marginBottom: 12,
+            }}>
+              {ritualsIntro.headline}
+            </h1>
+            <p style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 300, fontStyle: "italic",
+              color: "rgba(255,255,255,0.7)", lineHeight: 1.6, maxWidth: 560,
+            }}>
+              {ritualsIntro.subtitle}
+            </p>
+          </FadeIn>
+        </div>
+      </section>
 
       {/* ── Philosophical Introduction ──────────────────────────────────── */}
       <section style={{ padding: "80px 52px", background: C.cream }}>
@@ -34,18 +68,22 @@ export default function RitualsPage() {
           {/* Tradition markers */}
           <FadeIn delay={0.15}>
             <div style={{
-              display: "flex", gap: 24, flexWrap: "wrap",
+              display: "grid",
+              gridTemplateColumns: "repeat(6, 1fr)",
+              gap: "28px 0",
               marginTop: 48, paddingTop: 48,
               borderTop: `1px solid ${C.stone}`,
             }}>
-              {traditions.map(t => (
+              {traditions.map((t, i) => (
                 <div key={t.name} style={{
                   display: "flex", alignItems: "center", gap: 12,
-                  flex: "1 1 200px",
+                  gridColumn: i < 3
+                    ? `${i * 2 + 1} / span 2`
+                    : i === 3 ? "2 / span 2" : "4 / span 2",
                 }}>
                   <span style={{
                     fontSize: 28, color: t.color, opacity: 0.7,
-                    lineHeight: 1,
+                    lineHeight: 1, fontFamily: "serif",
                   }}>{t.symbol}</span>
                   <div>
                     <span style={{
