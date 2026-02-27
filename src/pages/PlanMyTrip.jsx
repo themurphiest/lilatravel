@@ -588,8 +588,8 @@ function StepIntention({ data, onChange, onNext, onBack }) {
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 10, transition: "opacity 0.3s", opacity: active ? 1 : 0.4 }}>
                 <Ic size={30} color={active ? item.color : C.sage} />
               </div>
-              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 5vw, 24px)", fontWeight: 600, color: C.slate, marginBottom: 8 }}>{item.label}</div>
-              <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(12px, 3.2vw, 14px)", color: `${C.slate}80`, lineHeight: 1.5 }}>{item.desc}</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(16px, 4vw, 18px)", fontWeight: 600, color: C.slate, marginBottom: 3 }}>{item.label}</div>
+              <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, color: `${C.slate}70`, lineHeight: 1.3 }}>{item.desc}</div>
             </button>
           );
         })}
@@ -816,6 +816,49 @@ function StepPacing({ data, onChange, onNext, onBack }) {
   );
 }
 
+function StepRange({ data, onChange, onNext, onBack }) {
+  const val = data.range ?? 35;
+  const labels = ["Rooted", "Flexible", "Nomadic", "Full Drift"];
+  const labelIndex = val < 25 ? 0 : val < 50 ? 1 : val < 75 ? 2 : 3;
+  const descriptions = [
+    "One place, explored deeply. No car keys needed.",
+    "A home base with a day trip or two woven in.",
+    "Two or three stops. Each day, a new landscape.",
+    "The open road is the trip. A different view every morning.",
+  ];
+
+  return (
+    <div>
+      <StepTitle eyebrow="Territory" title="How far do you want to roam?" subtitle="Some trips go deep in one place. Others cover ground." />
+      <div style={{ maxWidth: 440, margin: "0 auto", padding: "0 28px" }}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(32px, 8vw, 40px)", fontWeight: 300, color: C.sage, marginBottom: 6 }}>{labels[labelIndex]}</div>
+          <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: `${C.slate}70`, lineHeight: 1.6 }}>{descriptions[labelIndex]}</p>
+        </div>
+        <div style={{ position: "relative", padding: "16px 0" }}>
+          <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: 6, background: `${C.sage}18`, borderRadius: 3, transform: "translateY(-50%)" }} />
+          <div style={{ position: "absolute", top: "50%", left: 0, width: `${val}%`, height: 6, background: `linear-gradient(90deg, ${C.seaGlass}, ${C.skyBlue}, ${C.goldenAmber})`, borderRadius: 3, transform: "translateY(-50%)", transition: "width 0.15s" }} />
+          <input type="range" min={0} max={100} value={val}
+            onChange={e => onChange({ range: Number(e.target.value) })}
+            style={{ width: "100%", appearance: "none", WebkitAppearance: "none", background: "transparent", cursor: "pointer", position: "relative", zIndex: 2, height: 44, WebkitTapHighlightColor: "transparent" }}
+          />
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <IconMountain size={16} color={C.seaGlass} />
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", color: C.seaGlass }}>Rooted</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", color: C.goldenAmber }}>Drift</span>
+            <IconTorii size={16} color={C.goldenAmber} />
+          </div>
+        </div>
+      </div>
+      <NavButtons onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
+
 
 // ─── Step: Details (duration + budget combined) ─────────────────────────────
 
@@ -942,7 +985,7 @@ function StepProfile({ data, onBack, onUnlock }) {
   const radarValues = {
     movement: (data.movement ?? 50) / 100,
     wellness: Math.min(1, (practiceLevel / 3) * 0.7 + ((data.practices?.length || 0) / 5) * 0.3),
-    adventure: (data.intentions || []).includes("transformation") ? 0.85 : (data.movement ?? 50) > 65 ? 0.6 : 0.3,
+    adventure: Math.min(1, ((data.intentions || []).includes("transformation") ? 0.5 : 0.2) + ((data.range ?? 35) / 100) * 0.5),
     stillness: (data.intentions || []).some(i => ["peace","liberation"].includes(i)) ? 0.85 : (data.pacing ?? 50) < 40 ? 0.7 : 0.3,
     social: (data.intentions || []).includes("connection") ? 0.85 : 0.4,
     luxury: data.budget === "noLimits" ? 1 : data.budget === "premium" ? 0.75 : data.budget === "balanced" ? 0.5 : 0.3,
@@ -1059,7 +1102,7 @@ export default function PlanMyTrip() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
     destination: null, intentions: [], movement: 50,
-    pacing: 50, duration: 4, budget: null,
+    pacing: 50, range: 35, duration: 4, budget: null,
     practiceLevel: 1, practices: [],
   });
   const [transitioning, setTransitioning] = useState(false);
@@ -1082,7 +1125,7 @@ export default function PlanMyTrip() {
     alert("This would navigate to the payment / itinerary unlock flow!\n\nTrip data collected:\n" + JSON.stringify(data, null, 2));
   };
 
-  // 8 screens: welcome → destination → intention → movement → rhythm → details → practice → profile
+  // 9 screens: welcome → destination → intention → movement → pacing → range → details → practice → profile
   const renderStep = () => {
     switch (step) {
       case 0: return <StepWelcome onNext={goNext} />;
@@ -1090,9 +1133,10 @@ export default function PlanMyTrip() {
       case 2: return <StepIntention data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 3: return <StepMovement data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 4: return <StepPacing data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 5: return <StepDetails data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 6: return <StepPractice data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 7: return <StepProfile data={data} onBack={goBack} onUnlock={handleUnlock} />;
+      case 5: return <StepRange data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 6: return <StepDetails data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 7: return <StepPractice data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 8: return <StepProfile data={data} onBack={goBack} onUnlock={handleUnlock} />;
       default: return null;
     }
   };
@@ -1154,7 +1198,7 @@ export default function PlanMyTrip() {
         transform: transitioning ? "translateY(12px)" : "translateY(0)",
         transition: "opacity 0.3s, transform 0.3s",
       }}>
-        {step > 0 && step < 7 && <StepIndicator current={step - 1} total={6} />}
+        {step > 0 && step < 8 && <StepIndicator current={step - 1} total={7} />}
         {renderStep()}
       </div>
     </div>

@@ -151,13 +151,19 @@ export default function RitualsPage() {
                       ))}
                     </div>
 
-                    {/* Metaphor line */}
+                    {/* Quote */}
                     <p style={{
                       fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: 15, fontWeight: 300, fontStyle: "italic",
-                      color: "#9aabba", marginBottom: 20,
+                      fontSize: 17, fontWeight: 300, fontStyle: "italic",
+                      color: "#7a8a9a", lineHeight: 1.6, marginBottom: 20,
                     }}>
-                      "{pillar.traditions[0].metaphor}"
+                      "{pillar.quote}"
+                      <br />
+                      <span style={{
+                        fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 600,
+                        fontStyle: "normal", letterSpacing: "0.08em",
+                        color: pillar.color, opacity: 0.7,
+                      }}>— {pillar.quoteAuthor}</span>
                     </p>
 
                     <div>

@@ -12,6 +12,8 @@ export const ritualsPillars = [
     word: "Oneness",
     icon: "◎",
     color: "#6BA4B8",        // Ocean Teal
+    quote: "You are not a drop in the ocean. You are the entire ocean in a drop.",
+    quoteAuthor: "Rumi",
     desc: "You are not in the universe — you are the universe, temporarily gathered into a form that can witness its own beauty. Separation is the illusion these traditions dissolve.",
     longDesc: "The deepest teaching across these wisdom traditions is that the boundary between self and world is drawn by the mind, not by nature. Hindu philosophy calls it Brahman–Ātman: the universal soul and your soul are one. Buddhism calls it Pratītyasamutpāda — dependent origination, where nothing exists independently and everything co-creates everything else. Shinto speaks of Musubi, the interconnecting creative energy that weaves kami through every mountain, river, and stone. Taoism teaches that all things emerge from and return to the Tao, with Yin and Yang as complementary expressions of one undivided whole. The Stoics saw this same unity through Sympatheia — the mutual interdependence of all things within a cosmos animated by a single rational principle, Logos. Marcus Aurelius wrote: 'Meditate often on the interconnectedness and mutual interdependence of all things in the universe.' The minerals in your bones were forged in the same stellar furnaces that built these mountains. Our journeys are designed to strip away the noise until that truth becomes felt — not just understood.",
     traditions: [
@@ -64,6 +66,8 @@ export const ritualsPillars = [
     word: "Flow",
     icon: "〰",
     color: "#E8956A",        // Sun Salmon
+    quote: "Flow with whatever may happen, and let your mind be free.",
+    quoteAuthor: "Zhuangzi",
     desc: "There is a current running through all things. Wisdom isn't found by fighting it, but by learning to move with it. The deepest ease comes from alignment, not effort.",
     longDesc: "Taoism calls it Wu Wei — effortless action, like water finding its path without force. Hindu philosophy speaks of Dharma and Ishvara Pranidhana — following your true path by surrendering the illusion of control. Buddhism teaches the Middle Way and Anicca — neither grasping nor resisting the constant flow of change. Shinto calls it Kannagara no Michi — the Way of the Kami — living in spontaneous harmony with the divine flow of nature. And the Stoics captured this principle through Amor Fati — the love of fate — and Kata Phusin, living according to nature. Not passivity, but the radical act of embracing what is, trusting the rational order of the cosmos, and meeting each moment with openness rather than resistance. This is the heart of 'Plan Less. Experience More.' Most travel is a fight against flow — rigid itineraries, anxious logistics, trying to control every variable. We design journeys that invite you into a different relationship with time.",
     traditions: [
@@ -116,6 +120,8 @@ export const ritualsPillars = [
     word: "Presence",
     icon: "●",
     color: "#D4A853",        // Golden Amber
+    quote: "The quieter you become, the more you can hear.",
+    quoteAuthor: "Ram Dass",
     desc: "Every tradition points to the same radical truth: this moment — right now — is the only place life actually happens. Awakening isn't somewhere else. It's here.",
     longDesc: "Buddhism calls it Sati and Samādhi — the practice of full, unwavering attention that deepens into complete absorption. Hindu philosophy describes Dhyāna and Samādhi — progressive states of concentration leading to union with the object of awareness, where the observer becomes the observed. Shinto practices Harae — purification rituals that clear impurities and return you to direct connection with the present. Taoism speaks of Pu, the Uncarved Block — the original, unconditioned state of perception before the mind adds layers of judgment. And the Stoics practiced Prosochē — the fundamental spiritual attitude of constant, vigilant attention to the present moment. Not relaxation, but moral alertness: the discipline of catching each impression as it arises, of anchoring yourself in now. As Marcus Aurelius wrote: 'Everywhere and all the time it lies within your power to be reverently contented with your present lot.' Travel is one of the most powerful doorways into presence. New landscapes naturally wake up attention that routine has dulled. But most trips bury that opening under logistics and photo-taking.",
     traditions: [
@@ -168,6 +174,8 @@ export const ritualsPillars = [
     word: "Reverence",
     icon: "△",
     color: "#7DB8A0",        // Sea Glass Green
+    quote: "Walk as if you are kissing the Earth with your feet.",
+    quoteAuthor: "Thich Nhat Hanh",
     desc: "Mountains aren't obstacles to conquer. Rivers aren't amenities to consume. They are ancient beings deserving of our awe. These traditions share a profound respect for the living world as sacred ground.",
     longDesc: "Shinto teaches Yaoyorozu no Kami — 'eight million kami' — meaning spirit inhabits everything: every tree, river, mountain, and breeze. The whole world is a shrine. Buddhism emphasizes Ahiṃsā and Karuṇā — non-harm and deep compassion for all sentient beings and the ecosystems that sustain them. In Hindu tradition, rivers, mountains, and trees are literal embodiments of the divine — Ganga, Kailash, the Peepal tree. Taoism speaks of Tzu Jan — naturalness, the spontaneous self-organizing intelligence of the natural world that deserves respect, not interference. The Stoics held an equally profound reverence through their concept of Cosmopolis — the entire cosmos as a single living organism, a sacred city of which every being is a citizen. For the Stoics, the universe itself is divine, animated by Logos, and our role is not to dominate but to participate as stewards within a rational, living whole. We approach every destination as guests entering a living temple.",
     traditions: [

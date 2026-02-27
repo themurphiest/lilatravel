@@ -12,6 +12,7 @@
 //   /rituals                       → Rituals landing (all four pillars)
 //   /rituals/:slug                 → Individual ritual detail
 //   /offerings                     → Offerings / how it works
+//   /trips/:slug                   → Individual Threshold Trip detail
 //   /contact                       → Contact page
 //   *                              → 404
 //
@@ -46,6 +47,7 @@ import OfferingsPage from '@pages/Offerings';
 import ContactPage from '@pages/Contact';
 import PlanMyTrip from '@pages/PlanMyTrip';
 import NotFound from '@pages/NotFound';
+import TripPage from '@pages/trips/TripPage';
 
 // ─── Dedicated Guides ───────────────────────────────────────────────────────
 import ZionGuide from '@pages/guides/ZionGuide';
@@ -90,6 +92,9 @@ export default function App() {
           {/* Rituals */}
           <Route path="/rituals" element={<RitualsPage />} />
           <Route path="/rituals/:slug" element={<RitualDetail />} />
+
+          {/* Trips (Threshold Trip detail pages) */}
+          <Route path="/trips/:slug" element={<TripPage />} />
 
           {/* Other pages */}
           <Route path="/offerings" element={<OfferingsPage />} />

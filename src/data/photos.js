@@ -10,4 +10,5 @@ export const P = {
   vancouver: "/images/vancouver.jpg",
   kauai: "/images/kauai.jpg",
   lilaPainting: "/images/lilaPainting.jpg",
+  ancientCedar: "/images/ancientCedar.jpg",
 };
