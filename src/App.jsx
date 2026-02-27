@@ -13,6 +13,7 @@
 //   /rituals/:slug                 → Individual ritual detail
 //   /offerings                     → Offerings / how it works
 //   /trips/:slug                   → Individual Threshold Trip detail
+//   /itineraries/utah              → Utah National Parks itinerary (PWA trip guide)
 //   /contact                       → Contact page
 //   *                              → 404
 //
@@ -30,6 +31,12 @@
 //   2. Import it below
 //   3. Add a specific <Route> ABOVE the generic :slug route
 //      (React Router matches top-to-bottom, first match wins)
+//
+// ─── HOW TO ADD A NEW ITINERARY ──────────────────────────────────────────────
+//
+//   1. Create your itinerary in src/itineraries/<destination>/
+//   2. Import the main component below
+//   3. Add a <Route> under the Itineraries section
 //
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -53,6 +60,11 @@ import TripPage from '@pages/trips/TripPage';
 import ZionGuide from '@pages/guides/ZionGuide';
 // import BigSurGuide from '@pages/guides/BigSurGuide';
 // import JoshuaTreeGuide from '@pages/guides/JoshuaTreeGuide';
+
+// ─── Itineraries ────────────────────────────────────────────────────────────
+import UtahTripGuide from './itineraries/utah/UtahTripGuide';
+// import BigSurItinerary from './itineraries/bigsur/BigSurItinerary';
+// import ZionAutumnItinerary from './itineraries/zion-autumn/ZionAutumnItinerary';
 
 // ─── Scroll to top on route change ──────────────────────────────────────────
 function ScrollToTop() {
@@ -95,6 +107,11 @@ export default function App() {
 
           {/* Trips (Threshold Trip detail pages) */}
           <Route path="/trips/:slug" element={<TripPage />} />
+
+          {/* Itineraries (self-contained trip guides) */}
+          <Route path="/itineraries/utah" element={<UtahTripGuide />} />
+          {/* <Route path="/itineraries/big-sur" element={<BigSurItinerary />} /> */}
+          {/* <Route path="/itineraries/zion-autumn" element={<ZionAutumnItinerary />} /> */}
 
           {/* Other pages */}
           <Route path="/offerings" element={<OfferingsPage />} />
