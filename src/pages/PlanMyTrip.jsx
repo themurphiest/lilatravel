@@ -1193,15 +1193,22 @@ function GeneratingScreen({ destination }) {
   const [msgVisible, setMsgVisible] = useState(true);
   const [breathPhase, setBreathPhase] = useState(0); // 0-1 continuous
 
-  // Rotate messages every 3.5s
+  // Single pass through messages (~20s total, ~2.85s each)
   useEffect(() => {
+    const perMessage = 2850; // ~20s / 7 messages
+    let i = 0;
     const interval = setInterval(() => {
+      if (i >= GENERATING_MESSAGES.length - 1) {
+        clearInterval(interval);
+        return;
+      }
       setMsgVisible(false);
       setTimeout(() => {
-        setMsgIndex(i => (i + 1) % GENERATING_MESSAGES.length);
+        i++;
+        setMsgIndex(i);
         setMsgVisible(true);
       }, 400);
-    }, 3500);
+    }, perMessage);
     return () => clearInterval(interval);
   }, []);
 
