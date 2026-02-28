@@ -242,7 +242,7 @@ export function generateMatchingInstructions(profile) {
   const instructions = [];
 
   // Interest mapping
-  if (profile.interests.length > 0) {
+  if (profile.interests?.length > 0) {
     const sections = [...new Set(
       profile.interests.map(tag => InterestTags[tag]?.guideSection).filter(Boolean)
     )];
