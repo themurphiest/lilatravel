@@ -216,9 +216,13 @@ export async function assembleContext(destination, userPreferences) {
   const guide = loadGuide(destination);
 
   // 2. Fetch live data in parallel
+  const hasExactDates = userPreferences.dates?.start && userPreferences.dates?.end;
+  
   const [alerts, weather, campgrounds] = await Promise.all([
     fetchNPSAlerts(destination),
-    fetchWeather(destination, userPreferences.dates.start, userPreferences.dates.end),
+    hasExactDates 
+      ? fetchWeather(destination, userPreferences.dates.start, userPreferences.dates.end)
+      : Promise.resolve(null), // No weather fetch if only month selected
     fetchNPSCampgrounds(destination),
   ]);
 

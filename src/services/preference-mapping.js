@@ -36,6 +36,9 @@ export const TravelerProfileSchema = {
     end: '',                   // ISO date string — '2026-09-24'
     flexible: false,           // boolean — Can they shift dates for better timing?
   },
+  month: '',                   // string — 'january' through 'december' (from month selector)
+                               // Used when exact dates aren't set yet. If dates are provided,
+                               // month is derived from dates.start automatically.
 
   // Step 4: Who's coming?
   groupType: '',               // 'solo' | 'couple' | 'friends' | 'family'
@@ -287,16 +290,21 @@ export function generateMatchingInstructions(profile) {
   }
 
   // Date-based timing
-  if (profile.dates.start) {
-    const month = new Date(profile.dates.start).getMonth();
+  if (profile.dates?.start) {
+    const startDate = new Date(profile.dates.start);
+    const month = startDate.toLocaleString('en-US', { month: 'long' }).toLowerCase();
     const tripLength = Math.ceil(
       (new Date(profile.dates.end) - new Date(profile.dates.start)) / (1000 * 60 * 60 * 24)
     ) + 1;
 
     instructions.push(
       `DATES: ${profile.dates.start} to ${profile.dates.end} (${tripLength} days). ` +
-      `Check the Magic Windows section for any special timing that overlaps with these dates. ` +
-      `Account for seasonal conditions — see Seasonal Considerations in the guide.`
+      `MONTH: ${month.charAt(0).toUpperCase() + month.slice(1)}. ` +
+      `Consult the Monthly Guide section for ${month.charAt(0).toUpperCase() + month.slice(1)} to understand what the destination ` +
+      `feels like, what's open, what's closed, what to prioritize, and what to pack. ` +
+      `Only recommend trails and activities that have availability in this month ` +
+      `(check each item's "Months" tag). ` +
+      `Also check the Magic Windows section for any special timing that overlaps with these dates.`
     );
 
     // Flexible dates advisory
@@ -306,6 +314,19 @@ export function generateMatchingInstructions(profile) {
         `align with a Magic Window or avoid known issues, suggest it.`
       );
     }
+  } else if (profile.month) {
+    // Month provided without exact dates
+    const monthName = profile.month.charAt(0).toUpperCase() + profile.month.slice(1);
+    instructions.push(
+      `MONTH: ${monthName} (exact dates not yet set). ` +
+      `Consult the Monthly Guide section for ${monthName} to understand what the destination ` +
+      `feels like, what's open, what's closed, what to prioritize, and what to pack. ` +
+      `Only recommend trails and activities that have availability in this month ` +
+      `(check each item's "Months" tag). ` +
+      `Check the Magic Windows section for any special timing in ${monthName}. ` +
+      `If ${monthName} overlaps with a Threshold Trip, mention it. ` +
+      `Build a sample itinerary for a typical ${monthName} visit (suggest ideal trip length for this month).`
+    );
   }
 
   // Intention — free text, passed directly to Claude

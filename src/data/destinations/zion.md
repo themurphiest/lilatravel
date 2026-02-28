@@ -67,6 +67,7 @@ The trail that defines Zion. A knife-edge ridge 1,488 feet above the canyon floo
 - **Budget**: mindful, balanced, open
 - **Time**: sunrise, morning
 - **Interests**: hiking
+- **Months**: all (Jan-Dec, but use microspikes Nov-Mar; not recommended in wet/icy conditions)
 
 ### The Narrows (Bottom-Up)
 Walk upstream through the Virgin River as thousand-foot walls close in around you. The canyon narrows until there is only water, stone, and sky. You will be walking in the river — sometimes ankle-deep, sometimes waist-deep. Rental gear (dry suit, neoprene socks, canyoneering boots, walking stick) available in Springdale.
@@ -83,6 +84,7 @@ Walk upstream through the Virgin River as thousand-foot walls close in around yo
 - **Budget**: balanced, open (gear rental ~$30-50)
 - **Time**: morning
 - **Interests**: hiking, water
+- **Months**: May-Oct (varies by water conditions; closed Nov-Apr due to cold water temps and flash flood risk)
 
 ### Canyon Overlook Trail
 One mile of trail, a lifetime of perspective. The best effort-to-awe ratio in the park. The trailhead is at the east end of the Zion-Mt. Carmel Tunnel — a different approach than most canyon trails, offering views from above.
@@ -98,6 +100,7 @@ One mile of trail, a lifetime of perspective. The best effort-to-awe ratio in th
 - **Budget**: mindful, balanced, open
 - **Time**: sunset, anytime
 - **Interests**: hiking, scenicDrives
+- **Months**: all (year-round; may be icy Dec-Feb, use caution)
 
 ### The Watchman Trail
 A gentle trail with a powerful payoff. Views of Watchman Peak, the Towers of the Virgin, and the town of Springdale far below. Best experienced at sunrise when the canyon walls light up one layer at a time.
@@ -113,6 +116,7 @@ A gentle trail with a powerful payoff. Views of Watchman Peak, the Towers of the
 - **Budget**: mindful, balanced, open
 - **Time**: sunrise
 - **Interests**: hiking
+- **Months**: all (year-round; beautiful in every season)
 
 ### Observation Point (East Mesa Trail)
 The view that makes Angels Landing look small. At 6,521 feet, this is the highest overlook in Zion Canyon — you look DOWN on Angels Landing. The East Mesa approach avoids the strenuous canyon-bottom trail and is relatively flat.
@@ -127,6 +131,7 @@ The view that makes Angels Landing look small. At 6,521 feet, this is the highes
 - **Budget**: mindful, balanced, open
 - **Time**: morning, anytime
 - **Interests**: hiking, scenicDrives
+- **Months**: Apr-Nov (East Mesa dirt road typically impassable Dec-Mar)
 
 ### Emerald Pools (Lower, Middle, Upper)
 A series of three pools fed by waterfalls cascading down red rock walls. The lower pool is accessible and easy; the upper pool adds elevation and scrambling. A good option for afternoons or recovery days.
@@ -140,6 +145,7 @@ A series of three pools fed by waterfalls cascading down red rock walls. The low
 - **Budget**: mindful, balanced, open
 - **Time**: afternoon, anytime
 - **Interests**: hiking, water
+- **Months**: all (lower year-round; upper may be icy Dec-Feb)
 
 ### Pa'rus Trail
 A paved, flat, riverside trail connecting the Visitor Center to Canyon Junction. Bikes allowed. Dogs allowed (only trail in Zion proper). Perfect for early morning walks, gentle movement, or a mindful start to the day.
@@ -153,6 +159,7 @@ A paved, flat, riverside trail connecting the Visitor Center to Canyon Junction.
 - **Budget**: mindful, balanced, open
 - **Time**: morning, anytime
 - **Interests**: hiking, mindfulness
+- **Months**: all (year-round; paved and accessible in every season)
 
 ---
 
@@ -216,7 +223,7 @@ A paved, flat, riverside trail connecting the Visitor Center to Canyon Junction.
 ### Premium (Elevated Experience)
 *Stay Style: premium | Budget: open | Group: solo, couple*
 
-- **Under Canvas Zion** — Glamping with safari-style tents. Outside the park but designed for immersive experiences. Seasonal.
+- **Under Canvas Zion** — Glamping with safari-style tents. Outside the park but designed for immersive experiences. **Seasonal: typically March–November. Closed in winter.**
 - **Zion Lodge** (Inside park) — The only lodge inside the park. Historic. Book far in advance. Limited availability.
 
 ### Beyond the Canyon
@@ -283,6 +290,171 @@ Includes: Guided canyon hikes, sunrise yoga, evening breathwork, shared meals at
 - **Monsoon season (July-September)**: Afternoon thunderstorms common. Flash flood risk elevated. Check NPS weather alerts daily.
 - **Winter (December-February)**: Mild canyon floor, icy higher elevations. Beautiful light. Solitude.
 - **Spring (March-May)**: Variable. Snowmelt, wildflowers, some trail closures.
+
+---
+
+## Monthly Guide — What Zion Feels Like Each Month
+
+Use this section to tailor itineraries based on the traveler's selected month. Each month entry describes the character of the experience, what's accessible, what to prioritize, what to avoid, and what to pack.
+
+### January
+- **Character**: Deep winter quiet. The canyon belongs to you. Stunning low-angle light on the walls. Contemplative, still, spacious.
+- **Weather**: Highs 50-55°F, Lows 25-30°F. Occasional snow on upper elevations. Canyon floor stays mild. Clear skies common.
+- **Shuttle**: Not running. Private vehicles allowed in the canyon — a rare and wonderful experience.
+- **What's open**: Canyon Overlook, Watchman, Pa'rus, Emerald Pools (lower). Angels Landing open but may have ice on chains — microspikes recommended, assess conditions at trailhead.
+- **What's limited/closed**: The Narrows is closed (cold water temps). Upper Emerald Pools may be icy. East Mesa road may be impassable.
+- **Prioritize**: Sunrise photography, solitude hikes, stargazing (longest nights of the year), scenic drives without crowds, river meditation.
+- **Wellness focus**: Walking meditation on Pa'rus (you'll have it to yourself), hot tub recovery, indoor yoga if available, contemplative journaling.
+- **Dining note**: Some Springdale restaurants have reduced winter hours. Oscar's, Deep Creek Coffee, and Bit & Spur are generally reliable year-round. Check ahead.
+- **Accommodation note**: Under Canvas is closed (seasonal). Campgrounds are open but cold overnight. Rooted/premium lodging recommended.
+- **Pack**: Warm layers, hat and gloves for morning, microspikes if doing Angels Landing, headlamp for early starts (sunrise ~7:30am).
+- **Magic Window**: Winter Solstice falls in late December but the light quality carries through January. Canyon light is at its most dramatic and brief.
+- **Vibe**: Solitude. Presence. The canyon stripped to its essence.
+
+### February
+- **Character**: Late winter. Still quiet but days are noticeably lengthening. A sense of the canyon waking up. Possible snow events create magical scenery — red rock dusted white.
+- **Weather**: Highs 55-60°F, Lows 30-35°F. Variable — can get warm sunny days or snow. Pack for both.
+- **Shuttle**: Not running until March. Private vehicles in canyon.
+- **What's open**: Same as January. Canyon Overlook, Watchman, Pa'rus, Emerald Pools (lower), Angels Landing (conditions permitting).
+- **What's limited/closed**: The Narrows still closed. Upper trails may be icy.
+- **Prioritize**: Photography after snowfall (rare and stunning), uncrowded trails, scenic drives, Kolob Canyons section (very empty).
+- **Wellness focus**: Same as January — contemplative, restorative. Self-guided practices thrive in the quiet.
+- **Dining note**: Winter hours still apply at some spots. Check ahead.
+- **Accommodation note**: Under Canvas still closed. Camping is cold but possible. Lodging recommended.
+- **Pack**: Layers, warm morning gear, rain jacket for variable weather. Microspikes if venturing to higher trails.
+- **Vibe**: Quiet awakening. The canyon between sleep and spring.
+
+### March
+- **Character**: Transition month. Spring begins to stir. Shuttle typically resumes mid-to-late March. Crowds start returning but still manageable. Wildflowers begin on lower trails. Waterfalls strengthen from snowmelt.
+- **Weather**: Highs 60-70°F, Lows 35-45°F. Variable — warm sunny days mixed with cool rainy ones. Wind common.
+- **Shuttle**: Resumes mid-to-late March (check NPS for exact date). Once running, private vehicles no longer allowed on Scenic Drive.
+- **What's open**: Most trails open. Angels Landing fully accessible. Emerald Pools all levels. Waterfalls at their best.
+- **What's limited/closed**: The Narrows may still be closed due to high water from snowmelt. Check NPS flow rates.
+- **Prioritize**: Waterfall hikes (Emerald Pools, Weeping Rock area), Canyon Overlook, Angels Landing if conditions allow, wildflower spotting on lower trails.
+- **Wellness focus**: Spring equinox practices (around March 20-21). Sunrise breathwork returns as days lengthen. River is too cold for grounding but watching the snowmelt rush is its own meditation.
+- **Dining note**: Springdale restaurants return to fuller hours. Reservations become more important on weekends.
+- **Accommodation note**: Under Canvas typically opens in March. Camping becomes pleasant. Book Watchman Campground early.
+- **Pack**: Layers are key. Warm morning, comfortable midday, cool evening. Rain jacket essential. Sun protection.
+- **Magic Window**: Spring Equinox — the sun's angle returns to the canyon floor. A threshold moment.
+- **Vibe**: Awakening. Renewal. The canyon coming alive.
+
+### April
+- **Character**: Peak spring. Wildflowers if winter was wet. Comfortable hiking weather. Crowds building but not yet at summer levels. One of the best months to visit.
+- **Weather**: Highs 70-80°F, Lows 40-55°F. Mostly pleasant. Occasional rain.
+- **Shuttle**: Running. Use it.
+- **What's open**: Everything. The Narrows typically opens mid-to-late April (water-dependent). Angels Landing. All trails.
+- **Prioritize**: The Narrows (if open — check conditions), Angels Landing at sunrise, wildflower walks, Canyon Overlook at sunset, Kolob Terrace Road.
+- **Wellness focus**: Full range available. Outdoor yoga returns comfortably. River grounding possible in warmer stretches. Desert yoga at sunrise on Pa'rus.
+- **Dining note**: All restaurants on full schedule. Weekend reservations smart for Bit & Spur and King's Landing.
+- **Accommodation note**: All options available. Book ahead — this is a popular month.
+- **Pack**: Light layers. Sun protection critical. Water shoes if doing The Narrows. Hat, sunscreen, reusable water bottle.
+- **Magic Window**: Desert Bloom — wildflowers if winter rains were good. Brief and unmissable.
+- **Vibe**: Vibrant. Energetic. The canyon in full bloom.
+
+### May
+- **Character**: Late spring sliding into early summer. Warm days. Everything is open and accessible. Crowds increasing. Still comfortable but heat is coming.
+- **Weather**: Highs 80-90°F, Lows 50-60°F. Mostly dry and sunny. Getting warm.
+- **Shuttle**: Running.
+- **What's open**: Everything. The Narrows is typically at its best. Full access.
+- **Prioritize**: The Narrows (ideal conditions), Angels Landing (start early to beat heat), Observation Point via East Mesa, evening scenic drives.
+- **Wellness focus**: Early morning practices before heat builds. River grounding becoming refreshing. Sunset breathwork at Canyon Overlook.
+- **Dining note**: Full operations. Patio dining is pleasant in evenings.
+- **Accommodation note**: Everything open. Under Canvas in full swing. Book well ahead.
+- **Pack**: Sun protection is now critical. Wide-brim hat, sunscreen, electrolytes. Light, breathable clothing. Water shoes for Narrows.
+- **Vibe**: Abundant. Warm. The last comfortable month before summer heat.
+
+### June
+- **Character**: Summer arrives. Hot. The experienced traveler starts hikes at dawn and rests midday. Crowds are heavy. The canyon demands respect — hydration, sun protection, smart pacing.
+- **Weather**: Highs 95-105°F, Lows 60-70°F. Intense sun. Dry early, monsoon potential by late June.
+- **Shuttle**: Running. Expect lines, especially 9am-2pm.
+- **What's open**: Technically everything, but heat makes strenuous hikes dangerous midday. The Narrows is a welcome reprieve (cool water).
+- **What's limited**: Afternoon hiking is inadvisable. Flash flood risk begins.
+- **Prioritize**: Pre-dawn Angels Landing, The Narrows (the cool water is perfect in heat), Pa'rus Trail at sunrise, evening Canyon Overlook. Plan around heat — early morning and late afternoon only.
+- **Wellness focus**: Gentle movement only during heat. River grounding is therapeutic. Early morning yoga. Evening meditation as canyon cools.
+- **Dining note**: Fully operational. Eat lunch inside (AC). Dinner outside as it cools.
+- **Accommodation note**: Full availability but book ahead. Camping is HOT — consider lodging with AC. Under Canvas has fans but no AC.
+- **Pack**: Maximum sun protection. Electrolytes mandatory. 3+ liters of water per hike. Light, breathable clothing. Cooling towel.
+- **SAFETY**: Heat is the primary risk this month. People die in Zion from heat exposure. Respect it completely.
+- **Vibe**: Intense. Primal. The canyon at full power — but you must match its energy with preparation.
+
+### July
+- **Character**: Peak summer. Hottest month. Monsoon season begins — dramatic afternoon thunderstorms, flash flood risk. The canyon becomes a different place in storm season — more dramatic, more dangerous, more alive.
+- **Weather**: Highs 100-110°F, Lows 65-75°F. Afternoon thunderstorms common. Flash flood warnings frequent.
+- **Shuttle**: Running. Heavy crowds.
+- **What's open**: All trails technically, but heat and flood risk limit options. The Narrows may close for flash flood warnings.
+- **What's limited**: The Narrows closes frequently due to flash flood risk. Slot canyons are extremely dangerous. Afternoon hiking inadvisable.
+- **Prioritize**: Pre-dawn everything. Angels Landing at first light. The Narrows if conditions allow (check daily). Storm watching from safe locations (Zion Lodge patio, Canyon Overlook). Kolob Canyons is slightly cooler.
+- **Wellness focus**: Minimal outdoor activity during heat. River time in morning. Restorative practices. Spa. Indoor movement.
+- **Dining note**: Full operations. Lean into indoor, air-conditioned spaces midday.
+- **Accommodation note**: AC is essential. Camping is extremely hot. Lodging strongly recommended.
+- **Pack**: Same as June, plus rain jacket for afternoon storms. Check flash flood forecast every morning.
+- **SAFETY**: Heat AND flash floods. This is the most dangerous month in terms of natural hazards. The Narrows can go from ankle-deep to unsurvivable in minutes during flash floods. NEVER enter narrow canyons if storms are forecast.
+- **Vibe**: Raw. Powerful. For experienced desert travelers who respect the elements.
+
+### August
+- **Character**: Late summer. Still hot but the monsoon brings green — the desert flushes with life after storms. Slightly less crowded than July as families head home for school. Dramatic skies.
+- **Weather**: Highs 95-105°F, Lows 65-70°F. Monsoon continues. Afternoon storms. Humid by desert standards.
+- **Shuttle**: Running.
+- **What's open**: Same as July. Flash flood risk continues.
+- **What's limited**: The Narrows — check daily. Afternoon hiking still inadvisable.
+- **Prioritize**: Dawn hikes, post-storm light (the most dramatic skies of the year), The Narrows in morning windows, Kolob for cooler temps.
+- **Wellness focus**: Similar to July. Early morning is the window. River grounding. Restorative afternoon practices.
+- **Accommodation note**: AC essential. Camping improving slightly as month progresses.
+- **Pack**: Same as July. Rain gear for storms.
+- **Vibe**: Dramatic. Green. The desert after the rain.
+
+### September
+- **Character**: The shift. Heat breaks. Crowds thin after Labor Day. Light turns golden. This is when Zion transforms from a hot, crowded national park into the sacred terrain Lila Trips is built around. The single best month.
+- **Weather**: Highs 85-95°F early, 75-85°F late. Lows 50-60°F. Monsoon fades. Clear, golden days.
+- **Shuttle**: Running through November.
+- **What's open**: Everything. The Narrows is typically excellent. All trails accessible. Flash flood risk diminishing.
+- **Prioritize**: EVERYTHING. This is the month where you can do it all. Angels Landing at sunrise, The Narrows, Canyon Overlook at sunset, Observation Point, Kolob Terrace Road. The weather supports full days.
+- **Wellness focus**: Full range. Outdoor yoga in perfect temperatures. River grounding (water still warm enough). Sunrise breathwork. Evening meditation under clearing skies. Stargazing improves as monsoon humidity clears.
+- **Dining note**: Full operations. Patio dining is ideal — warm evenings, beautiful light.
+- **Accommodation note**: Everything open and at its best. Under Canvas is magical in September. Book ahead — this is peak season for those who know.
+- **Pack**: Light layers. Warm enough for t-shirts by day, need a light jacket for evening. Sun protection still important. Water shoes for Narrows.
+- **Magic Window**: The Golden Corridor begins. Autumn Equinox around September 22 — the Threshold Trip timing.
+- **Vibe**: Golden. Spacious. The canyon breathing. This is Zion at its most transcendent.
+
+### October
+- **Character**: Peak fall. Cottonwoods along the Virgin River turn gold against red canyon walls. The visual contrast is staggering. Comfortable hiking weather. Crowds continue to thin. This is the other perfect month.
+- **Weather**: Highs 70-80°F, Lows 40-50°F. Cool mornings, warm afternoons. Clear skies. Occasional rain.
+- **Shuttle**: Running.
+- **What's open**: Everything. The Narrows is excellent (check water temps — neoprene may be needed). All trails.
+- **Prioritize**: Fall color along the Virgin River (Pa'rus Trail and Riverside Walk are gold-lined). Angels Landing. The Narrows with dry suit gear. Canyon Overlook at sunset. Photography everywhere.
+- **Wellness focus**: Peak conditions for everything. Morning yoga in crisp air. Breathwork with fall color. Walking meditation on gold-canopied Pa'rus Trail.
+- **Dining note**: Full operations. Some places may start reducing hours late October.
+- **Accommodation note**: Everything open. Camping is excellent — cool nights, comfortable days. Under Canvas still running.
+- **Pack**: Layers critical. Cool mornings (40s), warm afternoons (70s). Light jacket, long pants for morning. Dry suit rental recommended for Narrows.
+- **Magic Window**: The Golden Corridor continues. Peak fall color typically mid-to-late October.
+- **Vibe**: Amber. Contemplative. The canyon in its most photogenic season.
+
+### November
+- **Character**: Transition to winter. Crowds drop significantly. Fall color fades but the quiet deepens. Cool, crisp, beautiful. A underrated month for those who want solitude.
+- **Weather**: Highs 55-65°F, Lows 30-40°F. Cool and pleasant. Possible first snow on upper elevations. Shorter days.
+- **Shuttle**: Stops running mid-to-late November (check NPS for exact date). Once stopped, private vehicles return to canyon.
+- **What's open**: Most trails. Angels Landing (watch for ice). Canyon Overlook. Watchman. Pa'rus. Emerald Pools.
+- **What's limited/closed**: The Narrows closes as water temps drop (typically late October/November). East Mesa road may close.
+- **Prioritize**: Uncrowded canyon experience. Angels Landing without crowds (if conditions allow). Scenic drives. Stargazing (dark skies + long nights). Kolob Canyons.
+- **Wellness focus**: Contemplative practices. Walking meditation on empty trails. Hot tub recovery. Indoor yoga. Journaling.
+- **Dining note**: Some Springdale restaurants begin winter hours. Bit & Spur, Oscar's, Deep Creek Coffee typically reliable.
+- **Accommodation note**: Under Canvas closes for season. Camping is cold but doable with gear. Lodging recommended for comfort.
+- **Pack**: Warm layers. Fleece, warm hat, gloves for morning. The temperature swing from morning to afternoon is significant.
+- **Vibe**: Quiet. Intimate. The canyon settling into winter.
+
+### December
+- **Character**: Winter settles in. The canyon is quiet, contemplative, and achingly beautiful. Short days mean dramatic light — the walls glow at sunrise and sunset. Snow on the rim with mild canyon floor creates contrast you can't get any other time.
+- **Weather**: Highs 50-55°F, Lows 25-35°F. Cold mornings, pleasant midday. Possible snow. Clear skies common between storms.
+- **Shuttle**: Not running. Private vehicles in canyon.
+- **What's open**: Canyon Overlook, Watchman, Pa'rus, Emerald Pools (lower), Angels Landing (conditions permitting — microspikes often needed).
+- **What's limited/closed**: The Narrows is closed. Upper trails may be icy. East Mesa road closed.
+- **Prioritize**: Winter Solstice experience (December 19-22). Sunrise/sunset photography. Driving the canyon in your own car (rare treat). Stargazing (longest nights). Kolob Canyons after snow.
+- **Wellness focus**: Deep contemplative practices. Walking meditation in solitude. Hot springs/hot tub recovery. The stillness itself is the practice.
+- **Dining note**: Winter hours. Check ahead. Core Springdale spots typically open.
+- **Accommodation note**: Under Canvas closed. Camping is very cold. Lodging recommended.
+- **Pack**: Full winter layers. Warm hat, gloves, fleece, insulated jacket for morning. Microspikes for any trail with potential ice. Headlamp (sunset ~5:15pm).
+- **Magic Window**: Winter Solstice — The Longest Shadow. Canyon light at its most dramatic and brief. A profound time to be here.
+- **Vibe**: Sacred. Still. The canyon at its most intimate.
 
 ---
 
