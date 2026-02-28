@@ -275,7 +275,7 @@ ${context.liveData.campgrounds ? `### Campground Data\n${context.liveData.campgr
 ## Traveler Profile
 
 - **Name**: ${context.traveler.name || 'Traveler'}
-- **Dates**: ${context.traveler.dates.start} to ${context.traveler.dates.end}
+- **Dates**: ${context.traveler.dates?.start ? `${context.traveler.dates.start} to ${context.traveler.dates.end}` : `Month: ${context.traveler.month || 'Not specified'}`}
 - **Wellness interests**: ${context.traveler.wellness?.join(', ') || context.traveler.interests?.map(i => i).join(', ') || 'Not specified'}
 - **Energy level**: ${context.traveler.energy}
 - **Stay style**: ${context.traveler.stayStyle || 'Not specified'}
