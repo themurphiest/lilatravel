@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/generate-itinerary.js": {
+      "includeFiles": "src/data/destinations/**,prompts/**,src/services/**"
+    }
+  }
+}
