@@ -546,24 +546,40 @@ function StepWelcome({ onNext }) {
 }
 
 function StepDestination({ data, onChange, onNext, onBack }) {
+  const AVAILABLE = new Set(["zion"]); // destinations with guides ready
   return (
     <div>
       <StepTitle eyebrow="Where" title="Where is calling you?" subtitle="Choose the landscape that stirs something." />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12, maxWidth: 560, margin: "0 auto", padding: "0 20px" }}>
         {DESTINATIONS.map(d => {
           const sel = data.destination === d.id;
+          const available = AVAILABLE.has(d.id);
           const Ic = d.icon;
           return (
-            <button key={d.id} onClick={() => onChange({ destination: d.id })} style={{
-              background: sel ? d.gradient : C.white,
-              border: `2px solid ${sel ? C.sage : `${C.sage}18`}`,
-              borderRadius: 16, padding: "22px 14px",
-              cursor: "pointer", transition: "all 0.3s",
-              textAlign: "center", minHeight: 110,
-              boxShadow: sel ? `0 4px 20px ${C.sage}15` : "0 1px 4px rgba(0,0,0,0.04)",
-              transform: sel ? "scale(1.02)" : "scale(1)",
-              WebkitTapHighlightColor: "transparent",
-            }}>
+            <button key={d.id}
+              onClick={() => available && onChange({ destination: d.id })}
+              style={{
+                position: "relative",
+                background: !available ? `${C.sage}06` : sel ? d.gradient : C.white,
+                border: `2px solid ${!available ? `${C.sage}10` : sel ? C.sage : `${C.sage}18`}`,
+                borderRadius: 16, padding: "22px 14px",
+                cursor: available ? "pointer" : "default",
+                transition: "all 0.3s",
+                textAlign: "center", minHeight: 110,
+                boxShadow: sel ? `0 4px 20px ${C.sage}15` : "0 1px 4px rgba(0,0,0,0.04)",
+                transform: sel ? "scale(1.02)" : "scale(1)",
+                opacity: available ? 1 : 0.45,
+                WebkitTapHighlightColor: "transparent",
+              }}>
+              {!available && (
+                <div style={{
+                  position: "absolute", top: 8, right: 8,
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 8, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
+                  color: C.sage, background: `${C.sage}12`,
+                  padding: "3px 7px", borderRadius: 6,
+                }}>Soon</div>
+              )}
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
                 <Ic size={28} color={sel ? C.sage : `${C.sage}80`} />
               </div>
@@ -1159,6 +1175,160 @@ function StepProfile({ data, onBack, onUnlock, generating }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// GENERATING SCREEN — meditative loading experience
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const GENERATING_MESSAGES = [
+  { text: "Reading the landscape...", icon: IconMountain },
+  { text: "Listening for the right rhythm...", icon: IconWave },
+  { text: "Weaving in your practices...", icon: IconLotus },
+  { text: "Finding the golden hours...", icon: IconFlame },
+  { text: "Mapping the sacred terrain...", icon: IconEnso },
+  { text: "Aligning with the season...", icon: IconBodhiLeaf },
+  { text: "Crafting your threshold moments...", icon: IconUnalome },
+];
+
+function GeneratingScreen({ destination }) {
+  const [msgIndex, setMsgIndex] = useState(0);
+  const [msgVisible, setMsgVisible] = useState(true);
+  const [breathPhase, setBreathPhase] = useState(0); // 0-1 continuous
+
+  // Rotate messages every 3.5s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMsgVisible(false);
+      setTimeout(() => {
+        setMsgIndex(i => (i + 1) % GENERATING_MESSAGES.length);
+        setMsgVisible(true);
+      }, 400);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Breathing animation (continuous)
+  useEffect(() => {
+    let frame;
+    const start = Date.now();
+    const cycle = 4000; // 4s per breath
+    function tick() {
+      const t = ((Date.now() - start) % cycle) / cycle;
+      // Smooth sine wave: 0→1→0
+      setBreathPhase(Math.sin(t * Math.PI));
+      frame = requestAnimationFrame(tick);
+    }
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  const current = GENERATING_MESSAGES[msgIndex];
+  const MsgIcon = current.icon;
+  const destName = DESTINATIONS.find(d => d.id === destination)?.name || "your destination";
+
+  // Ensō ring scale and opacity follow breath
+  const ringScale = 0.85 + breathPhase * 0.15;
+  const ringOpacity = 0.15 + breathPhase * 0.25;
+  const glowRadius = 40 + breathPhase * 30;
+
+  return (
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 200,
+      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      background: `linear-gradient(180deg, ${C.cream} 0%, ${C.white} 40%, ${C.cream} 100%)`,
+      padding: "40px 28px",
+    }}>
+      {/* Breathing Ensō */}
+      <div style={{
+        position: "relative", width: 140, height: 140,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        marginBottom: 48,
+      }}>
+        {/* Outer glow */}
+        <div style={{
+          position: "absolute", inset: -20,
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${C.oceanTeal}${Math.round(ringOpacity * 40).toString(16).padStart(2, '0')} 0%, transparent 70%)`,
+          transform: `scale(${ringScale})`,
+          transition: "none",
+        }} />
+        {/* Ensō ring */}
+        <svg width="140" height="140" viewBox="0 0 140 140" style={{
+          transform: `scale(${ringScale})`,
+        }}>
+          {/* Background circle (subtle) */}
+          <circle cx="70" cy="70" r="55" fill="none"
+            stroke={`${C.sage}12`} strokeWidth="2" />
+          {/* Animated stroke */}
+          <circle cx="70" cy="70" r="55" fill="none"
+            stroke={C.oceanTeal}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeDasharray={`${Math.PI * 110}`}
+            strokeDashoffset={`${Math.PI * 110 * (1 - (0.7 + breathPhase * 0.28))}`}
+            opacity={0.5 + breathPhase * 0.5}
+            style={{ transform: "rotate(-90deg)", transformOrigin: "center" }}
+          />
+          {/* Small gap in the ensō (the traditional opening) */}
+          <circle cx="70" cy="70" r="55" fill="none"
+            stroke={C.cream}
+            strokeWidth="4"
+            strokeDasharray={`${Math.PI * 110 * 0.05} ${Math.PI * 110 * 0.95}`}
+            strokeDashoffset={`${Math.PI * 110 * 0.12}`}
+            style={{ transform: "rotate(-90deg)", transformOrigin: "center" }}
+          />
+        </svg>
+        {/* Center icon (current step) */}
+        <div style={{
+          position: "absolute",
+          opacity: msgVisible ? (0.4 + breathPhase * 0.4) : 0,
+          transition: "opacity 0.4s",
+          transform: `scale(${0.9 + breathPhase * 0.1})`,
+        }}>
+          <MsgIcon size={32} color={C.oceanTeal} />
+        </div>
+      </div>
+
+      {/* Status text */}
+      <div style={{
+        textAlign: "center",
+        opacity: msgVisible ? 1 : 0,
+        transform: msgVisible ? "translateY(0)" : "translateY(8px)",
+        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+      }}>
+        <div style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: "clamp(20px, 5vw, 24px)", fontWeight: 300,
+          color: C.slate, marginBottom: 8,
+        }}>{current.text}</div>
+      </div>
+
+      {/* Destination context */}
+      <div style={{
+        marginTop: 48, textAlign: "center",
+      }}>
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase",
+          color: `${C.sage}60`,
+        }}>Crafting your {destName} journey</div>
+      </div>
+
+      {/* Subtle progress dots */}
+      <div style={{
+        display: "flex", gap: 8, marginTop: 20,
+      }}>
+        {GENERATING_MESSAGES.slice(0, 5).map((_, i) => (
+          <div key={i} style={{
+            width: 4, height: 4, borderRadius: "50%",
+            background: i <= msgIndex ? C.oceanTeal : `${C.sage}25`,
+            transition: "background 0.5s",
+          }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // MAIN
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -1282,6 +1452,9 @@ export default function PlanMyTrip() {
           to { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
+
+      {/* Generating overlay */}
+      {generating && <GeneratingScreen destination={data.destination} />}
 
       <div style={{
         maxWidth: 640, margin: "0 auto",
