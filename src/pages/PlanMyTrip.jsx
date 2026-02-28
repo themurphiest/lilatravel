@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import { C as BrandC } from '@data/brand';
+import { translateFormToApi } from "../services/form-to-api";
 
 // ─── Brand Tokens (extended from site brand system) ─────────────────────────
 const C = {
@@ -268,6 +269,21 @@ const BUDGET_TIERS = [
   { id: "balanced", label: "Balanced", desc: "Comfort meets experience", range: "$150–250/day", color: C.oceanTeal },
   { id: "premium", label: "Premium", desc: "Elevated at every turn", range: "$250–400/day", color: C.goldenAmber },
   { id: "noLimits", label: "No Limits", desc: "The extraordinary", range: "$400+/day", color: C.sunSalmon },
+];
+
+const MONTHS = [
+  { id: 'january',   label: 'January',   window: 'The Longest Shadow',   color: '#8BA4B8' },
+  { id: 'february',  label: 'February',  window: 'Quiet Awakening',      color: '#9BAFBF' },
+  { id: 'march',     label: 'March',     window: 'Spring Equinox',       color: '#8FA39A' },
+  { id: 'april',     label: 'April',     window: 'Desert Bloom',         color: '#A8C5A0' },
+  { id: 'may',       label: 'May',       window: 'Last Comfortable',     color: '#C5D4A0' },
+  { id: 'june',      label: 'June',      window: 'Solstice Fire',        color: '#E8C07A' },
+  { id: 'july',      label: 'July',      window: 'Monsoon Drama',        color: '#E8A860' },
+  { id: 'august',    label: 'August',    window: 'Desert After Rain',    color: '#D4956A' },
+  { id: 'september', label: 'September', window: 'The Golden Corridor',  color: '#D4855A' },
+  { id: 'october',   label: 'October',   window: 'Peak Fall Color',      color: '#C47A52' },
+  { id: 'november',  label: 'November',  window: 'Quiet Descent',        color: '#A08070' },
+  { id: 'december',  label: 'December',  window: 'Winter Solstice',      color: '#7A8A9A' },
 ];
 
 const DIMENSIONS = [
@@ -558,6 +574,51 @@ function StepDestination({ data, onChange, onNext, onBack }) {
         })}
       </div>
       <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.destination} showBack={false} />
+    </div>
+  );
+}
+
+function StepMonth({ data, onChange, onNext, onBack }) {
+  return (
+    <div>
+      <StepTitle
+        eyebrow="When"
+        title="When are you going?"
+        subtitle="Each month has its own character. We'll match your trip to the season."
+      />
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 10, maxWidth: 480, margin: '0 auto', padding: '0 20px',
+      }}>
+        {MONTHS.map(m => {
+          const sel = data.month === m.id;
+          return (
+            <button key={m.id} onClick={() => onChange({ month: m.id })} style={{
+              background: sel ? `${m.color}18` : C.white,
+              border: `2px solid ${sel ? m.color : `${C.sage}18`}`,
+              borderRadius: 14, padding: '16px 10px',
+              cursor: 'pointer', transition: 'all 0.3s',
+              textAlign: 'center', minHeight: 80,
+              boxShadow: sel ? `0 3px 16px ${m.color}20` : '0 1px 4px rgba(0,0,0,0.04)',
+              transform: sel ? 'scale(1.03)' : 'scale(1)',
+              WebkitTapHighlightColor: 'transparent',
+            }}>
+              <div style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 'clamp(15px, 3.8vw, 17px)', fontWeight: 600,
+                color: sel ? C.slate : `${C.slate}90`, marginBottom: 3,
+              }}>{m.label}</div>
+              <div style={{
+                fontFamily: "'Quicksand', sans-serif",
+                fontSize: 9, fontWeight: 600, letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: sel ? m.color : `${C.sage}60`,
+              }}>{m.window}</div>
+            </button>
+          );
+        })}
+      </div>
+      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.month} />
     </div>
   );
 }
@@ -973,7 +1034,7 @@ function StepDetails({ data, onChange, onNext, onBack }) {
 }
 
 // ─── Profile ─────────────────────────────────────────────────────────────────
-function StepProfile({ data, onBack, onUnlock }) {
+function StepProfile({ data, onBack, onUnlock, generating }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => { setTimeout(() => setVisible(true), 200); }, []);
 
@@ -992,6 +1053,7 @@ function StepProfile({ data, onBack, onUnlock }) {
   };
 
   const destName = DESTINATIONS.find(d => d.id === data.destination)?.name || "your destination";
+  const monthName = MONTHS.find(m => m.id === data.month)?.label || "";
   const intentionLabels = (data.intentions || []).map(id => INTENTIONS.find(i => i.id === id)?.label).filter(Boolean);
   const practiceLabels = (data.practices || []).map(id => PRACTICES.find(p => p.id === id)?.label).filter(Boolean);
 
@@ -1068,17 +1130,20 @@ function StepProfile({ data, onBack, onUnlock }) {
       <div style={{ textAlign: "center", marginTop: 40, padding: "0 28px 48px" }}>
         <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px, 5.5vw, 26px)", fontWeight: 300, color: C.slate, marginBottom: 8 }}>Your itinerary is ready</div>
         <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 3.5vw, 14px)", color: `${C.slate}70`, maxWidth: 380, margin: "0 auto 28px", lineHeight: 1.6 }}>
-          A custom {data.duration || 4}-day plan for {destName} — built around your pace, your practices, and your intentions.
+          A custom {data.duration || 4}-day {monthName ? `${monthName} ` : ''}plan for {destName} — built around your pace, your practices, and your intentions.
         </p>
-        <button onClick={onUnlock} style={{
+        <button onClick={onUnlock} disabled={generating} style={{
           fontFamily: "'Quicksand', sans-serif",
           fontSize: 14, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase",
-          background: `linear-gradient(135deg, ${C.sage}, ${C.oceanTeal})`,
+          background: generating
+            ? `${C.sage}60`
+            : `linear-gradient(135deg, ${C.sage}, ${C.oceanTeal})`,
           border: "none", color: C.white,
-          padding: "18px 44px", borderRadius: 40, cursor: "pointer",
-          transition: "all 0.3s", boxShadow: `0 6px 28px ${C.oceanTeal}30`,
+          padding: "18px 44px", borderRadius: 40, cursor: generating ? "wait" : "pointer",
+          transition: "all 0.3s", boxShadow: generating ? "none" : `0 6px 28px ${C.oceanTeal}30`,
           minHeight: 56, WebkitTapHighlightColor: "transparent",
-        }}>Unlock My Itinerary</button>
+          opacity: generating ? 0.8 : 1,
+        }}>{generating ? 'Creating your journey...' : 'Unlock My Itinerary'}</button>
         <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: `${C.sage}60`, marginTop: 16 }}>Starting at $29 · Fully customizable</div>
         <div style={{ marginTop: 20 }}>
           <button onClick={onBack} style={{
@@ -1101,11 +1166,12 @@ export default function PlanMyTrip() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
-    destination: null, intentions: [], movement: 50,
+    destination: null, month: null, intentions: [], movement: 50,
     pacing: 50, range: 35, duration: 4, budget: null,
     practiceLevel: 1, practices: [],
   });
   const [transitioning, setTransitioning] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const containerRef = useRef(null);
 
   const updateData = (patch) => setData(prev => ({ ...prev, ...patch }));
@@ -1121,22 +1187,48 @@ export default function PlanMyTrip() {
     setTransitioning(true);
     setTimeout(() => { setStep(s => s - 1); setTransitioning(false); if (containerRef.current) containerRef.current.scrollTop = 0; }, 300);
   };
-  const handleUnlock = () => {
-    alert("This would navigate to the payment / itinerary unlock flow!\n\nTrip data collected:\n" + JSON.stringify(data, null, 2));
+  const handleUnlock = async () => {
+    setGenerating(true);
+    try {
+      const apiBody = translateFormToApi(data);
+      const response = await fetch('/api/generate-itinerary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(apiBody),
+      });
+      const result = await response.json();
+      if (result.success) {
+        navigate('/itinerary', {
+          state: {
+            itinerary: result.itinerary,
+            metadata: result.metadata,
+            formData: data,
+          }
+        });
+      } else {
+        alert('Something went wrong generating your itinerary. Please try again.');
+      }
+    } catch (err) {
+      console.error('Itinerary generation failed:', err);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setGenerating(false);
+    }
   };
 
-  // 9 screens: welcome → destination → intention → movement → pacing → range → details → practice → profile
+  // 10 screens: welcome → destination → month → intention → movement → pacing → range → details → practice → profile
   const renderStep = () => {
     switch (step) {
       case 0: return <StepWelcome onNext={goNext} />;
       case 1: return <StepDestination data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 2: return <StepIntention data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 3: return <StepMovement data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 4: return <StepPacing data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 5: return <StepRange data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 6: return <StepDetails data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 7: return <StepPractice data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 8: return <StepProfile data={data} onBack={goBack} onUnlock={handleUnlock} />;
+      case 2: return <StepMonth data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 3: return <StepIntention data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 4: return <StepMovement data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 5: return <StepPacing data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 6: return <StepRange data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 7: return <StepDetails data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 8: return <StepPractice data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 9: return <StepProfile data={data} onBack={goBack} onUnlock={handleUnlock} generating={generating} />;
       default: return null;
     }
   };
@@ -1198,7 +1290,7 @@ export default function PlanMyTrip() {
         transform: transitioning ? "translateY(12px)" : "translateY(0)",
         transition: "opacity 0.3s, transform 0.3s",
       }}>
-        {step > 0 && step < 8 && <StepIndicator current={step - 1} total={7} />}
+        {step > 0 && step < 9 && <StepIndicator current={step - 1} total={8} />}
         {renderStep()}
       </div>
     </div>

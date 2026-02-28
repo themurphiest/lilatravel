@@ -42,9 +42,9 @@ export default async function handler(req, res) {
       });
     }
 
-    if (!preferences.dates?.start || !preferences.dates?.end) {
+    if (!preferences.dates?.start && !preferences.month) {
       return res.status(400).json({ 
-        error: 'Missing required fields: preferences.dates.start, preferences.dates.end' 
+        error: 'Missing required fields: either preferences.dates or preferences.month' 
       });
     }
 

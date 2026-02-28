@@ -55,6 +55,7 @@ import ContactPage from '@pages/Contact';
 import PlanMyTrip from '@pages/PlanMyTrip';
 import NotFound from '@pages/NotFound';
 import TripPage from '@pages/trips/TripPage';
+import ItineraryResults from './pages/ItineraryResults';
 
 // ─── Dedicated Guides ───────────────────────────────────────────────────────
 import ZionGuide from '@pages/guides/ZionGuide';
@@ -92,6 +93,7 @@ export default function App() {
 
           {/* Trip Planner — full-screen onboarding (no Nav/Footer) */}
           <Route path="/plan" element={<PlanMyTrip />} />
+<Route path="/itinerary" element={<ItineraryResults />} />
 
           {/* Destinations */}
           <Route path="/destinations" element={<DestinationsPage />} />
