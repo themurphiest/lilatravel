@@ -345,70 +345,103 @@ function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', u
   );
 }
 
-/* ── pick card ──────────────────────────────────────────────────────────── */
+/* ── inline pick (within timeline flow) ─────────────────────────────────── */
 
-function PickCard({ category, pick, alternatives = [] }) {
+function InlinePick({ category, pick, alternatives = [], isLast = false }) {
   const [showAlts, setShowAlts] = useState(false);
   const styles = {
-    stay: { label: 'Where to Stay', color: C.goldenAmber, icon: '🏡', badge: 'Lila Pick' },
-    eat: { label: 'Where to Eat', color: C.sunSalmon, icon: '🍽', badge: 'Lila Pick' },
-    gear: { label: 'Gear Rental', color: C.oceanTeal, icon: '🎒', badge: 'Lila Pick' },
-    wellness: { label: 'Wellness', color: C.seaGlass, icon: '🧘', badge: 'Lila Pick' },
+    stay: { label: 'Where to Stay', color: C.goldenAmber, icon: '🏡' },
+    eat: { label: 'Where to Eat', color: C.sunSalmon, icon: '🍽' },
+    gear: { label: 'Gear', color: C.oceanTeal, icon: '🎒' },
+    wellness: { label: 'Wellness', color: C.seaGlass, icon: '🧘' },
   };
   const s = styles[category] || styles.stay;
 
   return (
-    <div style={{ background: C.white, borderRadius: 16, border: `1px solid ${s.color}20`, overflow: 'hidden', marginBottom: 14, boxShadow: `0 1px 8px ${s.color}08` }}>
-      <div style={{ padding: '12px 18px 10px', background: `${s.color}06`, borderBottom: `1px solid ${s.color}12` }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 14 }}>{s.icon}</span>
-            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: `${s.color}12`, padding: '3px 10px 3px 7px', borderRadius: 12 }}>
-            <Star size={10} color={s.color} />
-            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.color }}>{s.badge}</span>
-          </div>
-        </div>
+    <div style={{ display: 'flex', gap: 14, minHeight: 48 }}>
+      {/* Timeline connector */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 20, flexShrink: 0 }}>
+        <div style={{
+          width: 12, height: 12, borderRadius: '50%',
+          background: `${s.color}20`, border: `2.5px solid ${s.color}`,
+          flexShrink: 0, marginTop: 4,
+          boxShadow: `0 0 0 3px ${s.color}12`,
+        }} />
+        {!isLast && <div style={{ width: 1.5, flex: 1, minHeight: 24, background: `linear-gradient(180deg, ${s.color}20, ${C.sage}08)` }} />}
       </div>
 
-      <div style={{ padding: '14px 18px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-          <LinkedName
-            name={pick.name}
-            url={pick.url}
-            style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(17px, 4.5vw, 20px)', fontWeight: 500, color: C.slate }}
-          />
-          {(pick.url || lookupUrl(pick.name)) && <ExternalLinkIcon size={11} color={`${C.sage}50`} />}
-        </div>
-        <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(12px, 3.2vw, 13px)', color: `${C.slate}70`, lineHeight: 1.6 }}>{pick.why}</div>
-      </div>
-
-      {alternatives.length > 0 && (
-        <>
-          <button onClick={() => setShowAlts(!showAlts)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '10px 18px', background: `${C.cream}60`, border: 'none', borderTop: `1px solid ${s.color}10`, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>
-            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, color: `${C.sage}80` }}>{showAlts ? 'Hide options' : `${alternatives.length} other option${alternatives.length > 1 ? 's' : ''}`}</span>
-            <Chevron open={showAlts} color={`${C.sage}50`} />
-          </button>
-          <Collapsible open={showAlts}>
-            <div style={{ padding: '4px 18px 14px' }}>
-              {alternatives.map((alt, i) => (
-                <div key={i} style={{ padding: '10px 0', borderBottom: i < alternatives.length - 1 ? `1px solid ${C.sage}10` : 'none' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 2 }}>
-                    <LinkedName
-                      name={alt.name}
-                      url={alt.url}
-                      style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(15px, 3.8vw, 17px)', fontWeight: 500, color: C.slate }}
-                    />
-                    {(alt.url || lookupUrl(alt.name)) && <ExternalLinkIcon size={10} color={`${C.sage}40`} />}
-                  </div>
-                  <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(11px, 3vw, 12px)', color: `${C.slate}70`, lineHeight: 1.5 }}>{alt.why}</div>
-                </div>
-              ))}
+      {/* Card body */}
+      <div style={{
+        flex: 1, paddingBottom: isLast ? 0 : 16,
+        marginBottom: 4,
+      }}>
+        <div style={{
+          background: `${s.color}05`,
+          border: `1.5px solid ${s.color}18`,
+          borderRadius: 14,
+          overflow: 'hidden',
+        }}>
+          {/* Header bar */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '10px 14px',
+            borderBottom: `1px solid ${s.color}10`,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 12 }}>{s.icon}</span>
+              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
             </div>
-          </Collapsible>
-        </>
-      )}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 3,
+              background: `${s.color}12`, padding: '2px 8px 2px 5px', borderRadius: 10,
+            }}>
+              <Star size={8} color={s.color} />
+              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 8, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.color }}>Lila Pick</span>
+            </div>
+          </div>
+
+          {/* Pick content */}
+          <div style={{ padding: '12px 14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
+              <LinkedName name={pick.name} url={pick.url}
+                style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(16px, 4.2vw, 19px)', fontWeight: 500, color: C.slate }} />
+              {(pick.url || lookupUrl(pick.name)) && <ExternalLinkIcon size={10} color={`${C.sage}50`} />}
+            </div>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(11px, 3vw, 12px)', color: `${C.slate}65`, lineHeight: 1.55 }}>{pick.why}</div>
+          </div>
+
+          {/* Alternatives toggle */}
+          {alternatives.length > 0 && (
+            <>
+              <button onClick={() => setShowAlts(!showAlts)} style={{
+                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                padding: '8px 14px', background: `${s.color}06`,
+                border: 'none', borderTop: `1px solid ${s.color}08`,
+                cursor: 'pointer', WebkitTapHighlightColor: 'transparent',
+              }}>
+                <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600, color: `${C.sage}70` }}>
+                  {showAlts ? 'Hide options' : `${alternatives.length} other option${alternatives.length > 1 ? 's' : ''}`}
+                </span>
+                <Chevron open={showAlts} color={`${C.sage}40`} />
+              </button>
+              <Collapsible open={showAlts}>
+                <div style={{ padding: '2px 14px 10px' }}>
+                  {alternatives.map((alt, i) => (
+                    <div key={i} style={{ padding: '8px 0', borderBottom: i < alternatives.length - 1 ? `1px solid ${C.sage}08` : 'none' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
+                        <LinkedName name={alt.name} url={alt.url}
+                          style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(14px, 3.6vw, 16px)', fontWeight: 500, color: C.slate }} />
+                        {(alt.url || lookupUrl(alt.name)) && <ExternalLinkIcon size={9} color={`${C.sage}40`} />}
+                      </div>
+                      <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(10px, 2.8vw, 11px)', color: `${C.slate}60`, lineHeight: 1.5 }}>{alt.why}</div>
+                    </div>
+                  ))}
+                </div>
+              </Collapsible>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -416,7 +449,7 @@ function PickCard({ category, pick, alternatives = [] }) {
 /* ── day card ───────────────────────────────────────────────────────────── */
 
 function DayCard({ day, isFirst = false, dayIndex = 0 }) {
-  const [open, setOpen] = useState(isFirst);
+  const [open, setOpen] = useState(true);
   const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
 
   return (
@@ -456,9 +489,9 @@ function DayCard({ day, isFirst = false, dayIndex = 0 }) {
           {day.timeline && day.timeline.map((b, i) => (
             <TimelineBlock key={i} time={b.time} title={b.title} summary={b.summary}
               details={b.details} timeOfDay={b.timeOfDay} url={b.url}
-              isLast={i === day.timeline.length - 1} />
+              isLast={i === day.timeline.length - 1 && (!day.picks || day.picks.length === 0)} />
           ))}
-          {day.picks && day.picks.map((p, i) => <PickCard key={i} category={p.category} pick={p.pick} alternatives={p.alternatives || []} />)}
+          {day.picks && day.picks.map((p, i) => <InlinePick key={i} category={p.category} pick={p.pick} alternatives={p.alternatives || []} isLast={i === day.picks.length - 1} />)}
         </div>
       </Collapsible>
     </div>
