@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { C as BrandC } from '@data/brand';
+import JSON5 from 'json5';
 
 const C = {
   ...BrandC,
@@ -270,13 +271,12 @@ export default function ItineraryResults() {
   let itinerary;
   try {
     let cleaned = rawItinerary;
-    // Find the JSON object between first { and last }
     const firstBrace = cleaned.indexOf('{');
     const lastBrace = cleaned.lastIndexOf('}');
     if (firstBrace !== -1 && lastBrace !== -1) {
       cleaned = cleaned.slice(firstBrace, lastBrace + 1);
     }
-    itinerary = JSON.parse(cleaned);
+    itinerary = JSON5.parse(cleaned);
     console.log('PARSED OK:', itinerary.title);
   } catch (e) {
     console.error('JSON parse failed:', e.message);
