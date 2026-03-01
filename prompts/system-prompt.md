@@ -64,6 +64,11 @@ Return this structure:
   "title": "Your Zion Canyon Itinerary — October's Golden Corridor",
   "subtitle": "For the traveler seeking stillness",
   "intro": "2-3 sentence evocative opening. Use sensory language. Address the traveler directly.",
+  "snapshot": {
+    "seasonalNote": "1 sentence about what makes this time of year special at this destination.",
+    "weatherSummary": "1 sentence summary of expected conditions, e.g. 'Warm days in the mid-70s, cool nights dropping to the 40s. Pack layers for morning canyon shade.'",
+    "packingHint": "1 short sentence, e.g. 'Layers, sun hat, and sturdy hiking boots.'"
+  },
   "days": [
     {
       "label": "Day 1",
@@ -76,15 +81,16 @@ Return this structure:
           "timeOfDay": "afternoon",
           "title": "Check in & Ground",
           "summary": "1 sentence visible at first glance.",
-          "details": "2-4 sentences with logistics, insider tips, sensory details."
+          "details": "2-4 sentences with logistics, insider tips, sensory details.",
+          "url": "https://example.com (optional — include if the activity has a relevant website)"
         }
       ],
       "picks": [
         {
           "category": "eat",
-          "pick": { "name": "Bit & Spur", "why": "1 sentence why this is the pick." },
+          "pick": { "name": "Bit & Spur", "why": "1 sentence why this is the pick.", "url": "https://bitandspur.com/" },
           "alternatives": [
-            { "name": "Whiptail Grill", "why": "1 sentence." }
+            { "name": "Whiptail Grill", "why": "1 sentence.", "url": "https://www.whiptailgrillzion.com/" }
           ]
         }
       ]
@@ -103,6 +109,8 @@ Return this structure:
 - timeline.timeOfDay: one of "morning", "midday", "afternoon", "evening", "night"
 - picks.category: one of "stay", "eat", "gear", "wellness"
 - snapshot: brief day overview with → arrows, shown when collapsed
+- **snapshot (top-level)**: Include seasonalNote, weatherSummary, and packingHint to give travelers context before they dive into the day-by-day
+- **url fields**: Include a "url" on picks and timeline items when the place has a known website. Use URLs from the destination guide's URL Registry section if provided. If no URL is known, omit the field — do NOT invent URLs.
 - Keep ALL text concise — summaries are 1 sentence, details are 2-4 sentences max
 - Include a "stay" pick on day 1, "eat" picks each day, "gear" if relevant on day 1
 - Every name MUST come from the destination guide

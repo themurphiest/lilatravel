@@ -194,6 +194,127 @@ function formatWeatherForPrompt(weatherData) {
 
 
 // ============================================================
+// LIVE DATA — Celestial (Sunrise/Sunset, Moon Phase via Open-Meteo)
+// ============================================================
+
+/**
+ * Fetch sunrise/sunset times and daylight info for the trip dates.
+ * Uses Open-Meteo's free API.
+ */
+async function fetchCelestial(destination, startDate, endDate) {
+  const coords = DESTINATION_COORDS[destination];
+  if (!coords || !startDate || !endDate) return null;
+
+  try {
+    const response = await fetch(
+      `https://api.open-meteo.com/v1/forecast?` +
+      `latitude=${coords.lat}&longitude=${coords.lon}` +
+      `&daily=sunrise,sunset` +
+      `&start_date=${startDate}&end_date=${endDate}` +
+      `&timezone=America/Denver`
+    );
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const daily = data.daily;
+
+    if (!daily || !daily.time) return null;
+
+    // Calculate moon phase for first day of trip
+    const moonPhase = getMoonPhase(new Date(startDate));
+
+    return {
+      days: daily.time.map((date, i) => ({
+        date,
+        sunrise: formatTime(daily.sunrise[i]),
+        sunset: formatTime(daily.sunset[i]),
+      })),
+      moonPhase,
+    };
+  } catch (error) {
+    console.error('Celestial fetch failed:', error);
+    return null;
+  }
+}
+
+/**
+ * Format ISO datetime to just the time portion (e.g., "6:42 AM")
+ */
+function formatTime(isoString) {
+  if (!isoString) return null;
+  try {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'America/Denver',
+    });
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Calculate moon phase based on date.
+ * Returns { name, emoji, illumination (0-1) }
+ * Uses a simplified synodic calculation.
+ */
+function getMoonPhase(date) {
+  // Known new moon: January 6, 2000 18:14 UTC
+  const knownNew = new Date('2000-01-06T18:14:00Z');
+  const synodicMonth = 29.53058770576; // days
+  const daysSinceKnown = (date - knownNew) / (1000 * 60 * 60 * 24);
+  const phase = ((daysSinceKnown % synodicMonth) + synodicMonth) % synodicMonth;
+  const normalized = phase / synodicMonth; // 0 to 1
+
+  const phases = [
+    { name: 'New Moon',        emoji: '🌑', min: 0,     max: 0.0625 },
+    { name: 'Waxing Crescent', emoji: '🌒', min: 0.0625, max: 0.1875 },
+    { name: 'First Quarter',   emoji: '🌓', min: 0.1875, max: 0.3125 },
+    { name: 'Waxing Gibbous',  emoji: '🌔', min: 0.3125, max: 0.4375 },
+    { name: 'Full Moon',       emoji: '🌕', min: 0.4375, max: 0.5625 },
+    { name: 'Waning Gibbous',  emoji: '🌖', min: 0.5625, max: 0.6875 },
+    { name: 'Last Quarter',    emoji: '🌗', min: 0.6875, max: 0.8125 },
+    { name: 'Waning Crescent', emoji: '🌘', min: 0.8125, max: 0.9375 },
+    { name: 'New Moon',        emoji: '🌑', min: 0.9375, max: 1.001 },
+  ];
+
+  const current = phases.find(p => normalized >= p.min && normalized < p.max) || phases[0];
+  // Approximate illumination: 0 at new, 1 at full
+  const illumination = Math.round((1 - Math.cos(normalized * 2 * Math.PI)) / 2 * 100);
+
+  return {
+    name: current.name,
+    emoji: current.emoji,
+    illumination,
+    stargazing: illumination < 30 ? 'excellent' : illumination < 60 ? 'good' : 'moderate',
+  };
+}
+
+/**
+ * Format celestial data for the Claude prompt.
+ */
+function formatCelestialForPrompt(celestialData) {
+  if (!celestialData) return 'Celestial data not available.';
+
+  const firstDay = celestialData.days[0];
+  const lastDay = celestialData.days[celestialData.days.length - 1];
+  const moon = celestialData.moonPhase;
+
+  let summary = `Sunrise: ${firstDay?.sunrise || 'N/A'} | Sunset: ${firstDay?.sunset || 'N/A'} (day 1)`;
+  if (celestialData.days.length > 1) {
+    summary += `\nSunrise: ${lastDay?.sunrise || 'N/A'} | Sunset: ${lastDay?.sunset || 'N/A'} (last day)`;
+  }
+  summary += `\nMoon Phase: ${moon.emoji} ${moon.name} (${moon.illumination}% illumination)`;
+  summary += `\nStargazing conditions: ${moon.stargazing}`;
+
+  return summary;
+}
+
+
+// ============================================================
 // MAIN: Assemble Full Context for Claude API Call
 // ============================================================
 
@@ -218,12 +339,15 @@ export async function assembleContext(destination, userPreferences) {
   // 2. Fetch live data in parallel
   const hasExactDates = userPreferences.dates?.start && userPreferences.dates?.end;
   
-  const [alerts, weather, campgrounds] = await Promise.all([
+  const [alerts, weather, campgrounds, celestial] = await Promise.all([
     fetchNPSAlerts(destination),
     hasExactDates 
       ? fetchWeather(destination, userPreferences.dates.start, userPreferences.dates.end)
       : Promise.resolve(null), // No weather fetch if only month selected
     fetchNPSCampgrounds(destination),
+    hasExactDates
+      ? fetchCelestial(destination, userPreferences.dates.start, userPreferences.dates.end)
+      : Promise.resolve(null),
   ]);
 
   // 3. Generate matching instructions from preferences
@@ -235,6 +359,9 @@ export async function assembleContext(destination, userPreferences) {
     liveData: {
       alerts: alerts || 'No alert data available.',
       weather: formatWeatherForPrompt(weather),
+      celestial: formatCelestialForPrompt(celestial),
+      celestialRaw: celestial,
+      weatherRaw: weather,
       campgrounds: campgrounds ? JSON.stringify(campgrounds, null, 2) : null,
     },
     traveler: userPreferences,
@@ -267,6 +394,9 @@ ${context.liveData.alerts}
 
 ### Weather Forecast for Travel Dates
 ${context.liveData.weather}
+
+### Celestial Data
+${context.liveData.celestial}
 
 ${context.liveData.campgrounds ? `### Campground Data\n${context.liveData.campgrounds}` : ''}
 

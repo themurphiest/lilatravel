@@ -466,3 +466,48 @@ The following information should be supplemented with live data at request time:
 - **Campground availability** → NPS API (`/campgrounds?parkCode=zion`)
 - **Event listings** → NPS API (`/events?parkCode=zion`)
 - **Angels Landing permit availability** → recreation.gov (no public API; advise users to check directly)
+
+---
+
+## URL Registry — Include These in Your Response
+
+When recommending any of the following places, include the corresponding URL in the "url" field of your JSON output.
+
+### Accommodation
+- Under Canvas Zion → https://www.undercanvas.com/camps/zion/
+- AutoCamp Zion → https://autocamp.com/zion/
+- Cliffrose Lodge → https://www.cliffroselodge.com/
+- Amangiri → https://www.aman.com/hotels/amangiri
+- Open Sky Zion → https://www.openskyzion.com/
+- Desert Pearl Inn → https://www.desertpearl.com/
+- Flanigan's Inn → https://flanigans.com/
+- Skyview Hotel → https://skyviewhotel.com/
+- Inn at Entrada → https://www.innatentrada.com/
+- Cable Mountain Lodge → https://www.cablemountainlodge.com/
+- Driftwood Lodge → https://www.driftwoodlodge.net/
+
+### Dining
+- Zion Canyon Brew Pub → https://zionbrewery.com/
+- King's Landing Bistro → https://www.kingslanding-zion.com/
+- Spotted Dog Café → https://flanigans.com/
+- Oscar's Café → https://www.oscarscafe.com/
+- Whiptail Grill → https://www.whiptailgrillzion.com/
+- Bit & Spur → https://bitandspur.com/
+
+### Trails
+- Angels Landing → https://www.nps.gov/zion/planyourvisit/angels-landing-702702.htm
+- The Narrows → https://www.nps.gov/zion/planyourvisit/thenarrows.htm
+- The Subway → https://www.nps.gov/zion/planyourvisit/the-subway.htm
+- Observation Point → https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm
+- Canyon Overlook → https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm
+- Emerald Pools → https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm
+- Pa'rus Trail → https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm
+- Watchman Trail → https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm
+
+### Wellness
+- Deep Canyon Spa → https://flanigans.com/spa/
+- Zion Guru → https://www.zionguru.com/
+
+### Resources
+- Zion National Park → https://www.nps.gov/zion/
+- Zion Shuttle System → https://www.nps.gov/zion/planyourvisit/zion-canyon-shuttle-system.htm

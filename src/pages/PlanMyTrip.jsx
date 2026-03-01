@@ -262,6 +262,9 @@ const PRACTICES = [
   { id: "journaling", label: "Journaling", icon: IconJournal, color: C.coralBlush },
   { id: "soundBath", label: "Sound Bath", icon: IconSoundBath, color: C.sageLight },
   { id: "sauna", label: "Sauna", icon: IconFlame, color: C.sunSalmon },
+  { id: "service", label: "Service Work", icon: IconDharmaWheel, color: C.seaGlass },
+  { id: "plantMedicine", label: "Plant Medicine", icon: IconBodhiLeaf, color: C.sage },
+  { id: "foraging", label: "Foraging", icon: IconBindu, color: C.goldenAmber },
 ];
 
 const BUDGET_TIERS = [
@@ -541,12 +544,45 @@ function StepWelcome({ onNext }) {
         minHeight: 52, WebkitTapHighlightColor: "transparent",
       }}>Begin</button>
       <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: `${C.sage}60`, marginTop: 24 }}>Takes about 2 minutes</p>
+
+      {/* Trust bar */}
+      <div style={{
+        marginTop: 40, display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
+        borderTop: `1px solid ${C.sage}15`, paddingTop: 28, maxWidth: 380,
+      }}>
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase",
+          color: `${C.sage}50`,
+        }}>Built from</div>
+        <div style={{
+          display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px 16px",
+        }}>
+          {["National Park Service Data", "Trusted Local Partners", "Experienced Travelers"].map(item => (
+            <span key={item} style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 11, fontWeight: 500, color: `${C.slate}60`,
+              display: "flex", alignItems: "center", gap: 5,
+            }}>
+              <span style={{ width: 4, height: 4, borderRadius: "50%", background: `${C.sage}40`, flexShrink: 0 }} />
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
 function StepDestination({ data, onChange, onNext, onBack }) {
   const AVAILABLE = new Set(["zion"]); // destinations with guides ready
+
+  // Auto-select if only one destination available
+  useEffect(() => {
+    if (!data.destination && AVAILABLE.size === 1) {
+      onChange({ destination: [...AVAILABLE][0] });
+    }
+  }, []);
   return (
     <div>
       <StepTitle eyebrow="Where" title="Where is calling you?" subtitle="Choose the landscape that stirs something." />
@@ -628,7 +664,7 @@ function StepMonth({ data, onChange, onNext, onBack }) {
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: 9, fontWeight: 600, letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color: sel ? m.color : `${C.sage}60`,
+                color: sel ? m.color : `${C.sage}90`,
               }}>{m.window}</div>
             </button>
           );
@@ -689,7 +725,7 @@ function StepMovement({ data, onChange, onNext, onBack }) {
 
   return (
     <div>
-      <StepTitle eyebrow="Movement" title="How do you want to move?" subtitle="From restorative mornings to summit pushes." />
+      <StepTitle eyebrow="Movement" title="How physically intense?" subtitle="From restorative mornings to summit-level effort." />
       <div style={{ maxWidth: 440, margin: "0 auto", padding: "0 28px" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(32px, 8vw, 40px)", fontWeight: 300, color: C.sage, marginBottom: 6 }}>{labels[labelIndex]}</div>
@@ -745,23 +781,17 @@ const PRACTICE_LEVELS = [
   },
 ];
 
-function StepPractice({ data, onChange, onNext, onBack }) {
+function StepPracticeLevel({ data, onChange, onNext, onBack }) {
   const level = data.practiceLevel ?? 1;
   const current = PRACTICE_LEVELS[level];
   const Ic = current.icon;
-
-  const selected = data.practices || [];
-  const toggle = (id) => {
-    const next = selected.includes(id) ? selected.filter(x => x !== id) : [...selected, id];
-    onChange({ practices: next });
-  };
 
   return (
     <div>
       <StepTitle
         eyebrow="Practice"
-        title="Where are you at?"
-        subtitle="This helps us know how much yoga, meditation, and wellness to weave into your days."
+        title="What's your relationship with mindfulness?"
+        subtitle="Yoga, meditation, breathwork — how familiar are these in your life?"
       />
       <div style={{ maxWidth: 460, margin: "0 auto", padding: "0 28px" }}>
         {/* Current level display */}
@@ -808,42 +838,54 @@ function StepPractice({ data, onChange, onNext, onBack }) {
             <IconUnalome size={14} color={C.oceanTeal} />
           </div>
         </div>
+      </div>
+      <NavButtons onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
 
-        {/* Optional practice picks */}
-        <div style={{ marginTop: 36 }}>
-          <div style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
-            color: `${C.sage}80`, textAlign: "center", marginBottom: 14,
-          }}>Anything you especially want?</div>
-          <div style={{
-            display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 8, maxWidth: 340, margin: "0 auto",
-          }}>
-            {PRACTICES.map(p => {
-              const active = selected.includes(p.id);
-              const Pic = p.icon;
-              return (
-                <button key={p.id} onClick={() => toggle(p.id)} style={{
-                  background: active ? `${p.color}12` : C.white,
-                  border: `1.5px solid ${active ? p.color : `${C.sage}12`}`,
-                  borderRadius: 12, padding: "14px 6px",
-                  cursor: "pointer", transition: "all 0.3s",
-                  textAlign: "center", minHeight: 68,
-                  boxShadow: active ? `0 2px 10px ${p.color}15` : "none",
-                  WebkitTapHighlightColor: "transparent",
-                }}>
-                  <div style={{ display: "flex", justifyContent: "center", marginBottom: 4 }}>
-                    <Pic size={20} color={active ? p.color : `${C.sage}50`} />
-                  </div>
-                  <div style={{
-                    fontFamily: "'Quicksand', sans-serif",
-                    fontSize: 10, fontWeight: 600, color: active ? C.slate : `${C.slate}90`, lineHeight: 1.2,
-                  }}>{p.label}</div>
-                </button>
-              );
-            })}
-          </div>
+function StepPracticeInterests({ data, onChange, onNext, onBack }) {
+  const selected = data.practices || [];
+  const toggle = (id) => {
+    const next = selected.includes(id) ? selected.filter(x => x !== id) : [...selected, id];
+    onChange({ practices: next });
+  };
+
+  return (
+    <div>
+      <StepTitle
+        eyebrow="Interests"
+        title="What jumps out?"
+        subtitle="Select any practices you'd like woven into your trip. Choose as many as you like."
+      />
+      <div style={{ maxWidth: 460, margin: "0 auto", padding: "0 28px" }}>
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 10, maxWidth: 380, margin: "0 auto",
+        }}>
+          {PRACTICES.map(p => {
+            const active = selected.includes(p.id);
+            const Pic = p.icon;
+            return (
+              <button key={p.id} onClick={() => toggle(p.id)} style={{
+                background: active ? `${p.color}12` : C.white,
+                border: `1.5px solid ${active ? p.color : `${C.sage}15`}`,
+                borderRadius: 14, padding: "18px 8px",
+                cursor: "pointer", transition: "all 0.3s",
+                textAlign: "center", minHeight: 80,
+                boxShadow: active ? `0 3px 14px ${p.color}15` : "0 1px 4px rgba(0,0,0,0.04)",
+                WebkitTapHighlightColor: "transparent",
+              }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
+                  <Pic size={24} color={active ? p.color : `${C.sage}50`} />
+                </div>
+                <div style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 11, fontWeight: 600, color: active ? C.slate : `${C.slate}80`, lineHeight: 1.2,
+                }}>{p.label}</div>
+              </button>
+            );
+          })}
         </div>
       </div>
       <NavButtons onBack={onBack} onNext={onNext} />
@@ -863,7 +905,7 @@ function StepPacing({ data, onChange, onNext, onBack }) {
 
   return (
     <div>
-      <StepTitle eyebrow="Rhythm" title="What's your rhythm?" subtitle="Some travelers need space. Others want every moment filled." />
+      <StepTitle eyebrow="Rhythm" title="How packed should each day be?" subtitle="Your daily schedule density — from wide-open mornings to dawn-to-dark adventures." />
       <div style={{ maxWidth: 440, margin: "0 auto", padding: "0 28px" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(32px, 8vw, 40px)", fontWeight: 300, color: C.sage, marginBottom: 6 }}>{labels[labelIndex]}</div>
@@ -937,30 +979,23 @@ function StepRange({ data, onChange, onNext, onBack }) {
 }
 
 
-// ─── Step: Details (duration + budget combined) ─────────────────────────────
+// ─── Step: Duration (standalone) ──────────────────────────────────────────
 
-function StepDetails({ data, onChange, onNext, onBack }) {
+function StepDuration({ data, onChange, onNext, onBack }) {
   const days = data.duration || 4;
 
   return (
     <div>
       <StepTitle
-        eyebrow="Details"
-        title="Your window"
-        subtitle="How much time do you have, and what range feels right?"
+        eyebrow="Duration"
+        title="How many days?"
+        subtitle="We recommend 4–7 days for a transformative experience."
       />
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px" }}>
-
-        {/* Duration */}
         <div style={{
-          background: C.white, borderRadius: 18, padding: "28px 24px",
-          border: `1px solid ${C.sage}12`, marginBottom: 16,
+          background: C.white, borderRadius: 18, padding: "36px 24px",
+          border: `1px solid ${C.sage}12`,
         }}>
-          <div style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 10, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase",
-            color: C.oceanTeal, marginBottom: 20, textAlign: "center",
-          }}>How many days?</div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 28 }}>
             <button onClick={() => onChange({ duration: Math.max(2, days - 1) })} style={{
               width: 48, height: 48, borderRadius: "50%",
@@ -988,60 +1023,62 @@ function StepDetails({ data, onChange, onNext, onBack }) {
               fontFamily: "'Quicksand', sans-serif", WebkitTapHighlightColor: "transparent",
             }}>+</button>
           </div>
-          <div style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 11, color: `${C.sage}60`, textAlign: "center", marginTop: 12,
-          }}>We recommend 4–7 days for a transformative experience</div>
         </div>
+      </div>
+      <NavButtons onBack={onBack} onNext={onNext} />
+    </div>
+  );
+}
 
-        {/* Budget */}
-        <div style={{
-          background: C.white, borderRadius: 18, padding: "24px 20px",
-          border: `1px solid ${C.sage}12`,
-        }}>
-          <div style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 10, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase",
-            color: C.goldenAmber, marginBottom: 14, textAlign: "center",
-          }}>What range feels right?</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {BUDGET_TIERS.map(tier => {
-              const active = data.budget === tier.id;
-              return (
-                <button key={tier.id} onClick={() => onChange({ budget: tier.id })} style={{
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  background: active ? `${tier.color}08` : "transparent",
-                  border: `1.5px solid ${active ? tier.color : `${C.sage}12`}`,
-                  borderRadius: 12, padding: "14px 16px",
-                  cursor: "pointer", transition: "all 0.25s",
-                  minHeight: 52, WebkitTapHighlightColor: "transparent",
-                }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{
-                      width: 8, height: 8, borderRadius: "50%",
-                      background: active ? tier.color : `${C.sage}30`,
-                      transition: "background 0.25s",
-                    }} />
-                    <div>
-                      <span style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: "clamp(16px, 4vw, 18px)", fontWeight: 600, color: C.slate,
-                      }}>{tier.label}</span>
-                      <span style={{
-                        fontFamily: "'Quicksand', sans-serif",
-                        fontSize: 11, color: `${C.slate}60`, marginLeft: 8,
-                      }}>{tier.desc}</span>
-                    </div>
-                  </div>
+// ─── Step: Budget (standalone) ────────────────────────────────────────────
+
+function StepBudget({ data, onChange, onNext, onBack }) {
+  return (
+    <div>
+      <StepTitle
+        eyebrow="Budget"
+        title="What budget feels right?"
+        subtitle="This helps us match accommodations, dining, and experiences to your comfort."
+      />
+      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {BUDGET_TIERS.map(tier => {
+            const active = data.budget === tier.id;
+            return (
+              <button key={tier.id} onClick={() => onChange({ budget: tier.id })} style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: active ? `${tier.color}08` : C.white,
+                border: `1.5px solid ${active ? tier.color : `${C.sage}18`}`,
+                borderRadius: 14, padding: "18px 20px",
+                cursor: "pointer", transition: "all 0.25s",
+                minHeight: 60, WebkitTapHighlightColor: "transparent",
+                boxShadow: active ? `0 3px 16px ${tier.color}15` : "0 1px 4px rgba(0,0,0,0.04)",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{
-                    fontFamily: "'Quicksand', sans-serif",
-                    fontSize: 11, fontWeight: 600, color: active ? tier.color : `${C.sage}70`,
-                    flexShrink: 0, whiteSpace: "nowrap",
-                  }}>{tier.range}</div>
-                </button>
-              );
-            })}
-          </div>
+                    width: 10, height: 10, borderRadius: "50%",
+                    background: active ? tier.color : `${C.sage}30`,
+                    transition: "background 0.25s",
+                  }} />
+                  <div>
+                    <span style={{
+                      fontFamily: "'Cormorant Garamond', serif",
+                      fontSize: "clamp(16px, 4vw, 18px)", fontWeight: 600, color: C.slate,
+                    }}>{tier.label}</span>
+                    <span style={{
+                      fontFamily: "'Quicksand', sans-serif",
+                      fontSize: 12, color: `${C.slate}60`, marginLeft: 8,
+                    }}>{tier.desc}</span>
+                  </div>
+                </div>
+                <div style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 12, fontWeight: 600, color: active ? tier.color : `${C.sage}70`,
+                  flexShrink: 0, whiteSpace: "nowrap",
+                }}>{tier.range}</div>
+              </button>
+            );
+          })}
         </div>
       </div>
       <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.budget} />
@@ -1106,43 +1143,6 @@ function StepProfile({ data, onBack, onUnlock, generating }) {
         <RadarChart values={radarValues} />
       </div>
 
-      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px", display: "flex", flexDirection: "column", gap: 10 }}>
-        {intentionLabels.length > 0 && (
-          <div style={{ background: C.white, borderRadius: 14, padding: "16px 20px", border: `1px solid ${C.sage}12` }}>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.oceanTeal, marginBottom: 8 }}>Seeking</div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-              {intentionLabels.map(l => (
-                <span key={l} style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 500, color: C.slate, background: `${C.oceanTeal}10`, padding: "4px 12px", borderRadius: 20 }}>{l}</span>
-              ))}
-            </div>
-          </div>
-        )}
-        {practiceLabels.length > 0 && (
-          <div style={{ background: C.white, borderRadius: 14, padding: "16px 20px", border: `1px solid ${C.sage}12` }}>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.goldenAmber, marginBottom: 8 }}>Practices</div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-              {practiceLabels.map(l => (
-                <span key={l} style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 500, color: C.slate, background: `${C.goldenAmber}10`, padding: "4px 12px", borderRadius: 20 }}>{l}</span>
-              ))}
-            </div>
-          </div>
-        )}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          <div style={{ background: C.white, borderRadius: 14, padding: "16px 18px", border: `1px solid ${C.sage}12` }}>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.sunSalmon, marginBottom: 4 }}>Rhythm</div>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 4.5vw, 22px)", fontWeight: 400, color: C.slate }}>
-              {(data.pacing ?? 50) < 35 ? "Spacious" : (data.pacing ?? 50) < 65 ? "Balanced" : "Full"}
-            </div>
-          </div>
-          <div style={{ background: C.white, borderRadius: 14, padding: "16px 18px", border: `1px solid ${C.sage}12` }}>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.seaGlass, marginBottom: 4 }}>Practice</div>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 4.5vw, 22px)", fontWeight: 400, color: C.slate }}>
-              {practiceLevel === 0 ? "Curious" : practiceLevel === 1 ? "Dabbling" : practiceLevel === 2 ? "Regular" : "Deep"}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div style={{ textAlign: "center", marginTop: 40, padding: "0 28px 48px" }}>
         <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px, 5.5vw, 26px)", fontWeight: 300, color: C.slate, marginBottom: 8 }}>Your itinerary is ready</div>
         <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 3.5vw, 14px)", color: `${C.slate}70`, maxWidth: 380, margin: "0 auto 28px", lineHeight: 1.6 }}>
@@ -1159,8 +1159,8 @@ function StepProfile({ data, onBack, onUnlock, generating }) {
           transition: "all 0.3s", boxShadow: generating ? "none" : `0 6px 28px ${C.oceanTeal}30`,
           minHeight: 56, WebkitTapHighlightColor: "transparent",
           opacity: generating ? 0.8 : 1,
-        }}>{generating ? 'Creating your journey...' : 'Unlock My Itinerary'}</button>
-        <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: `${C.sage}60`, marginTop: 16 }}>Starting at $29 · Fully customizable</div>
+        }}>{generating ? 'Creating your journey...' : 'Build My Itinerary'}</button>
+        <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: `${C.sage}60`, marginTop: 16 }}>Fully customizable · Powered by Lila Trips</div>
         <div style={{ marginTop: 20 }}>
           <button onClick={onBack} style={{
             fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 500, color: `${C.sage}80`,
@@ -1317,6 +1317,10 @@ function GeneratingScreen({ destination }) {
           fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase",
           color: `${C.sage}60`,
         }}>Crafting your {destName} journey</div>
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 11, color: `${C.sage}40`, marginTop: 8,
+        }}>This can take up to a minute</div>
       </div>
 
       {/* Subtle progress dots */}
@@ -1393,19 +1397,22 @@ export default function PlanMyTrip() {
     }
   };
 
-  // 10 screens: welcome → destination → month → intention → movement → pacing → range → details → practice → profile
+  // 12 screens: welcome → destination → month → duration → budget → territory → intention → movement → pacing → practiceLevel → practiceInterests → profile
+  const TOTAL_INNER_STEPS = 10; // steps shown in indicator (excludes welcome + profile)
   const renderStep = () => {
     switch (step) {
       case 0: return <StepWelcome onNext={goNext} />;
       case 1: return <StepDestination data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 2: return <StepMonth data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 3: return <StepIntention data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 4: return <StepMovement data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 5: return <StepPacing data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 6: return <StepRange data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 7: return <StepDetails data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 8: return <StepPractice data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 9: return <StepProfile data={data} onBack={goBack} onUnlock={handleUnlock} generating={generating} />;
+      case 3: return <StepDuration data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 4: return <StepBudget data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 5: return <StepRange data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 6: return <StepIntention data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 7: return <StepMovement data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 8: return <StepPacing data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 9: return <StepPracticeLevel data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 10: return <StepPracticeInterests data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 11: return <StepProfile data={data} onBack={goBack} onUnlock={handleUnlock} generating={generating} />;
       default: return null;
     }
   };
@@ -1470,7 +1477,7 @@ export default function PlanMyTrip() {
         transform: transitioning ? "translateY(12px)" : "translateY(0)",
         transition: "opacity 0.3s, transform 0.3s",
       }}>
-        {step > 0 && step < 9 && <StepIndicator current={step - 1} total={8} />}
+        {step > 0 && step < 11 && <StepIndicator current={step - 1} total={TOTAL_INNER_STEPS} />}
         {renderStep()}
       </div>
     </div>

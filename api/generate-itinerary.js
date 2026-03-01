@@ -73,6 +73,8 @@ export default async function handler(req, res) {
         model: messagePayload.model,
         hasAlerts: context.liveData.alerts !== 'No alert data available.',
         hasWeather: context.liveData.weather !== 'Weather forecast not available. Suggest traveler check closer to trip dates.',
+        celestial: context.liveData.celestialRaw || null,
+        weather: context.liveData.weatherRaw || null,
       }
     });
 
