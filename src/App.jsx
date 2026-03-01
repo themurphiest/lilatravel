@@ -50,7 +50,7 @@ import DestinationsPage from '@pages/Destinations';
 import DestinationGuide from '@pages/DestinationGuide';
 import ApproachPage from '@pages/Approach';
 import RitualDetail from '@pages/RitualDetail';  // TODO: rename file to ApproachDetail.jsx
-import OfferingsPage from '@pages/Offerings';     // TODO: rename file to HowItWorks.jsx
+import HowItWorksPage from '@pages/HowItWorks';
 import ContactPage from '@pages/Contact';
 import PlanMyTrip from '@pages/PlanMyTrip';
 import NotFound from '@pages/NotFound';
@@ -116,7 +116,7 @@ export default function App() {
           {/* <Route path="/itineraries/zion-autumn" element={<ZionAutumnItinerary />} /> */}
 
           {/* Other pages */}
-          <Route path="/how-it-works" element={<OfferingsPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/contact" element={<ContactPage />} />
 
           {/* 404 */}
