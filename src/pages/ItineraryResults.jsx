@@ -110,23 +110,41 @@ function SnapCell({ label, value, sub, color = C.sage }) {
 }
 
 function DestinationSnapshot({ snapshot, celestial, weather }) {
-  const hasCelestial = celestial && celestial.days && celestial.days.length > 0;
-  const hasMoon = celestial && celestial.moonPhase;
-  const hasWeather = weather && weather.length > 0;
-  const hasAiSnapshot = snapshot && (snapshot.seasonalNote || snapshot.weatherSummary);
+  // Resolve values — prefer AI snapshot fields, fall back to API data
+  let avgHigh = snapshot?.avgHigh ?? null;
+  let avgLow = snapshot?.avgLow ?? null;
+  let sunrise = snapshot?.sunrise ?? null;
+  let sunset = snapshot?.sunset ?? null;
+  let moonName = snapshot?.moonPhase ?? null;
+  let stargazing = snapshot?.stargazing ?? null;
 
-  if (!hasCelestial && !hasWeather && !hasAiSnapshot) return null;
-
-  // Compute averages from raw weather data
-  let avgHigh = null, avgLow = null;
-  if (hasWeather) {
+  // API fallbacks (when specific dates are selected)
+  if (avgHigh === null && weather && weather.length > 0) {
     const highs = weather.map(d => d.high);
     const lows = weather.map(d => d.low);
     avgHigh = Math.round(highs.reduce((a, b) => a + b, 0) / highs.length);
     avgLow = Math.round(lows.reduce((a, b) => a + b, 0) / lows.length);
   }
+  if (!sunrise && celestial?.days?.[0]) {
+    sunrise = celestial.days[0].sunrise;
+    sunset = celestial.days[0].sunset;
+  }
+  if (!moonName && celestial?.moonPhase) {
+    moonName = celestial.moonPhase.name;
+    stargazing = celestial.moonPhase.stargazing;
+  }
 
-  const firstDay = hasCelestial ? celestial.days[0] : null;
+  // Moon emoji lookup
+  const moonEmojis = {
+    'New Moon': '🌑', 'Waxing Crescent': '🌒', 'First Quarter': '🌓',
+    'Waxing Gibbous': '🌔', 'Full Moon': '🌕', 'Waning Gibbous': '🌖',
+    'Last Quarter': '🌗', 'Waning Crescent': '🌘',
+  };
+  const moonEmoji = moonEmojis[moonName] || '🌙';
+
+  const hasData = avgHigh !== null || sunrise || moonName;
+  if (!hasData && !snapshot?.seasonalNote) return null;
+
   const divider = { borderBottom: `1px solid ${C.sage}08` };
 
   return (
@@ -145,7 +163,7 @@ function DestinationSnapshot({ snapshot, celestial, weather }) {
       }}>Celestial Snapshot</div>
 
       {/* Seasonal one-liner */}
-      {hasAiSnapshot && snapshot.seasonalNote && (
+      {snapshot?.seasonalNote && (
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
           fontSize: 13, fontWeight: 500,
@@ -157,51 +175,51 @@ function DestinationSnapshot({ snapshot, celestial, weather }) {
       {/* 2-column data grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         {/* Row 1: Temp + Moon */}
-        {(avgHigh !== null || (hasAiSnapshot && snapshot.weatherSummary)) && (
+        {avgHigh !== null && (
           <div style={{ borderRight: `1px solid ${C.sage}08`, paddingRight: 16, ...divider }}>
             <SnapCell
               label="Avg Temp"
-              value={avgHigh !== null ? `${avgHigh}° / ${avgLow}°` : '—'}
-              sub={avgHigh !== null ? 'high / low' : snapshot?.weatherSummary}
+              value={`${avgHigh}° / ${avgLow}°`}
+              sub="high / low"
               color={C.skyBlue}
             />
           </div>
         )}
-        {hasMoon && (
+        {moonName && (
           <div style={{ paddingLeft: 16, ...divider }}>
             <SnapCell
               label="Moon"
-              value={`${celestial.moonPhase.emoji} ${celestial.moonPhase.name}`}
-              sub={`${celestial.moonPhase.stargazing} stargazing`}
+              value={`${moonEmoji} ${moonName}`}
+              sub={stargazing ? `${stargazing} stargazing` : null}
               color={C.goldenAmber}
             />
           </div>
         )}
 
         {/* Row 2: Sunrise + Sunset */}
-        {firstDay && firstDay.sunrise && (
+        {sunrise && (
           <div style={{ borderRight: `1px solid ${C.sage}08`, paddingRight: 16, ...divider }}>
             <SnapCell
               label="Sunrise"
-              value={firstDay.sunrise}
+              value={sunrise}
               sub="golden hour ~30 min prior"
               color={C.sunSalmon}
             />
           </div>
         )}
-        {firstDay && firstDay.sunset && (
+        {sunset && (
           <div style={{ paddingLeft: 16, ...divider }}>
             <SnapCell
               label="Sunset"
-              value={firstDay.sunset}
+              value={sunset}
               sub="golden hour ~1 hr prior"
               color="#8B7EC8"
             />
           </div>
         )}
 
-        {/* Row 3: Packing spanning full width */}
-        {hasAiSnapshot && snapshot.packingHint && (
+        {/* Row 3: Pack */}
+        {snapshot?.packingHint && (
           <div style={{ gridColumn: '1 / -1', padding: '14px 0 4px' }}>
             <div style={{
               fontFamily: "'Quicksand', sans-serif",

@@ -65,9 +65,14 @@ Return this structure:
   "subtitle": "For the traveler seeking stillness",
   "intro": "2-3 sentence evocative opening. Use sensory language. Address the traveler directly.",
   "snapshot": {
-    "seasonalNote": "1 sentence about what makes this time of year special at this destination.",
-    "weatherSummary": "1 sentence summary of expected conditions, e.g. 'Warm days in the mid-70s, cool nights dropping to the 40s. Pack layers for morning canyon shade.'",
-    "packingHint": "1 short sentence, e.g. 'Layers, sun hat, and sturdy hiking boots.'"
+    "seasonalNote": "1 sentence about what makes this time of year special.",
+    "avgHigh": 78,
+    "avgLow": 45,
+    "sunrise": "6:45 AM",
+    "sunset": "7:15 PM",
+    "moonPhase": "Waxing Gibbous",
+    "stargazing": "good",
+    "packingHint": "Layers, sun hat, sturdy hiking boots."
   },
   "days": [
     {
@@ -109,7 +114,13 @@ Return this structure:
 - timeline.timeOfDay: one of "morning", "midday", "afternoon", "evening", "night"
 - picks.category: one of "stay", "eat", "gear", "wellness"
 - snapshot: brief day overview with → arrows, shown when collapsed
-- **snapshot (top-level)**: Include seasonalNote, weatherSummary, and packingHint to give travelers context before they dive into the day-by-day
+- **snapshot (top-level)**: ALWAYS include this object. Use the destination guide's monthly data to populate concrete values:
+  - **seasonalNote**: 1 evocative sentence about this time of year at this destination
+  - **avgHigh / avgLow**: Average daily high and low temperatures in °F for the travel month (integers, no units)
+  - **sunrise / sunset**: Typical sunrise and sunset times for the travel month at this destination (e.g. "6:45 AM", "7:15 PM")
+  - **moonPhase**: Approximate moon phase name for the travel dates or mid-month (e.g. "New Moon", "Waxing Crescent", "Full Moon", "Waning Gibbous")
+  - **stargazing**: One of "excellent" (new/crescent moon), "good" (quarter moon), "moderate" (gibbous/full)
+  - **packingHint**: 1 short sentence listing essential gear for this season
 - **url fields**: Include a "url" on picks and timeline items when the place has a known website. Use URLs from the destination guide's URL Registry section if provided. If no URL is known, omit the field — do NOT invent URLs.
 - Keep ALL text concise — summaries are 1 sentence, details are 2-4 sentences max
 - Include a "stay" pick on day 1, "eat" picks each day, "gear" if relevant on day 1
