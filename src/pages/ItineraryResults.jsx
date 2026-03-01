@@ -11,7 +11,7 @@ const C = {
   slateLight: '#2d3d4d',
   sage:       '#6B8078',
   sageDark:   '#4A5A54',
-  sageLight:  '#8FA39A',Tag
+  sageLight:  '#8FA39A',
   skyBlue:    BrandC.skyBlue,
   oceanTeal:  BrandC.oceanTeal,
   sunSalmon:  BrandC.sunSalmon,
