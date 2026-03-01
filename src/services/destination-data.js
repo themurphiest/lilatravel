@@ -296,7 +296,7 @@ Please create a personalized day-by-day itinerary for this traveler based on the
 
   return {
     model: 'claude-sonnet-4-5-20250929',
-    max_tokens: 16000,
+    max_tokens: 4096,
     system: systemPrompt,
     messages: [
       { role: 'user', content: userMessage }
