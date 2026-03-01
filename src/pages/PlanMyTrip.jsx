@@ -248,7 +248,7 @@ const INTENTIONS = [
   { id: "peace", label: "Peace", desc: "Quiet the noise. Find center.", icon: IconEnso, color: C.oceanTeal },
   { id: "transformation", label: "Transformation", desc: "Burn through the old. Come back different.", icon: IconFlame, color: C.sunSalmon },
   { id: "connection", label: "Connection", desc: "Deepen bonds. Open up.", icon: IconMagatama, color: C.goldenAmber },
-  { id: "liberation", label: "Liberation", desc: "Let go. Feel completely free.", icon: IconUnalome, color: C.skyBlue },
+  { id: "reset", label: "Reset", desc: "Step away from everything. Come back clear.", icon: IconUnalome, color: C.skyBlue },
 ];
 
 
@@ -268,10 +268,10 @@ const PRACTICES = [
 ];
 
 const BUDGET_TIERS = [
-  { id: "mindful", label: "Mindful", desc: "Smart & intentional", range: "$100–150/day", color: C.sage },
-  { id: "balanced", label: "Balanced", desc: "Comfort meets experience", range: "$150–250/day", color: C.oceanTeal },
-  { id: "premium", label: "Premium", desc: "Elevated at every turn", range: "$250–400/day", color: C.goldenAmber },
-  { id: "noLimits", label: "No Limits", desc: "The extraordinary", range: "$400+/day", color: C.sunSalmon },
+  { id: "mindful", label: "Mindful", desc: "Smart & intentional", range: "$", color: C.sage },
+  { id: "balanced", label: "Balanced", desc: "Comfort meets experience", range: "$$", color: C.oceanTeal },
+  { id: "premium", label: "Premium", desc: "Elevated at every turn", range: "$$$", color: C.goldenAmber },
+  { id: "noLimits", label: "No Limits", desc: "The extraordinary", range: "$$$$", color: C.sunSalmon },
 ];
 
 const MONTHS = [
@@ -308,7 +308,7 @@ const PERSONAS = [
       const pl = d.practiceLevel ?? 1;
       
       
-      const seeksPeace = (d.intentions || []).some(i => ["peace","liberation"].includes(i));
+      const seeksPeace = (d.intentions || []).some(i => ["peace","reset"].includes(i));
       return (pl >= 3 && seeksPeace) ? 1 : (pl >= 2 && seeksPeace) ? 0.7 : (pl >= 3) ? 0.6 : 0;
     },
   },
@@ -341,7 +341,7 @@ const PERSONAS = [
     color: C.skyBlue, icon: IconMountain,
     match: (d) => {
       const slowPace = (d.pacing ?? 50) < 40;
-      const seeksPeace = (d.intentions || []).some(i => ["peace","liberation"].includes(i));
+      const seeksPeace = (d.intentions || []).some(i => ["peace","reset"].includes(i));
       const deepPractice = (d.practiceLevel ?? 1) >= 2;
       return (slowPace && seeksPeace) ? 1 : (slowPace && deepPractice) ? 0.8 : seeksPeace ? 0.5 : 0;
     },
@@ -547,24 +547,31 @@ function StepWelcome({ onNext }) {
 
       {/* Trust bar */}
       <div style={{
-        marginTop: 40, display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
-        borderTop: `1px solid ${C.sage}15`, paddingTop: 28, maxWidth: 380,
+        marginTop: 40, display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
+        borderTop: `1px solid ${C.sage}15`, paddingTop: 28, maxWidth: 420,
       }}>
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
           fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase",
           color: `${C.sage}50`,
-        }}>Built from</div>
+        }}>Powered by</div>
         <div style={{
-          display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px 16px",
+          display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px 18px",
         }}>
-          {["National Park Service Data", "Trusted Local Partners", "Experienced Travelers"].map(item => (
+          {[
+            "National Park Service Data",
+            "Real-Time Weather",
+            "Lunar Cycle Timing",
+            "Local Partner Network",
+            "Wellness Practice Integration",
+            "Experienced Traveler Curation",
+          ].map(item => (
             <span key={item} style={{
               fontFamily: "'Quicksand', sans-serif",
-              fontSize: 11, fontWeight: 500, color: `${C.slate}60`,
+              fontSize: 11, fontWeight: 500, color: `${C.slate}55`,
               display: "flex", alignItems: "center", gap: 5,
             }}>
-              <span style={{ width: 4, height: 4, borderRadius: "50%", background: `${C.sage}40`, flexShrink: 0 }} />
+              <span style={{ width: 4, height: 4, borderRadius: "50%", background: `${C.oceanTeal}50`, flexShrink: 0 }} />
               {item}
             </span>
           ))}
@@ -790,8 +797,8 @@ function StepPracticeLevel({ data, onChange, onNext, onBack }) {
     <div>
       <StepTitle
         eyebrow="Practice"
-        title="What's your relationship with mindfulness?"
-        subtitle="Yoga, meditation, breathwork — how familiar are these in your life?"
+        title="Where are you on your wellness journey?"
+        subtitle="This helps us know how much yoga, meditation, and wellness to weave into your days."
       />
       <div style={{ maxWidth: 460, margin: "0 auto", padding: "0 28px" }}>
         {/* Current level display */}
@@ -1100,7 +1107,7 @@ function StepProfile({ data, onBack, onUnlock, generating }) {
     movement: (data.movement ?? 50) / 100,
     wellness: Math.min(1, (practiceLevel / 3) * 0.7 + ((data.practices?.length || 0) / 5) * 0.3),
     adventure: Math.min(1, ((data.intentions || []).includes("transformation") ? 0.5 : 0.2) + ((data.range ?? 35) / 100) * 0.5),
-    stillness: (data.intentions || []).some(i => ["peace","liberation"].includes(i)) ? 0.85 : (data.pacing ?? 50) < 40 ? 0.7 : 0.3,
+    stillness: (data.intentions || []).some(i => ["peace","reset"].includes(i)) ? 0.85 : (data.pacing ?? 50) < 40 ? 0.7 : 0.3,
     social: (data.intentions || []).includes("connection") ? 0.85 : 0.4,
     luxury: data.budget === "noLimits" ? 1 : data.budget === "premium" ? 0.75 : data.budget === "balanced" ? 0.5 : 0.3,
   };
@@ -1347,7 +1354,7 @@ export default function PlanMyTrip() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
-    destination: null, month: null, intentions: [], movement: 50,
+    destination: null, month: null, intentions: [], movement: 30,
     pacing: 50, range: 35, duration: 4, budget: null,
     practiceLevel: 1, practices: [],
   });
@@ -1397,7 +1404,7 @@ export default function PlanMyTrip() {
     }
   };
 
-  // 12 screens: welcome → destination → month → duration → budget → territory → intention → movement → pacing → practiceLevel → practiceInterests → profile
+  // 12 screens: welcome → destination → month → duration → budget → intention → territory → movement → pacing → practiceLevel → practiceInterests → profile
   const TOTAL_INNER_STEPS = 10; // steps shown in indicator (excludes welcome + profile)
   const renderStep = () => {
     switch (step) {
@@ -1406,8 +1413,8 @@ export default function PlanMyTrip() {
       case 2: return <StepMonth data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 3: return <StepDuration data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 4: return <StepBudget data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 5: return <StepRange data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
-      case 6: return <StepIntention data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 5: return <StepIntention data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
+      case 6: return <StepRange data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 7: return <StepMovement data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 8: return <StepPacing data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
       case 9: return <StepPracticeLevel data={data} onChange={updateData} onNext={goNext} onBack={goBack} />;
