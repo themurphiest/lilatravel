@@ -10,7 +10,7 @@ const C = {
   slateLight: '#2d3d4d',
   sage:       '#6B8078',
   sageDark:   '#4A5A54',
-  sageLight:  '#8FA39A',
+  sageLight:  '#8FA39A',Tag
   skyBlue:    BrandC.skyBlue,
   oceanTeal:  BrandC.oceanTeal,
   sunSalmon:  BrandC.sunSalmon,
@@ -269,7 +269,12 @@ export default function ItineraryResults() {
   // Try structured JSON, fall back to markdown
   let itinerary;
   try {
-    const cleaned = rawItinerary.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    let cleaned = rawItinerary;
+    const jsonMatch = cleaned.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/);
+    if (jsonMatch) {
+      cleaned = jsonMatch[1];
+    }
+    cleaned = cleaned.trim();
     itinerary = JSON.parse(cleaned);
   } catch (e) {
     itinerary = null;
