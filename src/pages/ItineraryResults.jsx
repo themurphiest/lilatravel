@@ -82,6 +82,33 @@ function LinkedName({ name, url, style = {} }) {
 
 /* ── destination snapshot ──────────────────────────────────────────────── */
 
+/* ── snapshot data cell (consistent styling) ──────────────────────────── */
+
+function SnapCell({ label, value, sub, color = C.sage }) {
+  return (
+    <div style={{ padding: '14px 0' }}>
+      <div style={{
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: 9, fontWeight: 700,
+        letterSpacing: '0.2em', textTransform: 'uppercase',
+        color, marginBottom: 6,
+      }}>{label}</div>
+      <div style={{
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: 17, fontWeight: 600,
+        color: C.slate, lineHeight: 1.2,
+      }}>{value}</div>
+      {sub && (
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 11, fontWeight: 500,
+          color: `${C.slate}50`, marginTop: 3,
+        }}>{sub}</div>
+      )}
+    </div>
+  );
+}
+
 function DestinationSnapshot({ snapshot, celestial, weather }) {
   const hasCelestial = celestial && celestial.days && celestial.days.length > 0;
   const hasMoon = celestial && celestial.moonPhase;
@@ -90,164 +117,106 @@ function DestinationSnapshot({ snapshot, celestial, weather }) {
 
   if (!hasCelestial && !hasWeather && !hasAiSnapshot) return null;
 
-  // Compute weather summary from raw data
-  let tempRange = null;
+  // Compute averages from raw weather data
+  let avgHigh = null, avgLow = null;
   if (hasWeather) {
     const highs = weather.map(d => d.high);
     const lows = weather.map(d => d.low);
-    tempRange = {
-      highMin: Math.min(...highs),
-      highMax: Math.max(...highs),
-      lowMin: Math.min(...lows),
-      lowMax: Math.max(...lows),
-    };
+    avgHigh = Math.round(highs.reduce((a, b) => a + b, 0) / highs.length);
+    avgLow = Math.round(lows.reduce((a, b) => a + b, 0) / lows.length);
   }
 
   const firstDay = hasCelestial ? celestial.days[0] : null;
+  const divider = { borderBottom: `1px solid ${C.sage}08` };
 
   return (
     <div style={{
-      background: C.white,
-      borderRadius: 20,
+      background: C.white, borderRadius: 20,
       border: `1px solid ${C.sage}10`,
       boxShadow: `0 2px 16px ${C.sage}06`,
-      padding: '24px 20px',
+      padding: '22px 24px 18px',
       marginBottom: 24,
-      overflow: 'hidden',
     }}>
       <div style={{
         fontFamily: "'Quicksand', sans-serif",
         fontSize: 9, fontWeight: 700,
         letterSpacing: '0.25em', textTransform: 'uppercase',
-        color: `${C.sage}70`,
-        marginBottom: 18, paddingLeft: 2,
-      }}>
-        What to Expect
-      </div>
+        color: `${C.sage}70`, marginBottom: 6,
+      }}>Celestial Snapshot</div>
 
-      {/* Seasonal note from AI */}
+      {/* Seasonal one-liner */}
       {hasAiSnapshot && snapshot.seasonalNote && (
-        <p style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 'clamp(16px, 4.2vw, 19px)',
-          fontWeight: 300, fontStyle: 'italic',
-          color: `${C.slate}85`,
-          lineHeight: 1.55,
-          marginBottom: 20,
-          paddingBottom: 18,
-          borderBottom: `1px solid ${C.sage}08`,
-        }}>
-          {snapshot.seasonalNote}
-        </p>
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 13, fontWeight: 500,
+          color: `${C.slate}70`, lineHeight: 1.55,
+          paddingBottom: 14, ...divider,
+        }}>{snapshot.seasonalNote}</div>
       )}
 
-      {/* Data grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        {/* Weather */}
-        {(tempRange || (hasAiSnapshot && snapshot.weatherSummary)) && (
-          <div style={{
-            background: `${C.skyBlue}08`,
-            borderRadius: 14,
-            padding: '14px 16px',
-            gridColumn: tempRange ? '1 / 2' : '1 / -1',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-              <span style={{ fontSize: 14 }}>🌡</span>
-              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: C.skyBlue }}>Weather</span>
-            </div>
-            {tempRange ? (
-              <>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(22px, 5.5vw, 28px)', fontWeight: 400, color: C.slate, lineHeight: 1.1 }}>
-                  {tempRange.highMin}–{tempRange.highMax}°F
-                </div>
-                <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, color: `${C.slate}60`, marginTop: 4 }}>
-                  highs · lows {tempRange.lowMin}–{tempRange.lowMax}°F
-                </div>
-              </>
-            ) : (
-              <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: `${C.slate}70`, lineHeight: 1.5 }}>
-                {snapshot.weatherSummary}
-              </div>
-            )}
+      {/* 2-column data grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        {/* Row 1: Temp + Moon */}
+        {(avgHigh !== null || (hasAiSnapshot && snapshot.weatherSummary)) && (
+          <div style={{ borderRight: `1px solid ${C.sage}08`, paddingRight: 16, ...divider }}>
+            <SnapCell
+              label="Avg Temp"
+              value={avgHigh !== null ? `${avgHigh}° / ${avgLow}°` : '—'}
+              sub={avgHigh !== null ? 'high / low' : snapshot?.weatherSummary}
+              color={C.skyBlue}
+            />
           </div>
         )}
-
-        {/* Moon phase */}
         {hasMoon && (
-          <div style={{
-            background: `${C.goldenAmber}08`,
-            borderRadius: 14,
-            padding: '14px 16px',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-              <span style={{ fontSize: 14 }}>{celestial.moonPhase.emoji}</span>
-              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: C.goldenAmber }}>Moon</span>
-            </div>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(15px, 4vw, 17px)', fontWeight: 400, color: C.slate, lineHeight: 1.3 }}>
-              {celestial.moonPhase.name}
-            </div>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, color: `${C.slate}60`, marginTop: 4 }}>
-              {celestial.moonPhase.illumination}% illuminated · {celestial.moonPhase.stargazing} stargazing
-            </div>
+          <div style={{ paddingLeft: 16, ...divider }}>
+            <SnapCell
+              label="Moon"
+              value={`${celestial.moonPhase.emoji} ${celestial.moonPhase.name}`}
+              sub={`${celestial.moonPhase.stargazing} stargazing`}
+              color={C.goldenAmber}
+            />
           </div>
         )}
 
-        {/* Sunrise */}
+        {/* Row 2: Sunrise + Sunset */}
         {firstDay && firstDay.sunrise && (
-          <div style={{
-            background: `${C.sunSalmon}08`,
-            borderRadius: 14,
-            padding: '14px 16px',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-              <span style={{ fontSize: 14 }}>🌅</span>
-              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: C.sunSalmon }}>Sunrise</span>
-            </div>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(18px, 4.5vw, 22px)', fontWeight: 400, color: C.slate }}>
-              {firstDay.sunrise}
-            </div>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, color: `${C.slate}60`, marginTop: 2 }}>
-              golden hour starts ~30 min before
-            </div>
+          <div style={{ borderRight: `1px solid ${C.sage}08`, paddingRight: 16, ...divider }}>
+            <SnapCell
+              label="Sunrise"
+              value={firstDay.sunrise}
+              sub="golden hour ~30 min prior"
+              color={C.sunSalmon}
+            />
+          </div>
+        )}
+        {firstDay && firstDay.sunset && (
+          <div style={{ paddingLeft: 16, ...divider }}>
+            <SnapCell
+              label="Sunset"
+              value={firstDay.sunset}
+              sub="golden hour ~1 hr prior"
+              color="#8B7EC8"
+            />
           </div>
         )}
 
-        {/* Sunset */}
-        {firstDay && firstDay.sunset && (
-          <div style={{
-            background: `#8B7EC808`,
-            borderRadius: 14,
-            padding: '14px 16px',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-              <span style={{ fontSize: 14 }}>🌇</span>
-              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#8B7EC8' }}>Sunset</span>
-            </div>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(18px, 4.5vw, 22px)', fontWeight: 400, color: C.slate }}>
-              {firstDay.sunset}
-            </div>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, color: `${C.slate}60`, marginTop: 2 }}>
-              golden hour ~1 hr before
-            </div>
+        {/* Row 3: Packing spanning full width */}
+        {hasAiSnapshot && snapshot.packingHint && (
+          <div style={{ gridColumn: '1 / -1', padding: '14px 0 4px' }}>
+            <div style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 9, fontWeight: 700,
+              letterSpacing: '0.2em', textTransform: 'uppercase',
+              color: C.seaGlass, marginBottom: 6,
+            }}>Pack</div>
+            <div style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 13, fontWeight: 500,
+              color: `${C.slate}70`, lineHeight: 1.5,
+            }}>{snapshot.packingHint}</div>
           </div>
         )}
       </div>
-
-      {/* Packing hint */}
-      {hasAiSnapshot && snapshot.packingHint && (
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          marginTop: 16, paddingTop: 14,
-          borderTop: `1px solid ${C.sage}08`,
-        }}>
-          <span style={{ fontSize: 13 }}>🎒</span>
-          <span style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 12, color: `${C.slate}70`,
-            lineHeight: 1.5,
-          }}>{snapshot.packingHint}</span>
-        </div>
-      )}
     </div>
   );
 }
