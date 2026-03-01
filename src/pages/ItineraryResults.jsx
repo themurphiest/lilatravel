@@ -51,31 +51,137 @@ function Collapsible({ open, children }) {
   );
 }
 
-/* ── logistics card ─────────────────────────────────────────────────────── */
+/* ── trip overview / at-a-glance ────────────────────────────────────────── */
 
-function LogisticsCard({ title, icon, fields, color = C.sage }) {
-  const [open, setOpen] = useState(false);
-  const [vals, setVals] = useState({});
+const DAY_COLORS = [
+  C.goldenAmber,
+  C.oceanTeal,
+  C.skyBlue,
+  C.sunSalmon,
+  C.seaGlass,
+  '#8B7EC8',
+  C.goldenAmber,
+  C.oceanTeal,
+];
+
+function TripOverview({ days, onDayClick }) {
   return (
-    <div style={{ background: C.white, border: `1.5px dashed ${color}35`, borderRadius: 14, marginBottom: 10, overflow: 'hidden' }}>
-      <button onClick={() => setOpen(!open)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', background: 'none', border: 'none', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 18 }}>{icon}</span>
-          <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, fontWeight: 600, color: C.slate }}>{title}</span>
-        </div>
-        <Chevron open={open} color={`${C.sage}60`} />
-      </button>
-      <Collapsible open={open}>
-        <div style={{ padding: '0 18px 16px' }}>
-          {fields.map(f => (
-            <div key={f.key} style={{ marginBottom: 10 }}>
-              <label style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}70`, display: 'block', marginBottom: 5 }}>{f.label}</label>
-              <input type="text" placeholder={f.placeholder} value={vals[f.key] || ''} onChange={e => setVals(v => ({ ...v, [f.key]: e.target.value }))}
-                style={{ width: '100%', fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: C.slate, padding: '10px 12px', border: `1px solid ${C.sage}20`, borderRadius: 8, background: `${C.cream}40`, outline: 'none', boxSizing: 'border-box' }} />
-            </div>
-          ))}
-        </div>
-      </Collapsible>
+    <div style={{
+      background: C.white,
+      borderRadius: 20,
+      border: `1px solid ${C.sage}10`,
+      boxShadow: `0 2px 16px ${C.sage}06`,
+      padding: '24px 20px',
+      marginBottom: 24,
+    }}>
+      <div style={{
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: 9,
+        fontWeight: 700,
+        letterSpacing: '0.25em',
+        textTransform: 'uppercase',
+        color: `${C.sage}70`,
+        marginBottom: 18,
+        paddingLeft: 2,
+      }}>
+        Your Trip at a Glance
+      </div>
+
+      <div style={{ position: 'relative' }}>
+        {/* Vertical connecting line */}
+        <div style={{
+          position: 'absolute',
+          left: 15,
+          top: 8,
+          bottom: 8,
+          width: 2,
+          background: `linear-gradient(180deg, ${C.sage}12, ${C.sage}06)`,
+          borderRadius: 1,
+        }} />
+
+        {days.map((day, i) => {
+          const color = DAY_COLORS[i % DAY_COLORS.length];
+          return (
+            <button
+              key={i}
+              onClick={() => onDayClick(i)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 14,
+                width: '100%',
+                padding: '10px 0',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                textAlign: 'left',
+                WebkitTapHighlightColor: 'transparent',
+                position: 'relative',
+              }}
+            >
+              {/* Day dot */}
+              <div style={{
+                width: 30,
+                height: 30,
+                borderRadius: '50%',
+                background: `${color}15`,
+                border: `2px solid ${color}40`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                zIndex: 1,
+              }}>
+                <span style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: color,
+                }}>{i + 1}</span>
+              </div>
+
+              {/* Day info */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: color,
+                  marginBottom: 2,
+                }}>{day.label}</div>
+                <div style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 'clamp(15px, 4vw, 17px)',
+                  fontWeight: 500,
+                  color: C.slate,
+                  lineHeight: 1.3,
+                }}>{day.title}</div>
+                {day.snapshot && (
+                  <div style={{
+                    fontFamily: "'Quicksand', sans-serif",
+                    fontSize: 'clamp(10px, 2.8vw, 11px)',
+                    color: `${C.slate}50`,
+                    lineHeight: 1.4,
+                    marginTop: 2,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}>{day.snapshot}</div>
+                )}
+              </div>
+
+              {/* Arrow */}
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
+                stroke={`${C.sage}30`} strokeWidth="1.5" strokeLinecap="round"
+                style={{ flexShrink: 0 }}>
+                <polyline points="6,3 11,8 6,13" />
+              </svg>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -103,7 +209,7 @@ function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', i
         {details && (
           <Collapsible open={open}>
             <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(12px, 3.2vw, 13px)', color: `${C.slate}90`, lineHeight: 1.7, padding: '8px 0' }}>
-              {details.split('\n').map((l, i) => <p key={i} style={{ margin: '6px 0' }}>{l}</p>)}
+              {renderInlineBlock(details)}
             </div>
           </Collapsible>
         )}
@@ -116,28 +222,55 @@ function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', i
 
 function PickCard({ category, pick, alternatives = [] }) {
   const [showAlts, setShowAlts] = useState(false);
-  const styles = { stay: { label: 'Where to Stay', color: C.goldenAmber, icon: '🏡' }, eat: { label: 'Where to Eat', color: C.sunSalmon, icon: '🍽' }, gear: { label: 'Gear Rental', color: C.oceanTeal, icon: '🎒' }, wellness: { label: 'Wellness', color: C.seaGlass, icon: '🧘' } };
+  const styles = {
+    stay: { label: 'Where to Stay', color: C.goldenAmber, icon: '🏡', badge: 'Lila Pick' },
+    eat: { label: 'Where to Eat', color: C.sunSalmon, icon: '🍽', badge: 'Lila Pick' },
+    gear: { label: 'Gear Rental', color: C.oceanTeal, icon: '🎒', badge: 'Lila Pick' },
+    wellness: { label: 'Wellness', color: C.seaGlass, icon: '🧘', badge: 'Lila Pick' },
+  };
   const s = styles[category] || styles.stay;
   return (
-    <div style={{ background: C.white, borderRadius: 16, border: `1px solid ${s.color}20`, overflow: 'hidden', marginBottom: 14 }}>
+    <div style={{ background: C.white, borderRadius: 16, border: `1px solid ${s.color}20`, overflow: 'hidden', marginBottom: 14, boxShadow: `0 1px 8px ${s.color}08` }}>
+      {/* Header bar */}
       <div style={{ padding: '12px 18px 10px', background: `${s.color}06`, borderBottom: `1px solid ${s.color}12` }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 14 }}>{s.icon}</span>
-          <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 14 }}>{s.icon}</span>
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
+          </div>
+          {/* Lila Pick badge */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            background: `${s.color}12`,
+            padding: '3px 10px 3px 7px',
+            borderRadius: 12,
+          }}>
+            <Star size={10} color={s.color} />
+            <span style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 9,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: s.color,
+            }}>{s.badge}</span>
+          </div>
         </div>
       </div>
+
+      {/* Our pick content */}
       <div style={{ padding: '14px 18px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-          <Star color={s.color} />
-          <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: `${C.sage}70` }}>Our Pick</span>
-        </div>
         <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(17px, 4.5vw, 20px)', fontWeight: 500, color: C.slate, marginBottom: 4 }}>{pick.name}</div>
         <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(12px, 3.2vw, 13px)', color: `${C.slate}70`, lineHeight: 1.6 }}>{pick.why}</div>
       </div>
+
+      {/* Alternatives toggle */}
       {alternatives.length > 0 && (
         <>
           <button onClick={() => setShowAlts(!showAlts)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '10px 18px', background: `${C.cream}60`, border: 'none', borderTop: `1px solid ${s.color}10`, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>
-            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, color: `${C.sage}80` }}>{showAlts ? 'Hide' : `${alternatives.length} other option${alternatives.length > 1 ? 's' : ''}`}</span>
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, color: `${C.sage}80` }}>{showAlts ? 'Hide options' : `${alternatives.length} other option${alternatives.length > 1 ? 's' : ''}`}</span>
             <Chevron open={showAlts} color={`${C.sage}50`} />
           </button>
           <Collapsible open={showAlts}>
@@ -158,15 +291,83 @@ function PickCard({ category, pick, alternatives = [] }) {
 
 /* ── day card ───────────────────────────────────────────────────────────── */
 
-function DayCard({ day, isFirst = false }) {
+function DayCard({ day, isFirst = false, dayIndex = 0 }) {
   const [open, setOpen] = useState(isFirst);
+  const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
+
   return (
-    <div style={{ marginBottom: 16, borderRadius: 20, background: C.white, border: `1px solid ${C.sage}10`, boxShadow: `0 2px 16px ${C.sage}06`, overflow: 'hidden' }}>
-      <button onClick={() => setOpen(!open)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 22px', background: open ? `${C.cream}50` : 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', transition: 'background 0.3s', WebkitTapHighlightColor: 'transparent' }}>
+    <div style={{
+      marginBottom: 16,
+      borderRadius: 20,
+      background: C.white,
+      border: `1px solid ${open ? `${color}25` : `${C.sage}10`}`,
+      boxShadow: open ? `0 4px 24px ${color}08` : `0 2px 16px ${C.sage}06`,
+      overflow: 'hidden',
+      transition: 'border-color 0.3s, box-shadow 0.3s',
+    }}>
+      <button onClick={() => setOpen(!open)} style={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '20px 22px',
+        background: open ? `${color}04` : 'transparent',
+        border: 'none',
+        cursor: 'pointer',
+        textAlign: 'left',
+        transition: 'background 0.3s',
+        WebkitTapHighlightColor: 'transparent',
+        gap: 12,
+      }}>
+        {/* Day number badge */}
+        <div style={{
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          background: open ? `${color}15` : `${C.sage}08`,
+          border: `1.5px solid ${open ? `${color}30` : `${C.sage}15`}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+          transition: 'all 0.3s',
+        }}>
+          <span style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 13,
+            fontWeight: 700,
+            color: open ? color : `${C.sage}80`,
+            transition: 'color 0.3s',
+          }}>{dayIndex + 1}</span>
+        </div>
+
         <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: C.sage, marginBottom: 4 }}>{day.label}</div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(20px, 5.5vw, 26px)', fontWeight: 400, color: C.slate, lineHeight: 1.2 }}>{day.title}</div>
-          {!open && day.snapshot && <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(11px, 3vw, 12px)', color: `${C.slate}55`, marginTop: 8, lineHeight: 1.6 }}>{day.snapshot}</div>}
+          <div style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: open ? color : C.sage,
+            marginBottom: 4,
+            transition: 'color 0.3s',
+          }}>{day.label}</div>
+          <div style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(20px, 5.5vw, 26px)',
+            fontWeight: 400,
+            color: C.slate,
+            lineHeight: 1.2,
+          }}>{day.title}</div>
+          {!open && day.snapshot && (
+            <div style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 'clamp(11px, 3vw, 12px)',
+              color: `${C.slate}55`,
+              marginTop: 8,
+              lineHeight: 1.6,
+            }}>{day.snapshot}</div>
+          )}
         </div>
         <Chevron open={open} />
       </button>
@@ -181,12 +382,68 @@ function DayCard({ day, isFirst = false }) {
   );
 }
 
-/* ── markdown fallback ──────────────────────────────────────────────────── */
+/* ── markdown rendering (improved) ─────────────────────────────────────── */
+
+function renderInlineBlock(text) {
+  if (!text) return null;
+  return text.split('\n').map((line, i) => {
+    if (line.trim() === '') return <div key={i} style={{ height: 4 }} />;
+    return <p key={i} style={{ margin: '4px 0' }}>{renderInline(line)}</p>;
+  });
+}
+
+function renderInline(text) {
+  if (!text || typeof text !== 'string') return text;
+  const parts = [];
+  let remaining = text;
+  let key = 0;
+
+  while (remaining.length > 0) {
+    // Bold: **text**
+    const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
+    // Italic: *text* (but not part of bold)
+    const italicMatch = remaining.match(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/);
+
+    let earliest = null;
+    let type = null;
+
+    if (boldMatch && (!earliest || boldMatch.index < earliest.index)) {
+      earliest = boldMatch;
+      type = 'bold';
+    }
+    if (italicMatch && (!earliest || italicMatch.index < earliest.index)) {
+      earliest = italicMatch;
+      type = 'italic';
+    }
+
+    if (!earliest) {
+      parts.push(remaining);
+      break;
+    }
+
+    if (earliest.index > 0) {
+      parts.push(remaining.slice(0, earliest.index));
+    }
+
+    if (type === 'bold') {
+      parts.push(<strong key={key++} style={{ fontWeight: 700, color: C.slate }}>{earliest[1]}</strong>);
+    } else {
+      parts.push(<em key={key++} style={{ fontStyle: 'italic', color: `${C.slate}85` }}>{earliest[1]}</em>);
+    }
+
+    remaining = remaining.slice(earliest.index + earliest[0].length);
+  }
+
+  return parts.length > 0 ? parts : text;
+}
 
 function MarkdownContent({ content }) {
+  if (!content || typeof content !== 'string') return null;
+
   const lines = content.split('\n');
   const elements = [];
   let key = 0;
+
   for (const line of lines) {
     if (line.trim() === '---' || line.trim() === '***') {
       elements.push(<hr key={key++} style={{ border: 'none', borderTop: `1px solid ${C.sage}15`, margin: '28px 0' }} />);
@@ -197,7 +454,41 @@ function MarkdownContent({ content }) {
     } else if (/^### /.test(line)) {
       elements.push(<h3 key={key++} style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 14, fontWeight: 700, color: C.sage, margin: '18px 0 6px' }}>{renderInline(line.slice(4))}</h3>);
     } else if (/^\s*[-*] /.test(line)) {
-      elements.push(<div key={key++} style={{ display: 'flex', gap: 8, padding: '3px 0' }}><span style={{ color: C.sage, flexShrink: 0 }}>•</span><span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: C.slate, lineHeight: 1.65 }}>{renderInline(line.replace(/^\s*[-*] /, ''))}</span></div>);
+      elements.push(
+        <div key={key++} style={{ display: 'flex', gap: 8, padding: '3px 0' }}>
+          <span style={{ color: C.sage, flexShrink: 0 }}>•</span>
+          <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: C.slate, lineHeight: 1.65 }}>
+            {renderInline(line.replace(/^\s*[-*] /, ''))}
+          </span>
+        </div>
+      );
+    } else if (/^\d+\.\s/.test(line)) {
+      const numMatch = line.match(/^(\d+)\.\s(.*)/);
+      if (numMatch) {
+        elements.push(
+          <div key={key++} style={{ display: 'flex', gap: 8, padding: '3px 0' }}>
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: C.sage, fontWeight: 700, flexShrink: 0, minWidth: 18 }}>{numMatch[1]}.</span>
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: C.slate, lineHeight: 1.65 }}>
+              {renderInline(numMatch[2])}
+            </span>
+          </div>
+        );
+      }
+    } else if (/^>\s/.test(line)) {
+      elements.push(
+        <div key={key++} style={{
+          borderLeft: `3px solid ${C.oceanTeal}30`,
+          paddingLeft: 14,
+          margin: '12px 0',
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 'clamp(15px, 4vw, 18px)',
+          fontStyle: 'italic',
+          color: `${C.slate}80`,
+          lineHeight: 1.6,
+        }}>
+          {renderInline(line.slice(2))}
+        </div>
+      );
     } else if (line.trim() === '') {
       elements.push(<div key={key++} style={{ height: 6 }} />);
     } else {
@@ -207,30 +498,6 @@ function MarkdownContent({ content }) {
   return <>{elements}</>;
 }
 
-function renderInline(text) {
-  // Split on **bold** and *italic* patterns
-  const parts = [];
-  let remaining = text;
-  let key = 0;
-  while (remaining.length > 0) {
-    // Bold
-    const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
-    // Italic
-    const italicMatch = remaining.match(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/);
-    // Find earliest match
-    let earliest = null;
-    let type = null;
-    if (boldMatch && (!earliest || boldMatch.index < earliest.index)) { earliest = boldMatch; type = 'bold'; }
-    if (italicMatch && (!earliest || italicMatch.index < earliest.index)) { earliest = italicMatch; type = 'italic'; }
-    if (!earliest) { parts.push(remaining); break; }
-    if (earliest.index > 0) parts.push(remaining.slice(0, earliest.index));
-    if (type === 'bold') parts.push(<strong key={key++} style={{ fontWeight: 700 }}>{earliest[1]}</strong>);
-    else parts.push(<em key={key++} style={{ fontStyle: 'italic' }}>{earliest[1]}</em>);
-    remaining = remaining.slice(earliest.index + earliest[0].length);
-  }
-  return parts.length > 0 ? parts : text;
-}
-
 /* ── main page ──────────────────────────────────────────────────────────── */
 
 export default function ItineraryResults() {
@@ -238,6 +505,7 @@ export default function ItineraryResults() {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const { itinerary: rawItinerary, metadata, formData } = location.state || {};
+  const dayRefs = useRef([]);
 
   useEffect(() => {
     if (!rawItinerary) { navigate('/plan'); return; }
@@ -263,15 +531,33 @@ export default function ItineraryResults() {
 
   const isStructured = itinerary && itinerary.days;
 
+  const scrollToDay = (index) => {
+    if (dayRefs.current[index]) {
+      dayRefs.current[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div style={{ fontFamily: "'Quicksand', sans-serif", background: C.cream, minHeight: '100vh' }}>
       {/* header */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', background: `${C.cream}f0`, backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: `1px solid ${C.sage}08` }}>
+      <div style={{
+        position: 'sticky', top: 0, zIndex: 100,
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        padding: '14px 20px',
+        background: `${C.cream}f0`,
+        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: `1px solid ${C.sage}08`,
+      }}>
         <Link to="/" style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(16px, 4vw, 20px)', fontWeight: 500, letterSpacing: '0.08em', color: C.slate, textDecoration: 'none' }}>Lila Trips</Link>
         <button onClick={() => navigate('/plan')} style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, color: C.sage, background: `${C.white}80`, border: `1px solid ${C.sage}20`, borderRadius: 20, padding: '7px 16px', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>New Trip</button>
       </div>
 
-      <div style={{ maxWidth: 600, margin: '0 auto', padding: '20px 16px 80px', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(16px)', transition: 'all 0.7s cubic-bezier(0.4,0,0.2,1)' }}>
+      <div style={{
+        maxWidth: 600, margin: '0 auto', padding: '20px 16px 80px',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(16px)',
+        transition: 'all 0.7s cubic-bezier(0.4,0,0.2,1)',
+      }}>
 
         {/* hero */}
         {isStructured && (
@@ -282,25 +568,27 @@ export default function ItineraryResults() {
           </div>
         )}
 
-        {/* logistics */}
-        <div style={{ background: `${C.sage}05`, borderRadius: 18, padding: '20px 16px', marginBottom: 24 }}>
-          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: `${C.sage}70`, marginBottom: 12, paddingLeft: 2 }}>Trip Logistics</div>
-          <LogisticsCard title="Flight Details" icon="✈️" color={C.skyBlue} fields={[{ key: 'airline', label: 'Airline', placeholder: 'e.g., Delta' }, { key: 'conf', label: 'Confirmation', placeholder: 'e.g., ABC123' }, { key: 'dep', label: 'Departure', placeholder: 'e.g., SEA → LAS, 8am' }, { key: 'ret', label: 'Return', placeholder: 'e.g., LAS → SEA, 6pm' }]} />
-          <LogisticsCard title="Rental Car" icon="🚗" color={C.seaGlass} fields={[{ key: 'co', label: 'Company', placeholder: 'e.g., Enterprise' }, { key: 'conf', label: 'Confirmation', placeholder: '' }]} />
-          <LogisticsCard title="Accommodation" icon="🏨" color={C.goldenAmber} fields={[{ key: 'hotel', label: 'Hotel', placeholder: 'e.g., Cable Mountain Lodge' }, { key: 'conf', label: 'Confirmation', placeholder: '' }, { key: 'ci', label: 'Check-in', placeholder: 'e.g., Oct 17, 3pm' }]} />
-        </div>
+        {/* Priority 2: Trip overview at-a-glance */}
+        {isStructured && itinerary.days.length > 1 && (
+          <TripOverview days={itinerary.days} onDayClick={scrollToDay} />
+        )}
 
-        {/* structured content */}
+        {/* structured content — day cards */}
         {isStructured ? (
           <>
-            {itinerary.days.map((day, i) => <DayCard key={i} day={day} isFirst={i === 0} />)}
+            {itinerary.days.map((day, i) => (
+              <div key={i} ref={el => dayRefs.current[i] = el} style={{ scrollMarginTop: 70 }}>
+                <DayCard day={day} isFirst={i === 0} dayIndex={i} />
+              </div>
+            ))}
+
             {itinerary.beforeYouGo && (
               <div style={{ background: C.white, borderRadius: 20, border: `1px solid ${C.sage}10`, padding: 22, marginTop: 8, boxShadow: `0 2px 16px ${C.sage}06` }}>
                 <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: C.sage, marginBottom: 14 }}>Before You Go</div>
                 {itinerary.beforeYouGo.map((item, i) => (
                   <div key={i} style={{ display: 'flex', gap: 8, padding: '6px 0', borderBottom: i < itinerary.beforeYouGo.length - 1 ? `1px solid ${C.sage}08` : 'none' }}>
                     <span style={{ color: C.sage, flexShrink: 0, fontSize: 12 }}>•</span>
-                    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: C.slate, lineHeight: 1.6 }}>{item}</span>
+                    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: C.slate, lineHeight: 1.6 }}>{renderInline(item)}</span>
                   </div>
                 ))}
               </div>
@@ -312,6 +600,7 @@ export default function ItineraryResults() {
             )}
           </>
         ) : (
+          /* markdown fallback with improved rendering */
           <div style={{ background: C.white, borderRadius: 20, padding: '24px 22px', border: `1px solid ${C.sage}10`, boxShadow: `0 2px 16px ${C.sage}06` }}>
             <MarkdownContent content={rawItinerary} />
           </div>
