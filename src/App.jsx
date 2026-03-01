@@ -48,7 +48,7 @@ import { C } from '@data/brand';
 import HomePage from '@pages/Home';
 import DestinationsPage from '@pages/Destinations';
 import DestinationGuide from '@pages/DestinationGuide';
-import RitualsPage from '@pages/Rituals';       // TODO: rename file to Approach.jsx
+import ApproachPage from '@pages/Approach';
 import RitualDetail from '@pages/RitualDetail';  // TODO: rename file to ApproachDetail.jsx
 import OfferingsPage from '@pages/Offerings';     // TODO: rename file to HowItWorks.jsx
 import ContactPage from '@pages/Contact';
@@ -104,7 +104,7 @@ export default function App() {
           <Route path="/destinations/:slug" element={<DestinationGuide />} />
 
           {/* Our Approach */}
-          <Route path="/approach" element={<RitualsPage />} />
+          <Route path="/approach" element={<ApproachPage />} />
           <Route path="/approach/:slug" element={<RitualDetail />} />
 
           {/* Trips (Threshold Trip detail pages) */}
