@@ -270,13 +270,16 @@ export default function ItineraryResults() {
   let itinerary;
   try {
     let cleaned = rawItinerary;
-    const jsonMatch = cleaned.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/);
-    if (jsonMatch) {
-      cleaned = jsonMatch[1];
+    // Find the JSON object between first { and last }
+    const firstBrace = cleaned.indexOf('{');
+    const lastBrace = cleaned.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1) {
+      cleaned = cleaned.slice(firstBrace, lastBrace + 1);
     }
-    cleaned = cleaned.trim();
     itinerary = JSON.parse(cleaned);
+    console.log('PARSED OK:', itinerary.title);
   } catch (e) {
+    console.error('JSON parse failed:', e.message);
     itinerary = null;
   }
 
