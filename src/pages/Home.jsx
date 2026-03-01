@@ -8,7 +8,6 @@ import { Nav, Footer, FadeIn } from '@components';
 import { C } from '@data/brand';
 import { P } from '@data/photos';
 import { destinations } from '@data/destinations';
-import { ritualsPillars } from '@data/rituals';
 import { journey, heroCallouts, magicMoments } from '@data/journey';
 import { useDayCycle, interpolatePhase, useHorizontalSwipe } from '@utils/hooks';
 
@@ -145,9 +144,49 @@ function DestCarousel() {
 }
 
 
-// ─── Rituals Section (homepage version) ─────────────────────────────────────
-function RitualsSectionHome() {
-  const [activeIdx, setActiveIdx] = useState(null);
+// ─── Approach Section (homepage version) — Three Braids ─────────────────────
+const approachBraids = [
+  {
+    label: "Sacred Terrain",
+    icon: "△",
+    color: "#7DB8A0",
+    headline: "The landscape is the teacher.",
+    body: "We choose destinations for their capacity to dissolve the ordinary. Places where canyon walls hold millions of years of silence. Where ancient forests hum with something older than language. Where the horizon line rearranges something inside you. These aren't backdrops — they're the main event.",
+    details: [
+      "Destinations chosen for transformative capacity, not popularity",
+      "Trips timed to natural crescendos — solstices, blooms, migrations",
+      "Terrain that invites awe: desert, alpine, coastal, old-growth",
+    ],
+  },
+  {
+    label: "Ancient Practices",
+    icon: "◎",
+    color: "#D4A853",
+    headline: "Wisdom traditions woven into every journey.",
+    body: "Across centuries and continents, wisdom traditions have arrived at remarkably similar truths about how to live well. We draw from principles shared by Buddhist, Hindu, Taoist, Shinto, and Stoic philosophy — oneness, flow, presence, and reverence — and weave them into every journey through yoga, breathwork, meditation, and mindful movement.",
+    details: [
+      "Four guiding principles: Oneness, Flow, Presence, Reverence",
+      "Practices include yoga, breathwork, meditation, cold plunges",
+      "Drawing from five wisdom traditions spanning 5,000 years",
+    ],
+  },
+  {
+    label: "Elemental Encounters",
+    icon: "✦",
+    color: "#6BA4B8",
+    headline: "The raw materials of being alive.",
+    body: "Sunlight on red rock at golden hour. Cold river water that shocks you back into your body. Starry skies so vast they reframe your place in the universe. Ancient stone that holds the memory of deep time. These are the real teachers — we just put you in the room.",
+    details: [
+      "Dark sky stargazing and sunrise rituals",
+      "Cold water immersion and natural hot springs",
+      "Golden hour on ancient terrain",
+      "Silence deep enough to hear yourself think",
+    ],
+  },
+];
+
+function ApproachSectionHome() {
+  const [active, setActive] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -157,100 +196,139 @@ function RitualsSectionHome() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  const toggle = (i) => setActiveIdx(activeIdx === i ? null : i);
+  const braid = approachBraids[active];
 
   return (
     <section style={{ padding: "100px 0", background: C.darkInk }}>
       <div className="section-padded" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 52px" }}>
         <FadeIn>
-          <span className="eyebrow" style={{ color: C.skyBlue }}>Rituals</span>
+          <span className="eyebrow" style={{ color: C.skyBlue }}>Our Approach</span>
+          <h2 style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: "clamp(26px, 4vw, 44px)", fontWeight: 300,
+            color: "white", lineHeight: 1.2, marginBottom: 12,
+          }}>
+            More than a trip.
+          </h2>
+          <p style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: "clamp(13px, 1.5vw, 16px)", fontWeight: 400,
+            color: "rgba(255,255,255,0.45)", lineHeight: 1.8, maxWidth: 520,
+          }}>
+            Three braids woven into every Lila journey — sacred places, ancient wisdom, and raw elemental experience.
+          </p>
         </FadeIn>
 
-        {/* Desktop: 4 columns */}
-        {!isMobile && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0, marginTop: 48 }}>
-            {ritualsPillars.map((pillar, i) => (
-              <FadeIn key={pillar.word} delay={i * 0.1}>
-                <div style={{ padding: "0 32px", borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.08)" : "none" }}>
-                  <span style={{ fontSize: 22, color: pillar.color, display: "block", marginBottom: 18, opacity: 0.8 }}>{pillar.icon}</span>
-                  <h3 style={{
-                    fontFamily: "'Quicksand', sans-serif", fontSize: 13, fontWeight: 700,
-                    letterSpacing: "0.2em", textTransform: "uppercase", color: pillar.color, marginBottom: 16,
-                  }}>{pillar.word}</h3>
-                  <p style={{
-                    fontFamily: "'Quicksand', sans-serif", fontSize: 13, fontWeight: 400,
-                    color: "rgba(255,255,255,0.45)", lineHeight: 1.9, letterSpacing: "0.02em", marginBottom: 20,
-                  }}>{pillar.desc}</p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                    {pillar.details.map((d, j) => (
-                      <span key={j} style={{
-                        fontFamily: "'Quicksand', sans-serif", fontSize: 12.5, fontWeight: 500,
-                        color: "rgba(255,255,255,0.3)", letterSpacing: "0.03em", lineHeight: 1.5,
-                      }}>{d}</span>
-                    ))}
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        )}
+        {/* Tab selectors */}
+        <div style={{
+          display: "flex", gap: isMobile ? 0 : 8,
+          marginTop: 48, marginBottom: 0,
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          flexDirection: isMobile ? "column" : "row",
+        }}>
+          {approachBraids.map((b, i) => {
+            const isActive = active === i;
+            return (
+              <button
+                key={b.label}
+                onClick={() => setActive(i)}
+                style={{
+                  flex: isMobile ? "none" : 1,
+                  padding: isMobile ? "18px 4px" : "20px 24px",
+                  background: "transparent",
+                  border: "none",
+                  borderBottom: isMobile ? "none" : `2px solid ${isActive ? b.color : "transparent"}`,
+                  borderLeft: isMobile ? `2px solid ${isActive ? b.color : "transparent"}` : "none",
+                  cursor: "pointer",
+                  display: "flex", alignItems: "center", gap: 12,
+                  transition: "all 0.3s ease",
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              >
+                <span style={{
+                  fontSize: 18, color: b.color,
+                  opacity: isActive ? 1 : 0.4, transition: "opacity 0.3s",
+                }}>{b.icon}</span>
+                <span style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: isMobile ? 13 : 12, fontWeight: 700,
+                  letterSpacing: "0.16em", textTransform: "uppercase",
+                  color: isActive ? b.color : "rgba(255,255,255,0.35)",
+                  transition: "color 0.3s",
+                }}>{b.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-        {/* Mobile: accordion */}
-        {isMobile && (
-          <div style={{ marginTop: 36 }}>
-            {ritualsPillars.map((pillar, i) => {
-              const isOpen = activeIdx === i;
-              return (
-                <div key={pillar.word} style={{
-                  borderTop: i === 0 ? "1px solid rgba(255,255,255,0.1)" : "none",
-                  borderBottom: "1px solid rgba(255,255,255,0.1)",
+        {/* Active content panel */}
+        <div
+          key={braid.label}
+          style={{
+            padding: isMobile ? "36px 0" : "48px 0",
+            animation: "fadeUp 0.4s ease",
+          }}
+        >
+          <style>{`
+            @keyframes fadeUp {
+              from { opacity: 0; transform: translateY(12px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+          `}</style>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+            gap: isMobile ? 32 : 56,
+            alignItems: "start",
+          }}>
+            {/* Left: headline + body */}
+            <div>
+              <h3 style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "clamp(22px, 3vw, 32px)", fontWeight: 300, fontStyle: "italic",
+                color: braid.color, lineHeight: 1.3, marginBottom: 20,
+              }}>
+                {braid.headline}
+              </h3>
+              <p style={{
+                fontFamily: "'Quicksand', sans-serif",
+                fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 400,
+                color: "rgba(255,255,255,0.55)", lineHeight: 2.0,
+                letterSpacing: "0.02em",
+              }}>
+                {braid.body}
+              </p>
+            </div>
+
+            {/* Right: detail points */}
+            <div style={{ paddingTop: isMobile ? 0 : 8 }}>
+              {braid.details.map((d, j) => (
+                <div key={j} style={{
+                  display: "flex", alignItems: "flex-start", gap: 14,
+                  padding: "16px 0",
+                  borderBottom: j < braid.details.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
                 }}>
-                  <button onClick={() => toggle(i)} style={{
-                    width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
-                    padding: "22px 4px", background: "transparent", border: "none", cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                      <span style={{ fontSize: 18, color: pillar.color, width: 28, textAlign: "center", opacity: isOpen ? 1 : 0.6, transition: "opacity 0.3s" }}>{pillar.icon}</span>
-                      <span style={{
-                        fontFamily: "'Quicksand', sans-serif", fontSize: 13, fontWeight: 700,
-                        letterSpacing: "0.2em", textTransform: "uppercase",
-                        color: isOpen ? pillar.color : "rgba(255,255,255,0.5)", transition: "color 0.3s",
-                      }}>{pillar.word}</span>
-                    </div>
-                    <span style={{
-                      fontSize: 18, color: isOpen ? pillar.color : "rgba(255,255,255,0.2)",
-                      transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                      transition: "transform 0.3s ease, color 0.3s", lineHeight: 1,
-                    }}>+</span>
-                  </button>
                   <div style={{
-                    maxHeight: isOpen ? 300 : 0, opacity: isOpen ? 1 : 0, overflow: "hidden",
-                    transition: "max-height 0.4s ease, opacity 0.3s ease", paddingLeft: 44,
-                  }}>
-                    <p style={{
-                      fontFamily: "'Quicksand', sans-serif", fontSize: 14, fontWeight: 400,
-                      color: "rgba(255,255,255,0.55)", lineHeight: 1.9, letterSpacing: "0.02em",
-                      marginBottom: 16, paddingRight: 16,
-                    }}>{pillar.desc}</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingBottom: 24 }}>
-                      {pillar.details.map((d, j) => (
-                        <div key={j} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <div style={{ width: 4, height: 4, borderRadius: "50%", background: pillar.color, opacity: 0.5, flexShrink: 0 }} />
-                          <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.04em" }}>{d}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                    width: 6, height: 6, borderRadius: "50%",
+                    background: braid.color, opacity: 0.5,
+                    flexShrink: 0, marginTop: 7,
+                  }} />
+                  <span style={{
+                    fontFamily: "'Quicksand', sans-serif",
+                    fontSize: 13, fontWeight: 500,
+                    color: "rgba(255,255,255,0.4)",
+                    letterSpacing: "0.03em", lineHeight: 1.7,
+                  }}>{d}</span>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
-        )}
+        </div>
 
-        <FadeIn delay={0.4}>
-          <div style={{ marginTop: 48, paddingLeft: isMobile ? 4 : 32 }}>
-            <Link to="/rituals" className="underline-link underline-link-light">Dive Deeper</Link>
+        <FadeIn delay={0.2}>
+          <div style={{ paddingTop: 16 }}>
+            <Link to="/approach" className="underline-link underline-link-light">Explore Our Approach</Link>
           </div>
         </FadeIn>
       </div>
@@ -456,9 +534,9 @@ export default function HomePage() {
                 fontWeight: 400, color: "rgba(255,255,255,0.55)", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
                 {[
-                  { text: "Sacred destinations with capacity for wonder.", icon: "△", color: "#7DB8A0" },
-                  { text: "Sensory-rich activities that stoke the fire.", icon: "〰", color: "#E8956A" },
-                  { text: "Wellness practices that invite expansion.", icon: "●", color: "#D4A853" },
+                  { text: "Sacred Terrain — iconic landscapes that dissolve the ordinary.", icon: "△", color: "#7DB8A0" },
+                  { text: "Ancient Practices — wisdom traditions woven into every journey.", icon: "◎", color: "#D4A853" },
+                  { text: "Elemental Encounters — sunlight, cold water, starry skies, ancient stone.", icon: "✦", color: "#6BA4B8" },
                 ].map((callout, i) => (
                   <div key={i} style={{
                     display: "flex", alignItems: "flex-start", gap: 14,
@@ -603,15 +681,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ 4. RITUALS ═══════════════════════════════════════════════════ */}
-      <RitualsSectionHome />
+      {/* ══ 4. OUR APPROACH — THREE BRAIDS ══════════════════════════════ */}
+      <ApproachSectionHome />
 
-      {/* ══ 5. OFFERINGS ═════════════════════════════════════════════════ */}
+      {/* ══ 5. HOW IT WORKS ══════════════════════════════════════════════ */}
       <section className="offerings-section" style={{ padding: "100px 0", background: C.warmWhite }}>
         <div className="section-padded" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 52px" }}>
           <FadeIn>
             <div style={{ marginBottom: 64, maxWidth: 580 }}>
-              <span className="eyebrow" style={{ color: "#9aabba" }}>Offerings</span>
+              <span className="eyebrow" style={{ color: "#9aabba" }}>How It Works</span>
               <h2 style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 300, color: C.darkInk, lineHeight: 1.15, marginBottom: 14,
@@ -638,7 +716,7 @@ export default function HomePage() {
           </div>
           <FadeIn delay={0.5}>
             <div style={{ marginTop: 48 }}>
-              <Link to="/offerings" className="underline-link">Learn More</Link>
+              <Link to="/how-it-works" className="underline-link">Learn More</Link>
             </div>
           </FadeIn>
         </div>
@@ -674,7 +752,7 @@ export default function HomePage() {
               }}>We'll show you the way.</p>
               <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap" }}>
                 <Link to="/destinations" className="underline-link underline-link-light">Explore Destinations</Link>
-                <Link to="/offerings" className="underline-link underline-link-light">Plan a Custom Trip</Link>
+                <Link to="/how-it-works" className="underline-link underline-link-light">Plan a Custom Trip</Link>
                 <Link to="/contact" className="underline-link underline-link-light">Contact Our Experts</Link>
               </div>
             </div>

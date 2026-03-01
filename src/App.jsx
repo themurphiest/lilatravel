@@ -9,9 +9,9 @@
 //   /destinations                  → Destinations landing (grid of all destinations)
 //   /destinations/zion-canyon      → Dedicated Zion guide (custom page)
 //   /destinations/:slug            → Generic destination guide (auto-generated)
-//   /rituals                       → Rituals landing (all four pillars)
-//   /rituals/:slug                 → Individual ritual detail
-//   /offerings                     → Offerings / how it works
+//   /approach                      → Our Approach (three braids + philosophy)
+//   /approach/:slug                → Individual philosophy detail
+//   /how-it-works                  → How It Works (ways to get started)
 //   /trips/:slug                   → Individual Threshold Trip detail
 //   /itineraries/utah              → Utah National Parks itinerary (PWA trip guide)
 //   /contact                       → Contact page
@@ -48,9 +48,9 @@ import { C } from '@data/brand';
 import HomePage from '@pages/Home';
 import DestinationsPage from '@pages/Destinations';
 import DestinationGuide from '@pages/DestinationGuide';
-import RitualsPage from '@pages/Rituals';
-import RitualDetail from '@pages/RitualDetail';
-import OfferingsPage from '@pages/Offerings';
+import RitualsPage from '@pages/Rituals';       // TODO: rename file to Approach.jsx
+import RitualDetail from '@pages/RitualDetail';  // TODO: rename file to ApproachDetail.jsx
+import OfferingsPage from '@pages/Offerings';     // TODO: rename file to HowItWorks.jsx
 import ContactPage from '@pages/Contact';
 import PlanMyTrip from '@pages/PlanMyTrip';
 import NotFound from '@pages/NotFound';
@@ -103,9 +103,9 @@ export default function App() {
           {/* ↓ Generic guide for destinations without a dedicated page */}
           <Route path="/destinations/:slug" element={<DestinationGuide />} />
 
-          {/* Rituals */}
-          <Route path="/rituals" element={<RitualsPage />} />
-          <Route path="/rituals/:slug" element={<RitualDetail />} />
+          {/* Our Approach */}
+          <Route path="/approach" element={<RitualsPage />} />
+          <Route path="/approach/:slug" element={<RitualDetail />} />
 
           {/* Trips (Threshold Trip detail pages) */}
           <Route path="/trips/:slug" element={<TripPage />} />
@@ -116,7 +116,7 @@ export default function App() {
           {/* <Route path="/itineraries/zion-autumn" element={<ZionAutumnItinerary />} /> */}
 
           {/* Other pages */}
-          <Route path="/offerings" element={<OfferingsPage />} />
+          <Route path="/how-it-works" element={<OfferingsPage />} />
           <Route path="/contact" element={<ContactPage />} />
 
           {/* 404 */}

@@ -21,8 +21,8 @@ export default function Nav({ transparent = false }) {
 
   const links = [
     { label: "Destinations", to: "/destinations" },
-    { label: "Rituals", to: "/rituals" },
-    { label: "Offerings", to: "/offerings" },
+    { label: "Our Approach", to: "/approach" },
+    { label: "How It Works", to: "/how-it-works" },
   ];
 
   return (

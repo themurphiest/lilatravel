@@ -8,8 +8,8 @@ import { C } from '@data/brand';
 export default function Footer() {
   const links = [
     { label: "Destinations", to: "/destinations" },
-    { label: "Rituals", to: "/rituals" },
-    { label: "Offerings", to: "/offerings" },
+    { label: "Our Approach", to: "/approach" },
+    { label: "How It Works", to: "/how-it-works" },
     { label: "Contact", to: "/contact" },
   ];
 
