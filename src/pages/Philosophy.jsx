@@ -562,6 +562,67 @@ export default function PhilosophyPage() {
               <Link to="/ethos" className="underline-link">Back to Our Ethos</Link>
               <Link to="/destinations" className="underline-link">Explore Destinations</Link>
             </div>
+
+            {/* ── Practices Explorer CTA ── */}
+            <div style={{
+              marginTop: 48, padding: "32px 28px", borderRadius: 16,
+              background: "white",
+              border: `1px solid ${C.stone}`,
+              maxWidth: 480, marginLeft: "auto", marginRight: "auto",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 12 }}>
+                <span style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 9, fontWeight: 700,
+                  letterSpacing: "0.2em", textTransform: "uppercase",
+                  color: C.oceanTeal,
+                }}>
+                  Wisdom Layer
+                </span>
+                <span style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 8, fontWeight: 700,
+                  letterSpacing: "0.12em", textTransform: "uppercase",
+                  padding: "2px 8px", borderRadius: 4,
+                  background: `${C.sunSalmon}15`,
+                  color: C.sunSalmon,
+                }}>
+                  Beta
+                </span>
+              </div>
+              <p style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "clamp(18px, 2.2vw, 22px)",
+                fontWeight: 400, color: C.darkInk,
+                lineHeight: 1.4, margin: "0 0 8px", textAlign: "center",
+              }}>
+                Explore Our Integrated Teachings &amp; Practices
+              </p>
+              <p style={{
+                fontFamily: "'Quicksand', sans-serif",
+                fontSize: 12, fontWeight: 400,
+                color: "#7a8a9a", lineHeight: 1.6, margin: "0 0 20px", textAlign: "center",
+              }}>
+                Browse the full library of teachings, practices, and ceremonies across all five traditions — filterable by principle, type, and tradition.
+              </p>
+              <div style={{ textAlign: "center" }}>
+                <Link to="/ethos/practices" style={{
+                  display: "inline-block",
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 10, fontWeight: 700,
+                  letterSpacing: "0.18em", textTransform: "uppercase",
+                  color: "white", background: C.oceanTeal,
+                  padding: "12px 28px", borderRadius: 8,
+                  textDecoration: "none",
+                  transition: "opacity 0.2s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+                onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                >
+                  Open Practices Explorer →
+                </Link>
+              </div>
+            </div>
           </FadeIn>
         </div>
       </section>

@@ -13,6 +13,7 @@
 //   /ethos                         → Ethos (three braids + philosophy)
 //   /ethos/:slug                   → Individual philosophy detail
 //   /ethos/philosophy               → Philosophy deep-dive (four principles × five traditions)
+//   /ethos/practices                → Practices Explorer (interactive wisdom layer browser)
 //   /ways-to-travel                → Ways to Travel (how to get started)
 //   /trips/:slug                   → Individual Threshold Trip detail
 //   /itineraries/utah              → Utah National Parks itinerary (PWA trip guide)
@@ -58,6 +59,7 @@ import PlanMyTrip from '@pages/PlanMyTrip';
 import NotFound from '@pages/NotFound';
 import GroupTripsPage from '@pages/GroupTrips';
 import PhilosophyPage from '@pages/Philosophy';
+import PracticesExplorerPage from '@pages/PracticesExplorer';
 import TripPage from '@pages/trips/TripPage';
 import ItineraryResults from './pages/ItineraryResults';
 
@@ -113,6 +115,7 @@ export default function App() {
           {/* Ethos (formerly "Our Approach") */}
           <Route path="/ethos" element={<EthosPage />} />
           <Route path="/ethos/philosophy" element={<PhilosophyPage />} />
+          <Route path="/ethos/practices" element={<PracticesExplorerPage />} />
           <Route path="/ethos/:slug" element={<EthosDetail />} />
 
           {/* Trips (Threshold Trip detail pages) */}
