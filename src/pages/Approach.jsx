@@ -14,7 +14,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Nav, Footer, FadeIn } from '@components';
+import { Nav, Footer, FadeIn, PageHeader } from '@components';
 import { C } from '@data/brand';
 import { ritualsPillars, traditions, ritualsIntro } from '@data/rituals';
 
@@ -53,105 +53,51 @@ export default function ApproachPage() {
     <>
       <Nav />
 
-      {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
-      <section style={{
-        position: "relative", minHeight: "55vh", overflow: "hidden",
-        display: "flex", alignItems: "flex-end", background: C.darkInk,
-      }}>
-        <img
-          src="/images/rituals-hero.jpg"
-          alt=""
-          style={{
-            position: "absolute", inset: 0, width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center 70%",
-          }}
-        />
+      <PageHeader
+        eyebrow="Our Approach"
+        title="More Than a Trip"
+        subtitle="Three braids woven into every Lila journey — sacred places, ancient wisdom, and raw elemental experience."
+        accentColor={C.goldenAmber}
+      >
+        {/* Three braid markers */}
         <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to bottom, rgba(15,30,42,0.3) 0%, rgba(15,30,42,0.65) 70%, rgba(15,30,42,0.85) 100%)",
-        }} />
-        <div style={{
-          position: "relative", zIndex: 2,
-          padding: "64px 52px", maxWidth: 900, width: "100%",
+          display: "flex", gap: isMobile ? 24 : 48,
+          flexDirection: isMobile ? "column" : "row",
+          marginTop: 32, paddingTop: 32,
+          borderTop: `1px solid ${C.stone}`,
         }}>
-          <FadeIn from="bottom" delay={0.1}>
-            <span className="eyebrow" style={{ color: "#6BA4B8" }}>Our Approach</span>
-            <h1 style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: "clamp(32px, 5vw, 52px)", fontWeight: 300,
-              color: "white", lineHeight: 1.2, marginBottom: 12,
-            }}>
-              More Than a Trip
-            </h1>
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 300, fontStyle: "italic",
-              color: "rgba(255,255,255,0.7)", lineHeight: 1.6, maxWidth: 560,
-            }}>
-              Three braids woven into every Lila journey — sacred places, ancient wisdom, and raw elemental experience.
-            </p>
-          </FadeIn>
+          {[
+            { icon: "△", label: "Sacred Terrain", color: "#7DB8A0", sub: "The landscape is the teacher" },
+            { icon: "◎", label: "Ancient Practices", color: "#D4A853", sub: "Wisdom traditions woven in" },
+            { icon: "✦", label: "Elemental Encounters", color: "#6BA4B8", sub: "The raw materials of being alive" },
+          ].map((b) => (
+            <a
+              key={b.label}
+              href={`#${b.label.toLowerCase().replace(/\s+/g, '-')}`}
+              style={{
+                display: "flex", alignItems: "flex-start", gap: 14,
+                flex: 1, textDecoration: "none",
+                transition: "opacity 0.3s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+            >
+              <span style={{ fontSize: 22, color: b.color, opacity: 0.7, lineHeight: 1, marginTop: 2 }}>{b.icon}</span>
+              <div>
+                <span style={{
+                  fontFamily: "'Quicksand'", fontSize: 12, fontWeight: 700,
+                  letterSpacing: "0.14em", textTransform: "uppercase",
+                  color: C.darkInk, display: "block", marginBottom: 4,
+                }}>{b.label}</span>
+                <span style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 15, fontStyle: "italic", color: "#7a8a9a",
+                }}>{b.sub}</span>
+              </div>
+            </a>
+          ))}
         </div>
-      </section>
-
-      {/* ══ EDITORIAL INTRO ═══════════════════════════════════════════════════ */}
-      <section style={{ padding: "80px 52px", background: C.cream }}>
-        <div style={{ maxWidth: 760, margin: "0 auto" }}>
-          <FadeIn>
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(20px, 2.5vw, 26px)", fontWeight: 300, fontStyle: "italic",
-              color: "#4a6070", lineHeight: 1.9, marginBottom: 0,
-            }}>
-              Most travel is designed around logistics — where to sleep, what to see, how to get there.
-              We start somewhere different. We ask: what combination of place, practice, and raw experience
-              has the power to change the way you see the world? Then we weave three threads together
-              until something new emerges.
-            </p>
-          </FadeIn>
-
-          {/* Three braid markers */}
-          <FadeIn delay={0.15}>
-            <div style={{
-              display: "flex", gap: isMobile ? 24 : 48,
-              flexDirection: isMobile ? "column" : "row",
-              marginTop: 48, paddingTop: 48,
-              borderTop: `1px solid ${C.stone}`,
-            }}>
-              {[
-                { icon: "△", label: "Sacred Terrain", color: "#7DB8A0", sub: "The landscape is the teacher" },
-                { icon: "◎", label: "Ancient Practices", color: "#D4A853", sub: "Wisdom traditions woven in" },
-                { icon: "✦", label: "Elemental Encounters", color: "#6BA4B8", sub: "The raw materials of being alive" },
-              ].map((b, i) => (
-                <a
-                  key={b.label}
-                  href={`#${b.label.toLowerCase().replace(/\s+/g, '-')}`}
-                  style={{
-                    display: "flex", alignItems: "flex-start", gap: 14,
-                    flex: 1, textDecoration: "none",
-                    transition: "opacity 0.3s",
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
-                  onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-                >
-                  <span style={{ fontSize: 22, color: b.color, opacity: 0.7, lineHeight: 1, marginTop: 2 }}>{b.icon}</span>
-                  <div>
-                    <span style={{
-                      fontFamily: "'Quicksand'", fontSize: 12, fontWeight: 700,
-                      letterSpacing: "0.14em", textTransform: "uppercase",
-                      color: C.darkInk, display: "block", marginBottom: 4,
-                    }}>{b.label}</span>
-                    <span style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: 15, fontStyle: "italic", color: "#7a8a9a",
-                    }}>{b.sub}</span>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+      </PageHeader>
 
 
       {/* ══ BRAID 1: SACRED TERRAIN ══════════════════════════════════════════ */}
