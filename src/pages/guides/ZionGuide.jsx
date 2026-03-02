@@ -46,9 +46,9 @@ function SectionTitle({ children }) {
 function SectionSub({ children }) {
   return (
     <p style={{
-      fontFamily: "'Cormorant Garamond', serif",
-      fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 300, fontStyle: "italic",
-      color: "#5a7080", margin: "0 auto 28px", lineHeight: 1.65,
+      fontFamily: "'Quicksand', sans-serif",
+      fontSize: "clamp(14px, 1.8vw, 15px)", fontWeight: 400,
+      color: "#5a7080", margin: "0 auto 28px", lineHeight: 1.7,
       textAlign: "center", maxWidth: 520,
     }}>{children}</p>
   );
@@ -207,8 +207,8 @@ function AddToTripButton({ name }) {
               color: C.darkInk, marginBottom: 12,
             }}>Added to your trip</div>
             <div style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 300, fontStyle: "italic",
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
               color: "#5a7080", lineHeight: 1.65, marginBottom: 28,
             }}>Unlock the Zion Trip Planner to save your picks, build a day-by-day itinerary, and access everything offline.</div>
             <button
@@ -270,9 +270,9 @@ function ListItem({ name, detail, note, tags, featured, url }) {
           )}
         </div>
         <div style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "clamp(14px, 1.6vw, 15px)", fontWeight: 300,
-          color: "#5a7080", lineHeight: 1.6,
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: "clamp(13px, 1.5vw, 14px)", fontWeight: 400,
+          color: "#5a7080", lineHeight: 1.65,
         }}>{detail}</div>
         {note && (
           <div style={{
@@ -340,9 +340,9 @@ function StayItem({ name, location, tier, detail, tags, url, featured }) {
         </div>
         <div style={{ marginBottom: 3 }}>{nameEl}</div>
         <div style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "clamp(14px, 1.6vw, 15px)", fontWeight: 300,
-          color: "#5a7080", lineHeight: 1.6,
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: "clamp(13px, 1.5vw, 14px)", fontWeight: 400,
+          color: "#5a7080", lineHeight: 1.65,
         }}>{detail}</div>
         {tags && (
           <div style={{ display: "flex", gap: 5, marginTop: 7, flexWrap: "wrap" }}>
@@ -410,7 +410,7 @@ function OfferingCard({ icon, label, title, description, cta, ctaAction, accent,
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        padding: "24px 20px",
+        padding: "32px 28px",
         background: hovered ? `${accent}08` : "transparent",
         border: `1px solid ${hovered ? accent : C.stone}`,
         transition: "all 0.3s ease",
@@ -419,29 +419,29 @@ function OfferingCard({ icon, label, title, description, cta, ctaAction, accent,
         minWidth: 0,
       }}
     >
-      <div style={{ marginBottom: 14 }}>{icon}</div>
+      <div style={{ marginBottom: 20 }}>{icon}</div>
       <div style={{
         fontFamily: "'Quicksand', sans-serif",
         fontSize: 9, fontWeight: 700,
         letterSpacing: "0.22em", textTransform: "uppercase",
-        color: accent, marginBottom: 6,
+        color: accent, marginBottom: 10,
       }}>{label}</div>
       <div style={{
         fontFamily: "'Cormorant Garamond', serif",
-        fontSize: "clamp(18px, 2.5vw, 22px)", fontWeight: 400,
-        color: C.darkInk, lineHeight: 1.2, marginBottom: 8,
+        fontSize: "clamp(20px, 2.5vw, 26px)", fontWeight: 400,
+        color: C.darkInk, lineHeight: 1.2, marginBottom: 14,
       }}>{title}</div>
       <p style={{
-        fontFamily: "'Cormorant Garamond', serif",
-        fontSize: 14, fontWeight: 300, fontStyle: "italic",
-        color: "#5a7080", lineHeight: 1.55, margin: "0 0 18px",
-        flex: 1,
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: 13, fontWeight: 400,
+        color: "#5a7080", lineHeight: 1.65, margin: "0 0 auto",
+        paddingBottom: 24,
       }}>{description}</p>
       <button
         onClick={ctaAction}
         style={{
           alignSelf: "flex-start",
-          padding: "9px 18px",
+          padding: "11px 22px",
           background: "transparent",
           border: `1.5px solid ${accent}`,
           color: accent,
@@ -456,8 +456,8 @@ function OfferingCard({ icon, label, title, description, cta, ctaAction, accent,
       {secondary && (
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: 9, fontWeight: 500, color: "#9aabba",
-          marginTop: 8, letterSpacing: "0.04em",
+          fontSize: 10, fontWeight: 500, color: "#9aabba",
+          marginTop: 10, letterSpacing: "0.04em",
         }}>{secondary}</div>
       )}
     </div>
@@ -526,8 +526,8 @@ function PlanMyTripCTA({ variant = "default" }) {
           marginBottom: 8,
         }}>{v.heading}</div>
         <p style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "clamp(14px, 1.8vw, 16px)", fontWeight: 300, fontStyle: "italic",
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
           color: isDark ? "rgba(255,255,255,0.55)" : "#5a7080",
           lineHeight: 1.65, maxWidth: 480, margin: "0 auto 24px",
         }}>{v.body}</p>
@@ -604,8 +604,8 @@ function ThresholdTripCard({ title, dates, duration, description, spotsLeft, acc
         color: accent, marginBottom: 16,
       }}>{dates} · {duration} · Guided group</div>
       <p style={{
-        fontFamily: "'Cormorant Garamond', serif",
-        fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 300, fontStyle: "italic",
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
         lineHeight: 1.7, color: "rgba(255,255,255,0.55)", margin: "0 0 24px",
       }}>{description}</p>
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
@@ -658,8 +658,8 @@ function TimingAlertCapture() {
               color: C.goldenAmber, marginBottom: 8,
             }}>You're on the list</div>
             <div style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 16, fontWeight: 300, fontStyle: "italic",
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 13, fontWeight: 400,
               color: "#5a7080", lineHeight: 1.6,
             }}>We'll let you know when the golden window opens.</div>
           </>
@@ -672,8 +672,8 @@ function TimingAlertCapture() {
               color: C.darkInk, marginBottom: 6,
             }}>Get Zion timing alerts</div>
             <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 15, fontWeight: 300, fontStyle: "italic",
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 13, fontWeight: 400,
               color: "#5a7080", lineHeight: 1.6,
               maxWidth: 420, margin: "0 auto 20px",
             }}>We track conditions, seasonal windows, and earth rhythms — and let you know when it's time to go.</p>
@@ -732,191 +732,206 @@ export default function ZionGuide() {
     <>
       <Nav />
 
-      {/* ══ IMAGE HERO ══════════════════════════════════════════════════════ */}
-      <section style={{
-        position: "relative", minHeight: "70vh", overflow: "hidden",
-        display: "flex", alignItems: "flex-end",
-      }}>
-        <img src={P.zion} alt="Zion Canyon" style={{
-          position: "absolute", inset: 0, width: "100%", height: "100%",
-          objectFit: "cover", objectPosition: "center 40%",
-        }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,18,26,0.8) 0%, rgba(10,18,26,0.15) 50%, rgba(10,18,26,0.05) 100%)" }} />
-        <div style={{
-          position: "relative", zIndex: 2,
-          padding: "64px 52px", maxWidth: 900, width: "100%",
-        }}>
+      {/* ══ TITLE MASTHEAD ═══════════════════════════════════════════════════ */}
+      <section style={{ background: C.cream, paddingTop: 24 }}>
+        <div style={{ padding: "44px 52px 40px", maxWidth: 920, margin: "0 auto" }}>
           <FadeIn from="bottom" delay={0.1}>
-            <span className="eyebrow" style={{ color: C.sunSalmon }}>Destination Guide</span>
-            <h1 style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(40px, 8vw, 80px)", fontWeight: 300,
-              color: "white", lineHeight: 1.0, marginBottom: 16, letterSpacing: "-0.02em",
+
+            {/* Breadcrumb */}
+            <Breadcrumb items={[
+              { label: "Home", to: "/" },
+              { label: "Destinations", to: "/destinations" },
+              { label: "Zion Canyon" },
+            ]} />
+
+            {/* Two column layout */}
+            <div style={{
+              display: "grid", gridTemplateColumns: "1fr 320px", gap: 52, alignItems: "start",
+              marginTop: 28,
             }}>
-              Zion &amp; its orbit
-            </h1>
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 300, fontStyle: "italic",
-              color: "rgba(255,255,255,0.6)", lineHeight: 1.6, maxWidth: 500,
-            }}>
-              Cottonwoods catch fire against ancient sandstone. The crowds thin. The canyon breathes.
-            </p>
+
+              {/* ── Left: Title + description ── */}
+              <div>
+                <span className="eyebrow" style={{ color: C.sunSalmon, marginBottom: 14, display: "block" }}>Destination Guide</span>
+
+                <h1 style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "clamp(38px, 6vw, 64px)", fontWeight: 300,
+                  color: C.darkInk, lineHeight: 1.0,
+                  margin: "0 0 22px", letterSpacing: "-0.02em",
+                }}>
+                  Zion &amp; its orbit
+                </h1>
+
+                {/* The land's history */}
+                <p style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
+                  color: "#5a7080", lineHeight: 1.75, maxWidth: 460,
+                  margin: "0 0 14px",
+                }}>
+                  The Southern Paiute called this place <span style={{ color: C.darkInk }}>Mukuntuweap</span>. The sandstone is 170 million years old. For thousands of years, this land has drawn people inward.
+                </p>
+
+                {/* Why we think it's magical */}
+                <p style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
+                  color: "#5a7080", lineHeight: 1.75, maxWidth: 460,
+                  margin: 0,
+                }}>
+                  The scale quiets the mind. The light feels earned. Something here shifts — and we built this guide to help you find it.
+                </p>
+              </div>
+
+              {/* ── Right: This Guide Covers ── */}
+              <div style={{
+                borderLeft: `1px solid ${C.stone}`,
+                paddingLeft: 28,
+              }}>
+                <div style={{
+                  fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700,
+                  letterSpacing: "0.22em", textTransform: "uppercase",
+                  color: "#b8b0a8", marginBottom: 18,
+                }}>This guide covers</div>
+
+                {/* Parks */}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{
+                    fontFamily: "'Quicksand', sans-serif", fontSize: 8, fontWeight: 700,
+                    letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: C.seaGlass, marginBottom: 10,
+                  }}>Parks</div>
+                  {[
+                    { label: "Zion National Park", url: "https://www.nps.gov/zion/" },
+                    { label: "Bryce Canyon National Park", url: "https://www.nps.gov/brca/" },
+                    { label: "Capitol Reef National Park", url: "https://www.nps.gov/care/" },
+                  ].map((park, i) => (
+                    <a key={i} href={park.url} target="_blank" rel="noopener noreferrer" style={{
+                      display: "flex", alignItems: "center", gap: 10, marginBottom: 7,
+                      textDecoration: "none",
+                    }}>
+                      <div style={{
+                        width: 5, height: 5, borderRadius: "50%",
+                        background: C.seaGlass, opacity: 0.5,
+                      }} />
+                      <span style={{
+                        fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600,
+                        letterSpacing: "0.02em", color: C.darkInk,
+                      }}>{park.label}</span>
+                    </a>
+                  ))}
+                </div>
+
+                {/* Gateway Towns */}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{
+                    fontFamily: "'Quicksand', sans-serif", fontSize: 8, fontWeight: 700,
+                    letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: C.goldenAmber, marginBottom: 10,
+                  }}>Gateway Towns</div>
+                  {["Springdale", "Kanab", "Escalante", "Torrey"].map((town, i) => (
+                    <div key={i} style={{
+                      display: "flex", alignItems: "center", gap: 10, marginBottom: 7,
+                    }}>
+                      <div style={{
+                        width: 5, height: 5, borderRadius: "50%",
+                        background: C.goldenAmber, opacity: 0.5,
+                      }} />
+                      <span style={{
+                        fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600,
+                        letterSpacing: "0.02em", color: C.darkInk,
+                      }}>{town}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Inside this guide */}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{
+                    fontFamily: "'Quicksand', sans-serif", fontSize: 8, fontWeight: 700,
+                    letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: C.skyBlue, marginBottom: 10,
+                  }}>Inside this guide</div>
+                  <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                    {[
+                      "Trails & Canyon Routes",
+                      "Places to Eat",
+                      "Where to Stay",
+                      "Yoga & Breathwork",
+                      "Scenic Drives",
+                      "Stargazing",
+                      "Local Culture",
+                      "Community Connection",
+                      "Seasonal Timing",
+                      "Group Trips",
+                    ].map((tag, i) => (
+                      <span key={i} style={{
+                        fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 600,
+                        letterSpacing: "0.04em", color: "#8a9baa",
+                        padding: "3px 9px", border: `1px solid ${C.stone}`,
+                        lineHeight: 1.4,
+                      }}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Updated */}
+                <div style={{
+                  fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 500,
+                  letterSpacing: "0.06em", color: "#b8b0a8", marginTop: 14,
+                  paddingTop: 12, borderTop: `1px solid ${C.stone}`,
+                }}>
+                  Updated 2026
+                </div>
+              </div>
+            </div>
           </FadeIn>
         </div>
       </section>
 
+      {/* ══ IMAGE STRIP ════════════════════════════════════════════════════ */}
+      <section style={{ position: "relative" }}>
+        <div style={{
+          display: "flex", gap: 2,
+          overflowX: "auto", scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch",
+          scrollbarWidth: "none",
+        }}>
+          {[
+            { src: P.zionWatchman,    alt: "The Watchman at golden hour",     caption: "The Watchman at golden hour",       width: 420 },
+            { src: P.zionNarrows,     alt: "The Narrows",                    caption: "The Narrows — ankle to waist",      width: 280 },
+            { src: P.bryceCanyon,     alt: "Bryce Canyon hoodoos",           caption: "Bryce Canyon hoodoos",              width: 420 },
+            { src: P.capitolReef,     alt: "Capitol Reef at sunset",         caption: "Capitol Reef at sunset",            width: 360 },
+          ].map((img, i) => (
+            <div key={i} style={{
+              flex: "0 0 auto", width: img.width,
+              scrollSnapAlign: "start", position: "relative", overflow: "hidden",
+            }}>
+              <img src={img.src} alt={img.alt} style={{
+                width: "100%", height: 320, objectFit: "cover", display: "block",
+              }} />
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0,
+                padding: "32px 16px 14px",
+                background: "linear-gradient(to top, rgba(10,18,26,0.7), transparent)",
+              }}>
+                <span style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 10, fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  color: "rgba(255,255,255,0.8)",
+                }}>{img.caption}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ══ GUIDE CONTENT ═══════════════════════════════════════════════════ */}
-      <section style={{ padding: "80px 52px", background: C.cream }}>
+      <section style={{ padding: "48px 52px 80px", background: C.cream }}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
 
-          <Breadcrumb items={[
-            { label: "Home", to: "/" },
-            { label: "Destinations", to: "/destinations" },
-            { label: "Zion Canyon" },
-          ]} />
-
-          {/* ── Park Badges ─────────────────────────────────────────────── */}
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 32, marginBottom: 20 }}>
-            {[
-              { label: "Zion National Park", url: "https://www.nps.gov/zion/" },
-              { label: "Bryce Canyon National Park", url: "https://www.nps.gov/brca/" },
-              { label: "Capitol Reef National Park", url: "https://www.nps.gov/care/" },
-            ].map((park, i) => (
-              <a key={i} href={park.url} target="_blank" rel="noopener noreferrer" style={{
-                textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8,
-                padding: "5px 14px 5px 6px", background: `${C.seaGlass}15`,
-              }}>
-                <div style={{
-                  width: 22, height: 22, background: C.seaGlass,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 11, color: "#fff",
-                }}>{"🏛"}</div>
-                <span style={{
-                  fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700,
-                  letterSpacing: "0.08em", color: C.seaGlass,
-                }}>{park.label}</span>
-              </a>
-            ))}
-          </div>
-
-          {/* ── Subtitle + Threshold Badge + Meta Tags ──────────────────── */}
-          <FadeIn>
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(17px, 2vw, 22px)", fontWeight: 300, fontStyle: "italic",
-              color: "#5a7080", margin: "0 0 28px", lineHeight: 1.65, maxWidth: 520,
-            }}>
-              Our curated guide to Southwest Utah — from the canyon floor in Zion to the hoodoos of Bryce Canyon and the starlit mesas of Capitol Reef. The places, practices, and experiences we keep coming back to.
-            </p>
-
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24 }}>
-              <div style={{ width: 20, height: 1, background: C.sunSalmon }} />
-              <span style={{
-                fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700,
-                letterSpacing: "0.22em", textTransform: "uppercase", color: C.sunSalmon,
-              }}>Autumn · Sep–Nov</span>
-            </div>
-
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 40 }}>
-              {["Springdale to Torrey", "Free Guide", "Updated 2026"].map((t, i) => (
-                <span key={i} style={{
-                  padding: "5px 14px", border: `1px solid ${C.stone}`,
-                  fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600,
-                  letterSpacing: "0.08em", color: "#9aabba",
-                }}>{t}</span>
-              ))}
-            </div>
-          </FadeIn>
-
-
-          {/* ══════════════════════════════════════════════════════════════ */}
-          {/* HOW LILA HELPS — FOUR PATHWAYS (front and center)             */}
-          {/* ══════════════════════════════════════════════════════════════ */}
-          <section style={{ padding: "0 0 48px" }}>
-            <FadeIn>
-              <SectionLabel>How Lila Helps</SectionLabel>
-              <SectionTitle>Four ways to experience Zion</SectionTitle>
-              <SectionSub>
-                Start by exploring our free guide below — or jump straight to the path that fits.
-              </SectionSub>
-            </FadeIn>
-
-            <FadeIn delay={0.08}>
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-                gap: 12,
-              }}>
-                <OfferingCard
-                  icon={
-                    <svg width={24} height={24} viewBox="0 0 28 28" fill="none">
-                      <path d="M5 4 L5 24 L23 24" stroke={C.skyBlue} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M5 4 L15 4 L15 16 L5 16" stroke={C.skyBlue} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                      <line x1="8" y1="8" x2="12" y2="8" stroke={C.skyBlue} strokeWidth="1.5" strokeLinecap="round" />
-                      <line x1="8" y1="12" x2="12" y2="12" stroke={C.skyBlue} strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  }
-                  label="DIY"
-                  title="Explore the Guide"
-                  description="Browse our curated picks for free — where to stay, what to hike, where to eat, and when the light is best."
-                  cta="Start Reading ↓"
-                  accent={C.skyBlue}
-                  secondary="Free · No account needed"
-                  ctaAction={() => {
-                    document.getElementById('guide-start')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                />
-                <OfferingCard
-                  icon={
-                    <svg width={24} height={24} viewBox="0 0 28 28" fill="none">
-                      <circle cx="14" cy="14" r="11" stroke={C.oceanTeal} strokeWidth="1.5" fill="none" />
-                      <path d="M11 17 L13 13 L17 11 L15 15 Z" stroke={C.oceanTeal} strokeWidth="1.5" fill="none" strokeLinejoin="round" />
-                    </svg>
-                  }
-                  label="Plan a Trip"
-                  title="Trip Planner"
-                  description="Turn your favorites into a day-by-day itinerary with booking links, permit timing, and offline access."
-                  cta="Unlock — $39"
-                  accent={C.oceanTeal}
-                  secondary="One-time purchase · Offline access"
-                />
-                <OfferingCard
-                  icon={
-                    <svg width={24} height={24} viewBox="0 0 28 28" fill="none">
-                      <path d="M18 6 A10 10 0 1 0 18 22 A7 7 0 1 1 18 6 Z" stroke={C.sunSalmon} strokeWidth="1.5" fill="none" />
-                    </svg>
-                  }
-                  label="Join a Group"
-                  title="Group Trips"
-                  description="Small group journeys timed to natural crescendos. Guided, curated, eight travelers maximum."
-                  cta="View Trips"
-                  accent={C.sunSalmon}
-                  secondary="From $895 per person"
-                  ctaAction={() => {
-                    document.getElementById('threshold-trips')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                />
-                <OfferingCard
-                  icon={
-                    <svg width={24} height={24} viewBox="0 0 28 28" fill="none">
-                      <path d="M4 20 L14 6 L24 20" stroke={C.goldenAmber} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                      <line x1="9" y1="13" x2="19" y2="13" stroke={C.goldenAmber} strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  }
-                  label="Designed for You"
-                  title="Custom Itinerary"
-                  description="Tell us your dates, group, and vibe. A real person builds a Zion itinerary around your trip."
-                  cta="Start — from $199"
-                  accent={C.goldenAmber}
-                  secondary="Personalized · Human-crafted"
-                />
-              </div>
-            </FadeIn>
-          </section>
-
-
-          <Divider />
 
           {/* ══════════════════════════════════════════════════════════════ */}
           {/* SENSE OF PLACE                                                */}
@@ -925,16 +940,16 @@ export default function ZionGuide() {
             <FadeIn>
               <SectionLabel>Sense of Place</SectionLabel>
               <p style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(16px, 2vw, 18px)", lineHeight: 1.85,
-                fontWeight: 300, color: "#5a6a78", margin: "0 0 16px",
+                fontFamily: "'Quicksand', sans-serif",
+                fontSize: "clamp(14px, 1.8vw, 15px)", lineHeight: 1.8,
+                fontWeight: 400, color: "#5a6a78", margin: "0 0 16px",
               }}>
                 {"Zion Canyon was carved over millions of years by the Virgin River cutting through Navajo sandstone. The walls glow copper at sunrise, amber at midday, impossible pink at dusk. The Paiute called it Mukuntuweap — \"straight-up land.\" Whatever name you give it, the experience is the same: you stand among these walls of stone and you stop talking."}
               </p>
               <p style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(16px, 2vw, 18px)", lineHeight: 1.85,
-                fontWeight: 300, color: "#5a6a78", margin: "0 0 24px",
+                fontFamily: "'Quicksand', sans-serif",
+                fontSize: "clamp(14px, 1.8vw, 15px)", lineHeight: 1.8,
+                fontWeight: 400, color: "#5a6a78", margin: "0 0 24px",
               }}>
                 This guide covers the full orbit — not just the park, but the surrounding area that makes a trip here extraordinary. From yoga studios in Springdale to the hoodoos of Bryce Canyon and the starlit mesas of Capitol Reef, drawn from the lived experience of locals, guides, and travelers who return again and again.
               </p>
@@ -954,7 +969,7 @@ export default function ZionGuide() {
                 ].map((s, i) => (
                   <div key={i}>
                     <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: C.oceanTeal, marginBottom: 3 }}>{s.l}</div>
-                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 17, fontWeight: 400, color: C.darkInk }}>{s.v}</div>
+                    <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 14, fontWeight: 600, color: C.darkInk }}>{s.v}</div>
                   </div>
                 ))}
               </div>
@@ -992,9 +1007,6 @@ export default function ZionGuide() {
             </FadeIn>
           </section>
 
-          {/* ── Plan My Trip CTA: After Magic Windows ────────────────── */}
-          <PlanMyTripCTA variant="default" />
-
 
           <Divider />
 
@@ -1022,7 +1034,7 @@ export default function ZionGuide() {
                 ].map((t, i) => (
                   <div key={i} style={{ flex: "1 1 140px" }}>
                     <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: t.color }}>{t.label}</span>
-                    <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 13, fontWeight: 300, fontStyle: "italic", color: "#5a7080", marginLeft: 6 }}>{t.desc}</span>
+                    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 400, color: "#5a7080", marginLeft: 6 }}>{t.desc}</span>
                   </div>
                 ))}
               </div>
@@ -1069,9 +1081,6 @@ export default function ZionGuide() {
               </ExpandableList>
             </FadeIn>
           </section>
-
-          {/* ── Plan My Trip CTA: After Stay ───────────────────────────── */}
-          <PlanMyTripCTA variant="afterStay" />
 
 
           <Divider />
@@ -1137,9 +1146,6 @@ export default function ZionGuide() {
               </ExpandableList>
             </FadeIn>
           </section>
-
-          {/* ── Plan My Trip CTA: After Move ───────────────────────────── */}
-          <PlanMyTripCTA variant="afterMove" />
 
 
           <Divider />
@@ -1231,9 +1237,6 @@ export default function ZionGuide() {
             </FadeIn>
           </section>
 
-          {/* ── Custom Itinerary CTA ─────────────────────────────────────── */}
-          <PlanMyTripCTA variant="custom" />
-
 
           <Divider />
 
@@ -1318,6 +1321,91 @@ export default function ZionGuide() {
           <Divider />
 
           {/* ══════════════════════════════════════════════════════════════ */}
+          {/* HOW LILA HELPS — FOUR PATHWAYS                                */}
+          {/* ══════════════════════════════════════════════════════════════ */}
+          <section style={{ padding: "48px 0" }}>
+            <FadeIn>
+              <SectionIcon type="plan" />
+              <SectionLabel>How Lila Helps</SectionLabel>
+              <SectionTitle>Four ways to experience Zion</SectionTitle>
+              <SectionSub>
+                You've seen what's here — now choose how you want to experience it.
+              </SectionSub>
+            </FadeIn>
+
+            <FadeIn delay={0.08}>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                gap: 12,
+              }}>
+                <OfferingCard
+                  icon={
+                    <svg width={28} height={28} viewBox="0 0 28 28" fill="none">
+                      <rect x="5" y="5" width="18" height="18" stroke={C.skyBlue} strokeWidth="1.5" fill="none" />
+                    </svg>
+                  }
+                  label="DIY"
+                  title="Explore the Guide"
+                  description="Browse our curated picks for free — where to stay, what to hike, where to eat, and when the light is best."
+                  cta="Start Reading ↓"
+                  accent={C.skyBlue}
+                  secondary="Free · No account needed"
+                  ctaAction={() => {
+                    document.getElementById('guide-start')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                />
+                <OfferingCard
+                  icon={
+                    <svg width={28} height={28} viewBox="0 0 28 28" fill="none">
+                      <circle cx="14" cy="14" r="10" stroke={C.oceanTeal} strokeWidth="1.5" fill="none" />
+                      <circle cx="14" cy="14" r="2.5" fill={C.oceanTeal} />
+                    </svg>
+                  }
+                  label="Plan a Trip"
+                  title="Trip Planner"
+                  description="Turn your favorites into a day-by-day itinerary with booking links, permit timing, and offline access."
+                  cta="Unlock — $39"
+                  accent={C.oceanTeal}
+                  secondary="One-time purchase · Offline access"
+                />
+                <OfferingCard
+                  icon={
+                    <svg width={28} height={28} viewBox="0 0 28 28" fill="none">
+                      <path d="M20 8 A9 9 0 1 0 20 20 A6 6 0 1 1 20 8 Z" stroke={C.sunSalmon} strokeWidth="1.5" fill="none" />
+                    </svg>
+                  }
+                  label="Join a Group"
+                  title="Group Trips"
+                  description="Small group journeys timed to natural crescendos. Guided, curated, eight travelers maximum."
+                  cta="View Trips"
+                  accent={C.sunSalmon}
+                  secondary="From $895 per person"
+                  ctaAction={() => {
+                    document.getElementById('threshold-trips')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                />
+                <OfferingCard
+                  icon={
+                    <svg width={28} height={28} viewBox="0 0 28 28" fill="none">
+                      <path d="M14 4 L24 24 L4 24 Z" stroke={C.goldenAmber} strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+                    </svg>
+                  }
+                  label="Designed for You"
+                  title="Custom Itinerary"
+                  description="Tell us your dates, group, and vibe. A real person builds a Zion itinerary around your trip."
+                  cta="Start — from $199"
+                  accent={C.goldenAmber}
+                  secondary="Personalized · Human-crafted"
+                />
+              </div>
+            </FadeIn>
+          </section>
+
+
+          <Divider />
+
+          {/* ══════════════════════════════════════════════════════════════ */}
           {/* GROUP TRIPS — ZION                                             */}
           {/* ══════════════════════════════════════════════════════════════ */}
           <section id="threshold-trips" style={{ padding: "48px 0" }}>
@@ -1355,8 +1443,8 @@ export default function ZionGuide() {
                 marginTop: 16,
               }}>
                 <p style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 15, fontWeight: 300, fontStyle: "italic",
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 13, fontWeight: 400,
                   color: "#5a7080", lineHeight: 1.6, margin: "0 0 16px",
                 }}>See all upcoming group trips across every destination.</p>
                 <Link to="/group-trips" style={{
@@ -1398,8 +1486,8 @@ export default function ZionGuide() {
                 color: C.darkInk, margin: "0 0 10px", lineHeight: 1.2,
               }}>Your Zion trip starts here</h3>
               <p style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 300, fontStyle: "italic",
+                fontFamily: "'Quicksand', sans-serif",
+                fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
                 color: "#5a7080", maxWidth: 460,
                 margin: "0 auto 36px", lineHeight: 1.65,
               }}>

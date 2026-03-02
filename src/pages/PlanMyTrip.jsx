@@ -508,70 +508,294 @@ function RadarChart({ values, size = 260 }) {
   );
 }
 
+// ─── Additional Welcome Screen Icons (matching Ways to Travel page) ──────────
+function IconCircleDot({ size, color }) {
+  // Matches "Plan a Trip" icon on offerings page
+  return (
+    <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="11" stroke={color} strokeWidth="1.5" fill="none" />
+      <circle cx="14" cy="14" r="3.5" fill={color} stroke="none" />
+    </svg>
+  );
+}
+
+function IconCrescent({ size, color }) {
+  // Matches "Join a Group" icon on offerings page
+  return (
+    <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
+      <path d="M18 6 A10 10 0 1 0 18 22 A7 7 0 1 1 18 6 Z" stroke={color} strokeWidth="1.5" fill="none" />
+    </svg>
+  );
+}
+
+function IconTriangle({ size, color }) {
+  // Matches "Designed for You" icon on offerings page
+  return (
+    <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
+      <path d="M4 20 L14 6 L24 20" stroke={color} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconArrowRight({ size = 16, color = C.white }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="8" x2="13" y2="8" />
+      <polyline points="9,4 13,8 9,12" />
+    </svg>
+  );
+}
+
+// ─── Welcome Path Card ──────────────────────────────────────────────────────
+function WelcomePathCard({ icon: IconComp, title, subtitle, description, buttonLabel, isPrimary, tag, tagColor, delay, visible, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: "relative",
+        background: C.white,
+        border: isPrimary ? `2px solid ${C.sage}30` : `1px solid ${C.sage}15`,
+        borderRadius: 20,
+        padding: isPrimary ? "32px 28px 28px" : "24px 24px 22px",
+        cursor: "pointer",
+        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        opacity: visible ? 1 : 0,
+        transform: visible ? (hovered ? "translateY(-2px)" : "translateY(0)") : "translateY(16px)",
+        transitionDelay: visible ? `${delay}ms` : "0ms",
+        boxShadow: isPrimary
+          ? (hovered ? `0 12px 48px ${C.sage}18, 0 4px 12px ${C.sage}10` : `0 8px 40px ${C.sage}12, 0 2px 8px ${C.sage}08`)
+          : (hovered ? `0 6px 24px ${C.sage}12` : `0 2px 12px ${C.sage}06`),
+        WebkitTapHighlightColor: "transparent",
+      }}
+    >
+      {tag && (
+        <div style={{
+          position: "absolute", top: -10, left: 24,
+          background: tagColor || C.oceanTeal,
+          color: C.white,
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase",
+          padding: "4px 14px", borderRadius: 20,
+        }}>{tag}</div>
+      )}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: isPrimary ? 20 : 16 }}>
+        <div style={{
+          width: isPrimary ? 52 : 44, height: isPrimary ? 52 : 44,
+          borderRadius: 14,
+          background: isPrimary ? `${C.oceanTeal}10` : `${C.sage}08`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          flexShrink: 0,
+        }}>
+          <IconComp size={isPrimary ? 26 : 22} color={isPrimary ? C.oceanTeal : C.sage} />
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
+            color: isPrimary ? C.oceanTeal : `${C.sage}80`,
+            marginBottom: 4,
+          }}>{subtitle}</div>
+          <h3 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: isPrimary ? "clamp(22px, 5vw, 26px)" : "clamp(18px, 4.5vw, 22px)",
+            fontWeight: 400, lineHeight: 1.2,
+            color: C.slate, margin: "2px 0 0",
+          }}>{title}</h3>
+          <p style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: isPrimary ? 14 : 13, fontWeight: 400,
+            color: `${C.slate}70`, lineHeight: 1.55,
+            margin: "8px 0 0",
+          }}>{description}</p>
+          <div style={{ marginTop: isPrimary ? 20 : 14 }}>
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
+              ...(isPrimary ? {
+                background: C.oceanTeal,
+                color: C.white,
+                padding: "12px 28px",
+                borderRadius: 30,
+                boxShadow: `0 4px 20px ${C.oceanTeal}25`,
+              } : {
+                background: "none",
+                color: C.sage,
+                padding: 0,
+              }),
+            }}>
+              {buttonLabel}
+              <IconArrowRight size={14} color={isPrimary ? C.white : C.sage} />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // STEPS
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function StepWelcome({ onNext }) {
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
   return (
     <div style={{
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      minHeight: "100vh", padding: "80px 28px 60px", textAlign: "center",
-      opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
-      transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+      display: "flex", flexDirection: "column", alignItems: "center",
+      minHeight: "100vh", padding: "min(18vh, 120px) 20px 60px", textAlign: "center",
     }}>
-      <div style={{ marginBottom: 24, opacity: 0.5 }}>
-        <IconEnso size={36} color={C.sage} />
+      {/* Hero */}
+      <div style={{
+        opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
+        transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        marginBottom: 8,
+      }}>
+        <div style={{ marginBottom: 10, opacity: 0.45, display: "flex", justifyContent: "center" }}>
+          <IconEnso size={32} color={C.sage} />
+        </div>
+        <h1 style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: "clamp(32px, 7.5vw, 42px)", fontWeight: 300, lineHeight: 1.15,
+          color: C.slate, marginBottom: 16, maxWidth: 460, margin: "0 auto",
+        }}>Let's design<br />your journey</h1>
+        <p style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: "clamp(13px, 3.5vw, 15px)", fontWeight: 400,
+          color: `${C.slate}70`, lineHeight: 1.65,
+          maxWidth: 380, margin: "16px auto 0",
+        }}>Choose how you'd like to plan — from a quick self-guided itinerary to a fully curated experience.</p>
       </div>
-      <h1 style={{
-        fontFamily: "'Cormorant Garamond', serif",
-        fontSize: "clamp(34px, 8vw, 44px)", fontWeight: 300, lineHeight: 1.15,
-        color: C.slate, marginBottom: 20, maxWidth: 520,
-      }}>Let's design<br />your journey</h1>
-      <p style={{
-        fontFamily: "'Quicksand', sans-serif",
-        fontSize: "clamp(14px, 3.8vw, 16px)", fontWeight: 400, color: `${C.slate}80`,
-        lineHeight: 1.7, maxWidth: 420, marginBottom: 48,
-      }}>A few questions to understand what you're seeking — so we can craft something that feels like it was made for you.</p>
-      <button onClick={onNext} style={{
-        fontFamily: "'Quicksand', sans-serif",
-        fontSize: 13, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase",
-        background: C.sage, border: "none", color: C.white,
-        padding: "16px 48px", borderRadius: 40, cursor: "pointer",
-        transition: "all 0.3s", boxShadow: `0 4px 24px ${C.sage}30`,
-        minHeight: 52, WebkitTapHighlightColor: "transparent",
-      }}>Begin</button>
-      <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, color: `${C.sage}60`, marginTop: 24 }}>Takes about 2 minutes</p>
+
+      {/* Three paths */}
+      <div style={{
+        display: "flex", flexDirection: "column", gap: 16,
+        marginTop: 36, width: "100%", maxWidth: 520,
+      }}>
+        {/* PRIMARY: DIY Path */}
+        <WelcomePathCard
+          icon={IconCircleDot}
+          subtitle="Self-Guided"
+          title="Plan My Own Trip"
+          description="Answer a few questions about what you're seeking and we'll craft a personalized itinerary — complete with trails, wellness practices, timing, and local picks."
+          buttonLabel="Start Planning — Free"
+          isPrimary={true}
+          tag="Most Popular"
+          tagColor={C.oceanTeal}
+          delay={200}
+          visible={visible}
+          onClick={onNext}
+        />
+
+        {/* SECONDARY ROW */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          {/* Group Trips */}
+          {[
+            {
+              icon: IconCrescent, color: C.sunSalmon, eyebrow: "Join a Group",
+              title: "Explore Group Trips",
+              desc: "Join others on curated Threshold Trips timed to nature's crescendos.",
+              cta: "View Trips", delay: "350ms",
+              onClick: () => navigate('/offerings'),
+            },
+            {
+              icon: IconTriangle, color: C.goldenAmber, eyebrow: "Designed for You",
+              title: "Expert Planning",
+              desc: "Work with a trip designer to build something completely bespoke.",
+              cta: "Learn More", delay: "450ms",
+              onClick: () => navigate('/offerings'),
+            },
+          ].map((card) => {
+            const Ic = card.icon;
+            return (
+              <div key={card.eyebrow}
+                onClick={card.onClick}
+                style={{
+                  background: C.white,
+                  border: `1px solid ${C.sage}15`,
+                  borderRadius: 18,
+                  padding: "22px 20px",
+                  cursor: "pointer",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(16px)",
+                  transitionDelay: card.delay,
+                  boxShadow: `0 2px 12px ${C.sage}06`,
+                  textAlign: "center",
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              >
+                <div style={{
+                  width: 44, height: 44, borderRadius: 12,
+                  background: `${card.color}10`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 14px",
+                }}>
+                  <Ic size={22} color={card.color} />
+                </div>
+                <div style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
+                  color: card.color, marginBottom: 6,
+                }}>{card.eyebrow}</div>
+                <h3 style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "clamp(17px, 4vw, 20px)", fontWeight: 400, lineHeight: 1.2,
+                  color: C.slate, margin: 0,
+                }}>{card.title}</h3>
+                <p style={{
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 12, fontWeight: 400,
+                  color: `${C.slate}60`, lineHeight: 1.5,
+                  margin: "8px 0 0",
+                }}>{card.desc}</p>
+                <div style={{
+                  marginTop: 14, display: "inline-flex", alignItems: "center", gap: 6,
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                  color: card.color,
+                }}>
+                  {card.cta} <IconArrowRight size={12} color={card.color} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Trust bar */}
       <div style={{
-        marginTop: 40, display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
-        borderTop: `1px solid ${C.sage}15`, paddingTop: 28, maxWidth: 420,
+        opacity: visible ? 1 : 0,
+        transition: "opacity 0.8s 0.6s",
+        borderTop: `1px solid ${C.sage}12`,
+        paddingTop: 24, marginTop: 32, width: "100%", maxWidth: 520,
+        textAlign: "center",
       }}>
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
           fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase",
-          color: `${C.sage}50`,
+          color: `${C.sage}45`, marginBottom: 12,
         }}>Powered by</div>
         <div style={{
-          display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px 18px",
+          display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px 16px",
         }}>
           {[
             "National Park Service Data",
             "Real-Time Weather",
             "Lunar Cycle Timing",
             "Local Partner Network",
-            "Wellness Practice Integration",
-            "Experienced Traveler Curation",
           ].map(item => (
             <span key={item} style={{
               fontFamily: "'Quicksand', sans-serif",
-              fontSize: 11, fontWeight: 500, color: `${C.slate}55`,
+              fontSize: 11, fontWeight: 500, color: `${C.slate}45`,
               display: "flex", alignItems: "center", gap: 5,
             }}>
-              <span style={{ width: 4, height: 4, borderRadius: "50%", background: `${C.oceanTeal}50`, flexShrink: 0 }} />
+              <span style={{ width: 3, height: 3, borderRadius: "50%", background: `${C.oceanTeal}40`, flexShrink: 0 }} />
               {item}
             </span>
           ))}
