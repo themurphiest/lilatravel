@@ -11,4 +11,8 @@ export const P = {
   kauai: "/images/kauai.jpg",
   lilaPainting: "/images/lilaPainting.jpg",
   ancientCedar: "/images/ancientCedar.jpg",
+  zionWatchman: "/images/zionWatchman.jpg",
+  zionNarrows: "/images/zionNarrows.jpg",
+  bryceCanyon: "/images/bryceCanyon.jpg",
+  capitolReef: "/images/capitolReef.jpg",
 };
