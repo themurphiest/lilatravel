@@ -89,19 +89,19 @@ function SnapCell({ label, value, sub, color = C.sage }) {
     <div style={{ padding: '14px 0' }}>
       <div style={{
         fontFamily: "'Quicksand', sans-serif",
-        fontSize: 9, fontWeight: 700,
+        fontSize: 10, fontWeight: 700,
         letterSpacing: '0.2em', textTransform: 'uppercase',
         color, marginBottom: 6,
       }}>{label}</div>
       <div style={{
         fontFamily: "'Quicksand', sans-serif",
-        fontSize: 17, fontWeight: 600,
+        fontSize: 18, fontWeight: 600,
         color: C.slate, lineHeight: 1.2,
       }}>{value}</div>
       {sub && (
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: 11, fontWeight: 500,
+          fontSize: 12, fontWeight: 500,
           color: `${C.slate}50`, marginTop: 3,
         }}>{sub}</div>
       )}
@@ -157,7 +157,7 @@ function DestinationSnapshot({ snapshot, celestial, weather }) {
     }}>
       <div style={{
         fontFamily: "'Quicksand', sans-serif",
-        fontSize: 9, fontWeight: 700,
+        fontSize: 10, fontWeight: 700,
         letterSpacing: '0.25em', textTransform: 'uppercase',
         color: `${C.sage}70`, marginBottom: 6,
       }}>Celestial Snapshot</div>
@@ -166,7 +166,7 @@ function DestinationSnapshot({ snapshot, celestial, weather }) {
       {snapshot?.seasonalNote && (
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: 13, fontWeight: 500,
+          fontSize: 14, fontWeight: 500,
           color: `${C.slate}70`, lineHeight: 1.55,
           paddingBottom: 14, ...divider,
         }}>{snapshot.seasonalNote}</div>
@@ -223,13 +223,13 @@ function DestinationSnapshot({ snapshot, celestial, weather }) {
           <div style={{ gridColumn: '1 / -1', padding: '14px 0 4px' }}>
             <div style={{
               fontFamily: "'Quicksand', sans-serif",
-              fontSize: 9, fontWeight: 700,
+              fontSize: 10, fontWeight: 700,
               letterSpacing: '0.2em', textTransform: 'uppercase',
               color: C.seaGlass, marginBottom: 6,
             }}>Pack</div>
             <div style={{
               fontFamily: "'Quicksand', sans-serif",
-              fontSize: 13, fontWeight: 500,
+              fontSize: 14, fontWeight: 500,
               color: `${C.slate}70`, lineHeight: 1.5,
             }}>{snapshot.packingHint}</div>
           </div>
@@ -254,14 +254,19 @@ function TripOverview({ days, onDayClick }) {
       padding: '24px 20px', marginBottom: 24,
     }}>
       <div style={{
-        fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700,
+        fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700,
         letterSpacing: '0.25em', textTransform: 'uppercase',
-        color: `${C.sage}70`, marginBottom: 18, paddingLeft: 2,
-      }}>Your Trip at a Glance</div>
+        color: `${C.sage}70`, marginBottom: 4, paddingLeft: 2,
+      }}>Trip Summary</div>
+      <div style={{
+        fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(16px, 4vw, 18px)',
+        fontWeight: 300, fontStyle: 'italic', color: `${C.slate}60`,
+        marginBottom: 20, paddingLeft: 2,
+      }}>Your day-by-day at a glance</div>
 
       <div style={{ position: 'relative' }}>
         <div style={{
-          position: 'absolute', left: 15, top: 8, bottom: 8,
+          position: 'absolute', left: 17, top: 8, bottom: 8,
           width: 2, background: `linear-gradient(180deg, ${C.sage}12, ${C.sage}06)`, borderRadius: 1,
         }} />
 
@@ -270,22 +275,22 @@ function TripOverview({ days, onDayClick }) {
           return (
             <button key={i} onClick={() => onDayClick(i)} style={{
               display: 'flex', alignItems: 'center', gap: 14, width: '100%',
-              padding: '10px 0', background: 'none', border: 'none', cursor: 'pointer',
+              padding: '11px 0', background: 'none', border: 'none', cursor: 'pointer',
               textAlign: 'left', WebkitTapHighlightColor: 'transparent', position: 'relative',
             }}>
               <div style={{
-                width: 30, height: 30, borderRadius: '50%',
+                width: 34, height: 34, borderRadius: '50%',
                 background: `${color}15`, border: `2px solid ${color}40`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0, zIndex: 1,
               }}>
-                <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 700, color }}>{i + 1}</span>
+                <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, fontWeight: 700, color }}>{i + 1}</span>
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color, marginBottom: 2 }}>{day.label}</div>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(15px, 4vw, 17px)', fontWeight: 500, color: C.slate, lineHeight: 1.3 }}>{day.title}</div>
+                <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color, marginBottom: 2 }}>{day.label}</div>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(17px, 4.5vw, 20px)', fontWeight: 500, color: C.slate, lineHeight: 1.3 }}>{day.title}</div>
                 {day.snapshot && (
-                  <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(10px, 2.8vw, 11px)', color: `${C.slate}50`, lineHeight: 1.4, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{day.snapshot}</div>
+                  <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(12px, 3.2vw, 13px)', color: `${C.slate}55`, lineHeight: 1.45, marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{day.snapshot}</div>
                 )}
               </div>
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke={`${C.sage}30`} strokeWidth="1.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
@@ -315,20 +320,20 @@ function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', u
       <div style={{ flex: 1, paddingBottom: isLast ? 0 : 16 }}>
         <button onClick={() => details && setOpen(!open)} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%', background: 'none', border: 'none', cursor: details ? 'pointer' : 'default', textAlign: 'left', padding: 0, gap: 8, WebkitTapHighlightColor: 'transparent' }}>
           <div>
-            {time && <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: dot, marginBottom: 3 }}>{time}</div>}
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(16px, 4.2vw, 19px)', fontWeight: 500, color: C.slate, lineHeight: 1.3 }}>{title}</div>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(12px, 3.2vw, 13px)', color: `${C.slate}70`, lineHeight: 1.5, marginTop: 4 }}>{summary}</div>
+            {time && <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: dot, marginBottom: 3 }}>{time}</div>}
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(18px, 4.5vw, 21px)', fontWeight: 500, color: C.slate, lineHeight: 1.3 }}>{title}</div>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(13px, 3.4vw, 14px)', color: `${C.slate}70`, lineHeight: 1.55, marginTop: 4 }}>{summary}</div>
           </div>
           {details && <Chevron open={open} color={`${C.sage}40`} />}
         </button>
         {details && (
           <Collapsible open={open}>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(12px, 3.2vw, 13px)', color: `${C.slate}90`, lineHeight: 1.7, padding: '8px 0' }}>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(13px, 3.4vw, 14px)', color: `${C.slate}90`, lineHeight: 1.7, padding: '8px 0' }}>
               {renderInlineBlock(details)}
               {resolvedUrl && (
                 <a href={resolvedUrl} target="_blank" rel="noopener noreferrer" style={{
                   display: 'inline-flex', alignItems: 'center', gap: 5,
-                  fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600,
+                  fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 600,
                   color: C.oceanTeal, textDecoration: 'none',
                   marginTop: 8, padding: '6px 12px',
                   background: `${C.oceanTeal}08`, borderRadius: 8,
@@ -362,12 +367,12 @@ function InlinePick({ category, pick, alternatives = [], isLast = false }) {
       {/* Timeline connector */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 20, flexShrink: 0 }}>
         <div style={{
-          width: 12, height: 12, borderRadius: '50%',
-          background: `${s.color}20`, border: `2.5px solid ${s.color}`,
+          width: 14, height: 14, borderRadius: '50%',
+          background: s.color, border: `2.5px solid ${C.white}`,
           flexShrink: 0, marginTop: 4,
-          boxShadow: `0 0 0 3px ${s.color}12`,
+          boxShadow: `0 0 0 3px ${s.color}30, 0 2px 8px ${s.color}20`,
         }} />
-        {!isLast && <div style={{ width: 1.5, flex: 1, minHeight: 24, background: `linear-gradient(180deg, ${s.color}20, ${C.sage}08)` }} />}
+        {!isLast && <div style={{ width: 1.5, flex: 1, minHeight: 24, background: `linear-gradient(180deg, ${s.color}25, ${C.sage}08)` }} />}
       </div>
 
       {/* Card body */}
@@ -376,64 +381,66 @@ function InlinePick({ category, pick, alternatives = [], isLast = false }) {
         marginBottom: 4,
       }}>
         <div style={{
-          background: `${s.color}05`,
-          border: `1.5px solid ${s.color}18`,
+          background: `${s.color}08`,
+          border: `2px solid ${s.color}25`,
           borderRadius: 14,
           overflow: 'hidden',
+          boxShadow: `0 2px 12px ${s.color}10`,
         }}>
           {/* Header bar */}
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '10px 14px',
-            borderBottom: `1px solid ${s.color}10`,
+            padding: '10px 16px',
+            background: `${s.color}10`,
+            borderBottom: `1px solid ${s.color}15`,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 12 }}>{s.icon}</span>
-              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
+              <span style={{ fontSize: 13 }}>{s.icon}</span>
+              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
             </div>
             <div style={{
-              display: 'flex', alignItems: 'center', gap: 3,
-              background: `${s.color}12`, padding: '2px 8px 2px 5px', borderRadius: 10,
+              display: 'flex', alignItems: 'center', gap: 4,
+              background: `${s.color}18`, padding: '3px 10px 3px 6px', borderRadius: 10,
             }}>
-              <Star size={8} color={s.color} />
-              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 8, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.color }}>Lila Pick</span>
+              <Star size={9} color={s.color} />
+              <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.color }}>Lila Pick</span>
             </div>
           </div>
 
           {/* Pick content */}
-          <div style={{ padding: '12px 14px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
+          <div style={{ padding: '14px 16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
               <LinkedName name={pick.name} url={pick.url}
-                style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(16px, 4.2vw, 19px)', fontWeight: 500, color: C.slate }} />
-              {(pick.url || lookupUrl(pick.name)) && <ExternalLinkIcon size={10} color={`${C.sage}50`} />}
+                style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(18px, 4.5vw, 21px)', fontWeight: 500, color: C.slate }} />
+              {(pick.url || lookupUrl(pick.name)) && <ExternalLinkIcon size={11} color={`${C.sage}50`} />}
             </div>
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(11px, 3vw, 12px)', color: `${C.slate}65`, lineHeight: 1.55 }}>{pick.why}</div>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(13px, 3.4vw, 14px)', color: `${C.slate}70`, lineHeight: 1.6 }}>{pick.why}</div>
           </div>
 
           {/* Alternatives toggle */}
           {alternatives.length > 0 && (
             <>
               <button onClick={() => setShowAlts(!showAlts)} style={{
-                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                padding: '8px 14px', background: `${s.color}06`,
-                border: 'none', borderTop: `1px solid ${s.color}08`,
+                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                padding: '10px 16px', background: `${s.color}08`,
+                border: 'none', borderTop: `1px solid ${s.color}12`,
                 cursor: 'pointer', WebkitTapHighlightColor: 'transparent',
               }}>
-                <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600, color: `${C.sage}70` }}>
+                <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, color: s.color }}>
                   {showAlts ? 'Hide options' : `${alternatives.length} other option${alternatives.length > 1 ? 's' : ''}`}
                 </span>
-                <Chevron open={showAlts} color={`${C.sage}40`} />
+                <Chevron open={showAlts} color={s.color} />
               </button>
               <Collapsible open={showAlts}>
-                <div style={{ padding: '2px 14px 10px' }}>
+                <div style={{ padding: '2px 16px 12px' }}>
                   {alternatives.map((alt, i) => (
-                    <div key={i} style={{ padding: '8px 0', borderBottom: i < alternatives.length - 1 ? `1px solid ${C.sage}08` : 'none' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
+                    <div key={i} style={{ padding: '10px 0', borderBottom: i < alternatives.length - 1 ? `1px solid ${C.sage}08` : 'none' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
                         <LinkedName name={alt.name} url={alt.url}
-                          style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(14px, 3.6vw, 16px)', fontWeight: 500, color: C.slate }} />
-                        {(alt.url || lookupUrl(alt.name)) && <ExternalLinkIcon size={9} color={`${C.sage}40`} />}
+                          style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(16px, 4vw, 18px)', fontWeight: 500, color: C.slate }} />
+                        {(alt.url || lookupUrl(alt.name)) && <ExternalLinkIcon size={10} color={`${C.sage}40`} />}
                       </div>
-                      <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(10px, 2.8vw, 11px)', color: `${C.slate}60`, lineHeight: 1.5 }}>{alt.why}</div>
+                      <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(12px, 3.2vw, 13px)', color: `${C.slate}65`, lineHeight: 1.55 }}>{alt.why}</div>
                     </div>
                   ))}
                 </div>
@@ -475,17 +482,17 @@ function DayCard({ day, isFirst = false, dayIndex = 0 }) {
           <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, fontWeight: 700, color: open ? color : `${C.sage}80`, transition: 'color 0.3s' }}>{dayIndex + 1}</span>
         </div>
         <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: open ? color : C.sage, marginBottom: 4, transition: 'color 0.3s' }}>{day.label}</div>
+          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: open ? color : C.sage, marginBottom: 4, transition: 'color 0.3s' }}>{day.label}</div>
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(20px, 5.5vw, 26px)', fontWeight: 400, color: C.slate, lineHeight: 1.2 }}>{day.title}</div>
           {!open && day.snapshot && (
-            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(11px, 3vw, 12px)', color: `${C.slate}55`, marginTop: 8, lineHeight: 1.6 }}>{day.snapshot}</div>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(12px, 3.2vw, 13px)', color: `${C.slate}55`, marginTop: 8, lineHeight: 1.6 }}>{day.snapshot}</div>
           )}
         </div>
         <Chevron open={open} />
       </button>
       <Collapsible open={open}>
         <div style={{ padding: '4px 22px 24px' }}>
-          {day.intro && <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(13px, 3.4vw, 14px)', color: `${C.slate}85`, lineHeight: 1.75, margin: '0 0 20px', fontStyle: 'italic' }}>{day.intro}</p>}
+          {day.intro && <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 'clamp(14px, 3.6vw, 15px)', color: `${C.slate}85`, lineHeight: 1.75, margin: '0 0 20px', fontStyle: 'italic' }}>{day.intro}</p>}
           {day.timeline && day.timeline.map((b, i) => (
             <TimelineBlock key={i} time={b.time} title={b.title} summary={b.summary}
               details={b.details} timeOfDay={b.timeOfDay} url={b.url}
@@ -667,7 +674,7 @@ export default function ItineraryResults() {
                 {itinerary.beforeYouGo.map((item, i) => (
                   <div key={i} style={{ display: 'flex', gap: 8, padding: '6px 0', borderBottom: i < itinerary.beforeYouGo.length - 1 ? `1px solid ${C.sage}08` : 'none' }}>
                     <span style={{ color: C.sage, flexShrink: 0, fontSize: 12 }}>•</span>
-                    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, color: C.slate, lineHeight: 1.6 }}>{renderInline(item)}</span>
+                    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 14, color: C.slate, lineHeight: 1.65 }}>{renderInline(item)}</span>
                   </div>
                 ))}
               </div>

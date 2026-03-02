@@ -51,6 +51,7 @@ When building a multi-day itinerary, follow this rhythm:
 - Build in "breathing room" — unscheduled time is not wasted time
 - Front-load the most demanding experiences when energy is highest
 - End the trip with something contemplative, not exhausting
+- **Earliest start time is 7:00 AM.** No timeline items before 7 AM unless the traveler explicitly requests sunrise activities. Even sunrise hikes should start no earlier than 7 AM for the meeting/departure time.
 
 ## OUTPUT FORMAT — CRITICAL
 

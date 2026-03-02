@@ -2,14 +2,166 @@
 // PAGE: HOMEPAGE
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Nav, Footer, FadeIn } from '@components';
 import { C } from '@data/brand';
 import { P } from '@data/photos';
 import { destinations } from '@data/destinations';
-import { journey, heroCallouts, magicMoments } from '@data/journey';
+import { heroCallouts, magicMoments } from '@data/journey';
 import { useDayCycle, interpolatePhase, useHorizontalSwipe } from '@utils/hooks';
+
+
+// ─── Shooting Stars ────────────────────────────────────────────────────────
+function ShootingStars({ opacity }) {
+  const [stars, setStars] = useState([]);
+  const idRef = useRef(0);
+  const timerRef = useRef(null);
+  const featureRef = useRef(null);
+  const isNight = opacity > 0.01;
+
+  const spawnStar = useCallback((feature = false) => {
+    const id = idRef.current++;
+
+    if (feature) {
+      // Classic long-arc shooting star — sweeps across a huge portion of the sky
+      const goRight = Math.random() > 0.5;
+      const baseAngle = (-15 + Math.random() * 30) * (Math.PI / 180); // very shallow
+      const angle = (goRight ? 0 : Math.PI) + baseAngle;
+      const speed = 600 + Math.random() * 300; // much farther
+      const dx = Math.cos(angle) * speed;
+      const dy = Math.sin(angle) * speed + Math.abs(speed * 0.08);
+      const duration = 1.4 + Math.random() * 0.6; // longer, more dramatic
+      const trailAngle = Math.atan2(dy, dx) * (180 / Math.PI) + 180;
+
+      setStars(prev => [...prev, {
+        id,
+        top: 8 + Math.random() * 25,
+        left: goRight ? (Math.random() * 30 + 5) : (Math.random() * 30 + 55),
+        dx, dy, duration,
+        size: 2.5,
+        peak: 1,
+        trailAngle,
+        trailLength: 70,
+        intensity: 1,
+        isFeature: true,
+      }]);
+
+      setTimeout(() => {
+        setStars(prev => prev.filter(s => s.id !== id));
+      }, duration * 1000 + 300);
+      return;
+    }
+
+    // Regular star
+    const baseAngle = (-40 + Math.random() * 80) * (Math.PI / 180);
+    const direction = Math.random() > 0.5 ? 0 : Math.PI;
+    const angle = direction + baseAngle;
+    const speed = 260 + Math.random() * 200;
+    const dx = Math.cos(angle) * speed;
+    const dy = Math.sin(angle) * speed + Math.abs(speed * 0.15);
+    const duration = 0.35 + Math.random() * 0.8;
+    const intensity = 0.4 + Math.random() * 0.6;
+    const size = intensity > 0.8 ? 2.5 : intensity > 0.55 ? 2 : 1.5;
+    const peak = intensity > 0.8 ? 1 : intensity > 0.55 ? 0.9 : 0.75;
+    const trailAngle = Math.atan2(dy, dx) * (180 / Math.PI) + 180;
+    const trailLength = intensity > 0.8 ? 35 : intensity > 0.55 ? 25 : 16;
+
+    setStars(prev => [...prev, {
+      id, top: Math.random() * 40 + 5, left: Math.random() * 85 + 7,
+      dx, dy, duration, size, peak, trailAngle, trailLength, intensity,
+      isFeature: false,
+    }]);
+
+    setTimeout(() => {
+      setStars(prev => prev.filter(s => s.id !== id));
+    }, duration * 1000 + 200);
+  }, []);
+
+  useEffect(() => {
+    if (!isNight) {
+      if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+      if (featureRef.current) { clearTimeout(featureRef.current); featureRef.current = null; }
+      return;
+    }
+
+    // Regular stars
+    const scheduleNext = () => {
+      timerRef.current = setTimeout(() => {
+        spawnStar();
+        scheduleNext();
+      }, 400 + Math.random() * 2800);
+    };
+
+    // Feature star — once or twice per night cycle
+    const scheduleFeature = () => {
+      featureRef.current = setTimeout(() => {
+        spawnStar(true);
+        scheduleFeature();
+      }, 8000 + Math.random() * 12000); // every 8-20s
+    };
+
+    spawnStar();
+    scheduleNext();
+    scheduleFeature();
+
+    return () => {
+      if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+      if (featureRef.current) { clearTimeout(featureRef.current); featureRef.current = null; }
+    };
+  }, [isNight, spawnStar]);
+
+  if (stars.length === 0 && !isNight) return null;
+
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", opacity: Math.min(opacity * 4, 1), pointerEvents: "none", zIndex: 1 }}>
+      {stars.map(s => (
+        <div key={s.id} style={{
+          position: "absolute",
+          top: `${s.top}%`,
+          left: `${s.left}%`,
+          animation: `shoot-move-${s.id} ${s.duration}s ease-out forwards`,
+        }}>
+          <style>{`
+            @keyframes shoot-move-${s.id} {
+              0% { transform: translate(0,0); opacity: 0; }
+              5% { opacity: ${s.peak * 0.5}; }
+              15% { opacity: ${s.peak}; }
+              50% { opacity: ${s.peak * 0.6}; }
+              85% { opacity: ${s.peak * 0.15}; }
+              100% { transform: translate(${s.dx}px, ${s.dy}px); opacity: 0; }
+            }
+          `}</style>
+          {/* Head */}
+          <div style={{
+            width: s.isFeature ? 3 : s.size,
+            height: s.isFeature ? 3 : s.size,
+            borderRadius: "50%",
+            background: "white",
+            boxShadow: s.isFeature
+              ? "0 0 8px 3px rgba(255,255,255,0.7)"
+              : s.intensity > 0.8
+              ? "0 0 4px 1px rgba(255,255,255,0.5)"
+              : "0 0 2px rgba(255,255,255,0.3)",
+          }} />
+          {/* Trail */}
+          <div style={{
+            position: "absolute",
+            top: (s.isFeature ? 3 : s.size) / 2,
+            left: (s.isFeature ? 3 : s.size) / 2,
+            width: s.trailLength,
+            height: s.isFeature ? 1.5 : 1,
+            background: s.isFeature
+              ? "linear-gradient(to left, rgba(255,255,255,0.7), rgba(255,255,255,0.2) 60%, transparent)"
+              : "linear-gradient(to left, rgba(255,255,255,0.5), transparent)",
+            transformOrigin: "0 0",
+            transform: `rotate(${s.trailAngle}deg)`,
+          }} />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 
 // ─── Destination Carousel ───────────────────────────────────────────────────
@@ -61,11 +213,44 @@ function DestCarousel() {
           display: "flex", flexDirection: "column", justifyContent: "center",
           borderTop: `1px solid ${C.stone}`, borderRight: `1px solid ${C.stone}`, borderBottom: `1px solid ${C.stone}`,
         }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 24 }}>
-            <div style={{ width: 20, height: 1, background: d.accent }} />
-            <span style={{ fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: d.accent }}>
-              {d.threshold}
-            </span>
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14, flexWrap: "wrap" }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                <div style={{ width: 20, height: 1, background: d.accent }} />
+                <span style={{ fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: d.accent }}>
+                  Golden Windows
+                </span>
+              </div>
+              {d.guideAvailable && (
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.seaGlass || "#7DB8A0" }} />
+                  <span style={{
+                    fontFamily: "'Quicksand'", fontSize: 13, fontWeight: 600,
+                    letterSpacing: "0.06em",
+                    color: C.seaGlass || "#7DB8A0",
+                  }}>
+                    Guide Available
+                  </span>
+                </div>
+              )}
+            </div>
+            {d.windows && (
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {d.windows.map((w, wi) => (
+                  <span key={wi} style={{
+                    fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 500,
+                    letterSpacing: "0.06em",
+                    color: "#7a90a0",
+                    padding: "4px 10px",
+                    border: `1px solid ${C.stone}`,
+                    lineHeight: 1,
+                    whiteSpace: "nowrap",
+                  }}>
+                    {w.season} · {w.months}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <h3 style={{
@@ -100,7 +285,7 @@ function DestCarousel() {
           onMouseEnter={e => { e.currentTarget.style.gap = "16px"; e.currentTarget.style.color = d.accent; e.currentTarget.style.borderColor = d.accent; }}
           onMouseLeave={e => { e.currentTarget.style.gap = "10px"; e.currentTarget.style.color = C.darkInk; e.currentTarget.style.borderColor = C.darkInk; }}
           >
-            Explore Free Guide <span>→</span>
+            Explore Free <span>→</span>
           </Link>
         </div>
       </div>
@@ -162,7 +347,7 @@ const approachBraids = [
     label: "Ancient Practices",
     icon: "◎",
     color: "#D4A853",
-    headline: "Wisdom traditions woven into every journey.",
+    headline: "Ancient wisdom shapes our path.",
     body: "Across centuries and continents, wisdom traditions have arrived at remarkably similar truths about how to live well. We draw from principles shared by Buddhist, Hindu, Taoist, Shinto, and Stoic philosophy — oneness, flow, presence, and reverence — and weave them into every journey through yoga, breathwork, meditation, and mindful movement.",
     details: [
       "Four guiding principles: Oneness, Flow, Presence, Reverence",
@@ -202,7 +387,7 @@ function ApproachSectionHome() {
     <section style={{ padding: "100px 0", background: C.darkInk }}>
       <div className="section-padded" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 52px" }}>
         <FadeIn>
-          <span className="eyebrow" style={{ color: C.skyBlue }}>Our Approach</span>
+          <span className="eyebrow" style={{ color: C.skyBlue }}>Ethos</span>
           <h2 style={{
             fontFamily: "'Quicksand', sans-serif",
             fontSize: "clamp(26px, 4vw, 44px)", fontWeight: 300,
@@ -328,7 +513,7 @@ function ApproachSectionHome() {
 
         <FadeIn delay={0.2}>
           <div style={{ paddingTop: 16 }}>
-            <Link to="/approach" className="underline-link underline-link-light">Explore Our Approach</Link>
+            <Link to="/ethos" className="underline-link underline-link-light">Explore Our Ethos</Link>
           </div>
         </FadeIn>
       </div>
@@ -340,7 +525,7 @@ function ApproachSectionHome() {
 // ─── Homepage ───────────────────────────────────────────────────────────────
 export default function HomePage() {
   const [scrollY, setScrollY] = useState(0);
-  const dayProgress = useDayCycle(30);
+  const dayProgress = useDayCycle(28);
 
   useEffect(() => {
     const h = () => setScrollY(window.scrollY);
@@ -420,11 +605,13 @@ export default function HomePage() {
               />
             ))}
           </svg>
+          <ShootingStars opacity={phase.stars} />
           <div style={{
             position: "absolute", left: "50%", top: `${phase.glowY * 100}%`,
             transform: "translate(-50%, -50%)", width: 400, height: 400, borderRadius: "50%",
             background: `radial-gradient(circle, ${phase.glowColor}${Math.round(phase.glowOpacity * 255).toString(16).padStart(2,"0")} 0%, transparent 70%)`,
             filter: "blur(40px)", pointerEvents: "none",
+            opacity: Math.max(0, 1 - phase.stars * 2),
           }} />
           <svg className="hero-mountains" style={{ position: "absolute", bottom: 0, width: "100%", height: "35%" }} viewBox="0 0 1440 360" preserveAspectRatio="none">
             <path d="M0,360 L0,210 L160,95 L320,170 L480,65 L640,145 L800,30 L960,115 L1120,55 L1280,130 L1440,85 L1440,360 Z" fill="rgba(12,28,42,0.92)" />
@@ -448,8 +635,8 @@ export default function HomePage() {
                   let dist = Math.abs(dayProgress - m.center);
                   if (dist > 0.5) dist = 1 - dist;
                   if (dist < 0.06) return 1;
-                  if (dist > 0.14) return 0;
-                  return Math.pow(1 - (dist - 0.06) / 0.08, 2);
+                  if (dist > 0.16) return 0;
+                  return Math.pow(1 - (dist - 0.06) / 0.10, 1.5);
                 })();
                 if (opacity <= 0) return null;
                 return (
@@ -503,7 +690,7 @@ export default function HomePage() {
                 fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 400,
                 color: "#5a6a78", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
-                <p style={{ marginBottom: 28 }}>Moments when we find our truest and lightest selves.<br />Not weighed down by the past or an imagined future.<br />Connected to the whole universe through now.</p>
+                <p style={{ marginBottom: 28 }}>Moments when we find our truest and lightest selves.<br />Not weighed down by the past or an imagined future.<br />Connected to the entire universe through right now.</p>
                 <p style={{ marginBottom: 32 }}>We're reminded of a truth we know, but often forget.<br />That life is not about conquering the mystery.<br />It's about learning to dance with it.</p>
                 <p style={{ marginBottom: 6 }}>
                   <span style={{ fontStyle: "italic", color: C.skyBlue }}>Līlā</span>
@@ -623,8 +810,8 @@ export default function HomePage() {
           <FadeIn>
             <div className="bento-grid">
               {[...destinations].sort((a, b) => {
-                const aHero = a.name === "Zion" || a.name === "Joshua Tree" ? 0 : 1;
-                const bHero = b.name === "Zion" || b.name === "Joshua Tree" ? 0 : 1;
+                const aHero = a.name === "Zion Canyon" || a.name === "Joshua Tree" ? 0 : 1;
+                const bHero = b.name === "Zion Canyon" || b.name === "Joshua Tree" ? 0 : 1;
                 return aHero - bHero;
               }).map((d, i) => {
                 const isHero = i < 2; // first two after sort are the hero tiles
@@ -648,12 +835,46 @@ export default function HomePage() {
                       position: "absolute", bottom: 0, left: 0, right: 0,
                       padding: isHero ? "36px 32px" : "24px 24px",
                     }}>
-                      <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                        <div style={{ width: 16, height: 1, background: d.accent }} />
-                        <span style={{
-                          fontFamily: "'Quicksand'", fontSize: 9, fontWeight: 700,
-                          letterSpacing: "0.22em", textTransform: "uppercase", color: d.accent,
-                        }}>{d.threshold}</span>
+                      <div style={{ marginBottom: 10 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
+                          <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                            <div style={{ width: 16, height: 1, background: d.accent }} />
+                            <span style={{
+                              fontFamily: "'Quicksand'", fontSize: 9, fontWeight: 700,
+                              letterSpacing: "0.22em", textTransform: "uppercase", color: d.accent,
+                            }}>Golden Windows</span>
+                          </div>
+                          {d.guideAvailable && (
+                            <div style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                              <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#7DB8A0" }} />
+                              <span style={{
+                                fontFamily: "'Quicksand'", fontSize: 11, fontWeight: 600,
+                                letterSpacing: "0.06em",
+                                color: "rgba(255,255,255,0.9)",
+                              }}>
+                                Guide Available
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        {d.windows && (
+                          <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                            {d.windows.map((w, wi) => (
+                              <span key={wi} style={{
+                                fontFamily: "'Quicksand'", fontSize: 8, fontWeight: 600,
+                                letterSpacing: "0.04em",
+                                color: "rgba(255,255,255,0.9)",
+                                padding: "3px 8px",
+                                background: "rgba(0,0,0,0.4)",
+                                backdropFilter: "blur(4px)",
+                                lineHeight: 1,
+                                whiteSpace: "nowrap",
+                              }}>
+                                {w.season} · {w.months}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <h3 style={{
                         fontFamily: "'Cormorant Garamond', serif",
@@ -684,39 +905,134 @@ export default function HomePage() {
       {/* ══ 4. OUR APPROACH — THREE BRAIDS ══════════════════════════════ */}
       <ApproachSectionHome />
 
-      {/* ══ 5. HOW IT WORKS ══════════════════════════════════════════════ */}
-      <section className="offerings-section" style={{ padding: "100px 0", background: C.warmWhite }}>
+      {/* ══ 5. TRAVEL YOUR WAY ═════════════════════════════════════════ */}
+      <section style={{ padding: "80px 0", background: C.cream }}>
         <div className="section-padded" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 52px" }}>
           <FadeIn>
-            <div style={{ marginBottom: 64, maxWidth: 580 }}>
-              <span className="eyebrow" style={{ color: "#9aabba" }}>How It Works</span>
+            <div style={{ textAlign: "center", marginBottom: 56 }}>
+              <span style={{
+                fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 700,
+                letterSpacing: "0.22em", textTransform: "uppercase",
+                color: C.sunSalmon, display: "block", marginBottom: 12,
+              }}>Your Path</span>
               <h2 style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 300, color: C.darkInk, lineHeight: 1.15, marginBottom: 14,
-              }}>From inspiration<br />to experience.</h2>
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "clamp(28px, 4vw, 42px)", fontWeight: 300,
+                color: C.darkInk, marginBottom: 16,
+              }}>Travel your way</h2>
               <p style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: "clamp(14px, 1.6vw, 17px)", fontWeight: 300, color: "#8aa0ad", lineHeight: 1.7,
-              }}>We handle the complexity so you can focus on being there.</p>
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 18, fontStyle: "italic", color: "#5a6a78",
+                maxWidth: 560, margin: "0 auto",
+              }}>
+                From free guides to fully custom itineraries — pick the level that fits.
+              </p>
             </div>
           </FadeIn>
-          <div className="journey-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0 }}>
-            {journey.map((j, i) => (
-              <FadeIn key={j.step} delay={i * 0.1}>
-                <div className="journey-card" style={{ borderTop: `2px solid ${i === 0 ? j.color : C.stone}` }}
-                  onMouseEnter={e => e.currentTarget.style.borderTopColor = j.color}
-                  onMouseLeave={e => e.currentTarget.style.borderTopColor = i === 0 ? j.color : C.stone}
-                >
-                  <span style={{ fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: j.color, display: "block", marginBottom: 12 }}>{j.label}</span>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 400, color: C.darkInk, lineHeight: 1.25, marginBottom: 14 }}>{j.title}</h3>
-                  <p style={{ fontSize: 13, lineHeight: 1.8, color: "#7a90a0" }}>{j.desc}</p>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gap: 1,
+            background: C.stone,
+            border: `1px solid ${C.stone}`,
+          }}>
+            {[
+              {
+                icon: "☐", label: "DIY", color: C.skyBlue,
+                title: "Explore the Guide",
+                desc: "Browse our curated picks for free — where to stay, what to hike, where to eat, and when the light is best.",
+                cta: "Explore Free", ctaLink: "/destinations",
+                detail: "Free · No account needed",
+              },
+              {
+                icon: "◎", label: "Plan a Trip", color: C.oceanTeal,
+                title: "Trip Planner",
+                desc: "Turn your favorites into a day-by-day itinerary with booking links, permit timing, and offline access.",
+                cta: "Unlock — $39", ctaLink: "/plan",
+                detail: "One-time purchase · Offline access",
+              },
+              {
+                icon: "☾", label: "Join a Group", color: C.sunSalmon,
+                title: "Threshold Trips",
+                desc: "Small group journeys timed to equinoxes, solstices, and natural crescendos. Guided, curated, eight travelers maximum.",
+                cta: "View Trips", ctaLink: "/group-trips",
+                detail: "From $895 per person",
+              },
+              {
+                icon: "△", label: "Designed for You", color: C.goldenAmber,
+                title: "Custom Itinerary",
+                desc: "Tell us your dates, group, and vibe. A real person builds a complete itinerary around your trip.",
+                cta: "Start — From $199", ctaLink: "/contact",
+                detail: "Personalized · Human-crafted",
+              },
+            ].map((o, i) => (
+              <FadeIn key={o.label} delay={i * 0.08}>
+                <div style={{
+                  background: "white",
+                  padding: "36px 28px 32px",
+                  display: "flex", flexDirection: "column",
+                  minHeight: 420,
+                }}>
+                  <div style={{
+                    fontFamily: "serif", fontSize: 28, color: o.color,
+                    marginBottom: 24, lineHeight: 1,
+                  }}>{o.icon}</div>
+
+                  <span style={{
+                    fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 700,
+                    letterSpacing: "0.22em", textTransform: "uppercase",
+                    color: o.color, display: "block", marginBottom: 12,
+                  }}>{o.label}</span>
+
+                  <h3 style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: 26, fontWeight: 400, color: C.darkInk,
+                    lineHeight: 1.2, marginBottom: 16,
+                  }}>{o.title}</h3>
+
+                  <p style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: 15, fontStyle: "italic",
+                    color: "#5a6a78", lineHeight: 1.8,
+                    flex: 1,
+                  }}>{o.desc}</p>
+
+                  <div style={{ marginTop: 24 }}>
+                    <Link
+                      to={o.ctaLink}
+                      style={{
+                        display: "inline-block",
+                        padding: "12px 24px",
+                        border: `1.5px solid ${o.color}`,
+                        fontFamily: "'Quicksand'", fontSize: 10, fontWeight: 700,
+                        letterSpacing: "0.18em", textTransform: "uppercase",
+                        color: o.color, textDecoration: "none",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={e => {
+                        e.target.style.background = o.color;
+                        e.target.style.color = "white";
+                      }}
+                      onMouseLeave={e => {
+                        e.target.style.background = "transparent";
+                        e.target.style.color = o.color;
+                      }}
+                    >{o.cta}</Link>
+                  </div>
+
+                  <p style={{
+                    fontFamily: "'Quicksand'", fontSize: 11,
+                    color: "#8a96a3", marginTop: 12,
+                  }}>{o.detail}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
-          <FadeIn delay={0.5}>
-            <div style={{ marginTop: 48 }}>
-              <Link to="/how-it-works" className="underline-link">Learn More</Link>
+
+          <FadeIn delay={0.4}>
+            <div style={{ marginTop: 48, textAlign: "center" }}>
+              <Link to="/ways-to-travel" className="underline-link">Learn More</Link>
             </div>
           </FadeIn>
         </div>
@@ -752,7 +1068,7 @@ export default function HomePage() {
               }}>We'll show you the way.</p>
               <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap" }}>
                 <Link to="/destinations" className="underline-link underline-link-light">Explore Destinations</Link>
-                <Link to="/how-it-works" className="underline-link underline-link-light">Plan a Custom Trip</Link>
+                <Link to="/ways-to-travel" className="underline-link underline-link-light">Plan a Custom Trip</Link>
                 <Link to="/contact" className="underline-link underline-link-light">Contact Our Experts</Link>
               </div>
             </div>

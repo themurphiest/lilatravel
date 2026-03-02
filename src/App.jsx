@@ -9,9 +9,10 @@
 //   /destinations                  → Destinations landing (grid of all destinations)
 //   /destinations/zion-canyon      → Dedicated Zion guide (custom page)
 //   /destinations/:slug            → Generic destination guide (auto-generated)
-//   /approach                      → Our Approach (three braids + philosophy)
-//   /approach/:slug                → Individual philosophy detail
-//   /how-it-works                  → How It Works (ways to get started)
+//   /group-trips                   → Group Trips landing (Threshold Trips)
+//   /ethos                         → Ethos (three braids + philosophy)
+//   /ethos/:slug                   → Individual philosophy detail
+//   /ways-to-travel                → Ways to Travel (how to get started)
 //   /trips/:slug                   → Individual Threshold Trip detail
 //   /itineraries/utah              → Utah National Parks itinerary (PWA trip guide)
 //   /contact                       → Contact page
@@ -40,7 +41,7 @@
 //
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { C } from '@data/brand';
 
@@ -48,12 +49,13 @@ import { C } from '@data/brand';
 import HomePage from '@pages/Home';
 import DestinationsPage from '@pages/Destinations';
 import DestinationGuide from '@pages/DestinationGuide';
-import ApproachPage from '@pages/Approach';
-import RitualDetail from '@pages/RitualDetail';  // TODO: rename file to ApproachDetail.jsx
-import HowItWorksPage from '@pages/HowItWorks';
+import EthosPage from '@pages/Approach';           // TODO: rename file to Ethos.jsx
+import EthosDetail from '@pages/RitualDetail';     // TODO: rename file to EthosDetail.jsx
+import WaysToTravelPage from '@pages/HowItWorks';  // TODO: rename file to WaysToTravel.jsx
 import ContactPage from '@pages/Contact';
 import PlanMyTrip from '@pages/PlanMyTrip';
 import NotFound from '@pages/NotFound';
+import GroupTripsPage from '@pages/GroupTrips';
 import TripPage from '@pages/trips/TripPage';
 import ItineraryResults from './pages/ItineraryResults';
 
@@ -93,7 +95,7 @@ export default function App() {
 
           {/* Trip Planner — full-screen onboarding (no Nav/Footer) */}
           <Route path="/plan" element={<PlanMyTrip />} />
-<Route path="/itinerary" element={<ItineraryResults />} />
+          <Route path="/itinerary" element={<ItineraryResults />} />
 
           {/* Destinations */}
           <Route path="/destinations" element={<DestinationsPage />} />
@@ -103,9 +105,12 @@ export default function App() {
           {/* ↓ Generic guide for destinations without a dedicated page */}
           <Route path="/destinations/:slug" element={<DestinationGuide />} />
 
-          {/* Our Approach */}
-          <Route path="/approach" element={<ApproachPage />} />
-          <Route path="/approach/:slug" element={<RitualDetail />} />
+          {/* Group Trips */}
+          <Route path="/group-trips" element={<GroupTripsPage />} />
+
+          {/* Ethos (formerly "Our Approach") */}
+          <Route path="/ethos" element={<EthosPage />} />
+          <Route path="/ethos/:slug" element={<EthosDetail />} />
 
           {/* Trips (Threshold Trip detail pages) */}
           <Route path="/trips/:slug" element={<TripPage />} />
@@ -115,9 +120,16 @@ export default function App() {
           {/* <Route path="/itineraries/big-sur" element={<BigSurItinerary />} /> */}
           {/* <Route path="/itineraries/zion-autumn" element={<ZionAutumnItinerary />} /> */}
 
+          {/* Ways to Travel (formerly "How It Works") */}
+          <Route path="/ways-to-travel" element={<WaysToTravelPage />} />
+
           {/* Other pages */}
-          <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/contact" element={<ContactPage />} />
+
+          {/* ─── Redirects from old routes ───────────────────────────────── */}
+          <Route path="/approach" element={<Navigate to="/ethos" replace />} />
+          <Route path="/approach/:slug" element={<Navigate to="/ethos" replace />} />
+          <Route path="/how-it-works" element={<Navigate to="/ways-to-travel" replace />} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />

@@ -12,8 +12,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Nav, Footer, FadeIn, Breadcrumb } from '@components';
+import TripCard from '@components/TripCard';
 import { C } from '@data/brand';
 import { P } from '@data/photos';
+import { getTripsByDestination } from '@data/trips';
 
 
 // ─── Guide-Specific Components ───────────────────────────────────────────────
@@ -674,7 +676,7 @@ function TimingAlertCapture() {
               fontSize: 15, fontWeight: 300, fontStyle: "italic",
               color: "#5a7080", lineHeight: 1.6,
               maxWidth: 420, margin: "0 auto 20px",
-            }}>We track conditions, seasonal windows, and threshold moments — and let you know when it's time to go.</p>
+            }}>We track conditions, seasonal windows, and earth rhythms — and let you know when it's time to go.</p>
             <div style={{
               display: "flex", gap: 8, maxWidth: 380,
               margin: "0 auto", flexWrap: "wrap", justifyContent: "center",
@@ -886,7 +888,7 @@ export default function ZionGuide() {
                     </svg>
                   }
                   label="Join a Group"
-                  title="Threshold Trips"
+                  title="Group Trips"
                   description="Small group journeys timed to natural crescendos. Guided, curated, eight travelers maximum."
                   cta="View Trips"
                   accent={C.sunSalmon}
@@ -1316,59 +1318,48 @@ export default function ZionGuide() {
           <Divider />
 
           {/* ══════════════════════════════════════════════════════════════ */}
-          {/* THRESHOLD EXPERIENCES (expanded)                              */}
+          {/* GROUP TRIPS — ZION                                             */}
           {/* ══════════════════════════════════════════════════════════════ */}
           <section id="threshold-trips" style={{ padding: "48px 0" }}>
             <FadeIn>
               <SectionIcon type="threshold" />
-              <SectionLabel>Threshold Trips</SectionLabel>
-              <SectionTitle>Join a curated journey</SectionTitle>
+              <SectionLabel>Group Trips</SectionLabel>
+              <SectionTitle>Tuned to Earth Rhythms</SectionTitle>
               <SectionSub>Small group trips timed to natural crescendos. Expert guides, meaningful connection, transformative terrain. Eight travelers maximum.</SectionSub>
             </FadeIn>
 
-            <FadeIn delay={0.08}>
-              <ThresholdTripCard
-                title="Autumn Equinox in Zion"
-                dates="September 20–24"
-                duration="5 days"
-                description="The cottonwoods begin their turn. Light shifts from summer's intensity to something golden and forgiving. A small group, guided through canyon trails at dawn, evening ceremonies as day and night find balance. The land at its most generous."
-                spotsLeft="6"
-              />
-            </FadeIn>
-
-            <FadeIn delay={0.14}>
-              <ThresholdTripCard
-                title="Winter Solstice — Canyon Light"
-                dates="December 19–22"
-                duration="4 days"
-                description="The shortest days cast the longest shadows. Snow dusts the upper walls. We gather at the stillest point of the year — morning breathwork in frozen air, evening fires under the darkest skies. A journey inward."
-                spotsLeft="8"
-              />
-            </FadeIn>
+            {/* Zion-specific trip — uses shared TripCard */}
+            {(() => {
+              const zionTrips = getTripsByDestination("Zion");
+              return zionTrips.length > 0 ? (
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: zionTrips.length > 1 ? "repeat(2, 1fr)" : "1fr",
+                  gap: 24,
+                  maxWidth: zionTrips.length === 1 ? 400 : "100%",
+                }}>
+                  {zionTrips.map((trip, i) => (
+                    <FadeIn key={trip.slug} delay={0.08 + i * 0.06}>
+                      <TripCard trip={trip} />
+                    </FadeIn>
+                  ))}
+                </div>
+              ) : null;
+            })()}
 
             <FadeIn delay={0.2}>
-              <ThresholdTripCard
-                title="Desert Bloom — Spring Awakening"
-                dates="Late March (exact dates TBD)"
-                duration="4 days"
-                description="After winter rain, the desert erupts. Wildflowers carpet the canyon floor, cacti crown themselves, and the air smells sweet. Timing is everything — we watch the conditions and go when the land says go."
-                accent={C.seaGlass}
-              />
-            </FadeIn>
-
-            <FadeIn delay={0.24}>
               <div style={{
                 padding: "20px 24px",
                 border: `1px solid ${C.stone}`,
                 textAlign: "center",
-                marginTop: 4,
+                marginTop: 16,
               }}>
                 <p style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: 15, fontWeight: 300, fontStyle: "italic",
                   color: "#5a7080", lineHeight: 1.6, margin: "0 0 16px",
-                }}>Want to be first to know when new Threshold Trips are announced?</p>
-                <button style={{
+                }}>See all upcoming group trips across every destination.</p>
+                <Link to="/group-trips" style={{
                   padding: "10px 24px",
                   background: "transparent",
                   border: `1.5px solid ${C.sunSalmon}`,
@@ -1376,11 +1367,13 @@ export default function ZionGuide() {
                   fontFamily: "'Quicksand', sans-serif",
                   fontSize: 10, fontWeight: 700,
                   letterSpacing: "0.18em", textTransform: "uppercase",
-                  cursor: "pointer", transition: "all 0.25s",
+                  textDecoration: "none",
+                  transition: "all 0.25s",
+                  display: "inline-block",
                 }}
                 onMouseEnter={e => { e.currentTarget.style.background = C.sunSalmon; e.currentTarget.style.color = "#fff"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = C.sunSalmon; }}
-                >Get Threshold Alerts</button>
+                >View All Group Trips</Link>
               </div>
             </FadeIn>
           </section>

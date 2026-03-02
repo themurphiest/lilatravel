@@ -8,8 +8,9 @@ import { C } from '@data/brand';
 export default function Footer() {
   const links = [
     { label: "Destinations", to: "/destinations" },
-    { label: "Our Approach", to: "/approach" },
-    { label: "How It Works", to: "/how-it-works" },
+    { label: "Group Trips", to: "/group-trips" },
+    { label: "Ethos", to: "/ethos" },
+    { label: "Ways to Travel", to: "/ways-to-travel" },
     { label: "Contact", to: "/contact" },
   ];
 
