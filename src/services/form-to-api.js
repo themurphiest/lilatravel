@@ -14,7 +14,7 @@
  * {
  *   destination: 'zion',
  *   month: 'october',           // NEW — from month selector step
- *   intentions: ['peace'],
+ *   intentions: ['reconnect'],
  *   movement: 50,               // slider 0-100
  *   pacing: 50,                 // slider 0-100
  *   range: 35,                  // slider 0-100
@@ -51,13 +51,12 @@ function movementToEnergy(movement = 50) {
   return 'adventurous';
 }
 
-// Map range slider (0-100) to stay style
-function rangeToStayStyle(range = 35) {
-  // Lower range = rooted (one base), higher = more mobile
-  // This is a rough heuristic — can refine
-  if (range < 35) return 'rooted';
-  if (range < 65) return 'rooted'; // even "flexible" travelers still need a base
-  return 'rooted'; // for now, always rooted since we're building single-destination guides
+// Map range slider (0-100) to exploration territory label
+function rangeToTerritory(range = 35) {
+  if (range < 25) return 'rooted';
+  if (range < 50) return 'flexible';
+  if (range < 75) return 'nomadic';
+  return 'full-drift';
 }
 
 // Map budget ID to API budget tier
@@ -111,10 +110,10 @@ function practicesToInterests(practices = [], intentions = [], movement = 50) {
 // Map intentions to a human-readable intention string
 function intentionsToString(intentions = []) {
   const intentionMap = {
-    peace: 'find stillness and quiet the noise',
-    transformation: 'be challenged and come back different',
-    connection: 'deepen bonds and open up to others',
-    liberation: 'let go and feel completely free',
+    reconnect: 'reconnect with others and feel part of something bigger',
+    tune_in: 'get quiet enough to hear myself again',
+    slow_down: 'slow down and stop rushing',
+    light_up: 'chase the moments that make me feel alive',
   };
 
   if (intentions.length === 0) return 'Experience something meaningful.';
@@ -151,9 +150,11 @@ export function translateFormToApi(formData, userName = 'Traveler') {
         formData.movement
       ),
       energy: movementToEnergy(formData.movement),
-      stayStyle: rangeToStayStyle(formData.range),
+      stayStyle: 'rooted', // No accommodation step yet — default for single-destination guides
+      territory: rangeToTerritory(formData.range),
       budget: budgetToApi(formData.budget),
       intention: intentionsToString(formData.intentions),
+      intentionIds: formData.intentions || [],
       // Pass through raw form data for additional context
       duration: formData.duration || 4,
       practiceLevel: formData.practiceLevel ?? 1,

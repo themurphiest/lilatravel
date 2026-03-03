@@ -246,10 +246,10 @@ const DESTINATIONS = [
 ];
 
 const INTENTIONS = [
-  { id: "peace", label: "Peace", desc: "Quiet the noise. Find center.", icon: IconEnso, color: C.oceanTeal },
-  { id: "transformation", label: "Transformation", desc: "Burn through the old. Come back different.", icon: IconFlame, color: C.sunSalmon },
-  { id: "connection", label: "Connection", desc: "Deepen bonds. Open up.", icon: IconMagatama, color: C.goldenAmber },
-  { id: "reset", label: "Reset", desc: "Step away from everything. Come back clear.", icon: IconUnalome, color: C.skyBlue },
+  { id: "reconnect", label: "Reconnect", desc: "Remember you're part of something bigger.", icon: IconMagatama, color: C.goldenAmber },
+  { id: "tune_in", label: "Tune In", desc: "Get quiet enough to hear yourself again.", icon: IconEnso, color: C.oceanTeal },
+  { id: "slow_down", label: "Slow Down", desc: "Give yourself permission to stop rushing.", icon: IconUnalome, color: C.skyBlue },
+  { id: "light_up", label: "Light Up", desc: "Chase the moments that make you feel alive.", icon: IconFlame, color: C.sunSalmon },
 ];
 
 
@@ -307,21 +307,19 @@ const PERSONAS = [
     color: C.oceanTeal, icon: IconEnso,
     match: (d) => {
       const pl = d.practiceLevel ?? 1;
-      
-      
-      const seeksPeace = (d.intentions || []).some(i => ["peace","reset"].includes(i));
-      return (pl >= 3 && seeksPeace) ? 1 : (pl >= 2 && seeksPeace) ? 0.7 : (pl >= 3) ? 0.6 : 0;
+      const seeksStillness = (d.intentions || []).some(i => ["tune_in","slow_down"].includes(i));
+      return (pl >= 3 && seeksStillness) ? 1 : (pl >= 2 && seeksStillness) ? 0.7 : (pl >= 3) ? 0.6 : 0;
     },
   },
   {
     id: "tapasvin", name: "The Tāpasvin", subtitle: "The One Who Burns",
-    desc: "You came to be challenged. Cold water, high ridgelines, dawn summits — you seek transformation through intensity. We'll push you to your edge and give you the space to integrate what you find there.",
+    desc: "You came to be challenged. Cold water, high ridgelines, dawn summits — you light up when you're pushed to your edge. We'll take you there and give you the space to integrate what you find.",
     color: C.sunSalmon, icon: IconFlame,
     match: (d) => {
       const movement = d.movement ?? 50;
-      const seeksTransformation = (d.intentions || []).includes("transformation");
+      const seeksLightUp = (d.intentions || []).includes("light_up");
       const highPractice = (d.practiceLevel ?? 1) >= 2;
-      return (movement > 65 && seeksTransformation) ? 1 : (movement > 60 && highPractice) ? 0.7 : (movement > 70) ? 0.5 : 0;
+      return (movement > 65 && seeksLightUp) ? 1 : (movement > 60 && highPractice) ? 0.7 : (movement > 70) ? 0.5 : 0;
     },
   },
   {
@@ -331,9 +329,9 @@ const PERSONAS = [
     match: (d) => {
       const pacing = d.pacing ?? 50;
       const balanced = pacing > 30 && pacing < 70;
-      const seeksConnection = (d.intentions || []).includes("connection");
+      const seeksReconnect = (d.intentions || []).includes("reconnect");
       const moderate = (d.movement ?? 50) > 30 && (d.movement ?? 50) < 70;
-      return (balanced && moderate) ? 0.8 : (seeksConnection && balanced) ? 0.7 : 0;
+      return (balanced && moderate) ? 0.8 : (seeksReconnect && balanced) ? 0.7 : 0;
     },
   },
   {
@@ -342,9 +340,9 @@ const PERSONAS = [
     color: C.skyBlue, icon: IconMountain,
     match: (d) => {
       const slowPace = (d.pacing ?? 50) < 40;
-      const seeksPeace = (d.intentions || []).some(i => ["peace","reset"].includes(i));
+      const seeksStillness = (d.intentions || []).some(i => ["tune_in","slow_down"].includes(i));
       const deepPractice = (d.practiceLevel ?? 1) >= 2;
-      return (slowPace && seeksPeace) ? 1 : (slowPace && deepPractice) ? 0.8 : seeksPeace ? 0.5 : 0;
+      return (slowPace && seeksStillness) ? 1 : (slowPace && deepPractice) ? 0.8 : seeksStillness ? 0.5 : 0;
     },
   },
   {
@@ -354,8 +352,8 @@ const PERSONAS = [
     match: (d) => {
       const fullPace = (d.pacing ?? 50) > 60;
       const active = (d.movement ?? 50) > 55;
-      const seeksTransformation = (d.intentions || []).includes("transformation");
-      return (fullPace && active) ? 0.9 : (active && seeksTransformation) ? 0.6 : 0;
+      const seeksLightUp = (d.intentions || []).includes("light_up");
+      return (fullPace && active) ? 0.9 : (active && seeksLightUp) ? 0.6 : 0;
     },
   },
 ];
@@ -1331,9 +1329,9 @@ function StepProfile({ data, onBack, onUnlock, generating }) {
   const radarValues = {
     movement: (data.movement ?? 50) / 100,
     wellness: Math.min(1, (practiceLevel / 3) * 0.7 + ((data.practices?.length || 0) / 5) * 0.3),
-    adventure: Math.min(1, ((data.intentions || []).includes("transformation") ? 0.5 : 0.2) + ((data.range ?? 35) / 100) * 0.5),
-    stillness: (data.intentions || []).some(i => ["peace","reset"].includes(i)) ? 0.85 : (data.pacing ?? 50) < 40 ? 0.7 : 0.3,
-    social: (data.intentions || []).includes("connection") ? 0.85 : 0.4,
+    adventure: Math.min(1, ((data.intentions || []).includes("light_up") ? 0.5 : 0.2) + ((data.range ?? 35) / 100) * 0.5),
+    stillness: (data.intentions || []).some(i => ["tune_in","slow_down"].includes(i)) ? 0.85 : (data.pacing ?? 50) < 40 ? 0.7 : 0.3,
+    social: (data.intentions || []).includes("reconnect") ? 0.85 : 0.4,
     luxury: data.budget === "noLimits" ? 1 : data.budget === "premium" ? 0.75 : data.budget === "balanced" ? 0.5 : 0.3,
   };
 

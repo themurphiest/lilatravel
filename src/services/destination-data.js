@@ -406,8 +406,12 @@ ${context.liveData.campgrounds ? `### Campground Data\n${context.liveData.campgr
 
 - **Name**: ${context.traveler.name || 'Traveler'}
 - **Dates**: ${context.traveler.dates?.start ? `${context.traveler.dates.start} to ${context.traveler.dates.end}` : `Month: ${context.traveler.month || 'Not specified'}`}
+- **Trip length**: ${context.traveler.duration || 4} days
 - **Wellness interests**: ${context.traveler.wellness?.join(', ') || context.traveler.interests?.map(i => i).join(', ') || 'Not specified'}
 - **Energy level**: ${context.traveler.energy}
+- **Pacing**: ${context.traveler.pacing != null ? (context.traveler.pacing < 25 ? 'Spacious (few activities, lots of open time)' : context.traveler.pacing < 50 ? 'Unhurried (moderate structure, built-in rest)' : context.traveler.pacing < 75 ? 'Balanced (mix of activity and downtime)' : 'Full (packed days, maximize every moment)') : 'Balanced'}
+- **Practice level**: ${context.traveler.practiceLevel != null ? ['Curious beginner', 'Dabbler', 'Regular practitioner', 'Dedicated practitioner'][context.traveler.practiceLevel] || 'Curious beginner' : 'Not specified'}
+- **Territory**: ${context.traveler.territory || 'rooted'}
 - **Stay style**: ${context.traveler.stayStyle || 'Not specified'}
 - **Budget**: ${context.traveler.budget}
 - **Group**: ${context.traveler.groupType}${context.traveler.groupSize > 1 ? ` (${context.traveler.groupSize} people)` : ''}

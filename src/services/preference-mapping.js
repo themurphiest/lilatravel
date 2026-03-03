@@ -263,6 +263,27 @@ export function generateMatchingInstructions(profile) {
     );
   }
 
+  // Territory / exploration range mapping
+  if (profile.territory) {
+    const territoryInstructions = {
+      rooted:
+        `TERRITORY: Rooted. The traveler wants to go deep in one area rather than cover ground. ` +
+        `Keep all activities within a tight radius. Prioritize depth over breadth — revisit the same trail at different times of day, explore one neighborhood thoroughly.`,
+      flexible:
+        `TERRITORY: Flexible. The traveler is open to exploring moderately beyond a home base. ` +
+        `Include some variety in locations but don't require long drives between activities.`,
+      nomadic:
+        `TERRITORY: Nomadic. The traveler wants to cover ground and see different areas. ` +
+        `Include scenic drives, multiple zones of the park/region, and variety in landscapes across the trip.`,
+      'full-drift':
+        `TERRITORY: Full Drift. The traveler wants maximum geographic range. ` +
+        `Design the trip to move through the full breadth of the destination. Include the far-flung spots most visitors skip.`,
+    };
+    if (territoryInstructions[profile.territory]) {
+      instructions.push(territoryInstructions[profile.territory]);
+    }
+  }
+
   // Stay style mapping
   if (profile.stayStyle) {
     instructions.push(
@@ -329,13 +350,95 @@ export function generateMatchingInstructions(profile) {
     );
   }
 
-  // Intention — free text, passed directly to Claude
+  // Duration — how many days to generate
+  if (profile.duration) {
+    instructions.push(
+      `TRIP LENGTH: ${profile.duration} days. ` +
+      `Generate exactly ${profile.duration} days in the itinerary. ` +
+      `Day 1 should begin with arrival/settling in. The final day should end with a contemplative closing, not exhaustion.`
+    );
+  }
+
+  // Pacing — how packed each day should be
+  if (profile.pacing != null) {
+    const p = profile.pacing;
+    let pacingInstruction;
+    if (p < 25) {
+      pacingInstruction =
+        `PACING: Spacious. This traveler wants open, unhurried days. ` +
+        `Limit to 2–3 scheduled activities per day. Include long unstructured blocks, late mornings, and extended meals. ` +
+        `Leave breathing room between activities — white space is a feature, not a bug.`;
+    } else if (p < 50) {
+      pacingInstruction =
+        `PACING: Unhurried. This traveler prefers a relaxed rhythm with moderate structure. ` +
+        `Plan 3–4 activities per day with comfortable transitions. Include at least one open block per day for spontaneity or rest.`;
+    } else if (p < 75) {
+      pacingInstruction =
+        `PACING: Balanced. A comfortable mix of activity and downtime. ` +
+        `Plan 4–5 activities per day. Keep transitions reasonable but the day can be full. Include one restful period per day.`;
+    } else {
+      pacingInstruction =
+        `PACING: Full. This traveler wants packed, maximized days. ` +
+        `Plan 5–6 activities per day. Early starts are welcome. Fill the schedule — they came to do as much as possible.`;
+    }
+    instructions.push(pacingInstruction);
+  }
+
+  // Practice level — wellness experience depth
+  if (profile.practiceLevel != null && profile.practiceLevel > 0) {
+    const levels = [
+      null,
+      `PRACTICE LEVEL: Dabbler. The traveler has some exposure to wellness practices but is not deeply experienced. ` +
+      `Keep wellness recommendations approachable and well-explained. Avoid jargon. Guided sessions are preferred over self-directed.`,
+      `PRACTICE LEVEL: Regular practitioner. The traveler has an established wellness practice. ` +
+      `Recommend substantive experiences — longer meditation sits, intermediate-level yoga, meaningful breathwork sessions. They don't need hand-holding but appreciate depth.`,
+      `PRACTICE LEVEL: Dedicated practitioner. Wellness is central to this traveler's life. ` +
+      `Recommend advanced and immersive experiences — silent retreats, challenging pranayama, extended practice sessions, teachers over classes. They want the real thing, not the tourist version.`,
+    ];
+    if (levels[profile.practiceLevel]) {
+      instructions.push(levels[profile.practiceLevel]);
+    }
+  }
+
+  // Intention — structured mapping with behavioral signals
   if (profile.intention) {
     instructions.push(
       `INTENTION: The traveler described their intention as: "${profile.intention}". ` +
       `Let this shape the overall tone, pacing, and emphasis of the itinerary. ` +
       `Weave this intention into the narrative naturally.`
     );
+  }
+
+  // Structured intention signals (from raw intention IDs if available)
+  if (profile.intentionIds?.length > 0) {
+    const signals = {
+      reconnect:
+        `RECONNECT signal: Prioritize shared and communal experiences — group yoga, shared meals, partner hikes, community gatherings. ` +
+        `Choose lodging that encourages togetherness. Less solitary, more face-to-face.`,
+      tune_in:
+        `TUNE IN signal: Prioritize contemplative, awareness-oriented activities — guided meditation, journaling prompts, mindful silent hikes, sound baths, stargazing. ` +
+        `Build in pauses and moments of observation. The itinerary should feel reflective.`,
+      slow_down:
+        `SLOW DOWN signal: Prioritize spacious pacing — fewer activities per day, late mornings, long meals, spa/hot springs, gentle walks, open unscheduled blocks. ` +
+        `Give breathing room in the structure. Resist the urge to fill every hour.`,
+      light_up:
+        `LIGHT UP signal: Prioritize peak experiences and intensity — big hikes, sunrise breathwork, cold plunges, packed days with high-effort/high-reward moments. ` +
+        `Bring the "go for it" energy. Early starts, sunset finishes.`,
+    };
+    const activeSignals = profile.intentionIds
+      .map(id => signals[id])
+      .filter(Boolean);
+    if (activeSignals.length > 0) {
+      instructions.push(activeSignals.join('\n\n'));
+    }
+    // Combination guidance
+    if (profile.intentionIds.length > 1) {
+      instructions.push(
+        `The traveler selected multiple intentions. Combine them thoughtfully — ` +
+        `e.g. Tune In + Light Up = intense but contemplative (solo summit push → meditation at the top). ` +
+        `Reconnect + Slow Down = unhurried togetherness. Let both signals shape each day.`
+      );
+    }
   }
 
   return instructions.join('\n\n');

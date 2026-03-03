@@ -197,6 +197,51 @@ function SnapCell({ label, value, sub, color = C.sage }) {
   );
 }
 
+/* ── Trip Profile Summary ─ shows user's selections so they feel heard ── */
+
+const INTENTION_LABELS = { reconnect: 'Reconnect', tune_in: 'Tune In', slow_down: 'Slow Down', light_up: 'Light Up' };
+const PRACTICE_LABELS = { yoga: 'Yoga', breathwork: 'Breathwork', coldPlunge: 'Cold Plunge', meditation: 'Meditation', hiking: 'Hiking', stargazing: 'Stargazing', journaling: 'Journaling', soundBath: 'Sound Bath', sauna: 'Sauna', service: 'Service', plantMedicine: 'Plant Medicine', foraging: 'Foraging' };
+const BUDGET_LABELS = { mindful: 'Mindful', balanced: 'Balanced', premium: 'Premium', noLimits: 'No Limits' };
+const MONTH_LABELS = { january: 'January', february: 'February', march: 'March', april: 'April', may: 'May', june: 'June', july: 'July', august: 'August', september: 'September', october: 'October', november: 'November', december: 'December' };
+
+function TripProfileSummary({ formData }) {
+  const chips = [];
+
+  if (formData.month) chips.push(MONTH_LABELS[formData.month] || formData.month);
+  if (formData.duration) chips.push(`${formData.duration} days`);
+  if (formData.budget) chips.push(BUDGET_LABELS[formData.budget] || formData.budget);
+  if (formData.intentions?.length > 0) {
+    formData.intentions.forEach(id => {
+      if (INTENTION_LABELS[id]) chips.push(INTENTION_LABELS[id]);
+    });
+  }
+  const pacing = formData.pacing ?? 50;
+  chips.push(pacing < 25 ? 'Spacious pace' : pacing < 50 ? 'Unhurried pace' : pacing < 75 ? 'Balanced pace' : 'Full pace');
+  if (formData.practices?.length > 0) {
+    formData.practices.slice(0, 4).forEach(id => {
+      if (PRACTICE_LABELS[id]) chips.push(PRACTICE_LABELS[id]);
+    });
+    if (formData.practices.length > 4) chips.push(`+${formData.practices.length - 4} more`);
+  }
+
+  if (chips.length === 0) return null;
+
+  return (
+    <div style={{ textAlign: 'center', padding: '0 8px 16px' }}>
+      <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 10 }}>Built for You</div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
+        {chips.map((chip, i) => (
+          <span key={i} style={{
+            fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.slate}75`,
+            background: `${C.sage}0c`, border: `1px solid ${C.sage}12`,
+            borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap',
+          }}>{chip}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function DestinationSnapshot({ snapshot, celestial, weather }) {
   // Resolve values — prefer AI snapshot fields, fall back to API data
   let avgHigh = snapshot?.avgHigh ?? null;
@@ -1308,6 +1353,9 @@ export default function ItineraryResults() {
             {itinerary.intro && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, lineHeight: 1.75, maxWidth: 460, margin: '14px auto 0', fontWeight: 400 }}>{itinerary.intro}</p>}
           </div>
         )}
+
+        {/* Trip Profile Summary */}
+        {isStructured && formData && <TripProfileSummary formData={formData} />}
 
         {/* Snapshot */}
         {isStructured && (
