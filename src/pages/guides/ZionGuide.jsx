@@ -9,7 +9,7 @@
 // Route: /destinations/zion-canyon
 //
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Nav, Footer, FadeIn, Breadcrumb } from '@components';
 import TripCard from '@components/TripCard';
@@ -17,6 +17,7 @@ import { C } from '@data/brand';
 import { P } from '@data/photos';
 import { getTripsByDestination } from '@data/trips';
 import { trackEvent } from '@utils/analytics';
+import CelestialSnapshot from '@components/CelestialSnapshot';
 
 
 // ─── Guide-Specific Components ───────────────────────────────────────────────
@@ -730,6 +731,14 @@ function TimingAlertCapture() {
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 export default function ZionGuide() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 900);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   return (
     <>
       <Nav />
@@ -932,7 +941,15 @@ export default function ZionGuide() {
 
       {/* ══ GUIDE CONTENT ═══════════════════════════════════════════════════ */}
       <section style={{ padding: "48px 52px 80px", background: C.cream }}>
-        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+        <div style={{
+          maxWidth: 1060,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 260px",
+          gap: isMobile ? 0 : 48,
+          alignItems: "start",
+        }}>
+        <div style={{ maxWidth: 680 }}>
 
 
           {/* ══════════════════════════════════════════════════════════════ */}
@@ -1493,7 +1510,14 @@ export default function ZionGuide() {
           </FadeIn>
 
         </div>
+
+        {/* Right column: Celestial Snapshot (desktop only) */}
+        {!isMobile && <CelestialSnapshot destination="zion" />}
+        </div>
       </section>
+
+      {/* Mobile: floating button + drawer rendered by CelestialSnapshot */}
+      {isMobile && <CelestialSnapshot destination="zion" />}
 
       <Footer />
     </>
