@@ -1,0 +1,199 @@
+[
+  {
+    "id": "watchman-campground",
+    "name": "Watchman Campground",
+    "type": "camping",
+    "stayStyle": "elemental",
+    "budgetTier": "mindful",
+    "priceRange": "$20–30/night",
+    "location": "Inside Zion National Park, near Visitor Center",
+    "groupFit": ["solo", "couple", "friends", "family"],
+    "highlights": [
+      "The most immersive option — you wake up in the canyon",
+      "190 sites, some riverside",
+      "Walking distance to Visitor Center and shuttle",
+      "Excellent stargazing from campground"
+    ],
+    "amenities": ["restrooms", "drinking water", "fire rings", "picnic tables", "dump station", "some electric hookups"],
+    "bookingWindow": "Book at recreation.gov as soon as available — fills fast in peak season (Mar–Oct)",
+    "links": {
+      "website": "https://www.nps.gov/zion/planyourvisit/campgrounds.htm",
+      "booking": "https://www.recreation.gov/camping/campgrounds/232445"
+    },
+    "seasonalNotes": "Year-round. Cold winter nights (25–35°F) — bring warm gear. Summer is hot — shade is limited.",
+    "lilaPick": true,
+    "tags": ["inside-park", "riverside", "stargazing", "reservations-required", "immersive"]
+  },
+  {
+    "id": "south-campground",
+    "name": "South Campground",
+    "type": "camping",
+    "stayStyle": "elemental",
+    "budgetTier": "mindful",
+    "priceRange": "$20–30/night",
+    "location": "Inside Zion National Park, near Visitor Center",
+    "groupFit": ["solo", "couple", "friends"],
+    "highlights": [
+      "Walk-in, first-come-first-served — no reservations",
+      "Smaller and quieter than Watchman",
+      "More solitude-oriented"
+    ],
+    "amenities": ["restrooms", "drinking water", "fire rings", "picnic tables"],
+    "bookingWindow": "No reservations — first-come-first-served. Arrive early (before noon) in peak season.",
+    "links": {
+      "website": "https://www.nps.gov/zion/planyourvisit/campgrounds.htm",
+      "booking": null
+    },
+    "seasonalNotes": "Year-round. Same winter/summer considerations as Watchman. Fills early in spring/fall.",
+    "lilaPick": false,
+    "tags": ["inside-park", "first-come", "quiet", "solitude", "no-reservations"]
+  },
+  {
+    "id": "zion-canyon-campground",
+    "name": "Zion Canyon Campground & RV Resort",
+    "type": "camping",
+    "stayStyle": "elemental",
+    "budgetTier": "mindful",
+    "priceRange": "$30–55/night",
+    "location": "Springdale, just outside park entrance",
+    "groupFit": ["solo", "couple", "friends", "family"],
+    "highlights": [
+      "Private campground with full amenities",
+      "Steps from the park entrance",
+      "Good fallback when NPS campgrounds are full"
+    ],
+    "amenities": ["showers", "laundry", "camp store", "wifi", "restrooms", "electric hookups"],
+    "bookingWindow": "Reservations recommended in peak season. Walk-ins sometimes available.",
+    "links": {
+      "website": null,
+      "booking": null
+    },
+    "seasonalNotes": "Year-round. More comfortable than NPS campgrounds due to showers and amenities.",
+    "lilaPick": false,
+    "tags": ["springdale", "private-campground", "full-amenities", "rv-friendly", "fallback"]
+  },
+  {
+    "id": "cable-mountain-lodge",
+    "name": "Cable Mountain Lodge",
+    "type": "lodge",
+    "stayStyle": "rooted",
+    "budgetTier": "balanced",
+    "priceRange": "$150–250/night",
+    "location": "Springdale, walking distance to park entrance and shuttle",
+    "groupFit": ["solo", "couple", "friends", "family"],
+    "highlights": [
+      "Excellent location — walk to park entrance",
+      "Pool and hot tub",
+      "Best value in the rooted tier",
+      "Shuttle stop nearby"
+    ],
+    "amenities": ["pool", "hot tub", "in-room kitchen", "wifi", "parking", "shuttle access"],
+    "bookingWindow": "2–3 months ahead for peak season (Sep–Oct, spring break). Less lead time needed in winter.",
+    "links": {
+      "website": "https://www.cablemountainlodge.com/",
+      "booking": null
+    },
+    "seasonalNotes": "Year-round. Great base camp in any season. AC in summer, heated in winter.",
+    "lilaPick": true,
+    "tags": ["springdale", "good-value", "pool", "hot-tub", "walking-distance", "family-friendly"]
+  },
+  {
+    "id": "cliffrose-lodge",
+    "name": "Cliffrose Lodge",
+    "type": "boutique",
+    "stayStyle": "rooted",
+    "budgetTier": "balanced",
+    "priceRange": "$200–350/night",
+    "location": "Springdale, riverside — walking distance to everything",
+    "groupFit": ["solo", "couple", "friends", "family"],
+    "highlights": [
+      "Riverside setting with beautiful grounds",
+      "Lawn perfect for morning yoga",
+      "Slightly more premium feel within rooted tier",
+      "Walking distance to park and Springdale restaurants"
+    ],
+    "amenities": ["riverside grounds", "pool", "hot tub", "yoga lawn", "wifi", "parking", "shuttle access"],
+    "bookingWindow": "2–4 months ahead for peak season. Popular with returning guests.",
+    "links": {
+      "website": "https://www.cliffroselodge.com/",
+      "booking": null
+    },
+    "seasonalNotes": "Year-round. The riverside grounds are magical in fall (cottonwood color) and spring (wildflowers).",
+    "lilaPick": true,
+    "tags": ["springdale", "riverside", "yoga-friendly", "beautiful-grounds", "boutique-feel"]
+  },
+  {
+    "id": "driftwood-lodge",
+    "name": "Driftwood Lodge",
+    "type": "lodge",
+    "stayStyle": "rooted",
+    "budgetTier": "balanced",
+    "priceRange": "$130–220/night",
+    "location": "Springdale, central location",
+    "groupFit": ["solo", "couple", "friends", "family"],
+    "highlights": [
+      "Clean, well-located, reliable",
+      "Home to King's Landing Bistro (upscale dinner on-site)",
+      "Solid no-surprises option"
+    ],
+    "amenities": ["on-site restaurant", "pool", "wifi", "parking", "shuttle access"],
+    "bookingWindow": "1–2 months ahead for peak season. Easier to book than Cliffrose.",
+    "links": {
+      "website": "https://www.driftwoodlodge.net/",
+      "booking": null
+    },
+    "seasonalNotes": "Year-round. King's Landing Bistro may have reduced winter hours.",
+    "lilaPick": false,
+    "tags": ["springdale", "on-site-dining", "reliable", "central-location"]
+  },
+  {
+    "id": "under-canvas-zion",
+    "name": "Under Canvas Zion",
+    "type": "glamping",
+    "stayStyle": "premium",
+    "budgetTier": "premium",
+    "priceRange": "$300–600/night",
+    "location": "Outside park, ~30 min drive — designed for immersive desert experience",
+    "groupFit": ["solo", "couple", "friends"],
+    "highlights": [
+      "Safari-style luxury tents in the desert",
+      "Stargazing from your tent",
+      "Communal fire pits and curated programming",
+      "The Lila Trips aesthetic in accommodation form"
+    ],
+    "amenities": ["en-suite bathroom", "wood-burning stove", "communal fire pits", "on-site dining", "adventure concierge"],
+    "bookingWindow": "3–6 months ahead, especially for Sep–Oct. Sells out for fall equinox window.",
+    "links": {
+      "website": "https://www.undercanvas.com/camps/zion/",
+      "booking": null
+    },
+    "seasonalNotes": "Seasonal: typically March–November. Closed in winter. No AC — fans only in summer (can be hot June–Aug).",
+    "lilaPick": true,
+    "tags": ["glamping", "stargazing", "immersive", "desert", "seasonal", "lila-aesthetic", "signature-stay"]
+  },
+  {
+    "id": "zion-lodge",
+    "name": "Zion Lodge",
+    "type": "lodge",
+    "stayStyle": "premium",
+    "budgetTier": "premium",
+    "priceRange": "$250–400/night",
+    "location": "Inside Zion National Park — the only in-park lodge",
+    "groupFit": ["solo", "couple", "friends", "family"],
+    "highlights": [
+      "The only lodge inside the park",
+      "Historic property with unmatched location",
+      "Wake up on the canyon floor",
+      "No driving or shuttle needed — you're already there"
+    ],
+    "amenities": ["on-site restaurant", "gift shop", "ranger programs", "trailhead access", "parking"],
+    "bookingWindow": "6–12 months ahead. Extremely limited availability. Book as early as possible.",
+    "links": {
+      "website": null,
+      "booking": null
+    },
+    "seasonalNotes": "Year-round. Winter is quieter and easier to book. Summer sells out far in advance.",
+    "lilaPick": true,
+    "tags": ["inside-park", "historic", "only-in-park-lodge", "book-early", "iconic"]
+  }
+]
