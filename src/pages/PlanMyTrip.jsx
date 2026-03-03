@@ -246,9 +246,9 @@ const DESTINATIONS = [
 ];
 
 const INTENTIONS = [
-  { id: "reconnect", label: "Reconnect", desc: "Remember you're part of something bigger.", icon: IconMagatama, color: C.goldenAmber },
-  { id: "tune_in", label: "Tune In", desc: "Get quiet enough to hear yourself again.", icon: IconEnso, color: C.oceanTeal },
-  { id: "slow_down", label: "Slow Down", desc: "Give yourself permission to stop rushing.", icon: IconUnalome, color: C.skyBlue },
+  { id: "reconnect", label: "Reconnect", desc: "Remember you're part of something bigger.", icon: IconEnso, color: C.oceanTeal },
+  { id: "tune_in", label: "Tune In", desc: "Get quiet enough to hear yourself again.", icon: IconLotus, color: C.skyBlue },
+  { id: "slow_down", label: "Slow Down", desc: "Give yourself permission to stop rushing.", icon: IconWave, color: C.seaGlass },
   { id: "light_up", label: "Light Up", desc: "Chase the moments that make you feel alive.", icon: IconFlame, color: C.sunSalmon },
 ];
 
