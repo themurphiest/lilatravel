@@ -1,0 +1,444 @@
+[
+  {
+    "id": "wildflower-bloom",
+    "name": "Wildflower Bloom Season",
+    "type": "seasonal",
+    "description": "After wet winters, the desert erupts with color — Indian paintbrush, slickrock paintbrush, desert marigold, sacred datura, and claret cup cactus line the canyon trails. Intensity varies year to year based on winter precipitation. Lower elevations bloom first (mid-March), with peak diversity in April.",
+    "timing": {
+      "months": ["march", "april", "may"],
+      "approximate_dates": "Late March through mid-May, peak in April",
+      "recurring": true
+    },
+    "location": "Throughout Zion — especially Emerald Pools Trail, Riverside Walk, and lower canyon",
+    "cost": "free",
+    "links": {
+      "website": "https://www.nps.gov/zion/learn/nature/wildflowers.htm"
+    },
+    "tags": ["natural-phenomenon", "photography", "spring", "weather-dependent", "magic-window"]
+  },
+  {
+    "id": "waterfall-peak-season",
+    "name": "Spring Waterfall Season",
+    "type": "seasonal",
+    "description": "Snowmelt from higher elevations feeds Zion's waterfalls to their peak flow. Emerald Pools, Weeping Rock, and canyon wall seeps transform into dramatic cascades. By summer most reduce to a trickle. Flow depends entirely on winter snowpack.",
+    "timing": {
+      "months": ["march", "april", "may"],
+      "approximate_dates": "March through May, peak flow in March–April",
+      "recurring": true
+    },
+    "location": "Emerald Pools (Upper, Middle, Lower), Weeping Rock, canyon walls throughout Zion",
+    "cost": "free",
+    "links": {
+      "website": "https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
+    },
+    "tags": ["natural-phenomenon", "photography", "spring", "snowmelt", "ephemeral"]
+  },
+  {
+    "id": "fall-foliage",
+    "name": "Fall Foliage Season",
+    "type": "seasonal",
+    "description": "Cottonwoods along the Virgin River turn gold against red canyon walls — one of the most striking color contrasts in the American West. Bigtooth maples add red and orange in side canyons and Kolob. Rabbitbrush blooms deep yellow in early October. Peak color typically late October through mid-November.",
+    "timing": {
+      "months": ["october", "november"],
+      "approximate_dates": "Late October through mid-November for peak color",
+      "recurring": true
+    },
+    "location": "Virgin River corridor (Pa'rus Trail, Riverside Walk), Taylor Creek / Kolob Canyons (maples)",
+    "cost": "free",
+    "links": {
+      "website": "https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
+    },
+    "tags": ["natural-phenomenon", "photography", "autumn", "golden-corridor", "magic-window", "cottonwoods"]
+  },
+  {
+    "id": "nps-night-sky-programs",
+    "name": "NPS Ranger-Led Night Sky Programs",
+    "type": "astronomy",
+    "description": "Free ranger-led stargazing programs at one of the country's certified International Dark Sky Parks. Rangers set up telescopes and guide visitors through the night sky. Zion's dark skies reveal the Milky Way, planets, and deep-sky objects on clear moonless nights.",
+    "timing": {
+      "months": ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
+      "approximate_dates": "Year-round on select clear evenings; check NPS schedule",
+      "recurring": true
+    },
+    "location": "Zion Canyon Visitor Center amphitheater, Zion National Park",
+    "cost": "free",
+    "links": {
+      "website": "https://www.nps.gov/zion/planyourvisit/sunset-stargazing.htm"
+    },
+    "tags": ["stargazing", "dark-sky", "ranger-led", "family-friendly", "free"]
+  },
+  {
+    "id": "dark-sky-week",
+    "name": "International Dark Sky Week",
+    "type": "astronomy",
+    "description": "Annual celebration of dark skies with special programming at Zion and surrounding parks. Zion is a certified International Dark Sky Park — this week highlights what makes the night sky here extraordinary. Special ranger programs and community events.",
+    "timing": {
+      "months": ["april"],
+      "approximate_dates": "Late April (typically last full week)",
+      "recurring": true
+    },
+    "location": "Zion National Park and surrounding areas",
+    "cost": "free",
+    "links": {
+      "website": "https://www.nps.gov/zion/planyourvisit/sunset-stargazing.htm"
+    },
+    "tags": ["stargazing", "dark-sky", "awareness", "spring", "special-programming"]
+  },
+  {
+    "id": "zion-chalk-earth-fest",
+    "name": "Zion Chalk & Earth Fest",
+    "type": "festival",
+    "description": "Art and environmental awareness festival in Springdale. Street chalk art, sustainability exhibits, live music, and community activities. Held at Zion Canyon Village — a creative, family-friendly gathering right at the park's doorstep.",
+    "timing": {
+      "months": ["april"],
+      "approximate_dates": "Late April (typically last weekend)",
+      "recurring": true
+    },
+    "location": "Zion Canyon Village, 147 Zion Park Blvd, Springdale",
+    "cost": "free",
+    "links": {
+      "website": "https://www.springdaletown.com/297/Zion-Chalk-Earth-Fest"
+    },
+    "tags": ["art", "sustainability", "family-friendly", "springdale", "spring", "community"]
+  },
+  {
+    "id": "zion-canyon-farmers-market",
+    "name": "Zion Canyon Farmers Market",
+    "type": "market",
+    "description": "Saturday morning farmers market in Springdale with local produce, honey, jams, baked goods, and artisan items. Small-scale and community-oriented — a nice Saturday morning ritual before heading into the park.",
+    "timing": {
+      "months": ["april", "may", "june", "july", "august", "september", "october"],
+      "approximate_dates": "Saturdays, late April through late October, 9:00–11:30 AM",
+      "recurring": true
+    },
+    "location": "1212 Zion Park Blvd, Springdale",
+    "cost": "free",
+    "links": {
+      "website": "https://www.bitandspur.com/events-1"
+    },
+    "tags": ["farmers-market", "local-produce", "saturday-morning", "springdale", "seasonal"]
+  },
+  {
+    "id": "paiute-restoration-powwow",
+    "name": "Paiute Restoration Gathering & Pow-Wow",
+    "type": "cultural",
+    "description": "Annual powwow and cultural celebration hosted by the Paiute Indian Tribe of Utah. Dance competitions, traditional food, arts and crafts, and cultural demonstrations. Free and open to the public. One of the most significant indigenous cultural events in the region — the Paiute people are the original stewards of the Zion Canyon landscape.",
+    "timing": {
+      "months": ["june"],
+      "approximate_dates": "First weekend of June",
+      "recurring": true
+    },
+    "location": "Paiute Indian Tribe Pow-Wow Arbor, 440 N. Paiute Drive, Cedar City, UT (~60 mi from Springdale)",
+    "cost": "free",
+    "links": {
+      "website": "https://pitu.gov/culture/"
+    },
+    "tags": ["indigenous", "paiute", "powwow", "cultural-heritage", "dance", "cedar-city", "free"]
+  },
+  {
+    "id": "kayenta-native-arts-market",
+    "name": "Kayenta Native Arts Market",
+    "type": "cultural",
+    "description": "Native American art market featuring 50+ artists from across the Southwest — jewelry, pottery, painting, sculpture, textiles, and more. Set in the striking Kayenta Art Village against red rock cliffs. Free admission. A meaningful connection to the indigenous art traditions of the region.",
+    "timing": {
+      "months": ["may"],
+      "approximate_dates": "First weekend of May (Fri 5–8 PM, Sat–Sun 10 AM–5 PM)",
+      "recurring": true
+    },
+    "location": "Kayenta Art Village, 881 Coyote Gulch Court, Ivins, UT (~45 min from Springdale)",
+    "cost": "free",
+    "links": {
+      "website": "https://kayentaarts.org/kayenta-native-arts-market/"
+    },
+    "tags": ["native-american", "art-market", "southwest", "jewelry", "pottery", "kayenta", "free"]
+  },
+  {
+    "id": "springdale-fourth-of-july",
+    "name": "Springdale 4th of July Celebration",
+    "type": "festival",
+    "description": "Small-town Fourth of July with a parade down SR-9, live music, food vendors, and community events. The parade starts at 9 AM and the road closes briefly. Quintessential small-town Americana at the gateway to Zion.",
+    "timing": {
+      "months": ["july"],
+      "approximate_dates": "July 4th, parade at 9:00 AM",
+      "recurring": true
+    },
+    "location": "Springdale, along SR-9",
+    "cost": "free",
+    "links": {
+      "website": "https://www.springdaletown.com/253/4th-of-July"
+    },
+    "tags": ["parade", "community", "family-friendly", "springdale", "summer", "americana"]
+  },
+  {
+    "id": "zion-canyon-music-festival",
+    "name": "Zion Canyon Music Festival",
+    "type": "festival",
+    "description": "Two-day music festival in the backyard of Bit & Spur in Springdale. Live bands, artisan booths, food, and family activities against the backdrop of canyon walls. Intimate scale — not a mega-festival. The last weekend of September aligns perfectly with the Golden Corridor magic window.",
+    "timing": {
+      "months": ["september"],
+      "approximate_dates": "Last weekend of September (Fri 4–11 PM, Sat 3–11 PM)",
+      "recurring": true
+    },
+    "location": "Bit & Spur backyard, Springdale",
+    "cost": "$",
+    "links": {
+      "website": "https://zioncanyonmusicfestival.com/"
+    },
+    "tags": ["music", "live-music", "golden-corridor", "springdale", "fall", "intimate", "bit-and-spur"]
+  },
+  {
+    "id": "dixie-roundup-rodeo",
+    "name": "Dixie Round-Up Rodeo",
+    "type": "cultural",
+    "description": "PRCA rodeo held since the 1930s at the historic Dixie Sunbowl in downtown St. George. Three nights of bull riding, barrel racing, and roping with pre-rodeo entertainment. Thursday is Kids Night (11 and under free). A genuine piece of Southern Utah heritage.",
+    "timing": {
+      "months": ["september"],
+      "approximate_dates": "Third weekend of September (Thu–Sat, gates 6 PM, rodeo until ~11 PM)",
+      "recurring": true
+    },
+    "location": "Historic Dixie Sunbowl, downtown St. George (~45 min from Springdale)",
+    "cost": "$",
+    "links": {
+      "website": "https://sgcityutah.gov/activity/special_events/dixie_days/rodeo.php"
+    },
+    "tags": ["rodeo", "western-heritage", "family-friendly", "st-george", "fall", "historic"]
+  },
+  {
+    "id": "kayenta-art-festival",
+    "name": "Kayenta Art Festival",
+    "type": "festival",
+    "description": "Juried art festival with 50+ artists showing sculpture, painting, jewelry, ceramics, wood, and metalwork. Set in the dramatic red rock landscape of Kayenta Art Village. Free admission. One of the best curated art events in Southern Utah.",
+    "timing": {
+      "months": ["october"],
+      "approximate_dates": "Second weekend of October, 10 AM–5 PM daily",
+      "recurring": true
+    },
+    "location": "Kayenta Art Village, Ivins, UT (~45 min from Springdale)",
+    "cost": "free",
+    "links": {
+      "website": "https://www.kayentaartvillage.com/events-1/kayenta-art-festival"
+    },
+    "tags": ["art", "juried", "sculpture", "painting", "kayenta", "fall", "free"]
+  },
+  {
+    "id": "kayenta-first-friday",
+    "name": "First Friday Art Walk (Kayenta)",
+    "type": "cultural",
+    "description": "Monthly gallery walk at the Center for the Arts at Kayenta with rotating exhibitions, artist receptions, and live music. A relaxed evening of art against a red rock backdrop.",
+    "timing": {
+      "months": ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
+      "approximate_dates": "First Friday of each month, 5:30–8:00 PM",
+      "recurring": true
+    },
+    "location": "Center for the Arts at Kayenta, Ivins, UT (~45 min from Springdale)",
+    "cost": "free",
+    "links": {
+      "website": "https://www.kayentaartvillage.com/events"
+    },
+    "tags": ["art-walk", "gallery", "monthly", "kayenta", "evening", "free"]
+  },
+  {
+    "id": "st-george-marathon",
+    "name": "St. George Marathon",
+    "type": "sport",
+    "description": "One of the most scenic marathons in the US — a point-to-point course descending 2,600 feet from Pine Valley Mountains to downtown St. George. Marathon, half marathon, and 5K. Qualifies for Boston. Registration opens April 1 and fills quickly.",
+    "timing": {
+      "months": ["october"],
+      "approximate_dates": "First Saturday of October",
+      "recurring": true
+    },
+    "location": "Pine Valley Mountains to downtown St. George (~45 min from Springdale)",
+    "cost": "$$",
+    "links": {
+      "website": "https://www.stgeorgemarathon.com/"
+    },
+    "tags": ["marathon", "running", "half-marathon", "5k", "st-george", "fall", "boston-qualifier"]
+  },
+  {
+    "id": "zion-half-marathon",
+    "name": "Zion Half Marathon",
+    "type": "sport",
+    "description": "Paved point-to-point half marathon from La Verkin to Springdale, finishing at Cable Mountain Lodge with canyon views. Part of the Vacation Races series. A beautiful late-winter run through the red rock corridor leading to Zion.",
+    "timing": {
+      "months": ["february", "march"],
+      "approximate_dates": "Late February / early March",
+      "recurring": true
+    },
+    "location": "La Verkin to Springdale (finish at Cable Mountain Lodge)",
+    "cost": "$$",
+    "links": {
+      "website": "https://www.vacationraces.com/half-marathons/zion/"
+    },
+    "tags": ["half-marathon", "running", "scenic", "springdale", "winter", "point-to-point"]
+  },
+  {
+    "id": "zion-ultras",
+    "name": "Zion Ultras & Trail Half Marathon",
+    "type": "sport",
+    "description": "Ultra trail racing adjacent to Zion — 100 mile, 100K, 60K, 30K, and trail half marathon distances. Rugged desert terrain with red rock views. For serious trail runners drawn to the landscape.",
+    "timing": {
+      "months": ["april"],
+      "approximate_dates": "Mid-April (Fri–Sun)",
+      "recurring": true
+    },
+    "location": "Apple Valley, UT (adjacent to Zion National Park)",
+    "cost": "$$",
+    "links": {
+      "website": "https://www.vacationraces.com/ultras/zion/"
+    },
+    "tags": ["ultramarathon", "trail-running", "100-miler", "desert", "spring", "endurance"]
+  },
+  {
+    "id": "utah-shakespeare-festival",
+    "name": "Utah Shakespeare Festival",
+    "type": "cultural",
+    "description": "Tony Award-winning professional theater festival at Southern Utah University. 7–8 plays per season spanning Shakespeare, musicals, and contemporary drama. The free Greenshow — outdoor pre-show entertainment nightly at 7:10 PM in summer — is worth the drive alone. One of the premier regional theater experiences in the American West.",
+    "timing": {
+      "months": ["june", "july", "august", "september", "october"],
+      "approximate_dates": "Mid-June through early October; matinees 2 PM, evenings 8 PM",
+      "recurring": true
+    },
+    "location": "Southern Utah University, Cedar City, UT (~60 mi from Springdale)",
+    "cost": "$$",
+    "links": {
+      "website": "https://www.bard.org/"
+    },
+    "tags": ["theater", "shakespeare", "tony-award", "cedar-city", "summer", "greenshow-free", "performing-arts"]
+  },
+  {
+    "id": "tuacahn-broadway",
+    "name": "Tuacahn Amphitheatre Broadway Season",
+    "type": "cultural",
+    "description": "Professional Broadway-caliber musicals performed in a stunning outdoor red rock amphitheater. The setting alone — a natural sandstone canyon — makes this unlike any theater experience. Summer through fall outdoor season; indoor Hafen Theatre extends year-round.",
+    "timing": {
+      "months": ["june", "july", "august", "september", "october"],
+      "approximate_dates": "June through October (outdoor season); indoor shows year-round",
+      "recurring": true
+    },
+    "location": "Tuacahn Center for the Arts, Ivins, UT (~50 min from Springdale)",
+    "cost": "$$",
+    "links": {
+      "website": "https://www.tuacahn.org/calendar/"
+    },
+    "tags": ["broadway", "theater", "outdoor-amphitheater", "red-rock", "ivins", "summer", "performing-arts"]
+  },
+  {
+    "id": "kanab-balloons-tunes",
+    "name": "Kanab Balloons & Tunes Roundup",
+    "type": "festival",
+    "description": "Hot air balloon festival with dawn launches, evening balloon glows, live music, and a lantern festival. Balloon launches at 7:30 AM daily create a surreal scene against Kanab's red rock backdrop. Free to attend.",
+    "timing": {
+      "months": ["february"],
+      "approximate_dates": "Mid-to-late February (Fri–Sun)",
+      "recurring": true
+    },
+    "location": "Kanab, UT (~75 min from Springdale)",
+    "cost": "free",
+    "links": {
+      "website": "https://www.visitsouthernutah.com/balloons-and-tunes-roundup/"
+    },
+    "tags": ["hot-air-balloons", "music", "lanterns", "kanab", "winter", "photography", "free"]
+  },
+  {
+    "id": "st-george-art-festival",
+    "name": "St. George Art Festival",
+    "type": "festival",
+    "description": "Juried art festival with 110+ artists showing paintings, sculpture, ceramics, textiles, and photography. Held Easter weekend since 1980 in downtown St. George. Free admission. One of the longest-running art events in the region.",
+    "timing": {
+      "months": ["april"],
+      "approximate_dates": "Easter weekend (Fri–Sat)",
+      "recurring": true
+    },
+    "location": "Downtown St. George, UT (~45 min from Springdale)",
+    "cost": "free",
+    "links": {
+      "website": "https://sgcityutah.gov/activity/special_events/st_george_art_festival/index.php"
+    },
+    "tags": ["art", "juried", "easter", "st-george", "spring", "free", "long-running"]
+  },
+  {
+    "id": "zion-arts-crafts-fair",
+    "name": "Zion Canyon Arts & Crafts Fair",
+    "type": "market",
+    "description": "Local artisan market with bake sale and silent auction at the Canyon Community Center in Springdale. Small-scale, community-driven. A nice rainy-day or rest-day activity in late November.",
+    "timing": {
+      "months": ["november"],
+      "approximate_dates": "Late November",
+      "recurring": true
+    },
+    "location": "Canyon Community Center, Springdale",
+    "cost": "free",
+    "links": {
+      "website": "https://www.springdaletown.com/calendar.aspx?CID=23"
+    },
+    "tags": ["artisan", "crafts", "bake-sale", "springdale", "fall", "community", "free"]
+  },
+  {
+    "id": "joy-to-the-world",
+    "name": "Zion Joy to the World",
+    "type": "festival",
+    "description": "Springdale's holiday celebration featuring a light parade down SR-9, sweets social, and New Year's Eve events. The light parade through this tiny canyon town, backed by thousand-foot walls, is genuinely magical. A contemplative alternative to big-city holidays.",
+    "timing": {
+      "months": ["december"],
+      "approximate_dates": "Light parade in December; NYE celebration Dec 31",
+      "recurring": true
+    },
+    "location": "Springdale (SR-9 for parade, Canyon Community Center for events)",
+    "cost": "free",
+    "links": {
+      "website": "https://www.springdaletown.com/260/Zion-Joy-to-the-World"
+    },
+    "tags": ["holiday", "light-parade", "new-years", "springdale", "winter", "community", "free"]
+  },
+  {
+    "id": "christmas-in-the-canyon",
+    "name": "Christmas in the Canyon (Tuacahn)",
+    "type": "seasonal",
+    "description": "Holiday event at Tuacahn with lights, a train ride, live nativity, Santa, and seasonal treats. Set in the red rock canyon amphitheater. Runs from early November through Christmas Eve — a long window to catch it.",
+    "timing": {
+      "months": ["november", "december"],
+      "approximate_dates": "Early November through December 24 (Thu–Sat evenings)",
+      "recurring": true
+    },
+    "location": "Tuacahn Center for the Arts, Ivins, UT (~50 min from Springdale)",
+    "cost": "$",
+    "links": {
+      "website": "https://www.tuacahn.org/calendar/"
+    },
+    "tags": ["holiday", "christmas", "lights", "family-friendly", "tuacahn", "winter"]
+  },
+  {
+    "id": "st-george-farmers-market",
+    "name": "Downtown Farmers Market — St. George",
+    "type": "market",
+    "description": "Year-round Saturday farmers market with 60+ vendors. Larger and more diverse than the Springdale market. Local produce, baked goods, honey, crafts. Summer hours 8 AM–12 PM, winter hours 10 AM–2 PM. Closed January.",
+    "timing": {
+      "months": ["february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
+      "approximate_dates": "Every Saturday year-round (closed January). Summer 8 AM–12 PM, Winter 10 AM–2 PM",
+      "recurring": true
+    },
+    "location": "Downtown St. George, UT (~45 min from Springdale)",
+    "cost": "free",
+    "links": {
+      "website": "https://downtownfarmerstg.com/"
+    },
+    "tags": ["farmers-market", "local-produce", "saturday", "st-george", "year-round", "free"]
+  },
+  {
+    "id": "nps-ranger-talks",
+    "name": "NPS Ranger Talks & Patio Programs",
+    "type": "cultural",
+    "description": "Free 20–30 minute ranger-led talks on Zion's geology, wildlife, plants, and human history. Offered daily at the Visitor Center amphitheater and Zion Human History Museum patio. No reservation needed — just show up. A grounding way to connect with the place beyond the trail.",
+    "timing": {
+      "months": ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
+      "approximate_dates": "Year-round; typically 11:00 AM and 3:00 PM (check NPS schedule)",
+      "recurring": true
+    },
+    "location": "Zion Canyon Visitor Center amphitheater and Zion Human History Museum",
+    "cost": "free",
+    "links": {
+      "website": "https://www.nps.gov/zion/planyourvisit/ranger-led-activities.htm"
+    },
+    "tags": ["ranger-led", "educational", "geology", "history", "family-friendly", "free", "drop-in"]
+  }
+]
