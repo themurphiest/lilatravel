@@ -4,6 +4,8 @@ import { C as BrandC } from '@data/brand';
 import { lookupUrl } from '@data/destinations/zion-urls';
 import JSON5 from 'json5';
 import { trackEvent } from '@utils/analytics';
+import { getPracticesForItinerary, TRADITIONS } from '@services/practicesService';
+import { assignCompanions } from '@services/companionAssigner';
 
 /*
  * ItineraryResults — Merged V3
@@ -117,6 +119,37 @@ const RefreshIcon = ({ size = 14, color }) => (
   <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M2.5 8a5.5 5.5 0 0 1 9.5-3.5" /><path d="M13.5 8a5.5 5.5 0 0 1-9.5 3.5" />
     <polyline points="12,1 12,5 8,5" /><polyline points="4,15 4,11 8,11" />
+  </svg>
+);
+
+/* Companion icons */
+const TeachingIcon = ({ size = 13, color = C.goldenAmber }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+  </svg>
+);
+
+const PracticeIcon = ({ size = 13, color = C.seaGlass }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="5" r="2" /><path d="M12 7v4" /><path d="M8 21l4-10 4 10" /><path d="M6 14l6-3 6 3" />
+  </svg>
+);
+
+const ArrowRightIcon = ({ size = 10, color = `${C.sage}28` }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 8h10" /><polyline points="9,4 13,8 9,12" />
+  </svg>
+);
+
+const ClockIcon = ({ size = 9, color }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="8" cy="8" r="6.5" /><path d="M8 4.5V8l2.5 1.5" />
+  </svg>
+);
+
+const BackIcon = ({ size = 14, color = C.sage }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M13 8H3" /><polyline points="7,4 3,8 7,12" />
   </svg>
 );
 
@@ -355,13 +388,8 @@ function InlinePick({ category, pick, alternatives = [], isLast = false, dayInde
   const s = styles[category] || styles.stay;
 
   return (
-    <div style={{ display: 'flex', gap: 14, minHeight: 44 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 18, flexShrink: 0 }}>
-        <div style={{ width: 12, height: 12, borderRadius: '50%', background: `${s.color}20`, border: `2px solid ${s.color}50`, flexShrink: 0, marginTop: 4 }} />
-        {!isLast && <div style={{ width: 1, flex: 1, minHeight: 20, background: `linear-gradient(180deg, ${s.color}20, ${C.sage}06)` }} />}
-      </div>
-      <div style={{ flex: 1, paddingBottom: isLast ? 0 : 14 }}>
-        <div style={{ background: C.white, border: `1px solid ${s.color}20`, borderRadius: 12, overflow: 'hidden', boxShadow: `0 1px 6px ${s.color}08` }}>
+    <div style={{ marginBottom: isLast ? 0 : 10 }}>
+      <div style={{ background: C.white, border: `1px solid ${s.color}20`, borderRadius: 12, overflow: 'hidden', boxShadow: `0 1px 6px ${s.color}08` }}>
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: `${s.color}06`, borderBottom: `1px solid ${s.color}10` }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
@@ -410,12 +438,9 @@ function InlinePick({ category, pick, alternatives = [], isLast = false, dayInde
             </>
           )}
         </div>
-      </div>
     </div>
   );
 }
-
-/* ── day feedback ──────────────────────────────────────────────────────── */
 
 function DayFeedback({ dayIndex, feedback, onFeedback }) {
   const [noteText, setNoteText] = useState(feedback?.note || '');
@@ -513,11 +538,183 @@ function DayFeedback({ dayIndex, feedback, onFeedback }) {
   );
 }
 
+/* ── companion card (teaching + practice recommendations) ──────────────── */
+
+function CompanionCard({ companion, onOpenDetail }) {
+  if (!companion) return null;
+  const { teaching, practice } = companion;
+  if (!teaching && !practice) return null;
+
+  return (
+    <div style={{
+      padding: '12px 14px',
+      background: `linear-gradient(135deg, ${C.goldenAmber}04, ${C.seaGlass}04)`,
+      border: `1px solid ${C.sage}0a`,
+      borderRadius: 12,
+      borderLeft: `3px solid ${C.seaGlass}30`,
+      marginBottom: 10,
+    }}>
+      {/* Teaching */}
+      {teaching && (
+        <button onClick={() => onOpenDetail('teaching', teaching)} style={{
+          display: 'flex', alignItems: 'flex-start', gap: 9, width: '100%', textAlign: 'left',
+          background: 'none', border: 'none', cursor: 'pointer',
+          padding: practice ? '0 0 10px' : 0,
+          borderBottom: practice ? `1px solid ${C.sage}08` : 'none',
+          WebkitTapHighlightColor: 'transparent',
+        }}>
+          <div style={{ width: 26, height: 26, borderRadius: 7, background: `${C.goldenAmber}0e`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+            <TeachingIcon size={12} color={C.goldenAmber} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.goldenAmber, marginBottom: 2 }}>Today's Teaching</div>
+            <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 600, color: C.slate, lineHeight: 1.3, marginBottom: 2 }}>{teaching.title}</div>
+            <div style={{ fontFamily: F, fontSize: 11.5, color: `${C.slate}4a`, lineHeight: 1.45, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{teaching.essence}</div>
+          </div>
+          <ArrowRightIcon />
+        </button>
+      )}
+
+      {/* Practice */}
+      {practice && (
+        <button onClick={() => onOpenDetail('practice', practice)} style={{
+          display: 'flex', alignItems: 'flex-start', gap: 9, width: '100%', textAlign: 'left',
+          background: 'none', border: 'none', cursor: 'pointer',
+          padding: teaching ? '10px 0 0' : 0,
+          WebkitTapHighlightColor: 'transparent',
+        }}>
+          <div style={{ width: 26, height: 26, borderRadius: 7, background: `${C.seaGlass}0e`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+            <PracticeIcon size={12} color={C.seaGlass} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 2 }}>
+              <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.seaGlass }}>Today's Practice</span>
+              {practice.duration && (
+                <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <ClockIcon size={8} color={`${C.sage}45`} />
+                  <span style={{ fontFamily: F, fontSize: 9, fontWeight: 500, color: `${C.sage}50` }}>{practice.duration}</span>
+                </span>
+              )}
+            </div>
+            <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 600, color: C.slate, lineHeight: 1.3, marginBottom: 2 }}>{practice.title}</div>
+            <div style={{ fontFamily: F, fontSize: 11.5, color: `${C.slate}4a`, lineHeight: 1.45, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{practice.description}</div>
+          </div>
+          <ArrowRightIcon />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ── companion detail (slide-over) ────────────────────────────────────── */
+
+function CompanionDetail({ type, data, onClose }) {
+  if (!data) return null;
+  const isTeaching = type === 'teaching';
+  const accent = isTeaching ? C.goldenAmber : C.seaGlass;
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 250, background: C.cream, overflowY: 'auto', animation: 'companionSlideIn 0.3s ease' }}>
+      <style>{`@keyframes companionSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }`}</style>
+
+      {/* Header */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 1, display: 'flex', alignItems: 'center', padding: '13px 18px', background: `${C.cream}f0`, backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: `1px solid ${C.sage}06` }}>
+        <button onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: 'none', cursor: 'pointer', fontFamily: F, fontSize: 12, fontWeight: 500, color: C.sage, padding: 0, WebkitTapHighlightColor: 'transparent' }}>
+          <BackIcon size={14} color={C.sage} /> Back to itinerary
+        </button>
+      </div>
+
+      <div style={{ maxWidth: 500, margin: '0 auto', padding: '26px 20px 60px' }}>
+        {/* Type badge */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 7, background: `${accent}0e`, border: `1px solid ${accent}18`, marginBottom: 14 }}>
+          {isTeaching ? <TeachingIcon size={11} color={accent} /> : <PracticeIcon size={11} color={accent} />}
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: accent }}>{isTeaching ? "Today's Teaching" : "Today's Practice"}</span>
+        </div>
+
+        {/* Tradition */}
+        {data.tradition && (
+          <div style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}70`, marginBottom: 6 }}>{data.tradition} tradition</div>
+        )}
+
+        {/* Title */}
+        <h1 style={{ fontFamily: F, fontSize: 'clamp(21px, 6vw, 27px)', fontWeight: 600, color: C.slate, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
+
+        {/* Summary / essence */}
+        <p style={{ fontFamily: F, fontSize: 14.5, color: `${C.slate}6a`, lineHeight: 1.7, marginBottom: 20 }}>{isTeaching ? data.essence : data.description}</p>
+
+        {/* Deeper content */}
+        {data.deeper && (
+          <p style={{ fontFamily: F, fontSize: 14, color: `${C.slate}60`, lineHeight: 1.7, marginBottom: 20 }}>{data.deeper}</p>
+        )}
+
+        {/* Quote */}
+        {data.quote && (
+          <div style={{ padding: '14px 16px', borderLeft: `3px solid ${accent}30`, background: `${accent}05`, borderRadius: '0 8px 8px 0', marginBottom: 20 }}>
+            <p style={{ fontFamily: F, fontSize: 14, fontStyle: 'italic', color: `${C.slate}70`, lineHeight: 1.6, margin: 0 }}>"{data.quote.text}"</p>
+            {data.quote.source && <p style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, marginTop: 6, margin: '6px 0 0' }}>— {data.quote.source}</p>}
+          </div>
+        )}
+
+        {/* Practice-specific: duration, when, howTo */}
+        {!isTeaching && (data.duration || data.when || data.howTo) && (
+          <div style={{ background: C.white, borderRadius: 11, border: `1px solid ${C.sage}0c`, padding: '13px 15px', marginBottom: 20 }}>
+            {data.duration && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: (data.when || data.howTo) ? 10 : 0 }}>
+                <ClockIcon size={12} color={C.seaGlass} />
+                <div>
+                  <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 1 }}>Duration</div>
+                  <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 500, color: C.slate }}>{data.duration}</div>
+                </div>
+              </div>
+            )}
+            {data.when && (
+              <div style={{ borderTop: data.duration ? `1px solid ${C.sage}08` : 'none', paddingTop: data.duration ? 10 : 0, marginBottom: data.howTo ? 10 : 0 }}>
+                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 1 }}>When</div>
+                <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 500, color: `${C.slate}70`, lineHeight: 1.45 }}>{data.when}</div>
+              </div>
+            )}
+            {data.howTo && (
+              <div style={{ borderTop: (data.duration || data.when) ? `1px solid ${C.sage}08` : 'none', paddingTop: (data.duration || data.when) ? 10 : 0 }}>
+                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 3 }}>How To</div>
+                <div style={{ fontFamily: F, fontSize: 13, fontWeight: 400, color: `${C.slate}70`, lineHeight: 1.6 }}>{data.howTo}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Sources */}
+        {data.sources && data.sources.length > 0 && (
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${C.sage}55`, marginBottom: 8 }}>Sources</div>
+            {data.sources.map((s, i) => (
+              <div key={i} style={{ fontFamily: F, fontSize: 12, color: `${C.slate}55`, lineHeight: 1.5, marginBottom: 4 }}>
+                {s.author && <span style={{ fontWeight: 600 }}>{s.author}</span>}
+                {s.author && s.text && ', '}
+                {s.text && <em>{s.text}</em>}
+                {s.section && ` (${s.section})`}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Placeholder for future full content */}
+        <div style={{ padding: '16px 14px', background: `${C.sage}05`, borderRadius: 11, border: `1px dashed ${C.sage}10`, textAlign: 'center' }}>
+          <div style={{ fontFamily: F, fontSize: 12, fontWeight: 500, color: `${C.sage}50`, lineHeight: 1.5 }}>Full guided {isTeaching ? 'teaching' : 'practice'} experience coming soon.</div>
+          <div style={{ fontFamily: F, fontSize: 11, color: `${C.sage}3a`, marginTop: 3 }}>Audio, video, and deeper content from the Lila library.</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── day card ──────────────────────────────────────────────────────────── */
 
-function DayCard({ day, dayIndex = 0, feedback, onFeedback }) {
+function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenCompanionDetail }) {
   const [open, setOpen] = useState(true);
   const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
+  const hasCompanion = day.companion && (day.companion.teaching || day.companion.practice);
+  const hasPicks = day.picks && day.picks.length > 0;
+  const hasRecommendations = hasCompanion || hasPicks;
 
   return (
     <div style={{
@@ -556,16 +753,33 @@ function DayCard({ day, dayIndex = 0, feedback, onFeedback }) {
       </button>
       <Collapsible open={open}>
         <div style={{ padding: '2px 20px 22px' }}>
+          {/* Day intro */}
           {day.intro && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, lineHeight: 1.7, margin: '0 0 18px', fontStyle: 'italic' }}>{day.intro}</p>}
+
+          {/* ZONE 1: The Flow — timeline activities */}
           {day.timeline && day.timeline.map((b, i) => (
             <TimelineBlock key={i} time={b.time} title={b.title} summary={b.summary}
               details={b.details} timeOfDay={b.timeOfDay} url={b.url} dayIndex={dayIndex}
-              isLast={i === day.timeline.length - 1 && (!day.picks || day.picks.length === 0)} />
+              isLast={i === day.timeline.length - 1} />
           ))}
-          {day.picks && day.picks.map((p, i) => (
-            <InlinePick key={i} category={p.category} pick={p.pick} dayIndex={dayIndex}
-              alternatives={p.alternatives || []} isLast={i === day.picks.length - 1} />
-          ))}
+
+          {/* ZONE 2: Recommendations — companion + picks */}
+          {hasRecommendations && (
+            <div style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${C.sage}09` }}>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.13em', textTransform: 'uppercase', color: `${C.sage}65`, marginBottom: 10 }}>Recommendations</div>
+
+              {hasCompanion && (
+                <CompanionCard companion={day.companion} onOpenDetail={onOpenCompanionDetail} />
+              )}
+
+              {day.picks && day.picks.map((p, i) => (
+                <InlinePick key={i} category={p.category} pick={p.pick} dayIndex={dayIndex}
+                  alternatives={p.alternatives || []} isLast={i === day.picks.length - 1} />
+              ))}
+            </div>
+          )}
+
+          {/* ZONE 3: Feedback */}
           <DayFeedback dayIndex={dayIndex} feedback={feedback} onFeedback={onFeedback} />
         </div>
       </Collapsible>
@@ -880,6 +1094,9 @@ export default function ItineraryResults() {
   const [overallNote, setOverallNote] = useState('');
   const [refineError, setRefineError] = useState(null);
 
+  // Companion detail overlay state
+  const [companionDetail, setCompanionDetail] = useState(null); // { type, data }
+
   useEffect(() => {
     if (!rawItinerary) { navigate('/plan'); return; }
     setTimeout(() => setVisible(true), 100);
@@ -905,6 +1122,18 @@ export default function ItineraryResults() {
   }, [rawItinerary]);
 
   const isStructured = itinerary && itinerary.days;
+
+  // Enrich days with companion data from practices service
+  const enrichedDays = useMemo(() => {
+    if (!isStructured || !formData) return itinerary?.days || [];
+    try {
+      const practiceResults = getPracticesForItinerary(formData);
+      return assignCompanions(itinerary.days, practiceResults);
+    } catch (e) {
+      console.error('Companion assignment failed, using plain days:', e.message);
+      return itinerary.days;
+    }
+  }, [isStructured, itinerary, formData]);
   const beforeYouGoRef = useRef(null);
   const scrollSentinels = useRef({});
   const pageLoadTime = useRef(performance.now());
@@ -1041,6 +1270,11 @@ export default function ItineraryResults() {
     <div style={{ fontFamily: F, background: C.cream, minHeight: '100vh' }}>
       <RefiningOverlay visible={refining} />
 
+      {/* Companion detail slide-over */}
+      {companionDetail && (
+        <CompanionDetail type={companionDetail.type} data={companionDetail.data} onClose={() => setCompanionDetail(null)} />
+      )}
+
       {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
@@ -1081,16 +1315,20 @@ export default function ItineraryResults() {
         )}
 
         {/* Trip Overview */}
-        {isStructured && itinerary.days.length > 1 && (
-          <TripOverview days={itinerary.days} onDayClick={scrollToDay} dayFeedback={dayFeedback} />
+        {isStructured && enrichedDays.length > 1 && (
+          <TripOverview days={enrichedDays} onDayClick={scrollToDay} dayFeedback={dayFeedback} />
         )}
 
         {/* Day Cards / Markdown Fallback */}
         {isStructured ? (
           <>
-            {itinerary.days.map((day, i) => (
+            {enrichedDays.map((day, i) => (
               <div key={i} ref={el => dayRefs.current[i] = el} style={{ scrollMarginTop: 60 }}>
-                <DayCard day={day} dayIndex={i} feedback={dayFeedback[i]} onFeedback={handleDayFeedback} />
+                <DayCard day={day} dayIndex={i} feedback={dayFeedback[i]} onFeedback={handleDayFeedback}
+                  onOpenCompanionDetail={(type, data) => {
+                    trackEvent('companion_detail_opened', { type, title: data?.title, day_index: i });
+                    setCompanionDetail({ type, data });
+                  }} />
               </div>
             ))}
 
