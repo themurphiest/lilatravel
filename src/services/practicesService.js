@@ -451,6 +451,14 @@ export const ENTRIES = [
     quote: { text: 'When only the essential nature of the object shines forth, as if emptied of its own form, that is samādhi.', source: 'Yoga Sutras 3.3 (Patanjali)' },
     tripContext: 'Not something you schedule — something you create conditions for. Summit moments, deep silence, the final evening. The whole trip is designed to make this possible.',
     practiceLevel: 2,
+    destinationVariants: {
+      zion: {
+        name: 'Canyon Absorption',
+        summary: 'The subject-object boundary dissolves in Zion\'s immensity — you don\'t observe the canyon, you become the light on the walls.',
+        setting: 'Observation Point, Angels Landing summit, or Canyon Overlook at golden hour',
+        tripContext: 'Zion\'s scale creates natural conditions for absorption. At Observation Point, 2,000 feet above the canyon floor, the mind has no reference for separation — only vastness, light, and the self dissolving into red rock.',
+      },
+    },
   },
   {
     id: 'h-t-pancha-kosha',
@@ -491,6 +499,14 @@ export const ENTRIES = [
     timeOfDay: 'dawn',
     tripContext: 'Canyon rim at sunrise, desert dawn, beach morning, any east-facing elevated position.',
     practiceLevel: 0,
+    destinationVariants: {
+      zion: {
+        name: 'Canyon Rim Sun Salutation',
+        summary: 'Twelve postures performed on the rim of Zion Canyon as first light paints the Navajo sandstone from orange to gold.',
+        setting: 'Canyon Overlook Trail at dawn, or the Pa\'rus Trail facing east',
+        tripContext: 'Dawn on the canyon rim — face east toward the Temples and Towers as the sun crests the mesa. The red rock amplifies the warmth of each movement.',
+      },
+    },
   },
   {
     id: 'h-p-pranayama',
@@ -512,6 +528,14 @@ export const ENTRIES = [
     timeOfDay: 'morning or evening',
     tripContext: 'Waterfall proximity, forest settings, high altitude points, morning practice before hiking.',
     practiceLevel: 1,
+    destinationVariants: {
+      zion: {
+        name: 'Desert Canyon Breathwork',
+        summary: 'Conscious breathing amplified by Zion\'s dry desert air and the natural echo chamber of sandstone walls.',
+        setting: 'Canyon alcove, Weeping Rock amphitheater, or Virgin River banks',
+        tripContext: 'The dry air at 4,000 feet sharpens each breath. Practice Nadi Shodhana in a sandstone alcove where the canyon walls hold the silence.',
+      },
+    },
   },
   {
     id: 'h-p-yoga-nidra',
@@ -657,6 +681,14 @@ export const ENTRIES = [
     frameworks: ['Tilakkhana', 'Vipassana insight', 'Theravada foundation'],
     tripContext: 'Geological observation points, sunset/sunrise transitions, river settings, any landscape that shows deep time.',
     practiceLevel: 1,
+    destinationVariants: {
+      zion: {
+        name: 'Deep Time at Zion',
+        summary: 'Zion\'s 270-million-year geological record makes impermanence, change, and non-self visible in every layer of stone.',
+        setting: 'Any exposed cliff face showing geological strata, especially Checkerboard Mesa or the Great White Throne',
+        tripContext: 'Read the canyon walls like scripture: Kaibab limestone on top (270 million years), Navajo sandstone in the middle (ancient sand dunes), Chinle Formation below (tropical rivers). You are standing in the proof of impermanence.',
+      },
+    },
   },
   {
     id: 'b-t-three-paths',
@@ -741,6 +773,14 @@ export const ENTRIES = [
     timeOfDay: 'any',
     tripContext: 'Beginning of a hike (first 10 minutes slow), riverside path, forest trail, labyrinth walk.',
     practiceLevel: 0,
+    destinationVariants: {
+      zion: {
+        name: 'Narrows Walking Meditation',
+        summary: 'Each step placed deliberately on river-smoothed stone in the Virgin River Narrows — walking meditation where water is the teacher.',
+        setting: 'The Narrows (bottom-up from Temple of Sinawava) or Riverside Walk',
+        tripContext: 'The Narrows forces slow, deliberate steps — ankle-deep in the Virgin River, feeling each stone through water shoes. The canyon walls rise 1,000 feet. There is nowhere to be but here.',
+      },
+    },
   },
   {
     id: 'b-p-zazen',
@@ -927,6 +967,14 @@ export const ENTRIES = [
     timeOfDay: 'any, morning preferred',
     tripContext: 'Old-growth forest segments, after-rain forest walks, Pacific Northwest/Olympic settings.',
     practiceLevel: 0,
+    destinationVariants: {
+      zion: {
+        name: 'Cottonwood Cathedral Immersion',
+        summary: 'Slow, sensory-rich wandering through Zion\'s riparian corridors where ancient Fremont cottonwoods create a green cathedral inside the desert canyon.',
+        setting: 'Pa\'rus Trail cottonwood groves, Emerald Pools trail, or Court of the Patriarchs riparian zone',
+        tripContext: 'Zion\'s forest is unexpected — lush cottonwoods and boxelders lining the Virgin River, creating green tunnels inside the desert. The contrast between red rock and green canopy heightens every sense.',
+      },
+    },
   },
   {
     id: 't-p-zhan-zhuang',
@@ -948,6 +996,14 @@ export const ENTRIES = [
     timeOfDay: 'morning',
     tripContext: 'Overlook points, beside flowing water, under a significant tree.',
     practiceLevel: 1,
+    destinationVariants: {
+      zion: {
+        name: 'Standing with the Patriarchs',
+        summary: 'Standing meditation rooted in Zion\'s earth, with 2,000-foot sandstone towers as your mirror — firm as mountain, yielding as the Virgin River.',
+        setting: 'Court of the Patriarchs viewpoint, Canyon Junction bridge, or Pa\'rus Trail riverside',
+        tripContext: 'Stand facing Abraham, Isaac, or Jacob Peak — three towers that have stood for millions of years. Feel your own rootedness against the scale of deep time. The Virgin River flows at your back.',
+      },
+    },
   },
 
   // Ceremonies
@@ -1053,6 +1109,14 @@ export const ENTRIES = [
     timeOfDay: 'morning',
     tripContext: 'River crossings, waterfall encounters, alpine lake dips, cold plunge ritual.',
     practiceLevel: 0,
+    destinationVariants: {
+      zion: {
+        name: 'Virgin River Purification',
+        summary: 'Cold immersion in the Virgin River — the same water that carved these 2,000-foot walls carries away everything that isn\'t essential.',
+        setting: 'Virgin River near Big Bend, Pa\'rus Trail river access, or The Narrows shallows',
+        tripContext: 'The Virgin River runs cold even in summer — snowmelt from the Kolob Plateau. Enter at Big Bend where the river bends wide and shallow. Let the current that carved Zion carry away what you no longer need.',
+      },
+    },
   },
   {
     id: 's-p-nature-greeting',
@@ -1074,6 +1138,14 @@ export const ENTRIES = [
     timeOfDay: 'any',
     tripContext: 'Trailhead entries, summit arrivals, river crossings, forest transitions, sunrise.',
     practiceLevel: 0,
+    destinationVariants: {
+      zion: {
+        name: 'Greeting the Canyon',
+        summary: 'A practice of bowing and acknowledgment at each of Zion\'s thresholds — entering the Narrows, cresting a ridge, passing through a slot canyon.',
+        setting: 'Narrows entrance, Canyon Overlook trailhead, any slot canyon threshold',
+        tripContext: 'Zion is full of natural thresholds: the moment the Narrows walls close in, the arch at Canyon Overlook, the tunnel emergence. Each is a torii gate. Pause, bow, announce: "I am here. Thank you for receiving me."',
+      },
+    },
   },
   {
     id: 's-p-shinrin-yoku',
@@ -1390,6 +1462,14 @@ export const ENTRIES = [
     howTo: 'Find a place in the landscape that draws you. Sit. Do not meditate in the traditional sense — do not watch your breath or observe your thoughts. Instead, listen outward. Listen to the land. What is it saying? What rhythm does it have? Stay for at least 20 minutes. The knowing comes not from thinking but from attending.',
     tripContext: 'Solo sit spots, river listening, any moment where the landscape feels alive and communicative. Especially powerful in old-growth forests, canyon bottoms, and beside flowing water.',
     practiceLevel: 0,
+    destinationVariants: {
+      zion: {
+        name: 'Canyon Deep Listening',
+        summary: 'Sitting in the canyon bottom, listening not to your thoughts but to Zion itself — the river\'s voice, the wind through sandstone fins, the echoes that only silence reveals.',
+        setting: 'The Narrows cathedral section, Big Bend alcove, or Weeping Rock amphitheater',
+        tripContext: 'Zion\'s canyon acoustics are extraordinary — sound bounces off sandstone walls, water echoes in slot canyons, wind hums through fins and arches. Sit in the Narrows and listen. The canyon has been speaking for millions of years.',
+      },
+    },
     timeOfDay: 'any',
     duration: '20-45 min',
   },

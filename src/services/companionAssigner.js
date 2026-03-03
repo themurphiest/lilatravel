@@ -55,8 +55,9 @@ function detectDayArchetype(day, dayIndex, totalDays) {
 
 /**
  * Score how well a practice/teaching fits a specific day archetype.
+ * Entries with a matching destination variant get a boost.
  */
-function scoreFit(entry, archetype) {
+function scoreFit(entry, archetype, destination) {
   const config = DAY_ARCHETYPES[archetype];
   if (!config) return 0;
 
@@ -82,47 +83,55 @@ function scoreFit(entry, archetype) {
   // Practice level — gentler practices for arrival/departure
   if ((archetype === 'arrival' || archetype === 'departure') && entry.practiceLevel === 0) score += 2;
 
+  // Destination variant boost — prefer entries with landscape-specific versions
+  if (destination && entry.destinationVariants?.[destination]) score += 5;
+
   return score;
 }
 
 /**
  * Format a practicesService entry into the companion card data structure.
+ * When a destination variant exists, overlay its fields onto the base entry.
  */
-function formatForCompanion(entry, type) {
+function formatForCompanion(entry, type, destination) {
   if (!entry) return null;
 
   const tradition = TRADITIONS[entry.tradition];
+  const variant = destination && entry.destinationVariants?.[destination];
 
   if (type === 'teaching') {
     return {
-      title: entry.name,
-      essence: entry.summary,
+      title: variant?.name || entry.name,
+      essence: variant?.summary || entry.summary,
       tradition: tradition?.shortName || '',
       slug: entry.id,
       // Available for the detail view
       deeper: entry.deeper || null,
       quote: entry.quote || null,
       sources: entry.sources || [],
-      tripContext: entry.tripContext || null,
+      tripContext: variant?.tripContext || entry.tripContext || null,
+      setting: variant?.setting || null,
       principles: entry.principles || [],
+      isVariant: !!variant,
     };
   }
 
   if (type === 'practice') {
     return {
-      title: entry.name,
-      description: entry.summary,
+      title: variant?.name || entry.name,
+      description: variant?.summary || entry.summary,
       tradition: tradition?.shortName || '',
       duration: entry.duration || null,
-      when: entry.tripContext || null,
+      when: variant?.tripContext || entry.tripContext || null,
       howTo: entry.howTo || null,
       slug: entry.id,
       // Available for the detail view
       deeper: entry.deeper || null,
       quote: entry.quote || null,
       sources: entry.sources || [],
-      setting: entry.setting || null,
+      setting: variant?.setting || entry.setting || null,
       principles: entry.principles || [],
+      isVariant: !!variant,
     };
   }
 
@@ -131,12 +140,13 @@ function formatForCompanion(entry, type) {
 
 /**
  * Main assignment function.
- * 
+ *
  * @param {Array} days — itinerary days array from the AI-generated itinerary
  * @param {Object} practiceResults — output of getPracticesForItinerary(formData)
+ * @param {string} [destination] — destination slug (e.g. 'zion') for variant selection
  * @returns {Array} days with `companion` field added to each
  */
-export function assignCompanions(days, practiceResults) {
+export function assignCompanions(days, practiceResults, destination) {
   if (!days || !practiceResults) return days;
 
   const { dailyTeaching = [], allRelevant = [], morningPractice, eveningPractice } = practiceResults;
@@ -157,7 +167,7 @@ export function assignCompanions(days, practiceResults) {
     // Score all unused teachings for this day's archetype
     const teachingCandidates = availableTeachings
       .filter(t => !usedTeachingIds.has(t.id))
-      .map(t => ({ ...t, fitScore: scoreFit(t, archetype) + (t.score || 0) }))
+      .map(t => ({ ...t, fitScore: scoreFit(t, archetype, destination) + (t.score || 0) }))
       .sort((a, b) => b.fitScore - a.fitScore);
 
     const selectedTeaching = teachingCandidates[0] || null;
@@ -167,7 +177,7 @@ export function assignCompanions(days, practiceResults) {
     // Score all unused practices for this day's archetype
     const practiceCandidates = availablePractices
       .filter(p => !usedPracticeIds.has(p.id))
-      .map(p => ({ ...p, fitScore: scoreFit(p, archetype) + (p.score || 0) }))
+      .map(p => ({ ...p, fitScore: scoreFit(p, archetype, destination) + (p.score || 0) }))
       .sort((a, b) => b.fitScore - a.fitScore);
 
     const selectedPractice = practiceCandidates[0] || null;
@@ -175,8 +185,8 @@ export function assignCompanions(days, practiceResults) {
 
     // ── Build companion ──────────────────────────────
     const companion = {
-      teaching: formatForCompanion(selectedTeaching, 'teaching'),
-      practice: formatForCompanion(selectedPractice, 'practice'),
+      teaching: formatForCompanion(selectedTeaching, 'teaching', destination),
+      practice: formatForCompanion(selectedPractice, 'practice', destination),
       archetype,
     };
 
@@ -190,7 +200,7 @@ export function assignCompanions(days, practiceResults) {
 /**
  * Convenience: get companion data without mutating the days array.
  * Returns a map of dayIndex → companion data.
- * 
+ *
  * @param {Array} days — itinerary days
  * @param {Object} formData — from the questionnaire
  * @param {Function} getPracticesForItinerary — from practicesService
@@ -198,7 +208,8 @@ export function assignCompanions(days, practiceResults) {
  */
 export function getCompanionsForTrip(days, formData, getPracticesForItinerary) {
   const practiceResults = getPracticesForItinerary(formData);
-  const enrichedDays = assignCompanions(days, practiceResults);
+  const destination = formData.destination || null;
+  const enrichedDays = assignCompanions(days, practiceResults, destination);
 
   const companions = {};
   enrichedDays.forEach((day, i) => {
