@@ -191,7 +191,7 @@ export default function PhilosophyPage() {
 
       <style>{`
         .tradition-card {
-          padding: 28px 32px;
+          padding: 20px 24px;
           background: white;
           border: 1px solid ${C.stone};
           transition: all 0.3s ease;
@@ -329,7 +329,7 @@ export default function PhilosophyPage() {
             key={p.word}
             id={p.word.toLowerCase()}
             style={{
-              padding: "80px 52px",
+              padding: "60px 52px",
               background: isDark
                 ? `linear-gradient(165deg, ${C.darkInk}, #1a3040)`
                 : C.cream,
@@ -344,7 +344,7 @@ export default function PhilosophyPage() {
                 gridTemplateColumns: "1fr 1fr",
                 gap: 64,
                 alignItems: "start",
-                marginBottom: 56,
+                marginBottom: 40,
               }}>
                 {/* Left: icon, name, quote */}
                 <div>
@@ -422,7 +422,7 @@ export default function PhilosophyPage() {
                   fontSize: 10, fontWeight: 700,
                   letterSpacing: "0.22em", textTransform: "uppercase",
                   color: isDark ? "rgba(255,255,255,0.25)" : "#9aabba",
-                  display: "block", marginBottom: 24,
+                  display: "block", marginBottom: 16,
                 }}>
                   {p.word} across five traditions
                 </span>
@@ -430,14 +430,14 @@ export default function PhilosophyPage() {
                 <div className="tradition-grid" style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
-                  gap: isDark ? 1 : 12,
+                  gap: isDark ? 1 : 8,
                   ...(isDark ? { background: "rgba(255,255,255,0.06)" } : {}),
                 }}>
                   {p.traditions.map((t, ti) => (
                     <div
                       key={ti}
                       style={{
-                        padding: isMobile ? "24px 20px" : "28px 32px",
+                        padding: isMobile ? "16px 18px" : "20px 24px",
                         background: isDark ? C.darkInk : "white",
                         border: isDark ? "none" : `1px solid ${C.stone}`,
                         transition: "background 0.3s ease",
@@ -448,26 +448,23 @@ export default function PhilosophyPage() {
                       onMouseEnter={e => e.currentTarget.style.background = isDark ? "#162838" : "#f5f3f0"}
                       onMouseLeave={e => e.currentTarget.style.background = isDark ? C.darkInk : "white"}
                     >
-                      {/* Header: symbol + concept + source */}
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                      {/* Header: symbol + concept + source + metaphor — single line */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
                         <span style={{
-                          fontSize: 20, color: p.color, opacity: 0.5,
+                          fontSize: 16, color: p.color, opacity: 0.5,
                           fontFamily: "serif", lineHeight: 1,
                         }}>{t.symbol}</span>
-                        <div>
-                          <span style={{
-                            fontFamily: "'Quicksand', sans-serif",
-                            fontSize: 11, fontWeight: 700,
-                            letterSpacing: "0.1em", textTransform: "uppercase",
-                            color: isDark ? "rgba(255,255,255,0.8)" : C.darkInk,
-                            display: "block",
-                          }}>{t.concept}</span>
-                          <span style={{
-                            fontFamily: "'Quicksand', sans-serif",
-                            fontSize: 10, fontWeight: 400,
-                            color: isDark ? "rgba(255,255,255,0.3)" : "#9aabba",
-                          }}>{t.source} · {t.metaphor}</span>
-                        </div>
+                        <span style={{
+                          fontFamily: "'Quicksand', sans-serif",
+                          fontSize: 10, fontWeight: 700,
+                          letterSpacing: "0.1em", textTransform: "uppercase",
+                          color: isDark ? "rgba(255,255,255,0.8)" : C.darkInk,
+                        }}>{t.concept}</span>
+                        <span style={{
+                          fontFamily: "'Quicksand', sans-serif",
+                          fontSize: 10, fontWeight: 400,
+                          color: isDark ? "rgba(255,255,255,0.3)" : "#9aabba",
+                        }}>·  {t.source}  ·  {t.metaphor}</span>
                       </div>
 
                       {/* Quote */}
@@ -529,7 +526,7 @@ export default function PhilosophyPage() {
 
 
       {/* ═══ CLOSING ═════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "80px 52px", background: C.cream }}>
+      <section style={{ padding: "60px 52px", background: C.cream }}>
         <div className="section-pad" style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
           <FadeIn>
             <div style={{
