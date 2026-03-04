@@ -135,7 +135,7 @@ const PracticeIcon = ({ size = 13, color = C.seaGlass }) => (
   </svg>
 );
 
-const ArrowRightIcon = ({ size = 10, color = `${C.sage}28` }) => (
+const ArrowRightIcon = ({ size = 10, color = `${C.sage}50` }) => (
   <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 8h10" /><polyline points="9,4 13,8 9,12" />
   </svg>
@@ -187,13 +187,27 @@ function LinkedName({ name, url, style = {}, linkType = 'activity' }) {
 
 /* ── snapshot ───────────────────────────────────────────────────────────── */
 
-function SnapCell({ label, value, sub, color = C.sage }) {
+function MiniMoon({ phaseName, size = 22 }) {
+  const ILLUMINATION = {
+    'New Moon': 0, 'Waxing Crescent': 25, 'First Quarter': 50,
+    'Waxing Gibbous': 75, 'Full Moon': 100, 'Waning Gibbous': 75,
+    'Last Quarter': 50, 'Waning Crescent': 25,
+  };
+  const illum = (ILLUMINATION[phaseName] ?? 50) / 100;
   return (
-    <div style={{ padding: '12px 0' }}>
-      <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color, marginBottom: 5, opacity: 0.85 }}>{label}</div>
-      <div style={{ fontFamily: F, fontSize: 17, fontWeight: 600, color: C.slate, lineHeight: 1.2 }}>{value}</div>
-      {sub && <div style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.slate}45`, marginTop: 3 }}>{sub}</div>}
-    </div>
+    <svg width={size} height={size} viewBox="0 0 22 22">
+      <circle cx="11" cy="11" r="9.5" fill="#e8e0d0" />
+      {illum < 1 && (
+        <ellipse
+          cx={11 + (1 - illum) * 9.5}
+          cy="11"
+          rx={Math.max(0.5, (1 - illum) * 9.5)}
+          ry="9.5"
+          fill="#1a2a3a"
+          opacity="0.65"
+        />
+      )}
+    </svg>
   );
 }
 
@@ -267,54 +281,65 @@ function DestinationSnapshot({ snapshot, celestial, weather }) {
     stargazing = celestial.moonPhase.stargazing;
   }
 
-  const moonEmojis = {
-    'New Moon': '🌑', 'Waxing Crescent': '🌒', 'First Quarter': '🌓',
-    'Waxing Gibbous': '🌔', 'Full Moon': '🌕', 'Waning Gibbous': '🌖',
-    'Last Quarter': '🌗', 'Waning Crescent': '🌘',
-  };
-  const moonEmoji = moonEmojis[moonName] || '🌙';
-
   const hasData = avgHigh !== null || sunrise || moonName;
   if (!hasData && !snapshot?.seasonalNote) return null;
 
-  const divider = { borderBottom: `1px solid ${C.sage}08` };
+  // Build adaptive cells array
+  const cells = [];
+  if (avgHigh !== null) cells.push({ key: 'temp', label: 'AVG TEMP', render: () => (
+    <div style={{ textAlign: 'center' }}>
+      <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 300, color: C.slate }}>{avgHigh}°</span>
+      {avgLow !== null && <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, fontWeight: 300, color: `${C.slate}65`, marginLeft: 2 }}>/{avgLow}°</span>}
+    </div>
+  )});
+  if (moonName) cells.push({ key: 'moon', label: moonName.split(' ')[0].toUpperCase(), render: () => (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <MiniMoon phaseName={moonName} />
+    </div>
+  )});
+  if (sunrise) cells.push({ key: 'sunrise', label: 'SUNRISE', render: () => (
+    <div style={{ fontFamily: F, fontSize: 15, fontWeight: 600, color: C.slate, textAlign: 'center' }}>{sunrise}</div>
+  )});
+  if (sunset) cells.push({ key: 'sunset', label: 'SUNSET', render: () => (
+    <div style={{ fontFamily: F, fontSize: 15, fontWeight: 600, color: C.slate, textAlign: 'center' }}>{sunset}</div>
+  )});
+
+  const SERIF = "'Cormorant Garamond', serif";
+  const cellLabel = { fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginTop: 6, textAlign: 'center' };
 
   return (
-    <div style={{ background: C.white, borderRadius: 10, border: `1px solid ${C.sage}12`, boxShadow: `0 2px 12px ${C.amber}06`, padding: '20px 22px 16px', marginBottom: 20 }}>
-      <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 4 }}>Conditions & Context</div>
-
-      {snapshot?.seasonalNote && (
-        <div style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: `${C.slate}65`, lineHeight: 1.6, paddingBottom: 12, ...divider }}>{snapshot.seasonalNote}</div>
-      )}
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-        {avgHigh !== null && (
-          <div style={{ borderRight: `1px solid ${C.sage}08`, paddingRight: 14, ...divider }}>
-            <SnapCell label="Avg Temp" value={`${avgHigh}° / ${avgLow}°`} sub="high / low" color={C.skyBlue} />
-          </div>
-        )}
-        {moonName && (
-          <div style={{ paddingLeft: 14, ...divider }}>
-            <SnapCell label="Moon" value={`${moonEmoji} ${moonName}`} sub={stargazing ? `${stargazing} stargazing` : null} color={C.goldenAmber} />
-          </div>
-        )}
-        {sunrise && (
-          <div style={{ borderRight: `1px solid ${C.sage}08`, paddingRight: 14, ...divider }}>
-            <SnapCell label="Sunrise" value={sunrise} sub="golden hour ~30 min prior" color={C.sunSalmon} />
-          </div>
-        )}
-        {sunset && (
-          <div style={{ paddingLeft: 14, ...divider }}>
-            <SnapCell label="Sunset" value={sunset} sub="golden hour ~1 hr prior" color="#8B7EC8" />
-          </div>
-        )}
-        {snapshot?.packingHint && (
-          <div style={{ gridColumn: '1 / -1', padding: '12px 0 4px' }}>
-            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: C.seaGlass, marginBottom: 5, opacity: 0.85 }}>Pack</div>
-            <div style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: `${C.slate}65`, lineHeight: 1.5 }}>{snapshot.packingHint}</div>
-          </div>
+    <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, marginBottom: 20 }}>
+      {/* Header */}
+      <div style={{ padding: '18px 22px 14px', borderBottom: `1px solid ${C.sage}08` }}>
+        <div style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 300, color: C.slate, lineHeight: 1.3 }}>Trip Conditions</div>
+        {snapshot?.seasonalNote && (
+          <div style={{ fontFamily: F, fontSize: 13, fontWeight: 400, color: `${C.slate}70`, lineHeight: 1.6, marginTop: 4 }}>{snapshot.seasonalNote}</div>
         )}
       </div>
+
+      {/* Data grid */}
+      {cells.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cells.length}, 1fr)` }}>
+          {cells.map((cell, i) => (
+            <div key={cell.key} style={{
+              padding: '16px 12px 14px',
+              borderRight: i < cells.length - 1 ? `1px solid ${C.sage}08` : 'none',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {cell.render()}
+              <div style={cellLabel}>{cell.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Packing hint */}
+      {snapshot?.packingHint && (
+        <div style={{ padding: '14px 22px', borderTop: `1px solid ${C.sage}08` }}>
+          <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 6 }}>PACK</div>
+          <div style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: `${C.slate}70`, lineHeight: 1.5 }}>{snapshot.packingHint}</div>
+        </div>
+      )}
     </div>
   );
 }
@@ -323,9 +348,9 @@ function DestinationSnapshot({ snapshot, celestial, weather }) {
 
 function TripOverview({ days, onDayClick, dayFeedback = {} }) {
   return (
-    <div style={{ background: C.white, borderRadius: 10, border: `1px solid ${C.sage}12`, boxShadow: `0 2px 12px ${C.amber}06`, padding: '20px 20px', marginBottom: 20 }}>
+    <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, boxShadow: `0 2px 12px ${C.amber}06`, padding: '20px 20px', marginBottom: 20 }}>
       <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 2, paddingLeft: 1 }}>Trip at a Glance</div>
-      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'italic', color: `${C.slate}50`, marginBottom: 18, paddingLeft: 1 }}>Your day-by-day overview</div>
+      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'italic', color: `${C.slate}65`, marginBottom: 18, paddingLeft: 1 }}>Your day-by-day overview</div>
 
       <div style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', left: 15, top: 8, bottom: 8, width: 1.5, background: `linear-gradient(180deg, ${C.sage}10, ${C.sage}05)`, borderRadius: 1 }} />
@@ -350,10 +375,10 @@ function TripOverview({ days, onDayClick, dayFeedback = {} }) {
                 </div>
                 <div style={{ fontFamily: F, fontSize: 16, fontWeight: 600, color: C.slate, lineHeight: 1.3 }}>{day.title}</div>
                 {day.snapshot && (
-                  <div style={{ fontFamily: F, fontSize: 12, color: `${C.slate}50`, lineHeight: 1.45, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{day.snapshot}</div>
+                  <div style={{ fontFamily: F, fontSize: 12, color: `${C.slate}80`, lineHeight: 1.45, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{day.snapshot}</div>
                 )}
               </div>
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke={`${C.sage}25`} strokeWidth="1.5" strokeLinecap="round" style={{ flexShrink: 0 }}><polyline points="6,3 11,8 6,13" /></svg>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke={`${C.sage}50`} strokeWidth="1.5" strokeLinecap="round" style={{ flexShrink: 0 }}><polyline points="6,3 11,8 6,13" /></svg>
             </button>
           );
         })}
@@ -438,7 +463,7 @@ function InlinePick({ category, pick, alternatives = [], isLast = false, dayInde
 
   return (
     <div style={{ marginBottom: isLast ? 0 : 10 }}>
-      <div style={{ background: C.white, border: `1.5px solid ${s.color}20`, borderRadius: 10, overflow: 'hidden', boxShadow: `0 2px 10px ${s.color}08` }}>
+      <div style={{ background: C.white, border: `1.5px solid ${s.color}20`, borderRadius: 2, overflow: 'hidden', boxShadow: `0 2px 10px ${s.color}08` }}>
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: `${s.color}05`, borderBottom: `1px solid ${s.color}10` }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
@@ -479,7 +504,7 @@ function InlinePick({ category, pick, alternatives = [], isLast = false, dayInde
                         <LinkedName name={alt.name} url={alt.url} linkType="alternative" style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.slate }} />
                         {(alt.url || lookupUrl(alt.name)) && <ExternalLinkIcon size={9} color={`${C.sage}35`} />}
                       </div>
-                      <div style={{ fontFamily: F, fontSize: 12, color: `${C.slate}55`, lineHeight: 1.55 }}>{alt.why}</div>
+                      <div style={{ fontFamily: F, fontSize: 12, color: `${C.slate}70`, lineHeight: 1.55 }}>{alt.why}</div>
                     </div>
                   ))}
                 </div>
@@ -601,7 +626,7 @@ function CompanionCard({ companion, onOpenDetail }) {
       padding: '16px 16px',
       background: `linear-gradient(145deg, ${C.cream}, ${C.white})`,
       border: `1px solid ${C.sage}15`,
-      borderRadius: 10,
+      borderRadius: 2,
       borderLeft: `4px solid ${C.seaGlass}50`,
       marginBottom: 12,
       boxShadow: `0 2px 12px ${C.amber}06, inset 0 1px 0 ${C.white}`,
@@ -719,7 +744,7 @@ function CompanionDetail({ type, data, onClose }) {
 
         {/* Deeper content */}
         {data.deeper && (
-          <p style={{ fontFamily: F, fontSize: 14, color: `${C.slate}60`, lineHeight: 1.7, marginBottom: 20 }}>{data.deeper}</p>
+          <p style={{ fontFamily: F, fontSize: 14, color: `${C.slate}70`, lineHeight: 1.7, marginBottom: 20 }}>{data.deeper}</p>
         )}
 
         {/* Quote */}
@@ -732,7 +757,7 @@ function CompanionDetail({ type, data, onClose }) {
 
         {/* Practice-specific: duration, when, howTo */}
         {!isTeaching && (data.duration || data.when || data.howTo) && (
-          <div style={{ background: C.white, borderRadius: 11, border: `1px solid ${C.sage}12`, padding: '13px 15px', marginBottom: 20 }}>
+          <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, padding: '13px 15px', marginBottom: 20 }}>
             {data.duration && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: (data.when || data.howTo) ? 10 : 0 }}>
                 <ClockIcon size={12} color={C.seaGlass} />
@@ -762,7 +787,7 @@ function CompanionDetail({ type, data, onClose }) {
           <div style={{ marginBottom: 20 }}>
             <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${C.sage}55`, marginBottom: 8 }}>Sources</div>
             {data.sources.map((s, i) => (
-              <div key={i} style={{ fontFamily: F, fontSize: 12, color: `${C.slate}55`, lineHeight: 1.5, marginBottom: 4 }}>
+              <div key={i} style={{ fontFamily: F, fontSize: 12, color: `${C.slate}70`, lineHeight: 1.5, marginBottom: 4 }}>
                 {s.author && <span style={{ fontWeight: 600 }}>{s.author}</span>}
                 {s.author && s.text && ', '}
                 {s.text && <em>{s.text}</em>}
@@ -773,7 +798,7 @@ function CompanionDetail({ type, data, onClose }) {
         )}
 
         {/* Placeholder for future full content */}
-        <div style={{ padding: '16px 14px', background: `${C.sage}05`, borderRadius: 11, border: `1px dashed ${C.sage}10`, textAlign: 'center' }}>
+        <div style={{ padding: '16px 14px', background: `${C.sage}05`, borderRadius: 2, border: `1px dashed ${C.sage}10`, textAlign: 'center' }}>
           <div style={{ fontFamily: F, fontSize: 12, fontWeight: 500, color: `${C.sage}50`, lineHeight: 1.5 }}>Full guided {isTeaching ? 'teaching' : 'practice'} experience coming soon.</div>
           <div style={{ fontFamily: F, fontSize: 11, color: `${C.sage}3a`, marginTop: 3 }}>Audio, video, and deeper content from the Lila library.</div>
         </div>
@@ -793,7 +818,7 @@ function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenCompanionDetai
 
   return (
     <div style={{
-      marginBottom: 16, borderRadius: 10, background: C.white,
+      marginBottom: 16, borderRadius: 2, background: C.white,
       border: `1px solid ${open ? `${color}18` : `${C.sage}10`}`,
       boxShadow: open ? `0 4px 24px ${C.amber}0a, 0 1px 3px ${C.ink}05` : `0 1px 6px ${C.sage}06`,
       overflow: 'hidden', transition: 'border-color 0.3s, box-shadow 0.3s',
@@ -902,9 +927,9 @@ function TripPulse({ overallNote, setOverallNote, pulse, setPulse, onPulseSelect
   ];
 
   return (
-    <div style={{ background: C.white, borderRadius: 10, border: `1px solid ${C.sage}12`, boxShadow: `0 2px 12px ${C.amber}06`, padding: '22px 20px', marginTop: 20 }}>
+    <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, boxShadow: `0 2px 12px ${C.amber}06`, padding: '22px 20px', marginTop: 20 }}>
       <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 4 }}>Overall Feeling</div>
-      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'italic', color: `${C.slate}50`, marginBottom: 16 }}>How's this trip shaping up?</div>
+      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'italic', color: `${C.slate}65`, marginBottom: 16 }}>How's this trip shaping up?</div>
 
       <div style={{ display: 'flex', gap: 8 }}>
         {options.map(o => {
@@ -982,20 +1007,20 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
           <CheckIcon size={14} color={C.seaGlass} />
           <span style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.seaGlass }}>Trip locked in</span>
         </div>
-        <p style={{ fontFamily: F, fontSize: 12, color: `${C.slate}45`, marginTop: 10, lineHeight: 1.5 }}>You can still make changes anytime — just update your day notes above.</p>
+        <p style={{ fontFamily: F, fontSize: 12, color: `${C.slate}65`, marginTop: 10, lineHeight: 1.5 }}>You can still make changes anytime — just update your day notes above.</p>
       </div>
     );
   }
 
   if (isPremiumGated) {
     return (
-      <div style={{ background: C.white, borderRadius: 10, border: `1px solid ${C.oceanTeal}20`, boxShadow: `0 2px 16px ${C.oceanTeal}08`, padding: '24px 20px', marginTop: 20, textAlign: 'center' }}>
+      <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.oceanTeal}20`, boxShadow: `0 2px 16px ${C.oceanTeal}08`, padding: '24px 20px', marginTop: 20, textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 12px', borderRadius: 8, background: `${C.oceanTeal}10`, border: `1px solid ${C.oceanTeal}20`, marginBottom: 14 }}>
           <SparkleIcon size={12} color={C.oceanTeal} />
           <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.oceanTeal }}>Lila Pro</span>
         </div>
         <h3 style={{ fontFamily: F, fontSize: 18, fontWeight: 600, color: C.slate, marginBottom: 6 }}>Keep refining your perfect trip</h3>
-        <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}55`, lineHeight: 1.6, maxWidth: 380, margin: '0 auto 18px' }}>
+        <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, lineHeight: 1.6, maxWidth: 380, margin: '0 auto 18px' }}>
           You've used your {maxFree} free refinements. Upgrade to continue iterating and unlock the full trip planning toolkit.
         </p>
         <div ref={featuresRef} style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 300, margin: '0 auto 20px', textAlign: 'left' }}>
@@ -1015,7 +1040,7 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
         <button onClick={onUpgradeClick} style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.white, background: C.oceanTeal, border: 'none', borderRadius: 24, padding: '12px 28px', cursor: 'pointer', WebkitTapHighlightColor: 'transparent', boxShadow: `0 2px 12px ${C.oceanTeal}25`, transition: 'all 0.2s' }}>
           Upgrade to Lila Pro
         </button>
-        <div style={{ fontFamily: F, fontSize: 11, color: `${C.slate}35`, marginTop: 8 }}>Starting at $9/trip</div>
+        <div style={{ fontFamily: F, fontSize: 11, color: `${C.slate}65`, marginTop: 8 }}>Starting at $9/trip</div>
       </div>
     );
   }
@@ -1036,7 +1061,7 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
         <SparkleIcon size={14} color={hasFeedback ? C.white : `${C.sage}40`} />
         Refine this trip
       </button>
-      <div style={{ fontFamily: F, fontSize: 11, color: `${C.slate}35`, marginTop: 8 }}>
+      <div style={{ fontFamily: F, fontSize: 11, color: `${C.slate}65`, marginTop: 8 }}>
         {remaining} free refinement{remaining !== 1 ? 's' : ''} remaining
       </div>
       {!hasFeedback && (
@@ -1057,7 +1082,7 @@ function RefiningOverlay({ visible }) {
       <div style={{ width: 40, height: 40, borderRadius: '50%', border: `2px solid ${C.sage}15`, borderTopColor: C.oceanTeal, animation: 'lilaSpin 0.9s linear infinite' }} />
       <style>{`@keyframes lilaSpin { to { transform: rotate(360deg); } }`}</style>
       <p style={{ fontFamily: F, fontSize: 14, fontWeight: 500, color: `${C.slate}70`, marginTop: 20 }}>Refining your trip...</p>
-      <p style={{ fontFamily: F, fontSize: 12, fontWeight: 400, color: `${C.slate}40`, marginTop: 4 }}>Incorporating your feedback</p>
+      <p style={{ fontFamily: F, fontSize: 12, fontWeight: 400, color: `${C.slate}65`, marginTop: 4 }}>Incorporating your feedback</p>
     </div>
   );
 }
@@ -1409,7 +1434,7 @@ export default function ItineraryResults() {
           <div style={{ textAlign: 'center', padding: '18px 8px 28px' }}>
             <VersionBadge iteration={iteration} />
             <h1 style={{ fontFamily: F, fontSize: 'clamp(24px, 6.5vw, 32px)', fontWeight: 600, color: C.slate, lineHeight: 1.2, marginBottom: 8, letterSpacing: '-0.01em' }}>{itinerary.title}</h1>
-            {itinerary.subtitle && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}55`, fontStyle: 'italic', fontWeight: 400 }}>{itinerary.subtitle}</p>}
+            {itinerary.subtitle && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, fontStyle: 'italic', fontWeight: 400 }}>{itinerary.subtitle}</p>}
             {itinerary.intro && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, lineHeight: 1.75, maxWidth: 460, margin: '14px auto 0', fontWeight: 400 }}>{itinerary.intro}</p>}
           </div>
         )}
@@ -1442,7 +1467,7 @@ export default function ItineraryResults() {
 
             {/* Before You Go */}
             {itinerary.beforeYouGo && (
-              <div ref={beforeYouGoRef} style={{ background: C.white, borderRadius: 10, border: `1px solid ${C.sage}12`, padding: '18px 20px', marginTop: 6, boxShadow: `0 2px 10px ${C.amber}05` }}>
+              <div ref={beforeYouGoRef} style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, padding: '18px 20px', marginTop: 6, boxShadow: `0 2px 10px ${C.amber}05` }}>
                 <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 12 }}>Before You Go</div>
                 {itinerary.beforeYouGo.map((item, i) => (
                   <div key={i} style={{ display: 'flex', gap: 8, padding: '5px 0', borderBottom: i < itinerary.beforeYouGo.length - 1 ? `1px solid ${C.sage}06` : 'none' }}>
@@ -1478,7 +1503,7 @@ export default function ItineraryResults() {
               onUpgradeClick={() => trackEvent('premium_upgrade_clicked', { iteration })} />
           </>
         ) : (
-          <div style={{ background: C.white, borderRadius: 10, padding: '24px 22px', border: `1px solid ${C.sage}12`, boxShadow: `0 2px 10px ${C.amber}05` }}>
+          <div style={{ background: C.white, borderRadius: 2, padding: '24px 22px', border: `1px solid ${C.sage}12`, boxShadow: `0 2px 10px ${C.amber}05` }}>
             <MarkdownContent content={rawItinerary} />
           </div>
         )}
