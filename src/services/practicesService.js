@@ -1638,12 +1638,12 @@ export function getPracticesForItinerary(formData) {
     meditation: { types: ['practice', 'teaching'] },
     hiking: { keywords: ['trail', 'walk', 'hike', 'forest'] },
     stargazing: { keywords: ['star', 'night', 'cosmic', 'sky'] },
-    journaling: { keywords: ['journal', 'reflect', 'review'] },
+    localFarms: { keywords: ['farm', 'local', 'harvest', 'agricultural'] },
     soundBath: { keywords: ['sound', 'resonance'] },
     sauna: { keywords: ['heat', 'fire', 'voluntary discomfort'] },
     service: { keywords: ['service', 'dana', 'generosity'] },
     plantMedicine: { keywords: ['plant', 'ceremony'] },
-    foraging: { keywords: ['forage', 'nature', 'forest'] },
+    massage: { keywords: ['massage', 'bodywork', 'touch', 'spa'] },
   };
 
   // Score and select entries

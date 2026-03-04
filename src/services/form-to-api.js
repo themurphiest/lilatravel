@@ -86,7 +86,7 @@ function practicesToInterests(practices = [], intentions = [], movement = 50) {
     meditation: 'mindfulness',
     hiking: 'hiking',
     stargazing: 'stargazing',
-    journaling: 'mindfulness',
+    localFarms: 'food',
     soundBath: 'spa',
     sauna: 'spa',
   };

@@ -221,6 +221,17 @@ function IconJournal({ size, color }) {
   );
 }
 
+function IconMassage({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M6 14 C6 10 9 7 12 7 C15 7 18 10 18 14" fill={`${color}08`} />
+      <path d="M4 16 C5 12 8 9 12 9 C16 9 19 12 20 16" />
+      <path d="M4 16 C4 18 6 19 8 18" />
+      <path d="M20 16 C20 18 18 19 16 18" />
+    </Icon>
+  );
+}
+
 function IconSoundBath({ size, color }) {
   return (
     <Icon size={size} color={color}>
@@ -261,12 +272,12 @@ const PRACTICES = [
   { id: "meditation", label: "Meditation", icon: IconEnso, color: C.sage },
   { id: "hiking", label: "Mindful Hiking", icon: IconMountain, color: C.goldenAmber },
   { id: "stargazing", label: "Stargazing", icon: IconStars, color: C.slateLight },
-  { id: "journaling", label: "Journaling", icon: IconJournal, color: C.coralBlush },
+  { id: "localFarms", label: "Local Farms", icon: IconBindu, color: C.seaGlass },
   { id: "soundBath", label: "Sound Bath", icon: IconSoundBath, color: C.sageLight },
   { id: "sauna", label: "Sauna", icon: IconFlame, color: C.sunSalmon },
   { id: "service", label: "Service Work", icon: IconDharmaWheel, color: C.seaGlass },
   { id: "plantMedicine", label: "Plant Medicine", icon: IconBodhiLeaf, color: C.sage },
-  { id: "foraging", label: "Foraging", icon: IconBindu, color: C.goldenAmber },
+  { id: "massage", label: "Massage", icon: IconMassage, color: C.coralBlush },
 ];
 
 const BUDGET_TIERS = [
