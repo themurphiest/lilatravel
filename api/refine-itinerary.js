@@ -49,6 +49,41 @@ function buildFeedbackSummary(dayFeedback, days) {
 }
 
 /**
+ * Build the per-activity feedback summary for the refinement prompt.
+ * Keys look like day_0_timeline_2 or day_1_pick_0.
+ */
+function buildActivityFeedbackSummary(activityFeedback, days) {
+  if (!activityFeedback || Object.keys(activityFeedback).length === 0) return '';
+
+  const lines = Object.entries(activityFeedback).map(([key, value]) => {
+    const match = key.match(/^day_(\d+)_(timeline|pick)_(\d+)$/);
+    if (!match) return null;
+    const [, dayIdx, type, itemIdx] = match;
+    const day = days?.[Number(dayIdx)];
+    const dayLabel = day?.label || `Day ${Number(dayIdx) + 1}`;
+
+    let itemName = '';
+    if (type === 'timeline') {
+      itemName = day?.timeline?.[Number(itemIdx)]?.title || `activity ${Number(itemIdx) + 1}`;
+    } else {
+      const pick = day?.picks?.[Number(itemIdx)];
+      itemName = pick?.pick?.name || `${pick?.category || 'pick'} ${Number(itemIdx) + 1}`;
+    }
+
+    const reaction = typeof value === 'string' ? value : value?.reaction;
+    const note = typeof value === 'object' ? value?.note : '';
+    const labels = { fire: 'MUST DO', up: 'LOVE IT', down: 'NOT FOR ME' };
+    const label = labels[reaction] || reaction;
+
+    let line = `- **${dayLabel}**, ${itemName}: ${label}`;
+    if (note) line += ` — "${note}"`;
+    return line;
+  }).filter(Boolean);
+
+  return lines.join('\n');
+}
+
+/**
  * Build the overall pulse section for the refinement prompt.
  */
 function buildPulseSummary(pulse, overallNote) {
@@ -73,7 +108,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { itinerary, dayFeedback, pulse, overallNote, formData } = req.body;
+    const { itinerary, activityFeedback, dayFeedback, pulse, overallNote, formData } = req.body;
 
     if (!itinerary) {
       return res.status(400).json({ error: 'Missing required field: itinerary' });
@@ -94,12 +129,14 @@ export default async function handler(req, res) {
     }
 
     const feedbackSummary = buildFeedbackSummary(dayFeedback, parsedItinerary?.days);
+    const activitySummary = buildActivityFeedbackSummary(activityFeedback, parsedItinerary?.days);
     const pulseSummary = buildPulseSummary(pulse, overallNote);
 
     const hasDayFeedback = feedbackSummary.length > 0;
+    const hasActivityFeedback = activitySummary.length > 0;
     const hasPulse = pulseSummary.length > 0;
 
-    if (!hasDayFeedback && !hasPulse) {
+    if (!hasDayFeedback && !hasActivityFeedback && !hasPulse) {
       return res.status(400).json({ error: 'No feedback provided to refine against' });
     }
 
@@ -115,7 +152,9 @@ ${itinerary}
 
 ## Traveler Feedback
 
-${hasDayFeedback ? `### Per-Day Feedback\n\n${feedbackSummary}` : ''}
+${hasActivityFeedback ? `### Per-Activity Signals\n\nThe traveler reacted to individual activities and picks:\n\n${activitySummary}` : ''}
+
+${hasDayFeedback ? `### Per-Day Notes\n\n${feedbackSummary}` : ''}
 
 ${hasPulse ? `### Overall Trip Feeling\n\n${pulseSummary}` : ''}
 
@@ -125,21 +164,23 @@ ${hasPulse ? `### Overall Trip Feeling\n\n${pulseSummary}` : ''}
 
 You are revising this itinerary based on the traveler's feedback. Follow these rules:
 
-1. **Preserve approved days exactly.** If a day is marked APPROVED, return it unchanged — same timeline, same picks, same details. Do not rewrite, reorder, or "improve" approved days.
+1. **Honor per-activity signals.** Activities marked MUST DO or LOVE IT must be preserved exactly. Activities marked NOT FOR ME should be replaced with alternatives from the destination guide — respect any note the traveler attached. Activities without signals can be adjusted if needed.
 
-2. **Modify adjusted days based on the traveler's note.** Respect their specific request. If they say "less hiking, more town time" — replace strenuous trail activities with town-based or gentle alternatives from the destination guide. If they want a restaurant swap, swap it. Stay faithful to the note.
+2. **Preserve days whose activities are all loved.** If every signaled activity on a day is MUST DO or LOVE IT with no negative signals, keep that day locked.
 
-3. **Days without feedback** can be lightly revised if the overall pulse suggests changes, but keep them mostly stable. The traveler didn't flag them — don't surprise them with big changes.
+3. **Respect per-day notes.** If the traveler left a note on a day, follow their direction. If they say "less hiking, more town time" — replace strenuous trail activities with town-based or gentle alternatives from the destination guide.
 
-4. **Honor the overall pulse:**
+4. **Days without feedback** can be lightly revised if the overall pulse suggests changes, but keep them mostly stable. The traveler didn't flag them — don't surprise them with big changes.
+
+5. **Honor the overall pulse:**
    - "Almost there" (close) → make targeted tweaks only, preserve the overall structure
-   - "Rethink it" (rethink) → feel free to make larger structural changes (reorder days, swap major activities), but still preserve any individually approved days
+   - "Rethink it" (rethink) → feel free to make larger structural changes (reorder days, swap major activities), but still preserve any activities individually marked MUST DO or LOVE IT
 
-5. **Maintain the same JSON structure** as the original. Same fields, same format. The frontend depends on this structure.
+6. **Maintain the same JSON structure** as the original. Same fields, same format. The frontend depends on this structure.
 
-6. **All recommendations must still come from the destination guide** in your system prompt context. Do not invent new places.
+7. **All recommendations must still come from the destination guide** in your system prompt context. Do not invent new places.
 
-7. **Keep the same number of days** unless the overall note explicitly asks to add or remove days.
+8. **Keep the same number of days** unless the overall note explicitly asks to add or remove days.
 
 ${formData ? `
 ---

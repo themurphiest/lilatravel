@@ -154,6 +154,33 @@ const BackIcon = ({ size = 14, color = C.sage }) => (
   </svg>
 );
 
+const CloseIcon = ({ size = 14, color = C.sage }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4l8 8" /><path d="M12 4l-8 8" />
+  </svg>
+);
+
+const FlameIcon = ({ size = 14, color = C.goldenAmber, active = false }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2C12 2 7 7 7 13a5 5 0 0 0 10 0c0-3-2-5-2-5s0 3-3 3c0-2 0-6 0-9z" fill={active ? `${color}15` : 'none'} />
+    <path d="M12 17a1.5 1.5 0 0 1-1.5-1.5C10.5 14.5 12 13 12 13s1.5 1.5 1.5 2.5A1.5 1.5 0 0 1 12 17z" fill={active ? `${color}30` : 'none'} />
+  </svg>
+);
+
+const ThumbUp = ({ size = 14, color = C.seaGlass, active = false }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 11v9a1 1 0 0 0 1 1h9.5a1.5 1.5 0 0 0 1.48-1.26l1.2-7A1.5 1.5 0 0 0 17.7 10H14V6a2 2 0 0 0-2-2 1 1 0 0 0-1 1v.5L8.5 11H6z" fill={active ? `${color}18` : 'none'} />
+    <path d="M6 11H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h2" />
+  </svg>
+);
+
+const ThumbDown = ({ size = 14, color = C.sunSalmon, active = false }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 13V4a1 1 0 0 0-1-1H7.5a1.5 1.5 0 0 0-1.48 1.26l-1.2 7A1.5 1.5 0 0 0 6.3 14H10v4a2 2 0 0 0 2 2 1 1 0 0 0 1-1v-.5l2.5-4.5H18z" fill={active ? `${color}18` : 'none'} />
+    <path d="M18 13h2a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-2" />
+  </svg>
+);
+
 /* ── smooth collapsible ─────────────────────────────────────────────────── */
 
 function Collapsible({ open, children }) {
@@ -371,8 +398,7 @@ function TripOverview({ days, onDayClick, dayFeedback = {} }) {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color, marginBottom: 2 }}>{day.label}</span>
-                  {fb && fb.status === 'approved' && <CheckIcon size={11} color={C.seaGlass} />}
-                  {fb && fb.status === 'adjust' && <PencilIcon size={11} color={C.goldenAmber} />}
+                  {fb && fb.note && <PencilIcon size={11} color={C.sage} />}
                 </div>
                 <div style={{ fontFamily: F, fontSize: 16, fontWeight: 600, color: C.slate, lineHeight: 1.3 }}>{day.title}</div>
                 {day.snapshot && (
@@ -390,7 +416,7 @@ function TripOverview({ days, onDayClick, dayFeedback = {} }) {
 
 /* ── timeline block ────────────────────────────────────────────────────── */
 
-function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', url, isLast = false, dayIndex = 0 }) {
+function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', url, isLast = false, dayIndex = 0, itemIndex = 0, activityFeedback, onActivityFeedback }) {
   const [open, setOpen] = useState(false);
   const dot = WARM_DOT;
   const resolvedUrl = url || lookupUrl(title);
@@ -445,6 +471,9 @@ function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', u
             </div>
           </Collapsible>
         )}
+        {onActivityFeedback && (
+          <ActivityThumbs id={`day_${dayIndex}_timeline_${itemIndex}`} feedback={activityFeedback} onFeedback={onActivityFeedback} />
+        )}
       </div>
     </div>
   );
@@ -452,7 +481,7 @@ function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', u
 
 /* ── inline pick ───────────────────────────────────────────────────────── */
 
-function InlinePick({ category, pick, alternatives = [], isLast = false, dayIndex = 0 }) {
+function InlinePick({ category, pick, alternatives = [], isLast = false, dayIndex = 0, pickIndex = 0, activityFeedback, onActivityFeedback }) {
   const [showAlts, setShowAlts] = useState(false);
   const styles = {
     stay: { label: 'Where to Stay', color: C.goldenAmber },
@@ -512,103 +541,153 @@ function InlinePick({ category, pick, alternatives = [], isLast = false, dayInde
               </Collapsible>
             </>
           )}
+          {onActivityFeedback && (
+            <div style={{ padding: '6px 14px 10px' }}>
+              <ActivityThumbs id={`day_${dayIndex}_pick_${pickIndex}`} feedback={activityFeedback} onFeedback={onActivityFeedback} />
+            </div>
+          )}
         </div>
     </div>
   );
 }
 
-function DayFeedback({ dayIndex, feedback, onFeedback }) {
-  const [noteText, setNoteText] = useState(feedback?.note || '');
-  const [isExpanded, setIsExpanded] = useState(false);
-  const status = feedback?.status || null;
+/* ── ActivityThumbs — inline reaction buttons for timeline blocks and pick cards ── */
 
-  const handleApprove = () => {
-    onFeedback(dayIndex, { status: 'approved', note: '' });
-    setIsExpanded(false);
-    setNoteText('');
-  };
+function ActivityThumbs({ id, feedback, onFeedback }) {
+  const current = feedback?.[id] || null;
+  const currentReaction = typeof current === 'string' ? current : current?.reaction || null;
+  const currentNote = typeof current === 'object' ? current?.note || '' : '';
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteText, setNoteText] = useState(currentNote);
 
-  const handleAdjust = () => {
-    if (isExpanded && noteText.trim()) {
-      onFeedback(dayIndex, { status: 'adjust', note: noteText.trim() });
-      setIsExpanded(false);
+  const toggle = (reaction) => {
+    if (currentReaction === reaction) {
+      onFeedback(id, null);
+      if (reaction === 'down') { setNoteOpen(false); setNoteText(''); }
     } else {
-      setIsExpanded(true);
+      if (reaction === 'down') {
+        onFeedback(id, { reaction: 'down', note: noteText });
+      } else {
+        onFeedback(id, reaction);
+        setNoteOpen(false);
+        setNoteText('');
+      }
     }
   };
 
-  const handleClear = () => {
-    onFeedback(dayIndex, null);
-    setIsExpanded(false);
-    setNoteText('');
+  const saveNote = (text) => {
+    setNoteText(text);
+    onFeedback(id, { reaction: 'down', note: text });
   };
 
-  // Compact confirmed state
-  if (status && !isExpanded) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', marginTop: 10, borderTop: `1.5px solid ${C.sage}14` }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          {status === 'approved' && <CheckIcon size={12} color={C.seaGlass} />}
-          {status === 'adjust' && <PencilIcon size={12} color={C.goldenAmber} />}
-          <span style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: status === 'approved' ? C.seaGlass : C.goldenAmber }}>
-            {status === 'approved' ? 'On track' : 'Adjustments noted'}
-          </span>
+  const reactions = [
+    { key: 'fire', icon: FlameIcon, color: C.goldenAmber, label: 'Must do',
+      restBg: `${C.goldenAmber}08`, restBorder: `${C.goldenAmber}22`, restIcon: `${C.goldenAmber}70`,
+      activeBg: `${C.goldenAmber}18`, activeBorder: `${C.goldenAmber}45` },
+    { key: 'up', icon: ThumbUp, color: C.seaGlass, label: 'Love it',
+      restBg: `${C.seaGlass}08`, restBorder: `${C.seaGlass}25`, restIcon: `${C.seaGlass}80`,
+      activeBg: `${C.seaGlass}18`, activeBorder: `${C.seaGlass}45` },
+    { key: 'down', icon: ThumbDown, color: C.sunSalmon, label: 'Not for me',
+      restBg: `${C.sunSalmon}08`, restBorder: `${C.sunSalmon}25`, restIcon: `${C.sunSalmon}80`,
+      activeBg: `${C.sunSalmon}18`, activeBorder: `${C.sunSalmon}45` },
+  ];
+
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div style={{ display: 'flex', gap: 6 }}>
+        {reactions.map(r => {
+          const active = currentReaction === r.key;
+          const Ic = r.icon;
+          return (
+            <button key={r.key} onClick={() => toggle(r.key)} style={{
+              display: 'flex', alignItems: 'center', gap: 4,
+              padding: active ? '5px 10px' : '5px 8px',
+              borderRadius: 8,
+              background: active ? r.activeBg : r.restBg,
+              border: `1px solid ${active ? r.activeBorder : r.restBorder}`,
+              cursor: 'pointer', transition: 'all 0.2s',
+              WebkitTapHighlightColor: 'transparent',
+            }}>
+              <Ic size={14} color={active ? r.color : r.restIcon} active={active} />
+              {active && <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: r.color }}>{r.label}</span>}
+            </button>
+          );
+        })}
+      </div>
+      {/* Down note */}
+      {currentReaction === 'down' && (
+        <div style={{ marginTop: 6 }}>
+          {!noteOpen && !currentNote && (
+            <button onClick={() => setNoteOpen(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.sunSalmon}90`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', WebkitTapHighlightColor: 'transparent' }}>+ add note</button>
+          )}
+          {!noteOpen && currentNote && (
+            <button onClick={() => setNoteOpen(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, fontStyle: 'italic', color: `${C.slate}60`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', textAlign: 'left', WebkitTapHighlightColor: 'transparent', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
+              "{currentNote.length > 60 ? currentNote.slice(0, 60) + '…' : currentNote}" <span style={{ fontStyle: 'normal', color: `${C.sunSalmon}80` }}>edit</span>
+            </button>
+          )}
+          {noteOpen && (
+            <div style={{ marginTop: 4 }}>
+              <textarea value={noteText} onChange={e => setNoteText(e.target.value)}
+                placeholder="What doesn't feel right?"
+                rows={2}
+                style={{ width: '100%', padding: '8px 10px', fontFamily: F, fontSize: 12, fontWeight: 400, color: C.slate, background: C.white, border: `1px solid ${C.sunSalmon}25`, borderRadius: 8, resize: 'vertical', lineHeight: 1.5, outline: 'none', boxSizing: 'border-box' }}
+              />
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 6, marginTop: 4 }}>
+                <button onClick={() => setNoteOpen(false)} style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}70`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>Cancel</button>
+                <button onClick={() => { saveNote(noteText); setNoteOpen(false); }} style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: C.white, background: C.sunSalmon, border: 'none', borderRadius: 6, padding: '4px 12px', cursor: 'pointer' }}>Save</button>
+              </div>
+            </div>
+          )}
         </div>
-        <button onClick={handleClear} style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}70`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', WebkitTapHighlightColor: 'transparent' }}>Change</button>
+      )}
+    </div>
+  );
+}
+
+/* ── DayNote — conditional per-day note ───────────────────────────────── */
+
+function DayNote({ dayIndex, feedback, onFeedback, hasActivitySignals }) {
+  const noteText = feedback?.note || '';
+  const [editing, setEditing] = useState(false);
+  const [text, setText] = useState(noteText);
+
+  // Collapsed link mode when activity signals exist
+  if (hasActivitySignals && !editing && !noteText) {
+    return (
+      <div style={{ marginTop: 14, paddingTop: 10, borderTop: `1px solid ${C.sage}0c` }}>
+        <button onClick={() => setEditing(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.sage}60`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0', WebkitTapHighlightColor: 'transparent' }}>+ Add a note about this day</button>
       </div>
     );
   }
 
+  // Show saved note in compact form
+  if (hasActivitySignals && !editing && noteText) {
+    return (
+      <div style={{ marginTop: 14, paddingTop: 10, borderTop: `1px solid ${C.sage}0c` }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+          <div style={{ fontFamily: F, fontSize: 12, fontStyle: 'italic', color: `${C.slate}60`, lineHeight: 1.5 }}>"{noteText}"</div>
+          <button onClick={() => { setText(noteText); setEditing(true); }} style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}60`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px', flexShrink: 0 }}>Edit</button>
+        </div>
+      </div>
+    );
+  }
+
+  // Full textarea mode
   return (
     <div style={{ marginTop: 14, padding: '14px 0 4px', borderTop: `1.5px solid ${C.sage}14` }}>
       <div style={{ fontFamily: F, fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.muted, marginBottom: 10 }}>
         How does this day feel?
       </div>
-
-      <div style={{ display: 'flex', gap: 8 }}>
-        <button onClick={handleApprove} style={{
-          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-          padding: '11px 12px', borderRadius: 10,
-          background: status === 'approved' ? `${C.seaGlass}12` : C.white,
-          border: `1.5px solid ${status === 'approved' ? `${C.seaGlass}35` : `${C.sage}12`}`,
-          cursor: 'pointer', WebkitTapHighlightColor: 'transparent', transition: 'all 0.2s',
-          boxShadow: `0 1px 4px ${C.amber}06`,
-        }}>
-          <CheckIcon size={13} color={status === 'approved' ? C.seaGlass : `${C.sage}50`} />
-          <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: status === 'approved' ? C.seaGlass : C.body }}>On track</span>
-        </button>
-
-        <button onClick={handleAdjust} style={{
-          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-          padding: '11px 12px', borderRadius: 10,
-          background: isExpanded || status === 'adjust' ? `${C.goldenAmber}10` : C.white,
-          border: `1.5px solid ${isExpanded || status === 'adjust' ? `${C.goldenAmber}30` : `${C.sage}12`}`,
-          cursor: 'pointer', WebkitTapHighlightColor: 'transparent', transition: 'all 0.2s',
-          boxShadow: `0 1px 4px ${C.amber}06`,
-        }}>
-          <PencilIcon size={13} color={isExpanded || status === 'adjust' ? C.goldenAmber : `${C.sage}50`} />
-          <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: isExpanded || status === 'adjust' ? C.goldenAmber : C.body }}>I'd adjust</span>
-        </button>
-      </div>
-
-      {isExpanded && (
-        <div style={{ marginTop: 10 }}>
-          <textarea value={noteText} onChange={e => setNoteText(e.target.value)}
-            placeholder="What would you change? E.g. 'less hiking, more time in town' or 'swap the restaurant for something vegetarian-friendly'"
-            style={{ width: '100%', minHeight: 72, padding: '10px 12px', fontFamily: F, fontSize: 13, fontWeight: 400, color: C.slate, background: C.white, border: `1px solid ${C.goldenAmber}25`, borderRadius: 10, resize: 'vertical', lineHeight: 1.55, outline: 'none', boxSizing: 'border-box' }}
-            onFocus={e => e.target.style.borderColor = `${C.goldenAmber}50`}
-            onBlur={e => e.target.style.borderColor = `${C.goldenAmber}25`}
-          />
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 8 }}>
-            <button onClick={() => { setIsExpanded(false); setNoteText(''); }} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.sage}70`, background: 'none', border: 'none', cursor: 'pointer', padding: '6px 10px' }}>Cancel</button>
-            <button onClick={handleAdjust} disabled={!noteText.trim()} style={{
-              fontFamily: F, fontSize: 11, fontWeight: 600,
-              color: noteText.trim() ? C.white : `${C.sage}40`,
-              background: noteText.trim() ? C.goldenAmber : `${C.sage}10`,
-              border: 'none', borderRadius: 8, padding: '6px 14px',
-              cursor: noteText.trim() ? 'pointer' : 'default', transition: 'all 0.2s',
-            }}>Save note</button>
-          </div>
+      <textarea value={editing ? text : noteText} onChange={e => setText(e.target.value)}
+        placeholder="Any thoughts on this day? E.g. 'less hiking, more time in town'"
+        style={{ width: '100%', minHeight: 64, padding: '10px 12px', fontFamily: F, fontSize: 13, fontWeight: 400, color: C.slate, background: C.white, border: `1px solid ${C.sage}18`, borderRadius: 10, resize: 'vertical', lineHeight: 1.55, outline: 'none', boxSizing: 'border-box' }}
+        onFocus={(e) => { e.target.style.borderColor = `${C.sage}40`; if (!editing) { setText(noteText); setEditing(true); } }}
+        onBlur={e => e.target.style.borderColor = `${C.sage}18`}
+      />
+      {(editing || text !== noteText) && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 6 }}>
+          <button onClick={() => { setEditing(false); setText(noteText); }} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.sage}70`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>Cancel</button>
+          <button onClick={() => { onFeedback(dayIndex, { note: text.trim() }); setEditing(false); }} style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: C.white, background: C.sage, border: 'none', borderRadius: 8, padding: '5px 14px', cursor: 'pointer', transition: 'all 0.2s' }}>Save</button>
         </div>
       )}
     </div>
@@ -810,7 +889,7 @@ function CompanionDetail({ type, data, onClose }) {
 
 /* ── day card ──────────────────────────────────────────────────────────── */
 
-function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenCompanionDetail }) {
+function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenCompanionDetail, activityFeedback, onActivityFeedback }) {
   const [open, setOpen] = useState(true);
   const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
   const hasCompanion = day.companion && (day.companion.teaching || day.companion.practice);
@@ -853,8 +932,7 @@ function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenCompanionDetai
         <div style={{ flex: 1, position: 'relative' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ fontFamily: F, fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: open ? color : C.sage, transition: 'color 0.3s', marginBottom: 4 }}>{day.label}</span>
-            {feedback?.status === 'approved' && <CheckIcon size={11} color={C.seaGlass} />}
-            {feedback?.status === 'adjust' && <PencilIcon size={11} color={C.goldenAmber} />}
+            {feedback?.note && <PencilIcon size={11} color={C.sage} />}
           </div>
           <div style={{ fontFamily: F, fontSize: 19, fontWeight: 700, color: C.ink, lineHeight: 1.25 }}>{day.title}</div>
           {!open && day.snapshot && (
@@ -877,7 +955,8 @@ function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenCompanionDetai
             {day.timeline && day.timeline.map((b, i) => (
               <TimelineBlock key={i} time={b.time} title={b.title} summary={b.summary}
                 details={b.details} timeOfDay={b.timeOfDay} url={b.url} dayIndex={dayIndex}
-                isLast={i === day.timeline.length - 1} />
+                itemIndex={i} isLast={i === day.timeline.length - 1}
+                activityFeedback={activityFeedback} onActivityFeedback={onActivityFeedback} />
             ))}
           </div>
 
@@ -904,14 +983,16 @@ function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenCompanionDetai
 
                 {day.picks && day.picks.map((p, i) => (
                   <InlinePick key={i} category={p.category} pick={p.pick} dayIndex={dayIndex}
-                    alternatives={p.alternatives || []} isLast={i === day.picks.length - 1} />
+                    pickIndex={i} alternatives={p.alternatives || []} isLast={i === day.picks.length - 1}
+                    activityFeedback={activityFeedback} onActivityFeedback={onActivityFeedback} />
                 ))}
               </div>
             </>
           )}
 
-          {/* ZONE 3: Feedback */}
-          <DayFeedback dayIndex={dayIndex} feedback={feedback} onFeedback={onFeedback} />
+          {/* ZONE 3: Day note */}
+          <DayNote dayIndex={dayIndex} feedback={feedback} onFeedback={onFeedback}
+            hasActivitySignals={activityFeedback && Object.keys(activityFeedback).some(k => k.startsWith(`day_${dayIndex}_`))} />
         </div>
       </Collapsible>
     </div>
@@ -1189,6 +1270,117 @@ function tripSessionKey(rawItinerary, formData) {
   return `lila_iter_${hash}`;
 }
 
+/* ── FirstDraftModal — shown once on iteration 0 ──────────────────────── */
+
+function FirstDraftModal({ onClose }) {
+  const [show, setShow] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setShow(true), 120); return () => clearTimeout(t); }, []);
+
+  const instructions = [
+    { icon: FlameIcon, color: C.goldenAmber, text: 'Flame an activity you absolutely must do' },
+    { icon: ThumbUp, color: C.seaGlass, text: 'Thumb up activities you\'re excited about' },
+    { icon: ThumbDown, color: C.sunSalmon, text: 'Thumb down what doesn\'t feel right — add a note if you want' },
+  ];
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 300,
+      background: `${C.ink}60`,
+      backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 20,
+    }}>
+      <div style={{
+        position: 'relative',
+        width: '100%', maxWidth: 400,
+        background: C.cream, borderRadius: 2,
+        padding: '36px 32px 32px',
+        boxShadow: `0 20px 60px ${C.ink}30, 0 4px 16px ${C.ink}15`,
+        opacity: show ? 1 : 0,
+        transform: show ? 'translateY(0)' : 'translateY(12px)',
+        transition: 'opacity 0.35s ease, transform 0.35s ease',
+      }}>
+        {/* Close button */}
+        <button onClick={onClose} style={{
+          position: 'absolute', top: 12, right: 12,
+          width: 30, height: 30, borderRadius: '50%',
+          background: `${C.sage}08`, border: `1px solid ${C.sage}14`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', WebkitTapHighlightColor: 'transparent',
+          transition: 'background 0.2s',
+        }}>
+          <CloseIcon size={12} color={C.sage} />
+        </button>
+
+        {/* Wordmark */}
+        <div style={{ fontFamily: F, fontSize: 10, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 14 }}>Lila Trips</div>
+
+        {/* Headline */}
+        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 400, color: C.slate, lineHeight: 1.25, marginBottom: 16, whiteSpace: 'pre-line' }}>{"Your first draft\nis ready."}</h2>
+
+        {/* Subhead */}
+        <p style={{ fontFamily: F, fontSize: 13, fontWeight: 400, color: `${C.slate}70`, lineHeight: 1.65, marginBottom: 22 }}>React as you read — thumbs up what excites you, flag what doesn't fit. When you're done, we'll reshape the whole trip around your signals.</p>
+
+        {/* Instruction rows */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
+          {instructions.map((item, i) => {
+            const Ic = item.icon;
+            return (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: 8,
+                  background: `${item.color}12`, border: `1px solid ${item.color}20`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                }}>
+                  <Ic size={16} color={item.color} active />
+                </div>
+                <span style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: `${C.slate}80`, lineHeight: 1.45 }}>{item.text}</span>
+              </div>
+            );
+          })}
+          {/* Fourth note — no icon box */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: 5, height: 5, borderRadius: '50%', background: `${C.sage}40` }} />
+            </div>
+            <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 400, fontStyle: 'italic', color: `${C.slate}55`, lineHeight: 1.45 }}>When you're done, scroll to the bottom and refine your trip.</span>
+          </div>
+        </div>
+
+        {/* Free refinements callout */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          padding: '12px 14px', borderRadius: 2,
+          background: `${C.goldenAmber}08`, border: `1px solid ${C.goldenAmber}18`,
+          marginBottom: 22,
+        }}>
+          <div style={{
+            width: 30, height: 30, borderRadius: 7,
+            background: `${C.goldenAmber}15`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+          }}>
+            <LockIcon size={13} color={C.goldenAmber} />
+          </div>
+          <div>
+            <div style={{ fontFamily: F, fontSize: 13, fontWeight: 700, color: C.slate }}>2 free refinements included</div>
+            <div style={{ fontFamily: F, fontSize: 11, fontWeight: 400, color: `${C.slate}60`, marginTop: 1 }}>After that, upgrade to Lila Pro to keep going.</div>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <button onClick={onClose} style={{
+          width: '100%', padding: '14px 24px',
+          fontFamily: F, fontSize: 13, fontWeight: 600, letterSpacing: '0.04em',
+          color: C.white, background: C.slate,
+          border: 'none', borderRadius: 2,
+          cursor: 'pointer', WebkitTapHighlightColor: 'transparent',
+          transition: 'opacity 0.2s',
+        }}>Start exploring →</button>
+      </div>
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════════════ */
 /* ── MAIN PAGE ─────────────────────────────────────────────────────────── */
 /* ═══════════════════════════════════════════════════════════════════════ */
@@ -1221,9 +1413,13 @@ export default function ItineraryResults() {
 
   // Feedback state
   const [dayFeedback, setDayFeedback] = useState({});
+  const [activityFeedback, setActivityFeedback] = useState({});
   const [pulse, setPulse] = useState(null);
   const [overallNote, setOverallNote] = useState('');
   const [refineError, setRefineError] = useState(null);
+
+  // First draft modal state
+  const [hasSeenDraftModal, setHasSeenDraftModal] = useState(false);
 
   // Companion detail overlay state
   const [companionDetail, setCompanionDetail] = useState(null); // { type, data }
@@ -1337,25 +1533,27 @@ export default function ItineraryResults() {
 
   const handleDayFeedback = (dayIndex, feedback) => {
     if (feedback) {
-      const prev = dayFeedback[dayIndex];
-      if (prev) {
-        trackEvent('day_feedback_changed', { day_index: dayIndex, from_status: prev.status, to_status: feedback.status });
-      }
       trackEvent('day_feedback_given', {
         day_index: dayIndex,
-        status: feedback.status,
         has_note: Boolean(feedback.note),
         note_length: feedback.note ? feedback.note.length : 0,
       });
     }
     setDayFeedback(prev => {
       const next = { ...prev };
-      if (feedback === null) { delete next[dayIndex]; } else { next[dayIndex] = feedback; }
+      if (feedback === null || (feedback.note !== undefined && !feedback.note)) { delete next[dayIndex]; } else { next[dayIndex] = feedback; }
       return next;
     });
   };
 
-  const hasFeedback = Object.keys(dayFeedback).length > 0 || pulse === 'close' || pulse === 'rethink';
+  const handleActivityFeedback = (id, value) => {
+    setActivityFeedback(prev => {
+      if (value === null) { const next = { ...prev }; delete next[id]; return next; }
+      return { ...prev, [id]: value };
+    });
+  };
+
+  const hasFeedback = Object.keys(activityFeedback).length > 0 || Object.values(dayFeedback).some(f => f?.note) || pulse === 'close' || pulse === 'rethink';
 
   const handleRefine = async () => {
     const nextIteration = iteration + 1;
@@ -1371,6 +1569,7 @@ export default function ItineraryResults() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           itinerary: rawItinerary,
+          activityFeedback,
           dayFeedback,
           pulse,
           overallNote,
@@ -1384,6 +1583,7 @@ export default function ItineraryResults() {
       setRawItinerary(result.itinerary);
       setIteration(prev => prev + 1);
       setDayFeedback({});
+      setActivityFeedback({});
       setPulse(null);
       setOverallNote('');
       trackEvent('refinement_completed', { iteration: nextIteration, duration_ms: Math.round(performance.now() - t0) });
@@ -1400,6 +1600,11 @@ export default function ItineraryResults() {
   return (
     <div style={{ fontFamily: F, background: C.cream, minHeight: '100vh' }}>
       <RefiningOverlay visible={refining} />
+
+      {/* First draft modal */}
+      {iteration === 0 && !hasSeenDraftModal && isStructured && (
+        <FirstDraftModal onClose={() => setHasSeenDraftModal(true)} />
+      )}
 
       {/* Companion detail slide-over */}
       {companionDetail && (
@@ -1464,6 +1669,7 @@ export default function ItineraryResults() {
             {enrichedDays.map((day, i) => (
               <div key={i} ref={el => dayRefs.current[i] = el} style={{ scrollMarginTop: 60 }}>
                 <DayCard day={day} dayIndex={i} feedback={dayFeedback[i]} onFeedback={handleDayFeedback}
+                  activityFeedback={activityFeedback} onActivityFeedback={handleActivityFeedback}
                   onOpenCompanionDetail={(type, data) => {
                     trackEvent('companion_detail_opened', { type, title: data?.title, day_index: i });
                     setCompanionDetail({ type, data });
