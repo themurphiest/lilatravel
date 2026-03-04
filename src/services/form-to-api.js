@@ -89,6 +89,7 @@ function practicesToInterests(practices = [], intentions = [], movement = 50) {
     localFarms: 'food',
     soundBath: 'spa',
     sauna: 'spa',
+    massage: 'spa',
   };
 
   practices.forEach(p => {

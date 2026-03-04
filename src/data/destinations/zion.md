@@ -254,6 +254,84 @@ Cable Mountain Lodge and Cliffrose Lodge both have hot tubs available to guests.
 - **Interests**: spa
 - **Months**: all (year-round)
 
+### Spa & Bodywork
+
+#### Deep Canyon Spa
+Massage, facials, body treatments at Flanigan's Inn. Walk-in or reservation.
+- **Energy**: gentle
+- **Group**: solo, couple
+- **Budget**: balanced, premium
+- **Time**: morning, afternoon, evening
+- **Interests**: spa, massage
+- **Months**: all (year-round)
+
+#### Cable Mountain Spa
+Massage and body treatments at Cable Mountain Lodge in Springdale.
+- **Energy**: gentle
+- **Group**: solo, couple
+- **Budget**: balanced, premium
+- **Time**: morning, afternoon, evening
+- **Interests**: spa, massage
+- **Months**: all (year-round)
+
+#### Amangiri Spa
+Luxury destination spa ~90 min from Zion. Bodywork, hydrotherapy, desert wraps in a stunning desert setting.
+- **Energy**: gentle
+- **Group**: solo, couple
+- **Budget**: premium, noLimits
+- **Time**: morning, afternoon
+- **Interests**: spa, massage
+- **Months**: all (year-round)
+
+#### Homebody Healing
+Sound baths, energy work, massage. Mobile practitioner serving the Springdale area.
+- **Energy**: gentle
+- **Group**: solo, couple, friends
+- **Budget**: balanced, premium
+- **Time**: morning, afternoon, evening
+- **Interests**: spa, soundBath, massage
+- **Months**: all (year-round)
+
+### Soaking & Thermal
+
+#### Zion Canyon Hot Springs
+Soaking pools and sauna near Springdale. A perfect post-hike recovery spot.
+- **Energy**: gentle
+- **Group**: solo, couple, friends
+- **Budget**: balanced
+- **Time**: afternoon, evening
+- **Interests**: spa, sauna, water
+- **Months**: all (year-round)
+
+#### True North Float
+Sensory deprivation float pods in St. George (~45 min from Zion). Deep rest and recovery.
+- **Energy**: gentle
+- **Group**: solo
+- **Budget**: balanced, premium
+- **Time**: morning, afternoon, evening
+- **Interests**: spa, mindfulness
+- **Months**: all (year-round)
+
+### Additional Studios
+
+#### Cosmic Flow Yoga
+Dedicated yoga studio in Springdale. Drop-in classes, workshops, and retreats.
+- **Energy**: gentle, moderate
+- **Group**: solo, couple, friends
+- **Budget**: mindful, balanced
+- **Time**: morning, afternoon
+- **Interests**: yoga
+- **Months**: all (year-round)
+
+#### Zion Yogis
+Outdoor and indoor yoga experiences near Zion. Scenic sessions with canyon views.
+- **Energy**: gentle, moderate
+- **Group**: solo, couple, friends
+- **Budget**: mindful, balanced
+- **Time**: morning, afternoon
+- **Interests**: yoga
+- **Months**: all (year-round)
+
 ---
 
 ## Nourish — Where to Eat
@@ -797,6 +875,13 @@ When recommending any of the following places, include the corresponding URL in 
 
 ### Wellness
 - Deep Canyon Spa → https://flanigans.com/spa/
+- Cable Mountain Spa → https://cablemountainspa.com/
+- Amangiri Spa → https://www.aman.com/hotels/amangiri
+- Homebody Healing → https://www.homebodyhealing.love/
+- Zion Canyon Hot Springs → https://www.zioncanyonhotsprings.com/
+- True North Float → https://www.tnfloat.com/
+- Cosmic Flow Yoga → https://www.yogainzion.com/
+- Zion Yogis → https://www.zionyogis.com/
 - Zion Guru → https://www.zionguru.com/
 
 ### Resources
