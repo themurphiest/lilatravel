@@ -143,7 +143,7 @@ export default function TripPage() {
           }}>{trip.destination}</h1>
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 20, fontStyle: "italic",
+            fontSize: 20, fontStyle: "normal",
             color: "rgba(255,255,255,0.8)", lineHeight: 1.5,
           }}>{trip.tagline}</p>
         </div>

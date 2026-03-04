@@ -281,7 +281,7 @@ function DestCarousel() {
 
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "clamp(17px, 2vw, 22px)", fontWeight: 300, fontStyle: "italic",
+            fontSize: "clamp(17px, 2vw, 22px)", fontWeight: 300, fontStyle: "normal",
             color: "#5a7080", lineHeight: 1.75, marginBottom: 36,
           }}>
             {d.description}
@@ -685,8 +685,8 @@ export default function HomePage() {
                 <p style={{ marginBottom: 28 }}>Moments when we find our truest and lightest selves.<br />Not weighed down by the past or an imagined future.<br />Connected to the entire universe through right now.</p>
                 <p style={{ marginBottom: 32 }}>We're reminded of a truth we know, but often forget.<br />That life is not about conquering the mystery.<br />It's about learning to dance with it.</p>
                 <p style={{ marginBottom: 6 }}>
-                  <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 3.2vw, 38px)", fontWeight: 400, fontStyle: "italic", color: C.skyBlue }}>Līlā</span>
-                  {" "}<span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 2.2vw, 26px)", fontWeight: 300, fontStyle: "italic", color: "rgba(90,106,120,0.65)" }}>लीला</span>
+                  <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 3.2vw, 38px)", fontWeight: 400, fontStyle: "normal", color: C.skyBlue }}>Līlā</span>
+                  {" "}<span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 2.2vw, 26px)", fontWeight: 300, fontStyle: "normal", color: "rgba(90,106,120,0.65)" }}>लीला</span>
                   {" "}<span style={{ color: "rgba(90,106,120,0.6)", fontSize: "clamp(13px, 1.5vw, 15px)" }}>/lee·lah/</span>
                 </p>
                 <p style={{ marginBottom: 0, color: "#5a6a78" }}>
@@ -898,7 +898,7 @@ export default function HomePage() {
                       <div className="bento-desc">
                         <p style={{
                           fontFamily: "'Cormorant Garamond', serif",
-                          fontSize: isHero ? 16 : 14, fontWeight: 300, fontStyle: "italic",
+                          fontSize: isHero ? 16 : 14, fontWeight: 300, fontStyle: "normal",
                           color: "rgba(255,255,255,0.7)", lineHeight: 1.6,
                         }}>{d.description}</p>
                       </div>
@@ -942,7 +942,7 @@ export default function HomePage() {
               }}>Travel your way</h2>
               <p style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 18, fontStyle: "italic", color: "#5a6a78",
+                fontSize: 18, fontStyle: "normal", color: "#5a6a78",
                 maxWidth: 560, margin: "0 auto",
               }}>
                 From free guides to fully custom itineraries — pick the level that fits.

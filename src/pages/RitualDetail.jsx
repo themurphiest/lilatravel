@@ -58,7 +58,7 @@ export default function RitualDetail() {
             <FadeIn>
               <p style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(20px, 2.5vw, 26px)", fontWeight: 300, fontStyle: "italic",
+                fontSize: "clamp(20px, 2.5vw, 26px)", fontWeight: 300, fontStyle: "normal",
                 color: "#4a6070", lineHeight: 1.8, marginBottom: 48,
               }}>{pillar.longDesc}</p>
             </FadeIn>
@@ -116,7 +116,7 @@ export default function RitualDetail() {
                         {/* Metaphor */}
                         <p style={{
                           fontFamily: "'Cormorant Garamond', serif",
-                          fontSize: 15, fontWeight: 300, fontStyle: "italic",
+                          fontSize: 15, fontWeight: 300, fontStyle: "normal",
                           color: "#9aabba", marginBottom: 0,
                         }}>"{t.metaphor}"</p>
                       </div>

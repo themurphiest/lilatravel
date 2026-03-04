@@ -143,7 +143,7 @@ export default function TripCard({ trip, delay = 0 }) {
           {/* Description — fixed 3-line height for consistency */}
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 14, fontStyle: "italic",
+            fontSize: 14, fontStyle: "normal",
             color: "#5a6a78", lineHeight: 1.7,
             margin: "0 0 20px",
             flex: 1,

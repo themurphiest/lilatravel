@@ -378,7 +378,7 @@ function TripOverview({ days, onDayClick, dayFeedback = {} }) {
   return (
     <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, boxShadow: `0 2px 12px ${C.amber}06`, padding: '20px 20px', marginBottom: 20 }}>
       <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 2, paddingLeft: 1 }}>Trip at a Glance</div>
-      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'italic', color: `${C.slate}65`, marginBottom: 18, paddingLeft: 1 }}>Your day-by-day overview</div>
+      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'normal', color: `${C.slate}65`, marginBottom: 18, paddingLeft: 1 }}>Your day-by-day overview</div>
 
       <div style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', left: 15, top: 8, bottom: 8, width: 1.5, background: `linear-gradient(180deg, ${C.sage}10, ${C.sage}05)`, borderRadius: 1 }} />
@@ -621,7 +621,7 @@ function ActivityThumbs({ id, feedback, onFeedback }) {
             <button onClick={() => setNoteOpen(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.sunSalmon}90`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', WebkitTapHighlightColor: 'transparent' }}>+ add note</button>
           )}
           {!noteOpen && currentNote && (
-            <button onClick={() => setNoteOpen(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, fontStyle: 'italic', color: `${C.slate}60`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', textAlign: 'left', WebkitTapHighlightColor: 'transparent', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
+            <button onClick={() => setNoteOpen(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, fontStyle: 'normal', color: `${C.slate}60`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', textAlign: 'left', WebkitTapHighlightColor: 'transparent', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
               "{currentNote.length > 60 ? currentNote.slice(0, 60) + '…' : currentNote}" <span style={{ fontStyle: 'normal', color: `${C.sunSalmon}80` }}>edit</span>
             </button>
           )}
@@ -665,7 +665,7 @@ function DayNote({ dayIndex, feedback, onFeedback, hasActivitySignals }) {
     return (
       <div style={{ marginTop: 14, paddingTop: 10, borderTop: `1px solid ${C.sage}0c` }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
-          <div style={{ fontFamily: F, fontSize: 12, fontStyle: 'italic', color: `${C.slate}60`, lineHeight: 1.5 }}>"{noteText}"</div>
+          <div style={{ fontFamily: F, fontSize: 12, fontStyle: 'normal', color: `${C.slate}60`, lineHeight: 1.5 }}>"{noteText}"</div>
           <button onClick={() => { setText(noteText); setEditing(true); }} style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}60`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px', flexShrink: 0 }}>Edit</button>
         </div>
       </div>
@@ -830,7 +830,7 @@ function CompanionDetail({ type, data, onClose }) {
         {/* Quote */}
         {data.quote && (
           <div style={{ padding: '14px 16px', borderLeft: `3px solid ${accent}30`, background: `${accent}05`, borderRadius: '0 8px 8px 0', marginBottom: 20 }}>
-            <p style={{ fontFamily: F, fontSize: 14, fontStyle: 'italic', color: `${C.slate}70`, lineHeight: 1.6, margin: 0 }}>"{data.quote.text}"</p>
+            <p style={{ fontFamily: F, fontSize: 14, fontStyle: 'normal', color: `${C.slate}70`, lineHeight: 1.6, margin: 0 }}>"{data.quote.text}"</p>
             {data.quote.source && <p style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, marginTop: 6, margin: '6px 0 0' }}>— {data.quote.source}</p>}
           </div>
         )}
@@ -1011,7 +1011,7 @@ function TripPulse({ overallNote, setOverallNote, pulse, setPulse, onPulseSelect
   return (
     <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, boxShadow: `0 2px 12px ${C.amber}06`, padding: '22px 20px', marginTop: 20 }}>
       <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 4 }}>Overall Feeling</div>
-      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'italic', color: `${C.slate}65`, marginBottom: 16 }}>How's this trip shaping up?</div>
+      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'normal', color: `${C.slate}65`, marginBottom: 16 }}>How's this trip shaping up?</div>
 
       <div style={{ display: 'flex', gap: 8 }}>
         {options.map(o => {
@@ -1147,7 +1147,7 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
         {remaining} free refinement{remaining !== 1 ? 's' : ''} remaining
       </div>
       {!hasFeedback && (
-        <div style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, marginTop: 4, fontStyle: 'italic' }}>
+        <div style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, marginTop: 4, fontStyle: 'normal' }}>
           Add day feedback or rate the overall trip to enable refinement
         </div>
       )}
@@ -1205,7 +1205,7 @@ function renderInline(text) {
     if (!earliest) { parts.push(remaining); break; }
     if (earliest.index > 0) parts.push(remaining.slice(0, earliest.index));
     if (type === 'bold') parts.push(<strong key={key++} style={{ fontWeight: 700, color: C.slate }}>{earliest[1]}</strong>);
-    else parts.push(<em key={key++} style={{ fontStyle: 'italic', color: `${C.slate}80` }}>{earliest[1]}</em>);
+    else parts.push(<em key={key++} style={{ fontStyle: 'normal', color: `${C.slate}80` }}>{earliest[1]}</em>);
     remaining = remaining.slice(earliest.index + earliest[0].length);
   }
   return parts.length > 0 ? parts : text;
@@ -1233,7 +1233,7 @@ function MarkdownContent({ content }) {
         elements.push(<div key={key++} style={{ display: 'flex', gap: 8, padding: '3px 0' }}><span style={{ fontFamily: F, fontSize: 12, color: C.sage, fontWeight: 700, flexShrink: 0, minWidth: 18 }}>{numMatch[1]}.</span><span style={{ fontFamily: F, fontSize: 13, color: C.slate, lineHeight: 1.65 }}>{renderInline(numMatch[2])}</span></div>);
       }
     } else if (/^>\s/.test(line)) {
-      elements.push(<div key={key++} style={{ borderLeft: `3px solid ${C.oceanTeal}30`, paddingLeft: 14, margin: '12px 0', fontFamily: F, fontSize: 'clamp(15px, 4vw, 18px)', fontStyle: 'italic', color: `${C.slate}80`, lineHeight: 1.6 }}>{renderInline(line.slice(2))}</div>);
+      elements.push(<div key={key++} style={{ borderLeft: `3px solid ${C.oceanTeal}30`, paddingLeft: 14, margin: '12px 0', fontFamily: F, fontSize: 'clamp(15px, 4vw, 18px)', fontStyle: 'normal', color: `${C.slate}80`, lineHeight: 1.6 }}>{renderInline(line.slice(2))}</div>);
     } else if (line.trim() === '') {
       elements.push(<div key={key++} style={{ height: 6 }} />);
     } else {
@@ -1343,7 +1343,7 @@ function FirstDraftModal({ onClose }) {
             <div style={{ width: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <div style={{ width: 5, height: 5, borderRadius: '50%', background: `${C.sage}40` }} />
             </div>
-            <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 400, fontStyle: 'italic', color: `${C.slate}55`, lineHeight: 1.45 }}>When you're done, scroll to the bottom and refine your trip.</span>
+            <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 400, fontStyle: 'normal', color: `${C.slate}55`, lineHeight: 1.45 }}>When you're done, scroll to the bottom and refine your trip.</span>
           </div>
         </div>
 
@@ -1640,7 +1640,7 @@ export default function ItineraryResults() {
           <div style={{ textAlign: 'center', padding: '18px 8px 28px' }}>
             <VersionBadge iteration={iteration} />
             <h1 style={{ fontFamily: F, fontSize: 'clamp(24px, 6.5vw, 32px)', fontWeight: 600, color: C.slate, lineHeight: 1.2, marginBottom: 8, letterSpacing: '-0.01em' }}>{itinerary.title}</h1>
-            {itinerary.subtitle && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, fontStyle: 'italic', fontWeight: 400 }}>{itinerary.subtitle}</p>}
+            {itinerary.subtitle && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, fontStyle: 'normal', fontWeight: 400 }}>{itinerary.subtitle}</p>}
             {itinerary.intro && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, lineHeight: 1.75, maxWidth: 460, margin: '14px auto 0', fontWeight: 400 }}>{itinerary.intro}</p>}
           </div>
         )}
@@ -1697,7 +1697,7 @@ export default function ItineraryResults() {
             {/* Closing Note */}
             {itinerary.closingNote && (
               <div style={{ textAlign: 'center', padding: '28px 20px 0' }}>
-                <p style={{ fontFamily: F, fontSize: 15, fontWeight: 400, color: `${C.slate}60`, lineHeight: 1.6, fontStyle: 'italic' }}>{itinerary.closingNote}</p>
+                <p style={{ fontFamily: F, fontSize: 15, fontWeight: 400, color: `${C.slate}60`, lineHeight: 1.6, fontStyle: 'normal' }}>{itinerary.closingNote}</p>
               </div>
             )}
 

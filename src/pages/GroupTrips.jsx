@@ -57,7 +57,7 @@ export default function GroupTrips() {
         <FadeIn>
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 22, fontWeight: 300, fontStyle: "italic",
+            fontSize: 22, fontWeight: 300, fontStyle: "normal",
             color: "rgba(255,255,255,0.5)", marginBottom: 24,
           }}>
             Can't find the right dates?

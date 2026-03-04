@@ -350,7 +350,7 @@ export default function PhilosophyPage() {
                   <p style={{
                     fontFamily: "'Cormorant Garamond', serif",
                     fontSize: "clamp(22px, 3vw, 32px)",
-                    fontWeight: 300, fontStyle: "italic",
+                    fontWeight: 300, fontStyle: "normal",
                     color: isDark ? p.color : p.color,
                     lineHeight: 1.5,
                     marginBottom: 10, marginTop: 0,
@@ -455,7 +455,7 @@ export default function PhilosophyPage() {
                       {/* Line 2: metaphor */}
                       <p style={{
                         fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: 17, fontWeight: 400, fontStyle: "italic",
+                        fontSize: 17, fontWeight: 400, fontStyle: "normal",
                         color: isDark ? `${p.color}e6` : p.color,
                         marginBottom: 6, marginTop: 0,
                         paddingLeft: 28,

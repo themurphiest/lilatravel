@@ -390,7 +390,7 @@ function ExpandedView({ data, onCollapse }) {
           <div style={{ ...DETAIL, marginTop: 4 }}>
             {nextEvent.date} · {nextEvent.daysAway} day{nextEvent.daysAway !== 1 ? "s" : ""} away
           </div>
-          <div style={{ ...DETAIL, marginTop: 4, fontStyle: "italic" }}>{nextEvent.detail}</div>
+          <div style={{ ...DETAIL, marginTop: 4, fontStyle: "normal" }}>{nextEvent.detail}</div>
         </div>
       )}
 

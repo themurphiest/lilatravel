@@ -173,7 +173,7 @@ export default function DestinationsPage() {
                       <div className="bento-desc">
                         <p style={{
                           fontFamily: "'Cormorant Garamond', serif",
-                          fontSize: isHero ? 16 : 14, fontWeight: 300, fontStyle: "italic",
+                          fontSize: isHero ? 16 : 14, fontWeight: 300, fontStyle: "normal",
                           color: "rgba(255,255,255,0.7)", lineHeight: 1.6, marginTop: 8,
                         }}>{d.description}</p>
                       </div>

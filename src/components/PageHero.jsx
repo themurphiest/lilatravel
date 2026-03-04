@@ -39,7 +39,7 @@ export default function PageHero({ eyebrow, title, subtitle, photo, gradient, ac
           {subtitle && (
             <p style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(17px, 2.5vw, 24px)", fontWeight: 300, fontStyle: "italic",
+              fontSize: "clamp(17px, 2.5vw, 24px)", fontWeight: 300, fontStyle: "normal",
               color: "rgba(255,255,255,0.6)", lineHeight: 1.6, maxWidth: 600,
             }}>
               {subtitle}

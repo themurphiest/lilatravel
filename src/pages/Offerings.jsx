@@ -166,7 +166,7 @@ export default function OfferingsPage() {
                 }}>{b.label}</span>
                 <span style={{
                   fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 14, fontStyle: "italic",
+                  fontSize: 14, fontStyle: "normal",
                   color: "#8a9baa",
                 }}>{b.desc}</span>
               </div>
@@ -232,7 +232,7 @@ export default function OfferingsPage() {
 
                     <p style={{
                       fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: 15, fontStyle: "italic",
+                      fontSize: 15, fontStyle: "normal",
                       color: "#5a6a78", lineHeight: 1.8,
                       marginBottom: 24, flex: 1,
                     }}>{thread.description}</p>
@@ -288,7 +288,7 @@ export default function OfferingsPage() {
               }}>A day with Lila</h2>
               <p style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 18, fontStyle: "italic", color: "#5a6a78",
+                fontSize: 18, fontStyle: "normal", color: "#5a6a78",
                 maxWidth: 480, margin: "0 auto",
               }}>
                 Here's what it looks like when the threads come together. Every day is a composition — not a schedule.
@@ -314,13 +314,13 @@ export default function OfferingsPage() {
                 <span style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: 14, fontWeight: 400,
-                  color: "#9aa8b2", fontStyle: "italic",
+                  color: "#9aa8b2", fontStyle: "normal",
                 }}>Sample day</span>
                 <span style={{ fontSize: 11, color: "#c0c8cd" }}>·</span>
                 <span style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: 14, fontWeight: 400,
-                  color: "#9aa8b2", fontStyle: "italic",
+                  color: "#9aa8b2", fontStyle: "normal",
                 }}>Zion Canyon, Utah</span>
               </div>
 
@@ -417,7 +417,7 @@ export default function OfferingsPage() {
               }}>Travel your way</h2>
               <p style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 18, fontStyle: "italic", color: "#5a6a78",
+                fontSize: 18, fontStyle: "normal", color: "#5a6a78",
                 maxWidth: 560, margin: "0 auto",
               }}>
                 However you like to move through the world, there's a way in.
@@ -463,7 +463,7 @@ export default function OfferingsPage() {
                   {/* Description */}
                   <p style={{
                     fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: 15, fontStyle: "italic",
+                    fontSize: 15, fontStyle: "normal",
                     color: "#5a6a78", lineHeight: 1.8,
                     flex: 1,
                   }}>{o.desc}</p>
@@ -611,7 +611,7 @@ export default function OfferingsPage() {
                       }}>{trip.window}</p>
                       <p style={{
                         fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: 16, fontStyle: "italic",
+                        fontSize: 16, fontStyle: "normal",
                         color: "#5a6a78", lineHeight: 1.7,
                         marginBottom: 16,
                       }}>{trip.tagline}</p>

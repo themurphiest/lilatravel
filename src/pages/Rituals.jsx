@@ -43,7 +43,7 @@ export default function RitualsPage() {
             </h1>
             <p style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 300, fontStyle: "italic",
+              fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 300, fontStyle: "normal",
               color: "rgba(255,255,255,0.7)", lineHeight: 1.6, maxWidth: 560,
             }}>
               {ritualsIntro.subtitle}
@@ -58,7 +58,7 @@ export default function RitualsPage() {
           <FadeIn>
             <p style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(20px, 2.5vw, 26px)", fontWeight: 300, fontStyle: "italic",
+              fontSize: "clamp(20px, 2.5vw, 26px)", fontWeight: 300, fontStyle: "normal",
               color: "#4a6070", lineHeight: 1.9, marginBottom: 0,
             }}>
               {ritualsIntro.body}
@@ -154,7 +154,7 @@ export default function RitualsPage() {
                     {/* Quote */}
                     <p style={{
                       fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: 17, fontWeight: 300, fontStyle: "italic",
+                      fontSize: 17, fontWeight: 300, fontStyle: "normal",
                       color: "#7a8a9a", lineHeight: 1.6, marginBottom: 20,
                     }}>
                       "{pillar.quote}"
@@ -192,7 +192,7 @@ export default function RitualsPage() {
             </span>
             <p style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 300, fontStyle: "italic",
+              fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 300, fontStyle: "normal",
               color: "rgba(255,255,255,0.75)", lineHeight: 1.9, marginBottom: 40,
             }}>
               {ritualsIntro.convergence}
