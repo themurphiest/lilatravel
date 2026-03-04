@@ -832,29 +832,6 @@ function GuideNav({ isMobile }) {
             )}
           </div>
 
-          {/* Plan a Trip CTA */}
-          <Link
-            to="/plan"
-            onClick={() => trackEvent('guide_nav_clicked', { action: 'plan_a_trip', destination: 'zion' })}
-            className="guide-nav-cta"
-            style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: 10, fontWeight: 700,
-              letterSpacing: "0.2em", textTransform: "uppercase",
-              color: C.darkInk,
-              padding: isMobile ? "8px 14px" : "9px 20px",
-              border: `1px solid ${C.darkInk}`,
-              textDecoration: "none",
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-              marginLeft: isMobile ? 8 : 16,
-              transition: "all 0.3s",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = C.darkInk; e.currentTarget.style.color = "white"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = C.darkInk; }}
-          >
-            {isMobile ? "Plan →" : "Plan a Trip"}
-          </Link>
         </div>
       </nav>
 
