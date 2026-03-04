@@ -28,6 +28,7 @@ import {
   getServiceStats,
 } from "@services/practicesService";
 
+const V = { ink: '#1E2825', body: '#4A5650', muted: '#7A857E', sage: '#5A7068', amber: '#B8863A', warm: '#D4A95A' };
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SUB-COMPONENTS
@@ -38,13 +39,13 @@ function PrinciplePill({ id, active, onClick }) {
   return (
     <button onClick={onClick} style={{
       display: "inline-flex", alignItems: "center", gap: 6,
-      padding: "7px 14px", borderRadius: 20,
+      padding: "7px 14px", borderRadius: 10,
       background: active ? `${p.color}15` : "transparent",
-      border: `1.5px solid ${active ? p.color : `${C.slate}20`}`,
+      border: `1.5px solid ${active ? p.color : `${V.sage}18`}`,
       cursor: "pointer", transition: "all 0.25s",
-      fontFamily: FONTS.body, fontSize: 12, fontWeight: 600,
-      color: active ? p.color : `${C.slate}80`,
-      letterSpacing: "0.04em",
+      fontFamily: FONTS.body, fontSize: 12, fontWeight: 700,
+      color: active ? p.color : V.body,
+      letterSpacing: "0.12em",
     }}>
       <span style={{ fontSize: 14, lineHeight: 1 }}>{p.glyph}</span>
       {p.name}
@@ -56,16 +57,16 @@ function TraditionTab({ id, active, onClick, count }) {
   const t = TRADITIONS[id];
   return (
     <button onClick={onClick} style={{
-      padding: "10px 16px", borderRadius: 12,
+      padding: "10px 16px", borderRadius: 10,
       background: active ? `${t.color}12` : "transparent",
       border: active ? `1.5px solid ${t.color}30` : "1.5px solid transparent",
       cursor: "pointer", transition: "all 0.25s",
-      fontFamily: FONTS.body, fontSize: 12, fontWeight: 600,
-      color: active ? t.color : `${C.slate}70`,
+      fontFamily: FONTS.body, fontSize: 12, fontWeight: 700,
+      color: active ? t.color : V.body,
       display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
       minWidth: 72,
     }}>
-      <span style={{ fontFamily: FONTS.serif, fontSize: 15, fontWeight: 500 }}>
+      <span style={{ fontFamily: FONTS.body, fontSize: 15, fontWeight: 500 }}>
         {t.shortName}
       </span>
       <span style={{ fontSize: 9, fontWeight: 500, opacity: 0.6 }}>
@@ -80,9 +81,9 @@ function TypeBadge({ type }) {
   return (
     <span style={{
       display: "inline-flex", alignItems: "center", gap: 4,
-      padding: "3px 10px", borderRadius: 8,
-      background: `${m.color}12`, fontSize: 10, fontWeight: 600,
-      color: m.color, letterSpacing: "0.08em", textTransform: "uppercase",
+      padding: "3px 10px", borderRadius: 10,
+      background: `${m.color}12`, fontSize: 10, fontWeight: 700,
+      color: m.color, letterSpacing: "0.12em", textTransform: "uppercase",
       fontFamily: FONTS.body,
     }}>
       <span style={{ fontSize: 12 }}>{m.icon}</span> {m.label}
@@ -104,11 +105,11 @@ function EntryCard({ entry, expanded, onToggle }) {
   const t = TRADITIONS[entry.tradition];
   return (
     <div style={{
-      background: "#fff", borderRadius: 14,
-      border: `1px solid ${expanded ? `${t.color}25` : `${C.slate}10`}`,
+      background: `linear-gradient(180deg, ${C.cream}40, #FFFFFF 60%)`, borderRadius: 10,
+      border: `1px solid ${expanded ? `${t.color}25` : `${V.sage}18`}`,
       boxShadow: expanded
-        ? `0 4px 20px ${t.color}08`
-        : `0 1px 6px ${C.slate}04`,
+        ? `0 4px 20px ${V.amber}08`
+        : `0 1px 6px ${V.amber}06`,
       overflow: "hidden", transition: "all 0.3s", marginBottom: 10,
     }}>
       {/* Card Header — clickable */}
@@ -122,7 +123,7 @@ function EntryCard({ entry, expanded, onToggle }) {
           width: 36, height: 36, borderRadius: 10,
           background: `${t.color}10`, border: `1px solid ${t.color}18`,
           display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0, fontFamily: FONTS.serif,
+          flexShrink: 0, fontFamily: FONTS.body,
           fontSize: 16, fontWeight: 600, color: t.color,
         }}>
           {TRADITION_GLYPHS[entry.tradition] || t.shortName.charAt(0)}
@@ -130,14 +131,14 @@ function EntryCard({ entry, expanded, onToggle }) {
 
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-            <span style={{ fontFamily: FONTS.serif, fontSize: 17, fontWeight: 500, color: C.darkInk }}>
+            <span style={{ fontFamily: FONTS.body, fontSize: 17, fontWeight: 500, color: V.ink }}>
               {entry.name}
             </span>
             <TypeBadge type={entry.type} />
           </div>
           <p style={{
             fontFamily: FONTS.body, fontSize: 12.5,
-            color: `${C.slate}`, opacity: 0.7,
+            color: V.body,
             lineHeight: 1.55, margin: 0,
           }}>
             {entry.summary}
@@ -147,10 +148,10 @@ function EntryCard({ entry, expanded, onToggle }) {
           <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 8 }}>
             {entry.principles.map(p => (
               <span key={p} style={{
-                padding: "2px 8px", borderRadius: 6,
+                padding: "2px 8px", borderRadius: 10,
                 background: `${PRINCIPLES[p].color}10`,
-                fontSize: 9, fontWeight: 600, color: PRINCIPLES[p].color,
-                letterSpacing: "0.06em", textTransform: "uppercase",
+                fontSize: 9, fontWeight: 700, color: PRINCIPLES[p].color,
+                letterSpacing: "0.12em", textTransform: "uppercase",
                 fontFamily: FONTS.body,
               }}>
                 {PRINCIPLES[p].name}
@@ -158,9 +159,10 @@ function EntryCard({ entry, expanded, onToggle }) {
             ))}
             {entry.practiceLevel > 0 && (
               <span style={{
-                padding: "2px 8px", borderRadius: 6,
-                background: `${C.slate}08`, fontSize: 9, fontWeight: 600,
-                color: `${C.slate}80`, fontFamily: FONTS.body,
+                padding: "2px 8px", borderRadius: 10,
+                background: `${V.sage}08`, fontSize: 9, fontWeight: 700,
+                color: V.body, fontFamily: FONTS.body,
+                letterSpacing: "0.12em",
               }}>
                 Level {entry.practiceLevel}
               </span>
@@ -170,7 +172,7 @@ function EntryCard({ entry, expanded, onToggle }) {
 
         {/* Chevron */}
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-          stroke={`${C.slate}40`} strokeWidth="1.5" strokeLinecap="round"
+          stroke={`${V.sage}60`} strokeWidth="1.5" strokeLinecap="round"
           style={{
             transform: expanded ? "rotate(180deg)" : "rotate(0)",
             transition: "transform 0.3s", flexShrink: 0, marginTop: 4,
@@ -181,7 +183,7 @@ function EntryCard({ entry, expanded, onToggle }) {
 
       {/* Expanded detail */}
       {expanded && (
-        <div style={{ padding: "0 18px 18px", borderTop: `1px solid ${C.slate}08` }}>
+        <div style={{ padding: "0 18px 18px", borderTop: `1.5px solid ${V.sage}14` }}>
           {/* Going Deeper */}
           <div style={{ padding: "14px 0 0" }}>
             <div style={{
@@ -193,7 +195,7 @@ function EntryCard({ entry, expanded, onToggle }) {
             </div>
             <p style={{
               fontFamily: FONTS.body, fontSize: 13,
-              color: C.darkInk, opacity: 0.8,
+              color: V.body,
               lineHeight: 1.7, margin: 0,
             }}>
               {entry.deeper}
@@ -216,7 +218,7 @@ function EntryCard({ entry, expanded, onToggle }) {
               </div>
               <p style={{
                 fontFamily: FONTS.body, fontSize: 12,
-                color: C.darkInk, opacity: 0.7,
+                color: V.body,
                 lineHeight: 1.55, margin: 0,
               }}>
                 {entry.tripContext}
@@ -228,12 +230,12 @@ function EntryCard({ entry, expanded, onToggle }) {
           {(entry.timeOfDay || entry.duration) && (
             <div style={{ display: "flex", gap: 12, marginTop: 10 }}>
               {entry.timeOfDay && (
-                <span style={{ fontFamily: FONTS.body, fontSize: 11, color: `${C.slate}80` }}>
+                <span style={{ fontFamily: FONTS.body, fontSize: 11, color: V.body }}>
                   ⏰ {entry.timeOfDay}
                 </span>
               )}
               {entry.duration && (
-                <span style={{ fontFamily: FONTS.body, fontSize: 11, color: `${C.slate}80` }}>
+                <span style={{ fontFamily: FONTS.body, fontSize: 11, color: V.body }}>
                   ⏱ {entry.duration}
                 </span>
               )}
@@ -245,7 +247,7 @@ function EntryCard({ entry, expanded, onToggle }) {
             <div style={{
               marginTop: 14, padding: "12px 14px", borderRadius: 10,
               background: `${t.color}05`,
-              border: `1px solid ${t.color}10`,
+              border: `1.5px solid ${V.sage}14`,
             }}>
               <div style={{
                 fontFamily: FONTS.body, fontSize: 9, fontWeight: 700,
@@ -257,13 +259,13 @@ function EntryCard({ entry, expanded, onToggle }) {
               {entry.sources.map((src, i) => (
                 <div key={i} style={{
                   padding: i > 0 ? "8px 0 0" : "0",
-                  borderTop: i > 0 ? `1px solid ${C.slate}06` : "none",
+                  borderTop: i > 0 ? `1.5px solid ${V.sage}14` : "none",
                   marginTop: i > 0 ? 8 : 0,
                 }}>
                   <div style={{ display: "flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
                     <span style={{
-                      fontFamily: FONTS.serif, fontSize: 12.5, fontWeight: 500,
-                      fontStyle: "italic", color: C.darkInk,
+                      fontFamily: FONTS.body, fontSize: 12.5, fontWeight: 500,
+                      color: V.ink,
                     }}>
                       {src.text}
                     </span>
@@ -277,7 +279,7 @@ function EntryCard({ entry, expanded, onToggle }) {
                     )}
                     {src.era && (
                       <span style={{
-                        fontFamily: FONTS.body, fontSize: 9.5, color: `${C.slate}40`,
+                        fontFamily: FONTS.body, fontSize: 9.5, color: V.muted,
                       }}>
                         ({src.era})
                       </span>
@@ -286,14 +288,14 @@ function EntryCard({ entry, expanded, onToggle }) {
                   {src.author && (
                     <div style={{
                       fontFamily: FONTS.body, fontSize: 10, fontWeight: 600,
-                      color: `${C.slate}50`, marginTop: 1,
+                      color: V.body, marginTop: 1,
                     }}>
                       {src.author}
                     </div>
                   )}
                   {src.note && (
                     <p style={{
-                      fontFamily: FONTS.body, fontSize: 11, color: `${C.slate}55`,
+                      fontFamily: FONTS.body, fontSize: 11, color: V.muted,
                       lineHeight: 1.5, margin: "3px 0 0",
                     }}>
                       {src.note}
@@ -354,7 +356,7 @@ function MatrixView({ onCellClick }) {
           {traditions.map(t => (
             <tr key={t}>
               <td style={{
-                padding: "8px 6px", fontFamily: FONTS.serif,
+                padding: "8px 6px", fontFamily: FONTS.body,
                 fontSize: 13, fontWeight: 500, color: TRADITIONS[t].color,
                 verticalAlign: "middle",
               }}>
@@ -368,7 +370,7 @@ function MatrixView({ onCellClick }) {
                     style={{
                       padding: 6, verticalAlign: "top",
                       background: entries.length > 0 ? `${TRADITIONS[t].color}06` : "transparent",
-                      borderRadius: 8, textAlign: "center",
+                      borderRadius: 10, textAlign: "center",
                       cursor: entries.length > 0 ? "pointer" : "default",
                       transition: "background 0.2s",
                     }}
@@ -394,7 +396,7 @@ function MatrixView({ onCellClick }) {
                         </div>
                       </div>
                     ) : (
-                      <span style={{ fontSize: 11, color: `${C.slate}30` }}>—</span>
+                      <span style={{ fontSize: 11, color: `${V.sage}60` }}>—</span>
                     )}
                   </td>
                 );
@@ -433,15 +435,15 @@ function StatsBar() {
       ].map(s => (
         <div key={s.label} style={{ textAlign: "center" }}>
           <div style={{
-            fontFamily: FONTS.serif, fontSize: 28, fontWeight: 300,
+            fontFamily: FONTS.body, fontSize: 28, fontWeight: 700,
             color: s.color, lineHeight: 1,
           }}>
             {s.value}
           </div>
           <div style={{
-            fontFamily: FONTS.body, fontSize: 9, fontWeight: 600,
+            fontFamily: FONTS.body, fontSize: 9, fontWeight: 700,
             letterSpacing: "0.14em", textTransform: "uppercase",
-            color: `${C.slate}60`, marginTop: 4,
+            color: V.muted, marginTop: 4,
           }}>
             {s.label}
           </div>
@@ -465,20 +467,20 @@ function TraditionDetail({ traditionId }) {
 
   return (
     <div style={{
-      padding: "20px 22px", borderRadius: 14, marginBottom: 16,
+      padding: "20px 22px", borderRadius: 10, marginBottom: 16,
       background: `${t.color}06`,
       border: `1px solid ${t.color}12`,
     }}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 6 }}>
         <h3 style={{
-          fontFamily: FONTS.serif, fontSize: 20, fontWeight: 400,
-          color: C.darkInk, margin: 0,
+          fontFamily: FONTS.body, fontSize: 20, fontWeight: 400,
+          color: V.ink, margin: 0,
         }}>
           {t.name}
         </h3>
         <span style={{
-          fontFamily: FONTS.body, fontSize: 10, color: `${C.slate}50`,
+          fontFamily: FONTS.body, fontSize: 10, color: V.muted,
           fontWeight: 500,
         }}>
           {t.origin}
@@ -487,8 +489,8 @@ function TraditionDetail({ traditionId }) {
 
       {/* Essence */}
       <p style={{
-        fontFamily: FONTS.body, fontSize: 13, color: C.darkInk,
-        opacity: 0.7, lineHeight: 1.65, margin: "0 0 12px",
+        fontFamily: FONTS.body, fontSize: 13, color: V.body,
+        lineHeight: 1.65, margin: "0 0 12px",
       }}>
         {t.essence}
       </p>
@@ -497,10 +499,9 @@ function TraditionDetail({ traditionId }) {
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 14 }}>
         {t.coreTexts.map(text => (
           <span key={text} style={{
-            padding: "3px 10px", borderRadius: 6,
-            background: `${t.color}10`, fontFamily: FONTS.serif,
+            padding: "3px 10px", borderRadius: 10,
+            background: `${t.color}10`, fontFamily: FONTS.body,
             fontSize: 11, fontWeight: 500, color: t.color,
-            fontStyle: "italic",
           }}>
             {text}
           </span>
@@ -511,12 +512,12 @@ function TraditionDetail({ traditionId }) {
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {t.primarySources && t.primarySources.length > 0 && (
           <button onClick={() => { setShowSources(!showSources); setShowTerms(false); }} style={{
-            fontFamily: FONTS.body, fontSize: 10, fontWeight: 600,
-            letterSpacing: "0.08em", textTransform: "uppercase",
-            padding: "6px 14px", borderRadius: 8, cursor: "pointer",
+            fontFamily: FONTS.body, fontSize: 10, fontWeight: 700,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+            padding: "6px 14px", borderRadius: 10, cursor: "pointer",
             background: showSources ? `${t.color}15` : "transparent",
             border: `1px solid ${showSources ? t.color : `${t.color}25`}`,
-            color: showSources ? t.color : `${C.slate}60`,
+            color: showSources ? t.color : V.muted,
             transition: "all 0.2s",
           }}>
             📚 Sources {showSources ? "▾" : "▸"}
@@ -524,12 +525,12 @@ function TraditionDetail({ traditionId }) {
         )}
         {t.keyTerms && Object.keys(t.keyTerms).length > 0 && (
           <button onClick={() => { setShowTerms(!showTerms); setShowSources(false); }} style={{
-            fontFamily: FONTS.body, fontSize: 10, fontWeight: 600,
-            letterSpacing: "0.08em", textTransform: "uppercase",
-            padding: "6px 14px", borderRadius: 8, cursor: "pointer",
+            fontFamily: FONTS.body, fontSize: 10, fontWeight: 700,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+            padding: "6px 14px", borderRadius: 10, cursor: "pointer",
             background: showTerms ? `${t.color}15` : "transparent",
             border: `1px solid ${showTerms ? t.color : `${t.color}25`}`,
-            color: showTerms ? t.color : `${C.slate}60`,
+            color: showTerms ? t.color : V.muted,
             transition: "all 0.2s",
           }}>
             🔤 Key Terms {showTerms ? "▾" : "▸"}
@@ -541,7 +542,7 @@ function TraditionDetail({ traditionId }) {
       {showSources && t.primarySources && (
         <div style={{
           marginTop: 14, padding: "16px 18px", borderRadius: 10,
-          background: "white", border: `1px solid ${t.color}12`,
+          background: "white", border: `1.5px solid ${V.sage}14`,
         }}>
           <div style={{
             fontFamily: FONTS.body, fontSize: 9, fontWeight: 700,
@@ -553,29 +554,29 @@ function TraditionDetail({ traditionId }) {
           {t.primarySources.map((src, i) => (
             <div key={i} style={{
               padding: "10px 0",
-              borderTop: i > 0 ? `1px solid ${C.slate}06` : "none",
+              borderTop: i > 0 ? `1.5px solid ${V.sage}14` : "none",
             }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
                 <span style={{
-                  fontFamily: FONTS.serif, fontSize: 14, fontWeight: 500,
-                  fontStyle: "italic", color: C.darkInk,
+                  fontFamily: FONTS.body, fontSize: 14, fontWeight: 500,
+                  color: V.ink,
                 }}>
                   {src.work}
                 </span>
                 <span style={{
-                  fontFamily: FONTS.body, fontSize: 10, color: `${C.slate}50`,
+                  fontFamily: FONTS.body, fontSize: 10, color: V.muted,
                 }}>
                   {src.era}
                 </span>
               </div>
               <div style={{
                 fontFamily: FONTS.body, fontSize: 11, fontWeight: 600,
-                color: `${C.slate}70`, marginTop: 2,
+                color: V.body, marginTop: 2,
               }}>
                 {src.author}
               </div>
               <p style={{
-                fontFamily: FONTS.body, fontSize: 11.5, color: `${C.slate}60`,
+                fontFamily: FONTS.body, fontSize: 11.5, color: V.muted,
                 lineHeight: 1.5, margin: "4px 0 0",
               }}>
                 {src.note}
@@ -589,7 +590,7 @@ function TraditionDetail({ traditionId }) {
       {showTerms && t.keyTerms && (
         <div style={{
           marginTop: 14, padding: "16px 18px", borderRadius: 10,
-          background: "white", border: `1px solid ${t.color}12`,
+          background: "white", border: `1.5px solid ${V.sage}14`,
         }}>
           <div style={{
             fontFamily: FONTS.body, fontSize: 9, fontWeight: 700,
@@ -601,18 +602,18 @@ function TraditionDetail({ traditionId }) {
           <div style={{ display: "grid", gap: 8 }}>
             {Object.entries(t.keyTerms).map(([term, definition]) => (
               <div key={term} style={{
-                padding: "8px 12px", borderRadius: 8,
+                padding: "8px 12px", borderRadius: 10,
                 background: `${t.color}04`,
               }}>
                 <span style={{
-                  fontFamily: FONTS.serif, fontSize: 13, fontWeight: 600,
-                  fontStyle: "italic", color: t.color,
+                  fontFamily: FONTS.body, fontSize: 13, fontWeight: 600,
+                  color: t.color,
                   textTransform: "capitalize",
                 }}>
                   {term.replace(/([A-Z])/g, ' $1').trim()}
                 </span>
                 <span style={{
-                  fontFamily: FONTS.body, fontSize: 11.5, color: `${C.slate}70`,
+                  fontFamily: FONTS.body, fontSize: 11.5, color: V.body,
                   marginLeft: 8, lineHeight: 1.5,
                 }}>
                   — {definition}
@@ -736,9 +737,10 @@ export default function PracticesExplorerPage() {
               <button key={v.key} onClick={() => setView(v.key)} style={{
                 padding: "8px 16px", borderRadius: 10,
                 background: view === v.key ? `${C.oceanTeal}12` : "transparent",
-                border: `1.5px solid ${view === v.key ? `${C.oceanTeal}30` : `${C.slate}12`}`,
-                fontFamily: FONTS.body, fontSize: 11, fontWeight: 600,
-                color: view === v.key ? C.oceanTeal : `${C.slate}60`,
+                border: `1.5px solid ${view === v.key ? `${C.oceanTeal}30` : `${V.sage}18`}`,
+                fontFamily: FONTS.body, fontSize: 11, fontWeight: 700,
+                color: view === v.key ? C.oceanTeal : V.muted,
+                letterSpacing: "0.12em",
                 cursor: "pointer",
               }}>
                 {v.icon} {v.label}
@@ -748,8 +750,8 @@ export default function PracticesExplorerPage() {
 
           {hasFilters && (
             <button onClick={clearFilters} style={{
-              fontFamily: FONTS.body, fontSize: 10, fontWeight: 600,
-              letterSpacing: "0.1em", textTransform: "uppercase",
+              fontFamily: FONTS.body, fontSize: 10, fontWeight: 700,
+              letterSpacing: "0.12em", textTransform: "uppercase",
               color: C.sunSalmon, background: "none", border: "none",
               cursor: "pointer", padding: "4px 8px",
             }}>
@@ -762,7 +764,7 @@ export default function PracticesExplorerPage() {
         {view === "matrix" && (
           <>
             <p style={{
-              fontFamily: FONTS.body, fontSize: 12, color: `${C.slate}60`,
+              fontFamily: FONTS.body, fontSize: 12, color: V.muted,
               marginBottom: 16, lineHeight: 1.5,
             }}>
               Click any cell to browse its entries.
@@ -781,11 +783,11 @@ export default function PracticesExplorerPage() {
               WebkitOverflowScrolling: "touch",
             }}>
               <button onClick={() => setActiveTradition(null)} style={{
-                padding: "10px 14px", borderRadius: 12,
+                padding: "10px 14px", borderRadius: 10,
                 background: !activeTradition ? `${C.oceanTeal}12` : "transparent",
                 border: !activeTradition ? `1.5px solid ${C.oceanTeal}30` : "1.5px solid transparent",
-                cursor: "pointer", fontFamily: FONTS.body, fontSize: 11, fontWeight: 600,
-                color: !activeTradition ? C.oceanTeal : `${C.slate}60`, minWidth: 48,
+                cursor: "pointer", fontFamily: FONTS.body, fontSize: 11, fontWeight: 700,
+                color: !activeTradition ? C.oceanTeal : V.muted, minWidth: 48,
               }}>
                 All
               </button>
@@ -818,11 +820,11 @@ export default function PracticesExplorerPage() {
                   onClick={() => setActiveType(activeType === type ? null : type)}
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 4,
-                    padding: "5px 12px", borderRadius: 8,
+                    padding: "5px 12px", borderRadius: 10,
                     background: activeType === type ? `${TYPE_META[type].color}12` : "transparent",
-                    border: `1px solid ${activeType === type ? `${TYPE_META[type].color}25` : `${C.slate}12`}`,
-                    cursor: "pointer", fontSize: 11, fontWeight: 600,
-                    color: activeType === type ? TYPE_META[type].color : `${C.slate}60`,
+                    border: `1px solid ${activeType === type ? `${TYPE_META[type].color}25` : `${V.sage}18`}`,
+                    cursor: "pointer", fontSize: 11, fontWeight: 700,
+                    color: activeType === type ? TYPE_META[type].color : V.muted,
                     fontFamily: FONTS.body,
                   }}
                 >
@@ -834,7 +836,7 @@ export default function PracticesExplorerPage() {
             {/* Results count */}
             <div style={{
               fontFamily: FONTS.body, fontSize: 11,
-              color: `${C.slate}60`, marginBottom: 12,
+              color: V.muted, marginBottom: 12,
             }}>
               {filtered.length} {filtered.length === 1 ? "entry" : "entries"}
             </div>
@@ -857,7 +859,7 @@ export default function PracticesExplorerPage() {
                         {p.glyph}
                       </span>
                       <span style={{
-                        fontFamily: FONTS.serif, fontSize: 16, fontWeight: 400,
+                        fontFamily: FONTS.body, fontSize: 16, fontWeight: 400,
                         color: p.color,
                       }}>
                         {p.name}
@@ -878,15 +880,15 @@ export default function PracticesExplorerPage() {
 
             {/* Empty state */}
             {filtered.length === 0 && (
-              <div style={{ textAlign: "center", padding: "40px 20px", color: `${C.slate}50` }}>
+              <div style={{ textAlign: "center", padding: "40px 20px", color: V.muted }}>
                 <div style={{ fontSize: 24, marginBottom: 8 }}>🔍</div>
                 <p style={{ fontFamily: FONTS.body, fontSize: 13 }}>
                   No entries match these filters.
                 </p>
                 <button onClick={clearFilters} style={{
                   marginTop: 12, fontFamily: FONTS.body, fontSize: 11,
-                  fontWeight: 600, color: C.oceanTeal, background: "none",
-                  border: `1px solid ${C.oceanTeal}30`, borderRadius: 8,
+                  fontWeight: 700, color: C.oceanTeal, background: "none",
+                  border: `1px solid ${C.oceanTeal}30`, borderRadius: 10,
                   padding: "8px 16px", cursor: "pointer",
                 }}>
                   Clear All Filters
@@ -900,7 +902,7 @@ export default function PracticesExplorerPage() {
       {/* ── Back to Our Approach CTA ── */}
       <section style={{
         textAlign: "center", padding: "48px 24px 64px",
-        borderTop: `1px solid ${C.stone}`,
+        borderTop: `1.5px solid ${V.sage}18`,
       }}>
         <Link to="/ethos" className="underline-link">
           ← Back to Our Ethos
