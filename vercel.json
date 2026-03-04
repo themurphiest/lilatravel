@@ -6,5 +6,8 @@
     "api/refine-itinerary.js": {
       "includeFiles": "prompts/**"
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
 }
