@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// CELESTIAL SNAPSHOT — live conditions sidebar for destination guides
+// CELESTIAL SNAPSHOT — inline expandable card for destination guides
 // ═══════════════════════════════════════════════════════════════════════════════
 //
-// Sticky sidebar showing weather, sun, moon, night sky, river level,
-// upcoming celestial events, and NPS alerts. Collapses to a floating
-// button + drawer on mobile (≤ 900px).
+// Inline card showing weather, sun, moon, night sky, river level,
+// upcoming celestial events, and NPS alerts. Collapsed by default with
+// a 4-across summary grid; expands to full detail rows.
 //
 
 import { useState, useEffect, useCallback } from 'react';
@@ -70,9 +70,8 @@ function SunArc({ progress }) {
   );
 }
 
-function MoonDisc({ illumination, phaseName }) {
+function MoonDisc({ illumination, phaseName, r = 14 }) {
   // Simplified moon disc — dark circle with illuminated portion
-  const r = 14;
   const size = r * 2 + 4;
   const cx = r + 2, cy = r + 2;
 
@@ -128,99 +127,124 @@ function RiverBar({ level }) {
 }
 
 
-// ─── Expandable Row ──────────────────────────────────────────────────────────
+// ─── RiverDot (collapsed grid indicator) ─────────────────────────────────────
 
-function SnapshotRow({ label, children, expandContent }) {
-  const [open, setOpen] = useState(false);
+function RiverDot({ level }) {
+  const colors = { low: C.seaGlass, moderate: C.skyBlue, high: C.goldenAmber, dangerous: C.sunSalmon };
   return (
-    <div
-      onClick={() => expandContent && setOpen(!open)}
-      style={{
-        padding: "14px 0",
-        borderBottom: `1px solid ${C.stone}`,
-        cursor: expandContent ? "pointer" : "default",
-        transition: "background 0.15s",
-      }}
-      onMouseEnter={e => { if (expandContent) e.currentTarget.style.background = `${C.stone}22`; }}
-      onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-    >
-      <div style={LABEL}>{label}</div>
-      {children}
-      {open && expandContent && (
-        <div style={{ ...DETAIL, marginTop: 8 }}>{expandContent}</div>
-      )}
-    </div>
+    <span style={{
+      display: "inline-block",
+      width: 10, height: 10, borderRadius: "50%",
+      background: colors[level] || C.stone,
+    }} />
   );
 }
 
 
-// ─── Loading Skeleton ────────────────────────────────────────────────────────
+// ─── Collapsed View ──────────────────────────────────────────────────────────
 
-function Skeleton() {
+function CollapsedView({ data, onExpand }) {
+  const { weather, moon, sky, river } = data;
+
+  const cells = [];
+  if (weather) cells.push({ key: "temp", content: (
+    <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 300, color: C.darkInk, lineHeight: 1 }}>
+      {weather.temp}°
+    </span>
+  )});
+  if (moon) cells.push({ key: "moon", content: (
+    <MoonDisc illumination={moon.phase} phaseName={moon.name} r={10} />
+  )});
+  if (sky) cells.push({ key: "sky", content: (
+    <QualityDots rating={sky.quality} />
+  )});
+  if (river) cells.push({ key: "river", content: (
+    <RiverDot level={river.level} />
+  )});
+
   return (
-    <div style={{
-      width: 240, padding: "20px 22px",
-      background: C.warmWhite, border: `1px solid ${C.stone}`,
-      position: "sticky", top: 100,
-    }}>
-      {/* Header skeleton */}
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ width: 120, height: 12, background: C.stone, marginBottom: 8, opacity: 0.5 }} />
-        <div style={{ width: 80, height: 8, background: C.stone, opacity: 0.3 }} />
+    <>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+        <span style={{
+          width: 8, height: 8, borderRadius: "50%",
+          background: C.seaGlass,
+          animation: "celestialPulse 2s ease-in-out infinite",
+        }} />
+        <span style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 20, fontWeight: 300,
+          color: C.darkInk, lineHeight: 1.2,
+        }}>Celestial Snapshot</span>
       </div>
-      {/* Row skeletons */}
-      {[1, 2, 3, 4, 5].map(i => (
-        <div key={i} style={{ padding: "14px 0", borderBottom: `1px solid ${C.stone}` }}>
-          <div style={{ width: 60, height: 7, background: C.stone, marginBottom: 8, opacity: 0.4 }} />
-          <div style={{ width: 100 + i * 10, height: 10, background: C.stone, opacity: 0.25 }} />
+      <div style={{
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: 11, fontWeight: 400,
+        color: "#8a9098", marginBottom: 16,
+      }}>Zion Canyon — right now</div>
+
+      {/* 4-across flex grid */}
+      {cells.length > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", marginBottom: 14 }}>
+          {cells.map((cell, i) => (
+            <div key={cell.key} style={{
+              flex: "1 1 auto", minWidth: 60,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              padding: "8px 0",
+              borderRight: i < cells.length - 1 ? `1px solid ${C.stone}` : "none",
+            }}>
+              {cell.content}
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      )}
+
+      {/* Expand button */}
+      <button
+        onClick={onExpand}
+        style={{
+          background: "none", border: "none", padding: 0, cursor: "pointer",
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 10, fontWeight: 700,
+          letterSpacing: "0.14em", textTransform: "uppercase",
+          color: C.oceanTeal,
+        }}
+      >Full conditions ▼</button>
+    </>
   );
 }
 
 
-// ─── Main Sidebar Content ────────────────────────────────────────────────────
+// ─── Expanded View ───────────────────────────────────────────────────────────
 
-function SnapshotContent({ data }) {
+function ExpandedView({ data, onCollapse }) {
   const { weather, sun, moon, sky, river, nextEvent, alerts } = data;
 
   return (
     <>
-      {/* ── Header ── */}
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-          {/* Pulsing green dot */}
-          <span style={{
-            width: 6, height: 6, borderRadius: "50%",
-            background: C.seaGlass,
-            animation: "celestialPulse 2s ease-in-out infinite",
-          }} />
-          <span style={{
-            fontFamily: "'Quicksand', sans-serif",
-            fontSize: 9, fontWeight: 700,
-            letterSpacing: "0.2em", textTransform: "uppercase",
-            color: C.seaGlass,
-          }}>LIVE</span>
-        </div>
-        <div style={{
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+        <span style={{
+          width: 8, height: 8, borderRadius: "50%",
+          background: C.seaGlass,
+          animation: "celestialPulse 2s ease-in-out infinite",
+        }} />
+        <span style={{
           fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 19, fontWeight: 300,
+          fontSize: 20, fontWeight: 300,
           color: C.darkInk, lineHeight: 1.2,
-        }}>Celestial Snapshot</div>
-        <div style={{
-          fontFamily: "'Quicksand', sans-serif",
-          fontSize: 11, fontWeight: 400,
-          color: "#8a9098", marginTop: 4,
-        }}>Zion Canyon — right now</div>
+        }}>Celestial Snapshot</span>
       </div>
+      <div style={{
+        fontFamily: "'Quicksand', sans-serif",
+        fontSize: 11, fontWeight: 400,
+        color: "#8a9098", marginBottom: 16,
+      }}>Zion Canyon — right now</div>
 
-      {/* ── 1. Conditions ── */}
+      {/* 1. Conditions */}
       {weather && (
-        <SnapshotRow
-          label="CONDITIONS"
-          expandContent={<>H {weather.high}° / L {weather.low}° · Wind {weather.wind} mph</>}
-        >
+        <div style={{ borderBottom: `1px solid ${C.stone}`, padding: "14px 0" }}>
+          <div style={LABEL}>CONDITIONS</div>
           <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
             <span style={{
               fontFamily: "'Cormorant Garamond', serif",
@@ -229,12 +253,16 @@ function SnapshotContent({ data }) {
             }}>{weather.temp}°</span>
             <span style={VALUE}>{weather.condition}</span>
           </div>
-        </SnapshotRow>
+          <div style={{ ...DETAIL, marginTop: 6 }}>
+            H {weather.high}° / L {weather.low}° · Wind {weather.wind} mph
+          </div>
+        </div>
       )}
 
-      {/* ── 2. Daylight ── */}
+      {/* 2. Daylight */}
       {sun && (
-        <SnapshotRow label="DAYLIGHT">
+        <div style={{ borderBottom: `1px solid ${C.stone}`, padding: "14px 0" }}>
+          <div style={LABEL}>DAYLIGHT</div>
           <SunArc progress={sun.progress} />
           <div style={{ ...VALUE, fontSize: 12, textAlign: "center" }}>{sun.daylight}</div>
           <div style={{
@@ -252,12 +280,13 @@ function SnapshotContent({ data }) {
               <div style={{ ...VALUE, fontSize: 13 }}>{sun.set}</div>
             </div>
           </div>
-        </SnapshotRow>
+        </div>
       )}
 
-      {/* ── 3. Moon ── */}
+      {/* 3. Moon */}
       {moon && (
-        <SnapshotRow label="MOON">
+        <div style={{ borderBottom: `1px solid ${C.stone}`, padding: "14px 0" }}>
+          <div style={LABEL}>MOON</div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <MoonDisc illumination={moon.phase} phaseName={moon.name} />
             <div>
@@ -265,159 +294,123 @@ function SnapshotContent({ data }) {
               <div style={DETAIL}>{moon.phase}% illuminated</div>
             </div>
           </div>
-        </SnapshotRow>
+        </div>
       )}
 
-      {/* ── 4. Tonight's Sky ── */}
+      {/* 4. Tonight's Sky */}
       {sky && (
-        <SnapshotRow
-          label="TONIGHT'S SKY"
-          expandContent={
-            <>
-              Bortle Class {sky.bortle}
-              {sky.milkyWayVisible && sky.milkyWayWindow && (
-                <> · Milky Way {sky.milkyWayWindow}</>
-              )}
-              {sky.milkyWayNote && <> · {sky.milkyWayNote}</>}
-              {!sky.milkyWayVisible && <> · Milky Way core not visible this season</>}
-            </>
-          }
-        >
+        <div style={{ borderBottom: `1px solid ${C.stone}`, padding: "14px 0" }}>
+          <div style={LABEL}>{"TONIGHT'S SKY"}</div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ ...VALUE, color: C.goldenAmber }}>{sky.label}</span>
             <QualityDots rating={sky.quality} />
           </div>
-        </SnapshotRow>
+          <div style={{ ...DETAIL, marginTop: 6 }}>
+            Bortle Class {sky.bortle}
+            {sky.milkyWayVisible && sky.milkyWayWindow && (
+              <> · Milky Way {sky.milkyWayWindow}</>
+            )}
+            {sky.milkyWayNote && <> · {sky.milkyWayNote}</>}
+            {!sky.milkyWayVisible && <> · Milky Way core not visible this season</>}
+          </div>
+        </div>
       )}
 
-      {/* ── 5. Virgin River ── */}
+      {/* 5. Virgin River */}
       {river && (
-        <SnapshotRow
-          label="VIRGIN RIVER"
-          expandContent={<>{river.cfs} cfs · Water temp {river.tempF}°F</>}
-        >
-          <div style={VALUE}>{river.label}</div>
-          <RiverBar level={river.level} />
-        </SnapshotRow>
+        <div style={{ borderBottom: `1px solid ${C.stone}`, padding: "14px 0" }}>
+          <div style={LABEL}>VIRGIN RIVER</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <RiverDot level={river.level} />
+            <span style={VALUE}>{river.label}</span>
+          </div>
+          <div style={{ ...DETAIL, marginTop: 6 }}>
+            {river.cfs} cfs · Water temp {river.tempF}°F
+          </div>
+        </div>
       )}
 
-      {/* ── 6. Next Celestial Event ── */}
+      {/* 6. Next Celestial Event */}
       {nextEvent && (
-        <SnapshotRow label="NEXT CELESTIAL EVENT">
+        <div style={{ borderBottom: `1px solid ${C.stone}`, padding: "14px 0" }}>
+          <div style={LABEL}>NEXT CELESTIAL EVENT</div>
           <div style={VALUE}>{nextEvent.name}</div>
           <div style={{ ...DETAIL, marginTop: 4 }}>
             {nextEvent.date} · {nextEvent.daysAway} day{nextEvent.daysAway !== 1 ? "s" : ""} away
           </div>
           <div style={{ ...DETAIL, marginTop: 4, fontStyle: "italic" }}>{nextEvent.detail}</div>
-        </SnapshotRow>
+        </div>
       )}
 
-      {/* ── 7. NPS Alerts ── */}
-      {alerts.length > 0 && (
-        <SnapshotRow label="NPS ALERTS">
-          <div style={{
-            padding: "10px 12px",
-            background: `${C.sunSalmon}10`,
-            border: `1px solid ${C.sunSalmon}25`,
-          }}>
-            {alerts.map((alert, i) => (
-              <div key={i} style={{
-                display: "flex", gap: 8, alignItems: "flex-start",
-                marginBottom: i < alerts.length - 1 ? 8 : 0,
-              }}>
-                <span style={{
-                  width: 5, height: 5, borderRadius: "50%",
-                  background: C.sunSalmon, marginTop: 4, flexShrink: 0,
-                }} />
-                <span style={{ ...DETAIL, fontSize: 11, color: "#5a6a78" }}>{alert}</span>
-              </div>
-            ))}
-          </div>
-        </SnapshotRow>
-      )}
-    </>
-  );
-}
-
-
-// ─── Mobile Floating Button + Drawer ─────────────────────────────────────────
-
-function MobileDrawer({ data, open, onClose }) {
-  if (!open) return null;
-
-  return (
-    <>
-      {/* Backdrop */}
-      <div
-        onClick={onClose}
+      {/* Collapse button */}
+      <button
+        onClick={onCollapse}
         style={{
-          position: "fixed", inset: 0,
-          background: "rgba(26,37,48,0.35)",
-          zIndex: 999,
-          transition: "opacity 0.25s",
+          background: "none", border: "none", padding: 0, cursor: "pointer",
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 10, fontWeight: 700,
+          letterSpacing: "0.14em", textTransform: "uppercase",
+          color: C.oceanTeal, marginTop: 14,
         }}
-      />
-      {/* Drawer */}
-      <div style={{
-        position: "fixed", top: 0, right: 0,
-        width: 280, height: "100%",
-        background: C.warmWhite,
-        borderLeft: `1px solid ${C.stone}`,
-        padding: "24px 20px",
-        overflowY: "auto",
-        zIndex: 1000,
-        boxShadow: "-4px 0 20px rgba(0,0,0,0.08)",
-      }}>
-        {/* Close button */}
-        <div
-          onClick={onClose}
-          style={{
-            position: "absolute", top: 14, right: 14,
-            width: 28, height: 28,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", color: "#8a9098",
-            fontFamily: "'Quicksand', sans-serif", fontSize: 18, fontWeight: 300,
-          }}
-        >×</div>
-        <SnapshotContent data={data} />
-      </div>
+      >Show less ▲</button>
+
+      {/* NPS Alerts */}
+      {alerts && alerts.length > 0 && (
+        <div style={{
+          padding: "10px 12px", marginTop: 14,
+          background: `${C.sunSalmon}10`,
+          border: `1px solid ${C.sunSalmon}25`,
+        }}>
+          {alerts.map((alert, i) => (
+            <div key={i} style={{
+              display: "flex", gap: 8, alignItems: "flex-start",
+              marginBottom: i < alerts.length - 1 ? 8 : 0,
+            }}>
+              <span style={{
+                width: 5, height: 5, borderRadius: "50%",
+                background: C.sunSalmon, marginTop: 4, flexShrink: 0,
+              }} />
+              <span style={{ ...DETAIL, fontSize: 11, color: "#5a6a78" }}>{alert}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
 
-function FloatingButton({ onClick, hasData }) {
+
+// ─── Card Skeleton ───────────────────────────────────────────────────────────
+
+function CardSkeleton() {
   return (
-    <button
-      onClick={onClick}
-      style={{
-        position: "fixed", bottom: 24, right: 24,
-        width: 52, height: 52, borderRadius: "50%",
-        background: C.darkInk, border: "none",
-        cursor: "pointer", zIndex: 998,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
-        transition: "transform 0.2s",
-      }}
-      onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
-      onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
-    >
-      {/* Star/celestial icon */}
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-        <path
-          d="M11 2 L12.5 8 L19 11 L12.5 14 L11 20 L9.5 14 L3 11 L9.5 8 Z"
-          fill={C.goldenAmber} opacity="0.9"
-        />
-      </svg>
-      {/* Green dot indicator */}
-      {hasData && (
-        <span style={{
-          position: "absolute", top: 8, right: 8,
-          width: 7, height: 7, borderRadius: "50%",
-          background: C.seaGlass,
-          border: `2px solid ${C.darkInk}`,
-        }} />
-      )}
-    </button>
+    <div style={{
+      width: "100%",
+      padding: "20px 22px",
+      background: C.warmWhite,
+      border: `1px solid ${C.stone}`,
+    }}>
+      {/* Header skeleton */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+        <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.stone, opacity: 0.4 }} />
+        <div style={{ width: 140, height: 14, background: C.stone, opacity: 0.3 }} />
+      </div>
+      <div style={{ width: 120, height: 8, background: C.stone, opacity: 0.25, marginBottom: 16 }} />
+      {/* Grid skeleton */}
+      <div style={{ display: "flex", gap: 0, marginBottom: 14 }}>
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} style={{
+            flex: "1 1 auto", display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "8px 0",
+            borderRight: i < 4 ? `1px solid ${C.stone}` : "none",
+          }}>
+            <div style={{ width: 24, height: 16, background: C.stone, opacity: 0.2 }} />
+          </div>
+        ))}
+      </div>
+      {/* Button skeleton */}
+      <div style={{ width: 100, height: 8, background: C.stone, opacity: 0.2 }} />
+    </div>
   );
 }
 
@@ -427,16 +420,7 @@ function FloatingButton({ onClick, hasData }) {
 export default function CelestialSnapshot({ destination = "zion" }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // Mobile detection
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 900);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+  const [expanded, setExpanded] = useState(false);
 
   // Fetch data
   const fetchData = useCallback(async () => {
@@ -472,31 +456,20 @@ export default function CelestialSnapshot({ destination = "zion" }) {
     return () => { style.remove(); };
   }, []);
 
-  // Mobile: floating button + drawer
-  if (isMobile) {
-    return (
-      <>
-        <FloatingButton onClick={() => setDrawerOpen(true)} hasData={!!data} />
-        {data && <MobileDrawer data={data} open={drawerOpen} onClose={() => setDrawerOpen(false)} />}
-      </>
-    );
-  }
-
-  // Desktop: sticky sidebar
-  if (loading) return <Skeleton />;
+  if (loading) return <CardSkeleton />;
   if (!data) return null;
 
   return (
     <div style={{
-      width: 240,
+      width: "100%",
       padding: "20px 22px",
       background: C.warmWhite,
       border: `1px solid ${C.stone}`,
-      position: "sticky",
-      top: 100,
-      alignSelf: "start",
     }}>
-      <SnapshotContent data={data} />
+      {expanded
+        ? <ExpandedView data={data} onCollapse={() => setExpanded(false)} />
+        : <CollapsedView data={data} onExpand={() => setExpanded(true)} />
+      }
     </div>
   );
 }

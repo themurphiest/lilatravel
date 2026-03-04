@@ -45,13 +45,13 @@ function SectionTitle({ children }) {
   );
 }
 
-function SectionSub({ children }) {
+function SectionSub({ children, isMobile }) {
   return (
     <p style={{
       fontFamily: "'Quicksand', sans-serif",
-      fontSize: "clamp(14px, 1.8vw, 15px)", fontWeight: 400,
+      fontSize: isMobile ? 15 : "clamp(14px, 1.8vw, 15px)", fontWeight: 400,
       color: "#5a7080", margin: "0 auto 28px", lineHeight: 1.7,
-      textAlign: "center", maxWidth: 520,
+      textAlign: isMobile ? "left" : "center", maxWidth: isMobile ? "100%" : 520,
     }}>{children}</p>
   );
 }
@@ -244,7 +244,7 @@ function AddToTripButton({ name }) {
   );
 }
 
-function ListItem({ name, detail, note, tags, featured, url }) {
+function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
   const nameEl = url ? (
     <a href={url} target="_blank" rel="noopener noreferrer" style={{
       fontFamily: "'Quicksand', sans-serif", fontSize: 15, fontWeight: 600,
@@ -260,7 +260,7 @@ function ListItem({ name, detail, note, tags, featured, url }) {
   );
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 0", borderBottom: `1px solid ${C.stone}` }}>
+    <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", gap: 14, padding: "16px 0", borderBottom: `1px solid ${C.stone}` }}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 3 }}>
           {nameEl}
@@ -274,7 +274,7 @@ function ListItem({ name, detail, note, tags, featured, url }) {
         </div>
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: "clamp(13px, 1.5vw, 14px)", fontWeight: 400,
+          fontSize: isMobile ? 14 : "clamp(13px, 1.5vw, 14px)", fontWeight: 400,
           color: "#5a7080", lineHeight: 1.65,
         }}>{detail}</div>
         {note && (
@@ -300,7 +300,7 @@ function ListItem({ name, detail, note, tags, featured, url }) {
   );
 }
 
-function StayItem({ name, location, tier, detail, tags, url, featured }) {
+function StayItem({ name, location, tier, detail, tags, url, featured, isMobile }) {
   const styles = {
     elemental: { color: C.seaGlass, label: "Elemental", bg: `${C.seaGlass}15` },
     rooted: { color: C.oceanTeal, label: "Rooted", bg: `${C.oceanTeal}12` },
@@ -322,7 +322,7 @@ function StayItem({ name, location, tier, detail, tags, url, featured }) {
   );
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 0", borderBottom: `1px solid ${C.stone}` }}>
+    <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", gap: 14, padding: "18px 0", borderBottom: `1px solid ${C.stone}` }}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }}>
           <span style={{
@@ -344,7 +344,7 @@ function StayItem({ name, location, tier, detail, tags, url, featured }) {
         <div style={{ marginBottom: 3 }}>{nameEl}</div>
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: "clamp(13px, 1.5vw, 14px)", fontWeight: 400,
+          fontSize: isMobile ? 14 : "clamp(13px, 1.5vw, 14px)", fontWeight: 400,
           color: "#5a7080", lineHeight: 1.65,
         }}>{detail}</div>
         {tags && (
@@ -733,7 +733,7 @@ function TimingAlertCapture() {
 export default function ZionGuide() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 900);
+    const check = () => setIsMobile(window.innerWidth <= 768);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
@@ -745,7 +745,7 @@ export default function ZionGuide() {
 
       {/* ══ TITLE MASTHEAD ═══════════════════════════════════════════════════ */}
       <section style={{ background: C.cream, paddingTop: 24 }}>
-        <div style={{ padding: "44px 52px 40px", maxWidth: 920, margin: "0 auto" }}>
+        <div style={{ padding: isMobile ? "28px 20px 24px" : "44px 52px 40px", maxWidth: 920, margin: "0 auto" }}>
           <FadeIn from="bottom" delay={0.1}>
 
             {/* Breadcrumb */}
@@ -757,7 +757,7 @@ export default function ZionGuide() {
 
             {/* Two column layout */}
             <div style={{
-              display: "grid", gridTemplateColumns: "1fr 320px", gap: 52, alignItems: "start",
+              display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 320px", gap: isMobile ? 28 : 52, alignItems: "start",
               marginTop: 28,
             }}>
 
@@ -796,7 +796,10 @@ export default function ZionGuide() {
               </div>
 
               {/* ── Right: This Guide Covers ── */}
-              <div style={{
+              <div style={isMobile ? {
+                borderTop: `1px solid ${C.stone}`,
+                paddingTop: 28,
+              } : {
                 borderLeft: `1px solid ${C.stone}`,
                 paddingLeft: 28,
               }}>
@@ -916,7 +919,7 @@ export default function ZionGuide() {
             { src: P.capitolReef,     alt: "Capitol Reef at sunset",         caption: "Capitol Reef at sunset",            width: 360 },
           ].map((img, i) => (
             <div key={i} style={{
-              flex: "0 0 auto", width: img.width,
+              flex: "0 0 auto", width: isMobile ? "85vw" : img.width,
               scrollSnapAlign: "start", position: "relative", overflow: "hidden",
             }}>
               <img src={img.src} alt={img.alt} style={{
@@ -939,17 +942,16 @@ export default function ZionGuide() {
         </div>
       </section>
 
+      {/* ══ CELESTIAL SNAPSHOT (inline card) ═════════════════════════════ */}
+      <section style={{ padding: isMobile ? "24px 20px" : "32px 52px", background: C.cream }}>
+        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+          <FadeIn><CelestialSnapshot destination="zion" /></FadeIn>
+        </div>
+      </section>
+
       {/* ══ GUIDE CONTENT ═══════════════════════════════════════════════════ */}
-      <section style={{ padding: "48px 52px 80px", background: C.cream }}>
-        <div style={{
-          maxWidth: 1060,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "1fr 260px",
-          gap: isMobile ? 0 : 48,
-          alignItems: "start",
-        }}>
-        <div style={{ maxWidth: 680 }}>
+      <section style={{ padding: isMobile ? "32px 20px 60px" : "48px 52px 80px", background: C.cream }}>
+        <div style={{ maxWidth: 680, margin: "0 auto" }}>
 
 
           {/* ══════════════════════════════════════════════════════════════ */}
@@ -977,7 +979,7 @@ export default function ZionGuide() {
               <div style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
-                gap: 16, padding: 20,
+                gap: isMobile ? 12 : 16, padding: isMobile ? 16 : 20,
                 background: C.cream, border: `1px solid ${C.stone}`,
               }}>
                 {[
@@ -1006,20 +1008,20 @@ export default function ZionGuide() {
               <SectionIcon type="windows" />
               <SectionLabel>Magic Windows</SectionLabel>
               <SectionTitle>When to go</SectionTitle>
-              <SectionSub>Zion transforms with the seasons. These are the moments when the land is most alive.</SectionSub>
+              <SectionSub isMobile={isMobile}>Zion transforms with the seasons. These are the moments when the land is most alive.</SectionSub>
             </FadeIn>
             <FadeIn delay={0.08}>
               <div>
-                <ListItem name={"Early Autumn — The Golden Corridor"} featured
+                <ListItem isMobile={isMobile} name={"Early Autumn — The Golden Corridor"} featured
                   detail="Cottonwoods turn gold along the Virgin River. Crowds thin. Light goes amber. Best hiking weather of the year."
                   tags={["Late Sep – Oct", "Golden Light", "Best Weather"]} />
-                <ListItem name="Desert Bloom" featured
+                <ListItem isMobile={isMobile} name="Desert Bloom" featured
                   detail="After a wet winter, the desert floor erupts in wildflowers. Cacti crown themselves. Timing is everything — and unpredictable."
                   tags={["Mar – Apr", "Wildflowers", "Variable"]} />
-                <ListItem name="Winter Solstice"
+                <ListItem isMobile={isMobile} name="Winter Solstice"
                   detail="Shortest day, most dramatic canyon light. Snow dusting the upper walls at sunset. Fewer people, deeper silence."
                   tags={["Dec 19–22", "Solstice", "Canyon Light"]} />
-                <ListItem name="Dark Sky Season"
+                <ListItem isMobile={isMobile} name="Dark Sky Season"
                   detail="Late summer and early fall offer warm nights for stargazing. The Milky Way peaks overhead from June through September."
                   tags={["Jun – Sep", "Milky Way", "Warm Nights"]} />
               </div>
@@ -1037,14 +1039,14 @@ export default function ZionGuide() {
               <SectionIcon type="stay" />
               <SectionLabel>Stay</SectionLabel>
               <SectionTitle>Where to sleep</SectionTitle>
-              <SectionSub>How you inhabit a place matters. Options across the full spectrum — from sleeping under the stars to world-class luxury.</SectionSub>
+              <SectionSub isMobile={isMobile}>How you inhabit a place matters. Options across the full spectrum — from sleeping under the stars to world-class luxury.</SectionSub>
             </FadeIn>
 
             <FadeIn delay={0.05}>
               <div style={{
                 padding: "14px 16px", background: C.cream,
                 border: `1px solid ${C.stone}`, marginBottom: 20,
-                display: "flex", gap: 16, flexWrap: "wrap",
+                display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? 10 : 16, flexWrap: "wrap",
               }}>
                 {[
                   { label: "Elemental", desc: "In the landscape", color: C.seaGlass },
@@ -1061,39 +1063,39 @@ export default function ZionGuide() {
 
             <FadeIn delay={0.1}>
               <ExpandableList initialCount={4} label="places to stay">
-                <StayItem tier="elemental" name="Under Canvas Zion" location="Virgin, UT" featured
+                <StayItem isMobile={isMobile} tier="elemental" name="Under Canvas Zion" location="Virgin, UT" featured
                   url="https://www.undercanvas.com/camps/zion/"
                   detail="Safari-style tents on 196 acres. DarkSky certified. Stargazer tents with sky windows above your bed. No WiFi — by design."
                   tags={["Glamping", "DarkSky", "Seasonal"]} />
-                <StayItem tier="elemental" name="AutoCamp Zion" location="Virgin, UT" featured
+                <StayItem isMobile={isMobile} tier="elemental" name="AutoCamp Zion" location="Virgin, UT" featured
                   url="https://autocamp.com/zion/"
                   detail="Climate-controlled Airstream suites with midcentury design. Retro charm, modern comfort."
                   tags={["Airstreams", "Climate-Controlled", "Hilton Points"]} />
-                <StayItem tier="rooted" name="Cliffrose Springdale" location="Springdale" featured
+                <StayItem isMobile={isMobile} tier="rooted" name="Cliffrose Springdale" location="Springdale" featured
                   url="https://www.cliffroselodge.com/"
                   detail="Five acres of gardens on the Virgin River. Heated pools year-round. Anthera restaurant. Steps from the park."
                   tags={["Riverfront", "Restaurant", "Spa", "Pool"]} />
-                <StayItem tier="premium" name="Amangiri" location="Canyon Point, UT" featured
+                <StayItem isMobile={isMobile} tier="premium" name="Amangiri" location="Canyon Point, UT" featured
                   url="https://www.aman.com/hotels/amangiri"
                   detail="34 modernist suites on 900 acres. Camp Sarika with private plunge pools. Aman Spa with Navajo healing traditions."
                   tags={["Ultra-Luxury", "Via Ferrata", "Spa"]} />
-                <StayItem tier="elemental" name="Open Sky Zion" location="Virgin, UT"
+                <StayItem isMobile={isMobile} tier="elemental" name="Open Sky Zion" location="Virgin, UT"
                   url="https://www.openskyzion.com/"
                   detail="Private and immersive. Farm-to-table at Black Sage restaurant. Wellness woven into every element."
                   tags={["Luxury Glamping", "Farm-to-Table", "Wellness"]} />
-                <StayItem tier="rooted" name="Desert Pearl Inn" location="Springdale"
+                <StayItem isMobile={isMobile} tier="rooted" name="Desert Pearl Inn" location="Springdale"
                   url="https://www.desertpearl.com/"
                   detail="Family-owned 20+ years. Built with reclaimed Douglas fir from a century-old railroad trestle. Rated #1 in Springdale."
                   tags={["Family-Owned", "Riverside", "Kitchenette"]} />
-                <StayItem tier="rooted" name={"Flanigan's Resort"} location="Springdale"
+                <StayItem isMobile={isMobile} tier="rooted" name={"Flanigan's Resort"} location="Springdale"
                   url="https://flanigans.com/"
                   detail="Park lodge with Deep Canyon Spa, Spotted Dog restaurant, and hillside yoga. Best wellness integration in town."
                   tags={["Spa", "Restaurant", "Yoga"]} />
-                <StayItem tier="rooted" name="Skyview Hotel" location="Torrey, UT"
+                <StayItem isMobile={isMobile} tier="rooted" name="Skyview Hotel" location="Torrey, UT"
                   url="https://skyviewhotel.com/"
                   detail={"14 rooms and 6 glamping domes near Capitol Reef. Rooftop stargazing in Utah's first Dark Sky community."}
                   tags={["Dark Sky", "Glamping Domes", "Boutique"]} />
-                <StayItem tier="premium" name="The Inn at Entrada" location="St. George, UT"
+                <StayItem isMobile={isMobile} tier="premium" name="The Inn at Entrada" location="St. George, UT"
                   url="https://www.innatentrada.com/"
                   detail="Luxury casitas near Snow Canyon. Red rock panoramas, championship golf, full-service spa."
                   tags={["Casitas", "Golf", "Spa"]} />
@@ -1112,54 +1114,54 @@ export default function ZionGuide() {
               <SectionIcon type="move" />
               <SectionLabel>Move</SectionLabel>
               <SectionTitle>Hikes, trails &amp; adventures</SectionTitle>
-              <SectionSub>{"From easy canyon strolls to world-class challenges. The terrain teaches you something new at every elevation."}</SectionSub>
+              <SectionSub isMobile={isMobile}>{"From easy canyon strolls to world-class challenges. The terrain teaches you something new at every elevation."}</SectionSub>
             </FadeIn>
             <FadeIn delay={0.08}>
               <ExpandableList initialCount={5} label="trails & adventures">
-                <ListItem name="Angels Landing" featured
+                <ListItem isMobile={isMobile} name="Angels Landing" featured
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail={"The iconic chain-assisted ridgeline summit. Exposure, adrenaline, and views that justify every step. Permit required — book 3 months out."}
                   note="Permit required — recreation.gov · Seasonal lottery"
                   tags={["5.4 mi RT", "Strenuous", "1,488 ft gain", "Permit"]} />
-                <ListItem name="The Narrows" featured
+                <ListItem isMobile={isMobile} name="The Narrows" featured
                   url="https://www.nps.gov/zion/planyourvisit/thenarrows.htm"
                   detail="Hiking through the Virgin River between thousand-foot walls. Water levels dictate access — check conditions daily. Rent gear in Springdale."
                   note="River-level dependent — check NPS morning reports"
                   tags={["Up to 10 mi", "Moderate–Strenuous", "Water Hiking"]} />
-                <ListItem name="The Subway" featured
+                <ListItem isMobile={isMobile} name="The Subway" featured
                   url="https://www.nps.gov/zion/planyourvisit/the-subway.htm"
                   detail="A tunnel-shaped canyon carved by flowing water. Technical bottom-up route or wilderness top-down. Unforgettable geology."
                   tags={["9 mi RT", "Technical", "Permit Required"]} />
-                <ListItem name="Canyon Overlook Trail"
+                <ListItem isMobile={isMobile} name="Canyon Overlook Trail"
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Short, punchy, with one of the best views in the park. East side of the tunnel. Arrive early or at sunset."
                   tags={["1 mi RT", "Easy–Moderate", "Sunset", "Family Friendly"]} />
-                <ListItem name="Observation Point"
+                <ListItem isMobile={isMobile} name="Observation Point"
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Higher than Angels Landing, quieter, arguably more stunning. Full panorama of Zion Canyon."
                   tags={["8 mi RT", "Strenuous", "2,150 ft gain"]} />
-                <ListItem name="Kolob Canyons"
+                <ListItem isMobile={isMobile} name="Kolob Canyons"
                   url="https://www.nps.gov/zion/planyourvisit/kolob-canyons-wilderness-hiking-trails.htm"
                   detail={"Zion's quiet northern section. Fewer visitors, deeper solitude. Finger canyons of red Navajo sandstone."}
                   tags={["Multiple Trails", "Remote", "Separate Entrance"]} />
-                <ListItem name="Hidden Canyon"
+                <ListItem isMobile={isMobile} name="Hidden Canyon"
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="A narrow slot canyon reached by a chain-assisted trail. Small, intimate, often overlooked."
                   tags={["2.4 mi RT", "Moderate–Strenuous", "Chains"]} />
-                <ListItem name="Emerald Pools"
+                <ListItem isMobile={isMobile} name="Emerald Pools"
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Three tiers of pools and waterfalls, increasingly beautiful as you climb. Upper pool is the reward."
                   tags={["1–3 mi RT", "Easy–Moderate", "Family Friendly"]} />
-                <ListItem name={"Pa'rus Trail"}
+                <ListItem isMobile={isMobile} name={"Pa'rus Trail"}
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Flat, paved riverside trail. Bikes allowed. Perfect for decompression, morning walks, or families."
                   tags={["3.5 mi RT", "Easy", "Paved", "Bikes OK"]} />
-                <ListItem name="Snow Canyon State Park"
+                <ListItem isMobile={isMobile} name="Snow Canyon State Park"
                   url="https://stateparks.utah.gov/parks/snow-canyon/"
                   detail="Red and white sandstone, lava flows, and sand dunes 45 min from Zion. Far fewer crowds."
                   note="Near St. George — great half-day trip"
                   tags={["State Park", "Lava Tubes", "Less Crowded"]} />
-                <ListItem name="Scenic Drive to Capitol Reef"
+                <ListItem isMobile={isMobile} name="Scenic Drive to Capitol Reef"
                   detail="The 2.5-hour drive via Highway 12 is one of the most beautiful roads in America. Make it the journey, not the commute."
                   tags={["Scenic Drive", "Half Day", "Highway 12"]} />
               </ExpandableList>
@@ -1177,38 +1179,38 @@ export default function ZionGuide() {
               <SectionIcon type="breathe" />
               <SectionLabel>Breathe</SectionLabel>
               <SectionTitle>{"Yoga, spa & wellness"}</SectionTitle>
-              <SectionSub>{"Slow down. The canyon holds space for stillness just as powerfully as it holds space for adventure."}</SectionSub>
+              <SectionSub isMobile={isMobile}>{"Slow down. The canyon holds space for stillness just as powerfully as it holds space for adventure."}</SectionSub>
             </FadeIn>
             <FadeIn delay={0.08}>
               <ExpandableList initialCount={4} label="wellness options">
-                <ListItem name={"Hillside Yoga at Flanigan's"} featured
+                <ListItem isMobile={isMobile} name={"Hillside Yoga at Flanigan's"} featured
                   url="https://flanigans.com/spa/"
                   detail={"Gentle yoga with sound bath on a terrace overlooking Zion. The vibration carries differently at this elevation. All levels welcome — come for the practice, stay for the view."}
                   note={"At Flanigan's Resort — check schedule for sound bath sessions"}
                   tags={["Sound Bath", "Canyon Views", "All Levels"]} />
-                <ListItem name="Zion Guru Skydeck Yoga" featured
+                <ListItem isMobile={isMobile} name="Zion Guru Skydeck Yoga" featured
                   url="https://www.zionguru.com/"
                   detail="Open-air deck with the Watchman as your backdrop. Morning sessions catch first light on the canyon walls."
                   tags={["Outdoor", "Morning", "All Levels"]} />
-                <ListItem name="Deep Canyon Spa" featured
+                <ListItem isMobile={isMobile} name="Deep Canyon Spa" featured
                   url="https://flanigans.com/spa/"
                   detail={"Full-service spa inside Flanigan's Resort. Massages, body treatments, and facials after long trail days. The canyon's first spa, open since 1994."}
                   tags={["Full Spa", "Springdale", "Walk-In"]} />
-                <ListItem name="Open Sky Wellness Programs" featured
+                <ListItem isMobile={isMobile} name="Open Sky Wellness Programs" featured
                   url="https://www.openskyzion.com/"
                   detail="Immersive yoga, meditation, and sound healing in an off-grid desert setting. Multi-day programs available."
                   tags={["Multi-Day", "Off-Grid", "Immersive"]} />
-                <ListItem name="Five Petals Spa at the Cliffrose"
+                <ListItem isMobile={isMobile} name="Five Petals Spa at the Cliffrose"
                   url="https://www.cliffroselodge.com/"
                   detail="Riverfront spa steps from the park. Deep-tissue, hot stone, and custom facials."
                   tags={["Riverfront", "Hotel Spa"]} />
-                <ListItem name="Sunrise Meditation at Canyon Junction"
+                <ListItem isMobile={isMobile} name="Sunrise Meditation at Canyon Junction"
                   detail="Arrive before the shuttles. Sit at the Pine Creek bridge. Watch the walls ignite in silence. No teacher needed."
                   tags={["Free", "Early AM", "Solo", "Self-Guided"]} />
-                <ListItem name="Earthing on the Canyon Floor"
+                <ListItem isMobile={isMobile} name="Earthing on the Canyon Floor"
                   detail="Take your shoes off. Stand on the sandstone. Feel the warmth the rock has been collecting for 200 million years."
                   tags={["Free", "Grounding", "Self-Guided"]} />
-                <ListItem name="Journaling at the Virgin River"
+                <ListItem isMobile={isMobile} name="Journaling at the Virgin River"
                   detail={"Find a bench along the Pa'rus Trail. The sound of the river is its own kind of teacher."}
                   tags={["Free", "Contemplative", "Self-Guided"]} />
               </ExpandableList>
@@ -1226,29 +1228,29 @@ export default function ZionGuide() {
               <SectionIcon type="awaken" />
               <SectionLabel>Awaken</SectionLabel>
               <SectionTitle>{"Light, sky & wonder"}</SectionTitle>
-              <SectionSub>{"The moments that shift something inside you. Sunrise, starlight, the land at its most alive."}</SectionSub>
+              <SectionSub isMobile={isMobile}>{"The moments that shift something inside you. Sunrise, starlight, the land at its most alive."}</SectionSub>
             </FadeIn>
             <FadeIn delay={0.08}>
               <ExpandableList initialCount={4} label="experiences">
-                <ListItem name="Stargazing from the Canyon Floor" featured
+                <ListItem isMobile={isMobile} name="Stargazing from the Canyon Floor" featured
                   url="https://www.nps.gov/thingstodo/stargazing-in-zion.htm"
                   detail={"Zion is a certified International Dark Sky Park. On a moonless night, the Milky Way arcs directly overhead between the canyon walls. Bring a blanket, lie down, and give yourself an hour."}
                   tags={["Free", "Night", "Dark Sky Park"]} />
-                <ListItem name="Sunrise at the Watchman" featured
+                <ListItem isMobile={isMobile} name="Sunrise at the Watchman" featured
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Get to the trailhead before first light. Watch the canyon walls ignite one layer at a time. Worth every minute of lost sleep."
                   tags={["3.3 mi RT", "Moderate", "Early AM"]} />
-                <ListItem name="Drive Historic Highway 12" featured
+                <ListItem isMobile={isMobile} name="Drive Historic Highway 12" featured
                   detail="One of America's most dramatic scenic byways. 124 miles from Bryce Canyon to Capitol Reef through red rock canyons, hogbacks with thousand-foot drops on both sides, and the high forests of Boulder Mountain. Don't rush it."
                   tags={["Scenic Drive", "Half Day", "Bryce to Capitol Reef"]} />
-                <ListItem name="Drive the Mt. Carmel Tunnel" featured
+                <ListItem isMobile={isMobile} name="Drive the Mt. Carmel Tunnel" featured
                   detail="The 1.1-mile tunnel carved through sandstone in 1930. Emerge on the east side to a completely different landscape — checkerboard mesas, white slickrock, open sky."
                   tags={["Scenic Drive", "East Side", "Historic"]} />
-                <ListItem name="NPS Ranger Stargazing Program"
+                <ListItem isMobile={isMobile} name="NPS Ranger Stargazing Program"
                   url="https://www.nps.gov/zion/planyourvisit/sunset-stargazing.htm"
                   detail="Free ranger-led night sky programs. Telescopes provided, no reservation needed. Check the park calendar for dates."
                   tags={["Free", "Ranger-Led", "Seasonal"]} />
-                <ListItem name={"Bryce Canyon Under Stars"}
+                <ListItem isMobile={isMobile} name={"Bryce Canyon Under Stars"}
                   url="https://www.nps.gov/thingstodo/stargazing-at-bryce-canyon.htm"
                   detail={"Some of the darkest skies in the country. The hoodoos by starlight are otherworldly. Ranger-led telescope programs available."}
                   tags={["Day Trip", "Dark Sky", "Telescope Programs"]} />
@@ -1267,69 +1269,69 @@ export default function ZionGuide() {
               <SectionIcon type="connect" />
               <SectionLabel>Connect</SectionLabel>
               <SectionTitle>{"Food, culture & community"}</SectionTitle>
-              <SectionSub>{"The people and places that turn a visit into a memory. Where to eat, give back, honor the land, and linger."}</SectionSub>
+              <SectionSub isMobile={isMobile}>{"The people and places that turn a visit into a memory. Where to eat, give back, honor the land, and linger."}</SectionSub>
             </FadeIn>
             <FadeIn delay={0.08}>
               <ExpandableList initialCount={4} label="places">
-                <ListItem name={"Live Music at Zion Canyon Brew Pub"} featured
+                <ListItem isMobile={isMobile} name={"Live Music at Zion Canyon Brew Pub"} featured
                   url="https://zionbrewery.com/"
                   detail={"Cold beer, outdoor patio right on the Virgin River, canyon walls glowing overhead, and live music drifting through it all. Southern Utah's first brewery, and still the best post-hike spot in town."}
                   note="Live music Tuesdays, Fridays, and weekends — 95 Zion Park Blvd"
                   tags={["Live Music", "Outdoor Patio", "Craft Beer", "Canyon Views"]} />
-                <ListItem name={"King's Landing Bistro"} featured
+                <ListItem isMobile={isMobile} name={"King's Landing Bistro"} featured
                   url="https://www.kingslanding-zion.com/"
                   detail={"The canyon's most celebrated table. Seasonal, Southwest-rooted. Reserve ahead."}
                   tags={["Dinner", "Fine Dining", "Reservations", "$$–$$$"]} />
-                <ListItem name={"Spotted Dog Café"}
+                <ListItem isMobile={isMobile} name={"Spotted Dog Café"}
                   url="https://flanigans.com/"
                   detail={"Inside Flanigan's lodge. Organic, local, elevated comfort food."}
                   tags={["Dinner", "Organic", "$$"]} />
-                <ListItem name={"Oscar's Café"}
+                <ListItem isMobile={isMobile} name={"Oscar's Café"}
                   url="https://www.oscarscafe.com/"
                   detail="Big portions, excellent huevos rancheros. The local gathering spot."
                   tags={["Breakfast", "Lunch", "Casual", "$–$$"]} />
-                <ListItem name="Deep Creek Coffee"
+                <ListItem isMobile={isMobile} name="Deep Creek Coffee"
                   detail="The first stop every morning. Single-origin pour-overs and house-baked pastries."
                   tags={["Coffee", "Pastries", "$"]} />
-                <ListItem name="Whiptail Grill"
+                <ListItem isMobile={isMobile} name="Whiptail Grill"
                   url="https://www.whiptailgrillzion.com/"
                   detail="Mexican-inspired, great patio, solid margaritas, reasonable for Springdale."
                   tags={["Lunch", "Dinner", "Mexican", "$–$$"]} />
-                <ListItem name="Tribal Arts Zion"
+                <ListItem isMobile={isMobile} name="Tribal Arts Zion"
                   detail="Native American art and jewelry sourced directly from tribal artists."
                   tags={["Native Art", "Jewelry", "Gallery"]} />
-                <ListItem name="David J. West Gallery"
+                <ListItem isMobile={isMobile} name="David J. West Gallery"
                   url="https://www.davidjwest.com/"
                   detail={"Fine art photography of the Southwest in light that makes you question whether you've ever really seen these places."}
                   tags={["Photography", "Fine Art"]} />
-                <ListItem name="Sol Foods Market"
+                <ListItem isMobile={isMobile} name="Sol Foods Market"
                   detail="Small but mighty grocery. Good sandwiches for the trail, cold drinks, local provisions."
                   tags={["Grocery", "Deli", "Trail Provisions"]} />
-                <ListItem name="Springdale Farmers Market"
+                <ListItem isMobile={isMobile} name="Springdale Farmers Market"
                   detail="Saturday mornings in season. Local produce, artisan goods."
                   tags={["Seasonal", "Saturday AM", "Local"]} />
 
                 {/* ── Cultural Heritage & Service ──────────────────────── */}
-                <ListItem name="Paiute Cultural Heritage" featured
+                <ListItem isMobile={isMobile} name="Paiute Cultural Heritage" featured
                   url="https://pitu.gov/culture/"
                   detail={"The Southern Paiute called this land Mukuntuweap long before it was Zion. The Paiute Indian Tribe of Utah preserves language, oral history, and traditions through cultural programs and the annual Restoration Powwow in Cedar City each June."}
                   note="Paiute Indian Tribe of Utah — pitu.gov"
                   tags={["Indigenous Heritage", "Cultural", "Cedar City"]} />
-                <ListItem name="Pipe Spring National Monument" featured
+                <ListItem isMobile={isMobile} name="Pipe Spring National Monument" featured
                   url="https://www.nps.gov/pisp/"
                   detail={"Jointly managed by NPS and the Kaibab Band of Paiutes. A desert oasis that tells the layered story of water, sovereignty, and survival — Native, pioneer, and ranching history in one place. The Kaibab Paiutes operate the visitor center."}
                   tags={["NPS Monument", "Indigenous History", "Day Trip"]} />
-                <ListItem name="Zion Forever Project" featured
+                <ListItem isMobile={isMobile} name="Zion Forever Project" featured
                   url="https://www.zionpark.org/"
                   detail={"The park's official nonprofit partner. Conservation volunteer days, trail restoration, hanging garden protection, and dark sky preservation. A way to give back to the land that gives so much."}
                   note="Volunteer opportunities available — zionpark.org"
                   tags={["Conservation", "Volunteer", "Nonprofit"]} />
-                <ListItem name="Conserve Southwest Utah" featured
+                <ListItem isMobile={isMobile} name="Conserve Southwest Utah" featured
                   url="https://www.conserveswu.org/stewardship"
                   detail={"Hands-on desert habitat restoration at Red Cliffs NCA near St. George. Planting native shrubs, protecting threatened Mojave desert tortoise habitat, invasive species removal. Over 5,000 native plants restored since 2020."}
                   note="Regular volunteer days — 45 min from Zion"
                   tags={["Habitat Restoration", "Volunteer", "Desert Tortoise"]} />
-                <ListItem name="Parowan Gap Petroglyphs"
+                <ListItem isMobile={isMobile} name="Parowan Gap Petroglyphs"
                   detail={"A free, open-air gallery of ancient rock art attributed to the Fremont people, near Cedar City. Hundreds of petroglyphs etched into the canyon walls — a contemplative stop that asks nothing but attention."}
                   tags={["Free", "Ancient Rock Art", "Self-Guided", "Cedar City"]} />
               </ExpandableList>
@@ -1347,7 +1349,7 @@ export default function ZionGuide() {
               <SectionIcon type="threshold" />
               <SectionLabel>Group Trips</SectionLabel>
               <SectionTitle>Tuned to Earth Rhythms</SectionTitle>
-              <SectionSub>Small group trips timed to natural crescendos. Expert guides, meaningful connection, transformative terrain. Eight travelers maximum.</SectionSub>
+              <SectionSub isMobile={isMobile}>Small group trips timed to natural crescendos. Expert guides, meaningful connection, transformative terrain. Eight travelers maximum.</SectionSub>
             </FadeIn>
 
             {/* Zion-specific trip — uses shared TripCard */}
@@ -1356,7 +1358,7 @@ export default function ZionGuide() {
               return zionTrips.length > 0 ? (
                 <div style={{
                   display: "grid",
-                  gridTemplateColumns: zionTrips.length > 1 ? "repeat(2, 1fr)" : "1fr",
+                  gridTemplateColumns: isMobile ? "1fr" : (zionTrips.length > 1 ? "repeat(2, 1fr)" : "1fr"),
                   gap: 24,
                   maxWidth: zionTrips.length === 1 ? 400 : "100%",
                 }}>
@@ -1431,12 +1433,14 @@ export default function ZionGuide() {
 
               {/* Dual CTA buttons */}
               <div style={{
-                display: "flex", gap: 16, justifyContent: "center",
+                display: "flex", flexDirection: isMobile ? "column" : "row", gap: 16, justifyContent: "center",
+                alignItems: isMobile ? "stretch" : "center",
                 flexWrap: "wrap", marginBottom: 16,
               }}>
                 <Link to="/plan" style={{
                   padding: "14px 36px", border: "none",
                   background: C.darkInk, color: "#fff",
+                  textAlign: "center",
                   fontFamily: "'Quicksand', sans-serif",
                   fontSize: 10, fontWeight: 700,
                   letterSpacing: "0.2em", textTransform: "uppercase",
@@ -1451,7 +1455,7 @@ export default function ZionGuide() {
                 <Link to="/contact" style={{
                   padding: "14px 36px",
                   border: `1.5px solid ${C.darkInk}`, background: "transparent",
-                  color: C.darkInk,
+                  color: C.darkInk, textAlign: "center",
                   fontFamily: "'Quicksand', sans-serif",
                   fontSize: 10, fontWeight: 700,
                   letterSpacing: "0.2em", textTransform: "uppercase",
@@ -1510,14 +1514,7 @@ export default function ZionGuide() {
           </FadeIn>
 
         </div>
-
-        {/* Right column: Celestial Snapshot (desktop only) */}
-        {!isMobile && <CelestialSnapshot destination="zion" />}
-        </div>
       </section>
-
-      {/* Mobile: floating button + drawer rendered by CelestialSnapshot */}
-      {isMobile && <CelestialSnapshot destination="zion" />}
 
       <Footer />
     </>
