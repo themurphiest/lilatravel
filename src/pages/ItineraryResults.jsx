@@ -6,6 +6,7 @@ import JSON5 from 'json5';
 import { trackEvent } from '@utils/analytics';
 import { getPracticesForItinerary, TRADITIONS } from '@services/practicesService';
 import { assignCompanions } from '@services/companionAssigner';
+import CelestialMonthStrip from '@components/CelestialMonthStrip';
 
 /*
  * ItineraryResults — Merged V3
@@ -1450,6 +1451,11 @@ export default function ItineraryResults() {
         {/* Trip Overview */}
         {isStructured && enrichedDays.length > 1 && (
           <TripOverview days={enrichedDays} onDayClick={scrollToDay} dayFeedback={dayFeedback} />
+        )}
+
+        {/* Celestial Month Strip */}
+        {isStructured && formData?.month && (
+          <CelestialMonthStrip month={formData.month} destinationKey={formData?.destination} />
         )}
 
         {/* Day Cards / Markdown Fallback */}

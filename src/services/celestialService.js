@@ -230,6 +230,54 @@ async function fetchNPSAlerts(parkCode) {
 }
 
 
+// ─── Season Labels ───────────────────────────────────────────────────────
+
+const SEASON_LABELS = {
+  1: "Deep Winter", 2: "Late Winter", 3: "Early Spring",
+  4: "Spring", 5: "Late Spring", 6: "Early Summer",
+  7: "High Summer", 8: "Late Summer", 9: "Early Autumn",
+  10: "Autumn", 11: "Late Autumn", 12: "Early Winter",
+};
+
+
+// ─── Monthly Snapshot (pure — no API calls) ─────────────────────────────
+
+export function getMonthlySnapshot(month, year) {
+  if (!month || month < 1 || month > 12) return null;
+  const yr = year || new Date().getFullYear();
+
+  // Events happening this month
+  const events = CELESTIAL_EVENTS.filter(e => e.month === month);
+
+  // Find New Moon and Full Moon days by iterating the month
+  const daysInMonth = new Date(yr, month, 0).getDate();
+  let newMoon = null;
+  let fullMoon = null;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(yr, month - 1, d);
+    const mp = getMoonPhase(date);
+    if (!newMoon && mp.name === "New Moon") {
+      newMoon = { day: d, label: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }) };
+    }
+    if (!fullMoon && mp.name === "Full Moon") {
+      fullMoon = { day: d, label: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }) };
+    }
+  }
+
+  // Milky Way window for the month
+  const milkyWayWindow = MW_WINDOWS[month] || null;
+
+  return {
+    events,
+    newMoon,
+    fullMoon,
+    milkyWayWindow,
+    seasonLabel: SEASON_LABELS[month],
+  };
+}
+
+
 // ─── Orchestrator ────────────────────────────────────────────────────────────
 
 export async function getCelestialSnapshot(destinationKey = "zion") {
