@@ -596,7 +596,7 @@ export default function HomePage() {
           textAlign: "center", padding: "0 24px", opacity: heroOpacity,
         }}>
           <FadeIn from="none" delay={0.15}>
-            <span className="eyebrow" style={{ color: C.skyBlue }}>Wellness Travel for Adventure Seekers</span>
+            <span className="eyebrow" style={{ color: C.skyBlue }}>Adventure Travel with a Wellness Lens</span>
           </FadeIn>
           <FadeIn from="bottom" delay={0.25}>
             <div className="hero-moment-wrap">
@@ -618,7 +618,17 @@ export default function HomePage() {
             </div>
           </FadeIn>
           <FadeIn from="bottom" delay={0.45}>
+            <div style={{ fontFamily: "'Quicksand'", fontSize: 13, fontWeight: 400, color: "rgba(255,255,255,0.7)", letterSpacing: "0.04em", marginBottom: 18 }}>Ready to drop in?</div>
             <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap" }}>
+              <Link to="/destinations" style={{
+                fontFamily: "'Quicksand'", fontSize: 11, fontWeight: 700,
+                letterSpacing: "0.2em", textTransform: "uppercase",
+                color: "white", paddingBottom: 3, borderBottom: "1px solid rgba(255,255,255,0.5)",
+                display: "inline-block", transition: "opacity 0.2s", textDecoration: "none",
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.65"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+              >Explore Destinations</Link>
               <Link to="/plan" style={{
                 fontFamily: "'Quicksand'", fontSize: 11, fontWeight: 700,
                 letterSpacing: "0.2em", textTransform: "uppercase",
@@ -629,15 +639,6 @@ export default function HomePage() {
               onMouseEnter={e => e.currentTarget.style.opacity = "0.65"}
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
               >Plan a Trip</Link>
-              <Link to="/destinations" style={{
-                fontFamily: "'Quicksand'", fontSize: 11, fontWeight: 700,
-                letterSpacing: "0.2em", textTransform: "uppercase",
-                color: "white", paddingBottom: 3, borderBottom: "1px solid rgba(255,255,255,0.5)",
-                display: "inline-block", transition: "opacity 0.2s", textDecoration: "none",
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.65"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-              >Explore Destinations</Link>
             </div>
           </FadeIn>
         </div>
