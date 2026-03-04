@@ -50,7 +50,7 @@ function SectionSub({ children, isMobile }) {
     <p style={{
       fontFamily: "'Quicksand', sans-serif",
       fontSize: isMobile ? 15 : "clamp(14px, 1.8vw, 15px)", fontWeight: 400,
-      color: "#5a7080", margin: "0 auto 28px", lineHeight: 1.7,
+      color: "#4A5650", margin: "0 auto 28px", lineHeight: 1.7,
       textAlign: isMobile ? "left" : "center", maxWidth: isMobile ? "100%" : 520,
     }}>{children}</p>
   );
@@ -164,7 +164,7 @@ function AddToTripButton({ name }) {
           fontFamily: "'Quicksand', sans-serif",
           fontSize: 10, fontWeight: 700,
           letterSpacing: "0.14em", textTransform: "uppercase",
-          color: added ? C.oceanTeal : "#9aabba",
+          color: added ? C.oceanTeal : "#7A857E",
           transition: "all 0.2s ease",
           flexShrink: 0, whiteSpace: "nowrap",
         }}
@@ -172,7 +172,7 @@ function AddToTripButton({ name }) {
           if (!added) { e.currentTarget.style.borderColor = C.oceanTeal; e.currentTarget.style.color = C.oceanTeal; }
         }}
         onMouseLeave={e => {
-          if (!added) { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = "#9aabba"; }
+          if (!added) { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = "#7A857E"; }
         }}
       >
         <span style={{ fontSize: 14, lineHeight: 1, fontWeight: 400 }}>{added ? "✓" : "+"}</span>
@@ -205,14 +205,14 @@ function AddToTripButton({ name }) {
             }}>✓</div>
             <div style={{
               fontFamily: "'Quicksand', sans-serif",
-              fontSize: 11, fontWeight: 700,
+              fontSize: 12, fontWeight: 700,
               letterSpacing: "0.2em", textTransform: "uppercase",
               color: C.darkInk, marginBottom: 12,
             }}>Added to your trip</div>
             <div style={{
               fontFamily: "'Quicksand', sans-serif",
               fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
-              color: "#5a7080", lineHeight: 1.65, marginBottom: 28,
+              color: "#4A5650", lineHeight: 1.65, marginBottom: 28,
             }}>Unlock the Zion Trip Planner to save your picks, build a day-by-day itinerary, and access everything offline.</div>
             <button
               onClick={() => { trackEvent('guide_cta_clicked', { action: 'unlock_trip_planner', destination: 'zion' }); setShowPrompt(false); navigate('/plan'); }}
@@ -220,7 +220,7 @@ function AddToTripButton({ name }) {
                 width: "100%", padding: "13px 28px",
                 background: C.darkInk, color: "#fff", border: "none",
                 fontFamily: "'Quicksand', sans-serif",
-                fontSize: 10, fontWeight: 700,
+                fontSize: 11, fontWeight: 700,
                 letterSpacing: "0.2em", textTransform: "uppercase",
                 cursor: "pointer", marginBottom: 10, transition: "opacity 0.2s",
               }}
@@ -231,9 +231,9 @@ function AddToTripButton({ name }) {
               onClick={() => setShowPrompt(false)}
               style={{
                 width: "100%", padding: "10px 24px",
-                background: "transparent", color: "#9aabba", border: "none",
+                background: "transparent", color: "#7A857E", border: "none",
                 fontFamily: "'Quicksand', sans-serif",
-                fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+                fontSize: 12, fontWeight: 600, letterSpacing: "0.06em",
                 cursor: "pointer",
               }}
             >Keep browsing</button>
@@ -253,7 +253,7 @@ function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
     }} onMouseEnter={e => { e.target.style.borderColor = C.oceanTeal; e.target.style.color = C.slate || "#3D5A6B"; }}
        onMouseLeave={e => { e.target.style.borderColor = C.stone; e.target.style.color = C.darkInk; }}>
       {name}
-      <span style={{ fontSize: 11, marginLeft: 4, color: "#9aabba" }}>{"↗"}</span>
+      <span style={{ fontSize: 11, marginLeft: 4, color: "#7A857E" }}>{"↗"}</span>
     </a>
   ) : (
     <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 15, fontWeight: 600, color: C.darkInk }}>{name}</span>
@@ -275,7 +275,7 @@ function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
           fontSize: isMobile ? 14 : "clamp(13px, 1.5vw, 14px)", fontWeight: 400,
-          color: "#5a7080", lineHeight: 1.65,
+          color: "#4A5650", lineHeight: 1.65,
         }}>{detail}</div>
         {note && (
           <div style={{
@@ -289,7 +289,7 @@ function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
               <span key={i} style={{
                 padding: "2px 8px", background: C.stone + "60",
                 fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600,
-                color: "#9aabba",
+                color: "#7A857E",
               }}>{t}</span>
             ))}
           </div>
@@ -315,7 +315,7 @@ function StayItem({ name, location, tier, detail, tags, url, featured, isMobile 
     }} onMouseEnter={e => e.target.style.borderColor = C.oceanTeal}
        onMouseLeave={e => e.target.style.borderColor = C.stone}>
       {name}
-      <span style={{ fontSize: 11, marginLeft: 4, color: "#9aabba" }}>{"↗"}</span>
+      <span style={{ fontSize: 11, marginLeft: 4, color: "#7A857E" }}>{"↗"}</span>
     </a>
   ) : (
     <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 15, fontWeight: 600, color: C.darkInk }}>{name}</span>
@@ -331,7 +331,7 @@ function StayItem({ name, location, tier, detail, tags, url, featured, isMobile 
             letterSpacing: "0.18em", textTransform: "uppercase", color: s.color,
           }}>{s.label}</span>
           <span style={{
-            fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 500, color: "#9aabba",
+            fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 500, color: "#7A857E",
           }}>{location}</span>
           {featured && (
             <span style={{
@@ -345,7 +345,7 @@ function StayItem({ name, location, tier, detail, tags, url, featured, isMobile 
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
           fontSize: isMobile ? 14 : "clamp(13px, 1.5vw, 14px)", fontWeight: 400,
-          color: "#5a7080", lineHeight: 1.65,
+          color: "#4A5650", lineHeight: 1.65,
         }}>{detail}</div>
         {tags && (
           <div style={{ display: "flex", gap: 5, marginTop: 7, flexWrap: "wrap" }}>
@@ -353,7 +353,7 @@ function StayItem({ name, location, tier, detail, tags, url, featured, isMobile 
               <span key={i} style={{
                 padding: "2px 8px", background: C.stone + "60",
                 fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600,
-                color: "#9aabba",
+                color: "#7A857E",
               }}>{t}</span>
             ))}
           </div>
@@ -425,7 +425,7 @@ function OfferingCard({ icon, label, title, description, cta, ctaAction, accent,
       <div style={{ marginBottom: 20 }}>{icon}</div>
       <div style={{
         fontFamily: "'Quicksand', sans-serif",
-        fontSize: 9, fontWeight: 700,
+        fontSize: 10, fontWeight: 700,
         letterSpacing: "0.22em", textTransform: "uppercase",
         color: accent, marginBottom: 10,
       }}>{label}</div>
@@ -437,7 +437,7 @@ function OfferingCard({ icon, label, title, description, cta, ctaAction, accent,
       <p style={{
         fontFamily: "'Quicksand', sans-serif",
         fontSize: 13, fontWeight: 400,
-        color: "#5a7080", lineHeight: 1.65, margin: "0 0 auto",
+        color: "#4A5650", lineHeight: 1.65, margin: "0 0 auto",
         paddingBottom: 24,
       }}>{description}</p>
       <button
@@ -449,7 +449,7 @@ function OfferingCard({ icon, label, title, description, cta, ctaAction, accent,
           border: `1.5px solid ${accent}`,
           color: accent,
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: 9, fontWeight: 700,
+          fontSize: 10, fontWeight: 700,
           letterSpacing: "0.16em", textTransform: "uppercase",
           cursor: "pointer", transition: "all 0.25s",
         }}
@@ -459,7 +459,7 @@ function OfferingCard({ icon, label, title, description, cta, ctaAction, accent,
       {secondary && (
         <div style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: 10, fontWeight: 500, color: "#9aabba",
+          fontSize: 10, fontWeight: 500, color: "#7A857E",
           marginTop: 10, letterSpacing: "0.04em",
         }}>{secondary}</div>
       )}
@@ -531,7 +531,7 @@ function PlanMyTripCTA({ variant = "default" }) {
         <p style={{
           fontFamily: "'Quicksand', sans-serif",
           fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
-          color: isDark ? "rgba(255,255,255,0.55)" : "#5a7080",
+          color: isDark ? "rgba(255,255,255,0.75)" : "#4A5650",
           lineHeight: 1.65, maxWidth: 480, margin: "0 auto 24px",
         }}>{v.body}</p>
         <button
@@ -550,7 +550,7 @@ function PlanMyTripCTA({ variant = "default" }) {
               ? (hovered ? C.darkInk : "#fff")
               : (hovered ? "#fff" : C.darkInk),
             fontFamily: "'Quicksand', sans-serif",
-            fontSize: 10, fontWeight: 700,
+            fontSize: 11, fontWeight: 700,
             letterSpacing: "0.18em", textTransform: "uppercase",
             cursor: "pointer", transition: "all 0.3s",
           }}
@@ -558,7 +558,7 @@ function PlanMyTripCTA({ variant = "default" }) {
         {!isDark && (
           <div style={{
             fontFamily: "'Quicksand', sans-serif",
-            fontSize: 10, fontWeight: 500, color: "#9aabba",
+            fontSize: 10, fontWeight: 500, color: "#7A857E",
             marginTop: 12, letterSpacing: "0.04em",
           }}>One-time purchase · Includes offline access</div>
         )}
@@ -609,7 +609,7 @@ function ThresholdTripCard({ title, dates, duration, description, spotsLeft, acc
       <p style={{
         fontFamily: "'Quicksand', sans-serif",
         fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
-        lineHeight: 1.7, color: "rgba(255,255,255,0.55)", margin: "0 0 24px",
+        lineHeight: 1.7, color: "rgba(255,255,255,0.75)", margin: "0 0 24px",
       }}>{description}</p>
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
         <button
@@ -621,14 +621,14 @@ function ThresholdTripCard({ title, dates, duration, description, spotsLeft, acc
             background: hovered ? "white" : "transparent",
             color: hovered ? C.darkInk : "white",
             fontFamily: "'Quicksand', sans-serif",
-            fontSize: 10, fontWeight: 700,
+            fontSize: 11, fontWeight: 700,
             letterSpacing: "0.2em", textTransform: "uppercase",
             cursor: "pointer", transition: "all 0.3s",
           }}
         >Express Interest</button>
         <span style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.35)",
+          fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.55)",
           letterSpacing: "0.04em",
         }}>From $895 per person</span>
       </div>
@@ -663,7 +663,7 @@ function TimingAlertCapture() {
             <div style={{
               fontFamily: "'Quicksand', sans-serif",
               fontSize: 13, fontWeight: 400,
-              color: "#5a7080", lineHeight: 1.6,
+              color: "#4A5650", lineHeight: 1.6,
             }}>We'll let you know when the golden window opens.</div>
           </>
         ) : (
@@ -677,7 +677,7 @@ function TimingAlertCapture() {
             <p style={{
               fontFamily: "'Quicksand', sans-serif",
               fontSize: 13, fontWeight: 400,
-              color: "#5a7080", lineHeight: 1.6,
+              color: "#4A5650", lineHeight: 1.6,
               maxWidth: 420, margin: "0 auto 20px",
             }}>We track conditions, seasonal windows, and earth rhythms — and let you know when it's time to go.</p>
             <div style={{
@@ -706,7 +706,7 @@ function TimingAlertCapture() {
                   background: C.goldenAmber,
                   border: "none", color: "#fff",
                   fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 10, fontWeight: 700,
+                  fontSize: 11, fontWeight: 700,
                   letterSpacing: "0.16em", textTransform: "uppercase",
                   cursor: "pointer", transition: "opacity 0.2s",
                   whiteSpace: "nowrap",
@@ -717,7 +717,7 @@ function TimingAlertCapture() {
             </div>
             <div style={{
               fontFamily: "'Quicksand', sans-serif",
-              fontSize: 10, fontWeight: 400, color: "#9aabba",
+              fontSize: 10, fontWeight: 400, color: "#7A857E",
               marginTop: 10, letterSpacing: "0.04em",
             }}>No spam. Just timing.</div>
           </>
@@ -778,7 +778,7 @@ export default function ZionGuide() {
                 <p style={{
                   fontFamily: "'Quicksand', sans-serif",
                   fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
-                  color: "#5a7080", lineHeight: 1.75, maxWidth: 460,
+                  color: "#4A5650", lineHeight: 1.75, maxWidth: 460,
                   margin: "0 0 14px",
                 }}>
                   The Southern Paiute called this place <span style={{ color: C.darkInk }}>Mukuntuweap</span>. The sandstone is 170 million years old. For thousands of years, this land has drawn people inward.
@@ -788,7 +788,7 @@ export default function ZionGuide() {
                 <p style={{
                   fontFamily: "'Quicksand', sans-serif",
                   fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
-                  color: "#5a7080", lineHeight: 1.75, maxWidth: 460,
+                  color: "#4A5650", lineHeight: 1.75, maxWidth: 460,
                   margin: 0,
                 }}>
                   The scale quiets the mind. The light feels earned. Something here shifts — and we built this guide to help you find it.
@@ -804,15 +804,15 @@ export default function ZionGuide() {
                 paddingLeft: 28,
               }}>
                 <div style={{
-                  fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700,
+                  fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700,
                   letterSpacing: "0.22em", textTransform: "uppercase",
-                  color: "#b8b0a8", marginBottom: 18,
+                  color: "#7A857E", marginBottom: 18,
                 }}>This guide covers</div>
 
                 {/* Parks */}
                 <div style={{ marginBottom: 16 }}>
                   <div style={{
-                    fontFamily: "'Quicksand', sans-serif", fontSize: 8, fontWeight: 700,
+                    fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700,
                     letterSpacing: "0.2em", textTransform: "uppercase",
                     color: C.seaGlass, marginBottom: 10,
                   }}>Parks</div>
@@ -840,7 +840,7 @@ export default function ZionGuide() {
                 {/* Gateway Towns */}
                 <div style={{ marginBottom: 16 }}>
                   <div style={{
-                    fontFamily: "'Quicksand', sans-serif", fontSize: 8, fontWeight: 700,
+                    fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700,
                     letterSpacing: "0.2em", textTransform: "uppercase",
                     color: C.goldenAmber, marginBottom: 10,
                   }}>Gateway Towns</div>
@@ -863,7 +863,7 @@ export default function ZionGuide() {
                 {/* Inside this guide */}
                 <div style={{ marginBottom: 16 }}>
                   <div style={{
-                    fontFamily: "'Quicksand', sans-serif", fontSize: 8, fontWeight: 700,
+                    fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700,
                     letterSpacing: "0.2em", textTransform: "uppercase",
                     color: C.skyBlue, marginBottom: 10,
                   }}>Inside this guide</div>
@@ -881,8 +881,8 @@ export default function ZionGuide() {
                       "Group Trips",
                     ].map((tag, i) => (
                       <span key={i} style={{
-                        fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 600,
-                        letterSpacing: "0.04em", color: "#8a9baa",
+                        fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 600,
+                        letterSpacing: "0.04em", color: "#7A857E",
                         padding: "3px 9px", border: `1px solid ${C.stone}`,
                         lineHeight: 1.4,
                       }}>{tag}</span>
@@ -892,8 +892,8 @@ export default function ZionGuide() {
 
                 {/* Updated */}
                 <div style={{
-                  fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 500,
-                  letterSpacing: "0.06em", color: "#b8b0a8", marginTop: 14,
+                  fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 500,
+                  letterSpacing: "0.06em", color: "#7A857E", marginTop: 14,
                   paddingTop: 12, borderTop: `1px solid ${C.stone}`,
                 }}>
                   Updated 2026
@@ -963,14 +963,14 @@ export default function ZionGuide() {
               <p style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(14px, 1.8vw, 15px)", lineHeight: 1.8,
-                fontWeight: 400, color: "#5a6a78", margin: "0 0 16px",
+                fontWeight: 400, color: "#4A5650", margin: "0 0 16px",
               }}>
                 {"Zion Canyon was carved over millions of years by the Virgin River cutting through Navajo sandstone. The walls glow copper at sunrise, amber at midday, impossible pink at dusk. The Paiute called it Mukuntuweap — \"straight-up land.\" Whatever name you give it, the experience is the same: you stand among these walls of stone and you stop talking."}
               </p>
               <p style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(14px, 1.8vw, 15px)", lineHeight: 1.8,
-                fontWeight: 400, color: "#5a6a78", margin: "0 0 24px",
+                fontWeight: 400, color: "#4A5650", margin: "0 0 24px",
               }}>
                 This guide covers the full orbit — not just the park, but the surrounding area that makes a trip here extraordinary. From yoga studios in Springdale to the hoodoos of Bryce Canyon and the starlit mesas of Capitol Reef, drawn from the lived experience of locals, guides, and travelers who return again and again.
               </p>
@@ -1055,7 +1055,7 @@ export default function ZionGuide() {
                 ].map((t, i) => (
                   <div key={i} style={{ flex: "1 1 140px" }}>
                     <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: t.color }}>{t.label}</span>
-                    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 400, color: "#5a7080", marginLeft: 6 }}>{t.desc}</span>
+                    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 400, color: "#4A5650", marginLeft: 6 }}>{t.desc}</span>
                   </div>
                 ))}
               </div>
@@ -1381,7 +1381,7 @@ export default function ZionGuide() {
                 <p style={{
                   fontFamily: "'Quicksand', sans-serif",
                   fontSize: 13, fontWeight: 400,
-                  color: "#5a7080", lineHeight: 1.6, margin: "0 0 16px",
+                  color: "#4A5650", lineHeight: 1.6, margin: "0 0 16px",
                 }}>See all upcoming group trips across every destination.</p>
                 <Link to="/group-trips" style={{
                   padding: "10px 24px",
@@ -1389,7 +1389,7 @@ export default function ZionGuide() {
                   border: `1.5px solid ${C.sunSalmon}`,
                   color: C.sunSalmon,
                   fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 10, fontWeight: 700,
+                  fontSize: 11, fontWeight: 700,
                   letterSpacing: "0.18em", textTransform: "uppercase",
                   textDecoration: "none",
                   transition: "all 0.25s",
@@ -1425,7 +1425,7 @@ export default function ZionGuide() {
               <p style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
-                color: "#5a7080", maxWidth: 460,
+                color: "#4A5650", maxWidth: 460,
                 margin: "0 auto 36px", lineHeight: 1.65,
               }}>
                 Choose your path — build it yourself with our Trip Planner, or let us craft something personalized for you.
@@ -1442,7 +1442,7 @@ export default function ZionGuide() {
                   background: C.darkInk, color: "#fff",
                   textAlign: "center",
                   fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 10, fontWeight: 700,
+                  fontSize: 11, fontWeight: 700,
                   letterSpacing: "0.2em", textTransform: "uppercase",
                   cursor: "pointer", transition: "opacity 0.2s",
                   textDecoration: "none",
@@ -1457,7 +1457,7 @@ export default function ZionGuide() {
                   border: `1.5px solid ${C.darkInk}`, background: "transparent",
                   color: C.darkInk, textAlign: "center",
                   fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 10, fontWeight: 700,
+                  fontSize: 11, fontWeight: 700,
                   letterSpacing: "0.2em", textTransform: "uppercase",
                   cursor: "pointer", transition: "all 0.2s",
                   textDecoration: "none",
@@ -1470,7 +1470,7 @@ export default function ZionGuide() {
 
               <div style={{
                 fontFamily: "'Quicksand', sans-serif",
-                fontSize: 11, fontWeight: 400, color: "#9aabba", marginTop: 12,
+                fontSize: 11, fontWeight: 400, color: "#7A857E", marginTop: 12,
                 letterSpacing: "0.04em",
               }}>{"Trip Planner: one-time purchase · Custom Itinerary: from $199"}</div>
             </FadeIn>
@@ -1481,11 +1481,11 @@ export default function ZionGuide() {
           <FadeIn>
             <div style={{ padding: "44px 0" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 16 }}>
-                <span className="eyebrow" style={{ color: "#9aabba" }}>Also Explore</span>
+                <span className="eyebrow" style={{ color: "#7A857E" }}>Also Explore</span>
                 <span style={{
                   fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 10, fontWeight: 600,
-                  letterSpacing: "0.1em", color: "#9aabba",
+                  fontSize: 11, fontWeight: 600,
+                  letterSpacing: "0.1em", color: "#7A857E",
                 }}>Guides available for each destination</span>
               </div>
               <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 16 }}>
