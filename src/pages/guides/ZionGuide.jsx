@@ -4,13 +4,13 @@
 //
 // Full editorial guide for Zion & its orbit. Uses shared Nav/Footer/FadeIn
 // from the Lila Trips component library, with guide-specific components
-// defined locally (ListItem, StayItem, ExpandableList, AddToTripButton).
+// defined locally (ListItem, StayItem, ExpandableList).
 //
 // Route: /destinations/zion-canyon
 //
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Nav, Footer, FadeIn, Breadcrumb } from '@components';
 import TripCard from '@components/TripCard';
 import { C } from '@data/brand';
@@ -137,113 +137,6 @@ function SectionIcon({ type }) {
   );
 }
 
-function AddToTripButton({ name }) {
-  const navigate = useNavigate();
-  const [added, setAdded] = useState(false);
-  const [showPrompt, setShowPrompt] = useState(false);
-
-  const handleClick = (e) => {
-    e.stopPropagation();
-    if (added) { setAdded(false); return; }
-    trackEvent('guide_cta_clicked', { action: 'add_to_trip', destination: 'zion' });
-    setAdded(true);
-    setTimeout(() => setShowPrompt(true), 400);
-  };
-
-  return (
-    <>
-      <button
-        onClick={handleClick}
-        style={{
-          display: "inline-flex", alignItems: "center", gap: 4,
-          padding: added ? "4px 10px" : "4px 10px 4px 6px",
-          borderRadius: 1,
-          border: `1.5px solid ${added ? C.oceanTeal : C.stone}`,
-          background: added ? `${C.oceanTeal}10` : "transparent",
-          cursor: "pointer",
-          fontFamily: "'Quicksand', sans-serif",
-          fontSize: 10, fontWeight: 700,
-          letterSpacing: "0.14em", textTransform: "uppercase",
-          color: added ? C.oceanTeal : "#7A857E",
-          transition: "all 0.2s ease",
-          flexShrink: 0, whiteSpace: "nowrap",
-        }}
-        onMouseEnter={e => {
-          if (!added) { e.currentTarget.style.borderColor = C.oceanTeal; e.currentTarget.style.color = C.oceanTeal; }
-        }}
-        onMouseLeave={e => {
-          if (!added) { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = "#7A857E"; }
-        }}
-      >
-        <span style={{ fontSize: 14, lineHeight: 1, fontWeight: 400 }}>{added ? "✓" : "+"}</span>
-        {added ? "Added" : "Add"}
-      </button>
-
-      {showPrompt && (
-        <div
-          onClick={() => setShowPrompt(false)}
-          style={{
-            position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-            background: "rgba(0,0,0,0.4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            zIndex: 9999, padding: 20,
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{
-              background: C.warmWhite, padding: "48px 40px",
-              maxWidth: 400, width: "100%", textAlign: "center",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
-            }}
-          >
-            <div style={{
-              width: 44, height: 44,
-              background: `${C.oceanTeal}15`, color: C.oceanTeal,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 20, margin: "0 auto 16px",
-            }}>✓</div>
-            <div style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: 12, fontWeight: 700,
-              letterSpacing: "0.2em", textTransform: "uppercase",
-              color: C.darkInk, marginBottom: 12,
-            }}>Added to your trip</div>
-            <div style={{
-              fontFamily: "'Quicksand', sans-serif",
-              fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400,
-              color: "#4A5650", lineHeight: 1.65, marginBottom: 28,
-            }}>Unlock the Zion Trip Planner to save your picks, build a day-by-day itinerary, and access everything offline.</div>
-            <button
-              onClick={() => { trackEvent('guide_cta_clicked', { action: 'unlock_trip_planner', destination: 'zion' }); setShowPrompt(false); navigate('/plan'); }}
-              style={{
-                width: "100%", padding: "13px 28px",
-                background: C.darkInk, color: "#fff", border: "none",
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 11, fontWeight: 700,
-                letterSpacing: "0.2em", textTransform: "uppercase",
-                cursor: "pointer", marginBottom: 10, transition: "opacity 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-            >Unlock Trip Planner — $39</button>
-            <button
-              onClick={() => setShowPrompt(false)}
-              style={{
-                width: "100%", padding: "10px 24px",
-                background: "transparent", color: "#7A857E", border: "none",
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: 12, fontWeight: 600, letterSpacing: "0.06em",
-                cursor: "pointer",
-              }}
-            >Keep browsing</button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
 function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
   const nameEl = url ? (
     <a href={url} target="_blank" rel="noopener noreferrer" style={{
@@ -295,7 +188,6 @@ function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
           </div>
         )}
       </div>
-      <AddToTripButton name={name} />
     </div>
   );
 }
@@ -359,7 +251,6 @@ function StayItem({ name, location, tier, detail, tags, url, featured, isMobile 
           </div>
         )}
       </div>
-      <AddToTripButton name={name} />
     </div>
   );
 }
@@ -744,6 +635,7 @@ const GUIDE_SECTIONS = [
 function GuideNav({ isMobile }) {
   const [activeId, setActiveId] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const navRef = useRef(null);
   const sentinelRef = useRef(null);
   const activeItemRef = useRef(null);
@@ -765,7 +657,7 @@ function GuideNav({ isMobile }) {
           setActiveId(visible[0].target.id);
         }
       },
-      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+      { rootMargin: "-130px 0px -60% 0px", threshold: 0 }
     );
 
     elements.forEach(el => observer.observe(el));
@@ -795,13 +687,34 @@ function GuideNav({ isMobile }) {
     }
   }, [activeId, isMobile]);
 
+  // Track whether the scroll container can scroll further right
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container || !isMobile) { setCanScrollRight(false); return; }
+
+    const check = () => {
+      const gap = container.scrollWidth - container.scrollLeft - container.clientWidth;
+      setCanScrollRight(gap > 4);
+    };
+    check();
+    container.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      container.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, [isMobile]);
+
   const handleClick = useCallback((id) => {
     const el = document.getElementById(id);
     if (!el) return;
-    const navHeight = navRef.current?.offsetHeight || 52;
-    const y = el.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+    const guideNavHeight = navRef.current?.offsetHeight || 52;
+    const mainNavHeight = isMobile ? 58 : 64;
+    const y = el.getBoundingClientRect().top + window.scrollY - guideNavHeight - mainNavHeight - 16;
     window.scrollTo({ top: y, behavior: "smooth" });
-  }, []);
+  }, [isMobile]);
+
+  const MAIN_NAV_HEIGHT = isMobile ? 58 : 64;
 
   return (
     <>
@@ -812,11 +725,11 @@ function GuideNav({ isMobile }) {
         ref={navRef}
         style={{
           position: isSticky ? "fixed" : "relative",
-          top: isSticky ? 0 : "auto",
+          top: isSticky ? MAIN_NAV_HEIGHT : "auto",
           left: 0,
           right: 0,
-          zIndex: 900,
-          background: isSticky ? "rgba(250, 247, 243, 0.92)" : C.cream,
+          zIndex: 99,
+          background: isSticky ? "rgba(250, 247, 243, 0.97)" : C.cream,
           backdropFilter: isSticky ? "blur(12px)" : "none",
           WebkitBackdropFilter: isSticky ? "blur(12px)" : "none",
           borderBottom: `1px solid ${isSticky ? C.stone : "transparent"}`,
@@ -824,74 +737,124 @@ function GuideNav({ isMobile }) {
           boxShadow: isSticky ? "0 1px 8px rgba(0,0,0,0.04)" : "none",
         }}
       >
-        <div
-          ref={scrollContainerRef}
-          className="guide-nav-scroll"
-          style={{
-            maxWidth: 920,
-            margin: "0 auto",
-            padding: isMobile ? "0 16px" : "0 52px",
-            display: "flex",
-            alignItems: "center",
-            gap: isMobile ? 4 : 0,
-            overflowX: "auto",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            WebkitOverflowScrolling: "touch",
-          }}
-        >
-          {/* Hide scrollbar via style tag */}
-          <style>{`
-            .guide-nav-scroll::-webkit-scrollbar { display: none; }
-          `}</style>
+        <div style={{
+          maxWidth: 920,
+          margin: "0 auto",
+          padding: isMobile ? "0 16px" : "0 52px",
+          display: "flex",
+          alignItems: "center",
+        }}>
+          <div style={{ flex: 1, minWidth: 0, position: "relative" }}>
+            <div
+              ref={scrollContainerRef}
+              className="guide-nav-scroll"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: isMobile ? 4 : 0,
+                overflowX: "auto",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                WebkitOverflowScrolling: "touch",
+              }}
+            >
+            {/* Hide scrollbar via style tag */}
+            <style>{`
+              .guide-nav-scroll::-webkit-scrollbar { display: none; }
+            `}</style>
 
-          {GUIDE_SECTIONS.map((section, i) => {
-            const isActive = activeId === section.id;
-            return (
-              <button
-                key={section.id}
-                ref={isActive ? activeItemRef : null}
-                onClick={() => handleClick(section.id)}
-                className="guide-nav-scroll"
-                style={{
-                  padding: isMobile ? "14px 14px" : "16px 18px",
-                  background: "none",
-                  border: "none",
-                  borderBottom: `2px solid ${isActive ? C.oceanTeal : "transparent"}`,
-                  cursor: "pointer",
-                  fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 11,
-                  fontWeight: isActive ? 700 : 600,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: isActive ? C.oceanTeal : "#7A857E",
-                  whiteSpace: "nowrap",
-                  flexShrink: 0,
-                  transition: "color 0.25s ease, border-color 0.25s ease",
-                  position: "relative",
-                }}
-                onMouseEnter={e => {
-                  if (!isActive) {
-                    e.currentTarget.style.color = C.darkInk;
-                    e.currentTarget.style.borderBottomColor = C.stone;
-                  }
-                }}
-                onMouseLeave={e => {
-                  if (!isActive) {
-                    e.currentTarget.style.color = "#7A857E";
-                    e.currentTarget.style.borderBottomColor = "transparent";
-                  }
-                }}
-              >
-                {section.label}
+            {GUIDE_SECTIONS.map((section, i) => {
+              const isActive = activeId === section.id;
+              return (
+                <button
+                  key={section.id}
+                  ref={isActive ? activeItemRef : null}
+                  onClick={() => handleClick(section.id)}
+                  className="guide-nav-scroll"
+                  style={{
+                    padding: isMobile ? "14px 14px" : "16px 18px",
+                    background: "none",
+                    border: "none",
+                    borderBottom: `2px solid ${isActive ? C.oceanTeal : "transparent"}`,
+                    cursor: "pointer",
+                    fontFamily: "'Quicksand', sans-serif",
+                    fontSize: 11,
+                    fontWeight: isActive ? 700 : 600,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: isActive ? C.oceanTeal : "#7A857E",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                    transition: "color 0.25s ease, border-color 0.25s ease",
+                    position: "relative",
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = C.darkInk;
+                      e.currentTarget.style.borderBottomColor = C.stone;
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = "#7A857E";
+                      e.currentTarget.style.borderBottomColor = "transparent";
+                    }
+                  }}
+                >
+                  {section.label}
+                  <span style={{
+                    display: "inline-block", marginLeft: 4,
+                    fontSize: 7, opacity: isActive ? 1 : 0.5,
+                    transition: "opacity 0.25s",
+                  }}>{"↓"}</span>
+                </button>
+              );
+            })}
+            </div>
+
+            {/* Mobile scroll indicator — gradient fade + chevron */}
+            {isMobile && canScrollRight && (
+              <div style={{
+                position: "absolute", top: 0, right: 0, bottom: 0,
+                width: 40,
+                background: `linear-gradient(to right, transparent, ${isSticky ? "rgba(250,247,243,0.97)" : C.cream})`,
+                display: "flex", alignItems: "center", justifyContent: "flex-end",
+                paddingRight: 4,
+                pointerEvents: "none",
+                transition: "opacity 0.3s",
+              }}>
                 <span style={{
-                  display: "inline-block", marginLeft: 4,
-                  fontSize: 7, opacity: isActive ? 1 : 0.5,
-                  transition: "opacity 0.25s",
-                }}>{"↓"}</span>
-              </button>
-            );
-          })}
+                  fontFamily: "'Quicksand', sans-serif",
+                  fontSize: 14, fontWeight: 600,
+                  color: "#7A857E",
+                }}>{"›"}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Plan a Trip CTA */}
+          <Link
+            to="/plan"
+            onClick={() => trackEvent('guide_nav_clicked', { action: 'plan_a_trip', destination: 'zion' })}
+            className="guide-nav-cta"
+            style={{
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize: 10, fontWeight: 700,
+              letterSpacing: "0.2em", textTransform: "uppercase",
+              color: C.darkInk,
+              padding: isMobile ? "8px 14px" : "9px 20px",
+              border: `1px solid ${C.darkInk}`,
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+              marginLeft: isMobile ? 8 : 16,
+              transition: "all 0.3s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = C.darkInk; e.currentTarget.style.color = "white"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = C.darkInk; }}
+          >
+            {isMobile ? "Plan →" : "Plan a Trip"}
+          </Link>
         </div>
       </nav>
 
