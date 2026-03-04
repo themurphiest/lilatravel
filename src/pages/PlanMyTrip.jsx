@@ -193,6 +193,16 @@ function IconShide({ size, color }) {
   );
 }
 
+// ─── Person (Solo traveler) ─────────────────────────────────────────────────
+function IconPerson({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <circle cx="12" cy="7" r="3" fill={`${color}15`} />
+      <path d="M7 21 C7 16.5 9 14 12 14 C15 14 17 16.5 17 21" fill={`${color}08`} />
+    </Icon>
+  );
+}
+
 // ─── Compound: Stars ────────────────────────────────────────────────────────
 function IconStars({ size, color }) {
   return (
@@ -288,13 +298,13 @@ const BUDGET_TIERS = [
 ];
 
 const STAY_STYLES = [
-  { id: "elemental", label: "Elemental", desc: "Camping, glamping, under the stars — immersed in the landscape", icon: IconStars, color: C.goldenAmber },
+  { id: "elemental", label: "Elemental", desc: "Camping, glamping, under the stars — immersed in the landscape", icon: IconBodhiLeaf, color: C.goldenAmber },
   { id: "rooted",    label: "Rooted",    desc: "Boutique lodges, locally-owned inns — comfortable and connected", icon: IconTorii, color: C.oceanTeal },
   { id: "premium",   label: "Premium",   desc: "Design properties, luxury resorts — elevated experiences", icon: IconLotus, color: C.sunSalmon },
 ];
 
 const GROUP_TYPES = [
-  { id: "solo",    label: "Solo",    desc: "Just me",               icon: IconUnalome,     color: C.oceanTeal },
+  { id: "solo",    label: "Solo",    desc: "Just me",               icon: IconPerson,      color: C.oceanTeal },
   { id: "couple",  label: "Couple",  desc: "Two of us",             icon: IconYinYang,     color: C.sunSalmon },
   { id: "friends", label: "Friends", desc: "A group trip",          icon: IconDharmaWheel, color: C.goldenAmber },
   { id: "family",  label: "Family",  desc: "With kids or family",   icon: IconBodhiLeaf,   color: C.seaGlass },
@@ -640,11 +650,11 @@ function WelcomePathCard({ icon: IconComp, title, subtitle, description, buttonL
               fontFamily: "'Quicksand', sans-serif",
               fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
               ...(isPrimary ? {
-                background: C.oceanTeal,
+                background: `${C.sage}cc`,
                 color: C.white,
                 padding: "12px 28px",
                 borderRadius: 30,
-                boxShadow: `0 4px 20px ${C.oceanTeal}25`,
+                boxShadow: `0 4px 16px ${C.sage}18`,
               } : {
                 background: "none",
                 color: C.sage,
@@ -688,12 +698,6 @@ function StepWelcome({ onNext }) {
           fontSize: "clamp(32px, 7.5vw, 42px)", fontWeight: 300, lineHeight: 1.15,
           color: C.slate, marginBottom: 16, maxWidth: 460, margin: "0 auto",
         }}>Let's design<br />your journey</h1>
-        <p style={{
-          fontFamily: "'Quicksand', sans-serif",
-          fontSize: "clamp(13px, 3.5vw, 15px)", fontWeight: 400,
-          color: `${C.slate}70`, lineHeight: 1.65,
-          maxWidth: 380, margin: "16px auto 0",
-        }}>Choose how you'd like to plan — from a quick self-guided itinerary to a fully curated experience.</p>
       </div>
 
       {/* Three paths */}
@@ -851,8 +855,8 @@ function StepDestination({ data, onChange, onNext, onBack }) {
               onClick={() => available && onChange({ destination: d.id })}
               style={{
                 position: "relative",
-                background: !available ? `${C.sage}06` : sel ? d.gradient : C.white,
-                border: `2px solid ${!available ? `${C.sage}10` : sel ? C.sage : `${C.sage}18`}`,
+                background: !available ? `${C.sage}06` : sel ? `${C.oceanTeal}10` : C.white,
+                border: `2px solid ${!available ? `${C.sage}10` : sel ? C.oceanTeal : `${C.sage}18`}`,
                 borderRadius: 16, padding: "22px 14px",
                 cursor: available ? "pointer" : "default",
                 transition: "all 0.3s",
@@ -885,7 +889,12 @@ function StepDestination({ data, onChange, onNext, onBack }) {
   );
 }
 
+const GOLDEN_WINDOWS = {
+  zion: new Set(['march', 'april', 'october', 'november']),
+};
+
 function StepMonth({ data, onChange, onNext, onBack }) {
+  const goldenMonths = GOLDEN_WINDOWS[data.destination] || new Set();
   const hasExactDates = !!(data.dateStart && data.dateEnd);
   const [showDates, setShowDates] = useState(hasExactDates);
 
@@ -922,17 +931,26 @@ function StepMonth({ data, onChange, onNext, onBack }) {
       }}>
         {MONTHS.map(m => {
           const sel = data.month === m.id;
+          const isGolden = goldenMonths.has(m.id);
           return (
             <button key={m.id} onClick={() => { onChange({ month: m.id }); if (showDates) { onChange({ month: m.id, dateStart: null, dateEnd: null }); setShowDates(false); } }} style={{
+              position: 'relative',
               background: sel ? `${m.color}18` : C.white,
-              border: `2px solid ${sel ? m.color : `${C.sage}18`}`,
+              border: `2px solid ${sel ? m.color : isGolden ? `${C.goldenAmber}35` : `${C.sage}18`}`,
               borderRadius: 14, padding: '16px 10px',
               cursor: 'pointer', transition: 'all 0.3s',
               textAlign: 'center', minHeight: 80,
-              boxShadow: sel ? `0 3px 16px ${m.color}20` : '0 1px 4px rgba(0,0,0,0.04)',
+              boxShadow: sel ? `0 3px 16px ${m.color}20` : isGolden ? `0 1px 8px ${C.goldenAmber}12` : '0 1px 4px rgba(0,0,0,0.04)',
               transform: sel ? 'scale(1.03)' : 'scale(1)',
               WebkitTapHighlightColor: 'transparent',
             }}>
+              {isGolden && (
+                <div style={{
+                  position: 'absolute', top: 6, right: 6,
+                  width: 7, height: 7, borderRadius: '50%',
+                  background: C.goldenAmber, opacity: 0.6,
+                }} />
+              )}
               <div style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: 'clamp(15px, 3.8vw, 17px)', fontWeight: 600,
@@ -949,9 +967,11 @@ function StepMonth({ data, onChange, onNext, onBack }) {
         })}
       </div>
 
+      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.month} />
+
       {/* Exact dates toggle */}
       {data.month && (
-        <div style={{ maxWidth: 480, margin: '20px auto 0', padding: '0 20px' }}>
+        <div style={{ maxWidth: 480, margin: '0 auto', padding: '0 20px 40px' }}>
           <button onClick={toggleDates} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             width: '100%', padding: '12px 16px',
@@ -1028,8 +1048,6 @@ function StepMonth({ data, onChange, onNext, onBack }) {
           )}
         </div>
       )}
-
-      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.month} />
     </div>
   );
 }
@@ -1613,37 +1631,36 @@ function StepProfile({ data, onBack, onUnlock, generating }) {
       opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
       transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
     }}>
-      <StepTitle eyebrow="Your Travel Spirit" title="Here's what we see" />
+      <StepTitle eyebrow="Your Travel Spirit" />
 
       {/* Persona card */}
-      <div style={{ maxWidth: 480, margin: "0 auto 16px", padding: "0 20px" }}>
+      <div style={{ maxWidth: 480, margin: "0 auto 12px", padding: "0 20px" }}>
         <div style={{
-          background: C.white, borderRadius: 2, padding: "28px 24px",
+          background: C.white, borderRadius: 2, padding: "20px 20px",
           border: `2px solid ${persona.color}25`, boxShadow: `0 4px 24px ${persona.color}12`,
           textAlign: "center",
         }}>
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
             <div style={{
-              width: 52, height: 52, borderRadius: "50%",
+              width: 44, height: 44, borderRadius: "50%",
               background: `${persona.color}12`, border: `1.5px solid ${persona.color}30`,
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              <PersonaIcon size={26} color={persona.color} />
+              <PersonaIcon size={22} color={persona.color} />
             </div>
           </div>
-          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: persona.color, marginBottom: 8 }}>{persona.subtitle}</div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 7vw, 36px)", fontWeight: 300, color: C.slate, marginBottom: 4, lineHeight: 1.1 }}>{persona.name}</div>
-          <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(12px, 3.2vw, 13px)", fontWeight: 400, color: `${C.slate}80`, lineHeight: 1.65, marginTop: 14 }}>{persona.desc}</p>
+          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: persona.color, marginBottom: 6 }}>{persona.subtitle}</div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(24px, 6vw, 30px)", fontWeight: 300, color: C.slate, marginBottom: 4, lineHeight: 1.1 }}>{persona.name}</div>
+          <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(12px, 3.2vw, 13px)", fontWeight: 400, color: `${C.slate}80`, lineHeight: 1.55, marginTop: 10 }}>{persona.desc}</p>
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, padding: "0 20px" }}>
-        <RadarChart values={radarValues} />
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, padding: "0 20px" }}>
+        <RadarChart values={radarValues} size={200} />
       </div>
 
-      <div style={{ textAlign: "center", marginTop: 20, padding: "0 28px 24px" }}>
-        <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px, 5.5vw, 26px)", fontWeight: 300, color: C.slate, marginBottom: 8 }}>Your itinerary is ready</div>
-        <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 3.5vw, 14px)", color: `${C.slate}70`, maxWidth: 380, margin: "0 auto 28px", lineHeight: 1.6 }}>
+      <div style={{ textAlign: "center", marginTop: 8, padding: "0 28px 20px" }}>
+        <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 3.5vw, 14px)", color: `${C.slate}70`, maxWidth: 380, margin: "0 auto 20px", lineHeight: 1.6 }}>
           A custom {data.duration || 4}-day {monthName ? `${monthName} ` : ''}plan for {destName} — built around your pace, your practices, and your intentions.
         </p>
         <button onClick={onUnlock} disabled={generating} style={{
