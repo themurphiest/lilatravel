@@ -37,29 +37,30 @@ const DETAIL = {
 // ─── SVG Helpers ─────────────────────────────────────────────────────────────
 
 function SunArc({ progress }) {
-  // Simple arc showing daylight progress
+  // Semicircular arc showing daylight progress (0 = sunrise/left, 1 = sunset/right)
   const w = 180, h = 50;
   const cx = w / 2, cy = h - 4;
   const r = 72;
-  // Arc from left to right
-  const startAngle = Math.PI;
-  const endAngle = 0;
-  const currentAngle = startAngle + (endAngle - startAngle) * progress;
 
   const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`;
+  const arcLen = Math.PI * r;
 
-  const dotX = cx + r * Math.cos(currentAngle);
-  const dotY = cy - r * Math.sin(Math.PI - currentAngle);
+  // Angle along the semicircle: π (left) → 0 (right)
+  const angle = Math.PI * (1 - progress);
+  const dotX = cx + r * Math.cos(angle);
+  const dotY = cy - r * Math.sin(angle);
 
   return (
     <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ display: "block", margin: "6px auto 2px" }}>
+      {/* Full semicircle background */}
       <path d={arcPath} fill="none" stroke={C.stone} strokeWidth="1.5" />
       {progress > 0 && progress < 1 && (
         <>
+          {/* Progress stroke */}
           <path
             d={arcPath}
             fill="none" stroke={C.goldenAmber} strokeWidth="1.5"
-            strokeDasharray={`${progress * Math.PI * r} ${Math.PI * r}`}
+            strokeDasharray={`${progress * arcLen} ${arcLen}`}
           />
           <circle cx={dotX} cy={dotY} r="4" fill={C.goldenAmber} />
         </>

@@ -121,7 +121,18 @@ function getMoonPhase(date) {
     "New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous",
     "Full Moon", "Waning Gibbous", "Last Quarter", "Waning Crescent",
   ];
-  const idx = Math.floor(jd * 8) % 8;
+
+  // Derive phase name from illumination + waxing/waning to stay consistent
+  const isWaxing = jd < 0.5;
+  let idx;
+  if (phase <= 2)                     idx = 0; // New Moon
+  else if (phase < 48 && isWaxing)    idx = 1; // Waxing Crescent
+  else if (phase <= 52 && isWaxing)   idx = 2; // First Quarter
+  else if (phase < 98 && isWaxing)    idx = 3; // Waxing Gibbous
+  else if (phase >= 98)               idx = 4; // Full Moon
+  else if (phase > 52 && !isWaxing)   idx = 5; // Waning Gibbous
+  else if (phase >= 48 && !isWaxing)  idx = 6; // Last Quarter
+  else                                idx = 7; // Waning Crescent
 
   return { phase, name: names[idx], age };
 }
