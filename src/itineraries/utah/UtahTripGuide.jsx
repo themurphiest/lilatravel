@@ -21,6 +21,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Download, MessageCircle, X, CheckSquare } from 'lucide-react';
+import LilaModal from '@components/LilaModal';
 
 // Data
 import { parkLocations, fallbackWeather } from './data/weatherConfig';
@@ -58,6 +59,7 @@ const UtahTripGuide = () => {
   const [showOfflineModal, setShowOfflineModal] = useState(false);
   const [platform, setPlatform] = useState('unknown');
   const [isServiceWorkerReady, setIsServiceWorkerReady] = useState(false);
+  const [feedbackError, setFeedbackError] = useState(null);
   const contentRef = useRef(null);
 
   // Check if app is already installed
@@ -148,11 +150,11 @@ const UtahTripGuide = () => {
         }, 2000);
       } else {
         setFeedbackSubmitting(false);
-        alert('Sorry, there was an error submitting your feedback. Please try again.');
+        setFeedbackError('Sorry, there was an error submitting your feedback. Please try again.');
       }
     } catch (error) {
       setFeedbackSubmitting(false);
-      alert('Sorry, there was an error submitting your feedback. Please try again.');
+      setFeedbackError('Sorry, there was an error submitting your feedback. Please try again.');
     }
   };
 
@@ -769,6 +771,13 @@ const UtahTripGuide = () => {
           display: none;
         }
       `}</style>
+
+      <LilaModal
+        open={!!feedbackError}
+        variant="alert"
+        message={feedbackError}
+        onClose={() => setFeedbackError(null)}
+      />
     </div>
   );
 };

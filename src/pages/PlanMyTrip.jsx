@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { C as BrandC } from '@data/brand';
 import { translateFormToApi } from "../services/form-to-api";
 import { trackEvent } from '@utils/analytics';
+import LilaModal from '@components/LilaModal';
 
 // ─── Brand Tokens (extended from site brand system) ─────────────────────────
 const C = {
@@ -1604,7 +1605,7 @@ function StepProfile({ data, onBack, onUnlock, generating }) {
       <StepTitle eyebrow="Your Travel Spirit" title="Here's what we see" />
 
       {/* Persona card */}
-      <div style={{ maxWidth: 480, margin: "0 auto 28px", padding: "0 20px" }}>
+      <div style={{ maxWidth: 480, margin: "0 auto 16px", padding: "0 20px" }}>
         <div style={{
           background: C.white, borderRadius: 2, padding: "28px 24px",
           border: `2px solid ${persona.color}25`, boxShadow: `0 4px 24px ${persona.color}12`,
@@ -1625,11 +1626,11 @@ function StepProfile({ data, onBack, onUnlock, generating }) {
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 24, padding: "0 20px" }}>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, padding: "0 20px" }}>
         <RadarChart values={radarValues} />
       </div>
 
-      <div style={{ textAlign: "center", marginTop: 40, padding: "0 28px 48px" }}>
+      <div style={{ textAlign: "center", marginTop: 20, padding: "0 28px 24px" }}>
         <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px, 5.5vw, 26px)", fontWeight: 300, color: C.slate, marginBottom: 8 }}>Your itinerary is ready</div>
         <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 3.5vw, 14px)", color: `${C.slate}70`, maxWidth: 380, margin: "0 auto 28px", lineHeight: 1.6 }}>
           A custom {data.duration || 4}-day {monthName ? `${monthName} ` : ''}plan for {destName} — built around your pace, your practices, and your intentions.
@@ -1871,6 +1872,8 @@ export default function PlanMyTrip() {
   });
   const [transitioning, setTransitioning] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const containerRef = useRef(null);
   const questionnaireCompleted = useRef(false);
 
@@ -1895,7 +1898,7 @@ export default function PlanMyTrip() {
 
   const updateData = (patch) => setData(prev => ({ ...prev, ...patch }));
   const handleClose = () => {
-    if (step > 0 && !window.confirm("Leave trip planner? Your selections won't be saved.")) return;
+    if (step > 0) { setShowLeaveModal(true); return; }
     navigate('/');
   };
   const goNext = () => {
@@ -1963,12 +1966,12 @@ export default function PlanMyTrip() {
         });
       } else {
         trackEvent('itinerary_generation_failed', { destination: data.destination || undefined, error_type: 'api_error' });
-        alert('Something went wrong generating your itinerary. Please try again.');
+        setErrorMessage('Something went wrong generating your itinerary. Please try again.');
       }
     } catch (err) {
       console.error('Itinerary generation failed:', err);
       trackEvent('itinerary_generation_failed', { destination: data.destination || undefined, error_type: err.message || 'network_error' });
-      alert('Something went wrong. Please try again.');
+      setErrorMessage('Something went wrong. Please try again.');
     } finally {
       setGenerating(false);
     }
@@ -2059,6 +2062,22 @@ export default function PlanMyTrip() {
         {step > 0 && step < 13 && <StepIndicator current={step - 1} total={TOTAL_INNER_STEPS} />}
         {renderStep()}
       </div>
+
+      <LilaModal
+        open={showLeaveModal}
+        variant="confirm"
+        message="Leave trip planner? Your selections won't be saved."
+        confirmLabel="Leave"
+        cancelLabel="Stay"
+        onClose={() => setShowLeaveModal(false)}
+        onConfirm={() => navigate('/')}
+      />
+      <LilaModal
+        open={!!errorMessage}
+        variant="alert"
+        message={errorMessage}
+        onClose={() => setErrorMessage(null)}
+      />
     </div>
   );
 }
