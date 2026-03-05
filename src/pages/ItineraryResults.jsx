@@ -786,104 +786,240 @@ function CompanionCard({ companion, onOpenDetail }) {
   );
 }
 
-/* ── companion detail (slide-over) ────────────────────────────────────── */
+/* ── useIsDesktop hook ─────────────────────────────────────────────────── */
 
-function CompanionDetail({ type, data, onClose }) {
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+  useEffect(() => {
+    const handler = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return isDesktop;
+}
+
+/* ── companion panel content (shared between SidePanel & BottomSheet) ── */
+
+function CompanionPanelContent({ type, data, id, feedback, onFeedback }) {
   if (!data) return null;
   const isTeaching = type === 'teaching';
   const accent = isTeaching ? C.goldenAmber : C.seaGlass;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 250, background: C.cream, overflowY: 'auto', animation: 'companionSlideIn 0.3s ease' }}>
-      <style>{`@keyframes companionSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }`}</style>
-
-      {/* Header */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 1, display: 'flex', alignItems: 'center', padding: '13px 18px', background: `${C.cream}f0`, backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: `1px solid ${C.sage}06` }}>
-        <button onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: 'none', cursor: 'pointer', fontFamily: F, fontSize: 12, fontWeight: 500, color: C.sage, padding: 0, WebkitTapHighlightColor: 'transparent' }}>
-          <BackIcon size={14} color={C.sage} /> Back to itinerary
-        </button>
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '26px 20px 60px' }}>
+      {/* Type badge */}
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 7, background: `${accent}0e`, border: `1px solid ${accent}18`, marginBottom: 14 }}>
+        {isTeaching ? <TeachingIcon size={11} color={accent} /> : <PracticeIcon size={11} color={accent} />}
+        <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: accent }}>{isTeaching ? "Today's Teaching" : "Today's Practice"}</span>
       </div>
 
-      <div style={{ maxWidth: 500, margin: '0 auto', padding: '26px 20px 60px' }}>
-        {/* Type badge */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 7, background: `${accent}0e`, border: `1px solid ${accent}18`, marginBottom: 14 }}>
-          {isTeaching ? <TeachingIcon size={11} color={accent} /> : <PracticeIcon size={11} color={accent} />}
-          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: accent }}>{isTeaching ? "Today's Teaching" : "Today's Practice"}</span>
+      {/* Tradition */}
+      {data.tradition && (
+        <div style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}70`, marginBottom: 6 }}>{data.tradition} tradition</div>
+      )}
+
+      {/* Title */}
+      <h1 style={{ fontFamily: F, fontSize: 'clamp(21px, 6vw, 27px)', fontWeight: 600, color: C.slate, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
+
+      {/* Summary / essence */}
+      <p style={{ fontFamily: F, fontSize: 14.5, color: `${C.slate}6a`, lineHeight: 1.7, marginBottom: 20 }}>{isTeaching ? data.essence : data.description}</p>
+
+      {/* Deeper content */}
+      {data.deeper && (
+        <p style={{ fontFamily: F, fontSize: 14, color: `${C.slate}70`, lineHeight: 1.7, marginBottom: 20 }}>{data.deeper}</p>
+      )}
+
+      {/* Quote */}
+      {data.quote && (
+        <div style={{ padding: '14px 16px', borderLeft: `3px solid ${accent}30`, background: `${accent}05`, borderRadius: '0 8px 8px 0', marginBottom: 20 }}>
+          <p style={{ fontFamily: F, fontSize: 14, fontStyle: 'normal', color: `${C.slate}70`, lineHeight: 1.6, margin: 0 }}>"{data.quote.text}"</p>
+          {data.quote.source && <p style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, marginTop: 6, margin: '6px 0 0' }}>— {data.quote.source}</p>}
         </div>
+      )}
 
-        {/* Tradition */}
-        {data.tradition && (
-          <div style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}70`, marginBottom: 6 }}>{data.tradition} tradition</div>
-        )}
-
-        {/* Title */}
-        <h1 style={{ fontFamily: F, fontSize: 'clamp(21px, 6vw, 27px)', fontWeight: 600, color: C.slate, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
-
-        {/* Summary / essence */}
-        <p style={{ fontFamily: F, fontSize: 14.5, color: `${C.slate}6a`, lineHeight: 1.7, marginBottom: 20 }}>{isTeaching ? data.essence : data.description}</p>
-
-        {/* Deeper content */}
-        {data.deeper && (
-          <p style={{ fontFamily: F, fontSize: 14, color: `${C.slate}70`, lineHeight: 1.7, marginBottom: 20 }}>{data.deeper}</p>
-        )}
-
-        {/* Quote */}
-        {data.quote && (
-          <div style={{ padding: '14px 16px', borderLeft: `3px solid ${accent}30`, background: `${accent}05`, borderRadius: '0 8px 8px 0', marginBottom: 20 }}>
-            <p style={{ fontFamily: F, fontSize: 14, fontStyle: 'normal', color: `${C.slate}70`, lineHeight: 1.6, margin: 0 }}>"{data.quote.text}"</p>
-            {data.quote.source && <p style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, marginTop: 6, margin: '6px 0 0' }}>— {data.quote.source}</p>}
-          </div>
-        )}
-
-        {/* Practice-specific: duration, when, howTo */}
-        {!isTeaching && (data.duration || data.when || data.howTo) && (
-          <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, padding: '13px 15px', marginBottom: 20 }}>
-            {data.duration && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: (data.when || data.howTo) ? 10 : 0 }}>
-                <ClockIcon size={12} color={C.seaGlass} />
-                <div>
-                  <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 1 }}>Duration</div>
-                  <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 500, color: C.slate }}>{data.duration}</div>
-                </div>
+      {/* Practice-specific: duration, when, howTo */}
+      {!isTeaching && (data.duration || data.when || data.howTo) && (
+        <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, padding: '13px 15px', marginBottom: 20 }}>
+          {data.duration && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: (data.when || data.howTo) ? 10 : 0 }}>
+              <ClockIcon size={12} color={C.seaGlass} />
+              <div>
+                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 1 }}>Duration</div>
+                <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 500, color: C.slate }}>{data.duration}</div>
               </div>
-            )}
-            {data.when && (
-              <div style={{ borderTop: data.duration ? `1px solid ${C.sage}08` : 'none', paddingTop: data.duration ? 10 : 0, marginBottom: data.howTo ? 10 : 0 }}>
-                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 1 }}>When</div>
-                <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 500, color: `${C.slate}70`, lineHeight: 1.45 }}>{data.when}</div>
-              </div>
-            )}
-            {data.howTo && (
-              <div style={{ borderTop: (data.duration || data.when) ? `1px solid ${C.sage}08` : 'none', paddingTop: (data.duration || data.when) ? 10 : 0 }}>
-                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 3 }}>How To</div>
-                <div style={{ fontFamily: F, fontSize: 13, fontWeight: 400, color: `${C.slate}70`, lineHeight: 1.6 }}>{data.howTo}</div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Sources */}
-        {data.sources && data.sources.length > 0 && (
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${C.sage}55`, marginBottom: 8 }}>Sources</div>
-            {data.sources.map((s, i) => (
-              <div key={i} style={{ fontFamily: F, fontSize: 12, color: `${C.slate}70`, lineHeight: 1.5, marginBottom: 4 }}>
-                {s.author && <span style={{ fontWeight: 600 }}>{s.author}</span>}
-                {s.author && s.text && ', '}
-                {s.text && <em>{s.text}</em>}
-                {s.section && ` (${s.section})`}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Placeholder for future full content */}
-        <div style={{ padding: '16px 14px', background: `${C.sage}05`, borderRadius: 2, border: `1px dashed ${C.sage}10`, textAlign: 'center' }}>
-          <div style={{ fontFamily: F, fontSize: 12, fontWeight: 500, color: `${C.sage}50`, lineHeight: 1.5 }}>Full guided {isTeaching ? 'teaching' : 'practice'} experience coming soon.</div>
-          <div style={{ fontFamily: F, fontSize: 11, color: `${C.sage}3a`, marginTop: 3 }}>Audio, video, and deeper content from the Lila library.</div>
+            </div>
+          )}
+          {data.when && (
+            <div style={{ borderTop: data.duration ? `1px solid ${C.sage}08` : 'none', paddingTop: data.duration ? 10 : 0, marginBottom: data.howTo ? 10 : 0 }}>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 1 }}>When</div>
+              <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 500, color: `${C.slate}70`, lineHeight: 1.45 }}>{data.when}</div>
+            </div>
+          )}
+          {data.howTo && (
+            <div style={{ borderTop: (data.duration || data.when) ? `1px solid ${C.sage}08` : 'none', paddingTop: (data.duration || data.when) ? 10 : 0 }}>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 3 }}>How To</div>
+              <div style={{ fontFamily: F, fontSize: 13, fontWeight: 400, color: `${C.slate}70`, lineHeight: 1.6 }}>{data.howTo}</div>
+            </div>
+          )}
         </div>
+      )}
+
+      {/* Sources */}
+      {data.sources && data.sources.length > 0 && (
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${C.sage}55`, marginBottom: 8 }}>Sources</div>
+          {data.sources.map((s, i) => (
+            <div key={i} style={{ fontFamily: F, fontSize: 12, color: `${C.slate}70`, lineHeight: 1.5, marginBottom: 4 }}>
+              {s.author && <span style={{ fontWeight: 600 }}>{s.author}</span>}
+              {s.author && s.text && ', '}
+              {s.text && <em>{s.text}</em>}
+              {s.section && ` (${s.section})`}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Activity feedback */}
+      <div style={{ marginTop: 16 }}>
+        <ActivityThumbs id={id} feedback={feedback} onFeedback={onFeedback} />
       </div>
     </div>
+  );
+}
+
+/* ── SidePanel (desktop ≥ 768px) ──────────────────────────────────────── */
+
+function SidePanel({ item, onClose, feedback, onFeedback }) {
+  const { type, data } = item;
+  const panelId = `companion_${type}`;
+
+  return (
+    <>
+      <style>{`
+        @keyframes sidePanelSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes sidePanelBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+      `}</style>
+
+      {/* Backdrop */}
+      <div onClick={onClose} style={{
+        position: 'fixed', inset: 0, zIndex: 249,
+        background: 'rgba(0,0,0,0.3)',
+        animation: 'sidePanelBackdropIn 0.25s ease',
+      }} />
+
+      {/* Panel */}
+      <div style={{
+        position: 'fixed', top: 0, right: 0, bottom: 0,
+        width: 440, zIndex: 250,
+        background: C.cream, overflowY: 'auto',
+        animation: 'sidePanelSlideIn 0.3s ease',
+        boxShadow: '-4px 0 24px rgba(0,0,0,0.08)',
+      }}>
+        {/* Close button */}
+        <button onClick={onClose} style={{
+          position: 'sticky', top: 0, zIndex: 1,
+          float: 'right', margin: '12px 14px 0 0',
+          width: 32, height: 32,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: `${C.white}90`, border: `1px solid ${C.sage}15`,
+          borderRadius: '50%', cursor: 'pointer',
+          fontFamily: F, fontSize: 15, color: C.sage, lineHeight: 1,
+          WebkitTapHighlightColor: 'transparent',
+        }} aria-label="Close">✕</button>
+
+        <CompanionPanelContent type={type} data={data} id={panelId} feedback={feedback} onFeedback={onFeedback} />
+      </div>
+    </>
+  );
+}
+
+/* ── BottomSheet (mobile < 768px) ─────────────────────────────────────── */
+
+function BottomSheet({ item, onClose, feedback, onFeedback }) {
+  const { type, data } = item;
+  const panelId = `companion_${type}`;
+  const sheetRef = useRef(null);
+  const dragStartY = useRef(null);
+  const dragCurrentY = useRef(0);
+
+  const onTouchStart = (e) => {
+    dragStartY.current = e.touches[0].clientY;
+  };
+
+  const onTouchMove = (e) => {
+    if (dragStartY.current === null) return;
+    const dy = e.touches[0].clientY - dragStartY.current;
+    dragCurrentY.current = dy;
+    if (dy > 0 && sheetRef.current) {
+      sheetRef.current.style.transform = `translateY(${dy}px)`;
+    }
+  };
+
+  const onTouchEnd = () => {
+    if (dragCurrentY.current > 80) {
+      onClose();
+    } else if (sheetRef.current) {
+      sheetRef.current.style.transform = 'translateY(0)';
+    }
+    dragStartY.current = null;
+    dragCurrentY.current = 0;
+  };
+
+  return (
+    <>
+      <style>{`
+        @keyframes bottomSheetSlideIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes bottomSheetBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+      `}</style>
+
+      {/* Backdrop */}
+      <div onClick={onClose} style={{
+        position: 'fixed', inset: 0, zIndex: 249,
+        background: 'rgba(0,0,0,0.3)',
+        animation: 'bottomSheetBackdropIn 0.25s ease',
+      }} />
+
+      {/* Sheet */}
+      <div ref={sheetRef} style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0,
+        height: '82vh', zIndex: 250,
+        background: C.cream,
+        borderRadius: '16px 16px 0 0',
+        animation: 'bottomSheetSlideIn 0.3s ease',
+        boxShadow: '0 -4px 24px rgba(0,0,0,0.1)',
+        display: 'flex', flexDirection: 'column',
+      }}>
+        {/* Drag handle + close */}
+        <div
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          style={{ padding: '10px 14px 0', flexShrink: 0, position: 'relative' }}
+        >
+          {/* Pill handle */}
+          <div style={{
+            width: 36, height: 4, borderRadius: 2,
+            background: `${C.sage}30`, margin: '0 auto 8px',
+          }} />
+
+          {/* Close button */}
+          <button onClick={onClose} style={{
+            position: 'absolute', top: 8, right: 14,
+            width: 32, height: 32,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: `${C.white}90`, border: `1px solid ${C.sage}15`,
+            borderRadius: '50%', cursor: 'pointer',
+            fontFamily: F, fontSize: 15, color: C.sage, lineHeight: 1,
+            WebkitTapHighlightColor: 'transparent',
+          }} aria-label="Close">✕</button>
+        </div>
+
+        {/* Scrollable content */}
+        <div style={{ overflowY: 'auto', flex: 1, WebkitOverflowScrolling: 'touch' }}>
+          <CompanionPanelContent type={type} data={data} id={panelId} feedback={feedback} onFeedback={onFeedback} />
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -1423,6 +1559,14 @@ export default function ItineraryResults() {
 
   // Companion detail overlay state
   const [companionDetail, setCompanionDetail] = useState(null); // { type, data }
+  const isDesktop = useIsDesktop();
+
+  // Lock body scroll when companion panel is open
+  useEffect(() => {
+    if (companionDetail) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [companionDetail]);
 
   useEffect(() => {
     if (!rawItinerary) { navigate('/plan'); return; }
@@ -1606,9 +1750,10 @@ export default function ItineraryResults() {
         <FirstDraftModal onClose={() => setHasSeenDraftModal(true)} />
       )}
 
-      {/* Companion detail slide-over */}
-      {companionDetail && (
-        <CompanionDetail type={companionDetail.type} data={companionDetail.data} onClose={() => setCompanionDetail(null)} />
+      {/* Companion detail panel */}
+      {companionDetail && (isDesktop
+        ? <SidePanel item={companionDetail} onClose={() => setCompanionDetail(null)} feedback={activityFeedback} onFeedback={handleActivityFeedback} />
+        : <BottomSheet item={companionDetail} onClose={() => setCompanionDetail(null)} feedback={activityFeedback} onFeedback={handleActivityFeedback} />
       )}
 
       {/* Header */}
