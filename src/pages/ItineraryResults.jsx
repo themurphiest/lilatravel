@@ -580,12 +580,18 @@ function MetaStrip({ category, pick, color }) {
   );
 }
 
-function InlinePick({ category, pick, alternatives = [], isLast = false, dayIndex = 0, pickIndex = 0, onOpenPanel }) {
+function InlinePick({ category, pick, alternatives = [], isLast = false, dayIndex = 0, pickIndex = 0, onOpenPanel, activityFeedback = {} }) {
   const s = PICK_STYLES[category] || PICK_STYLES.stay;
 
   const handleClick = () => {
     onOpenPanel({ type: category, data: { ...pick, alternatives }, thumbId: `day_${dayIndex}_pick_${pickIndex}` });
   };
+
+  const thumbId = `day_${dayIndex}_pick_${pickIndex}`;
+  const currentFeedback = activityFeedback?.[thumbId] || null;
+  const currentReaction = typeof currentFeedback === 'string'
+    ? currentFeedback
+    : currentFeedback?.reaction || null;
 
   return (
     <div style={{ marginBottom: isLast ? 0 : 10 }}>
@@ -633,6 +639,26 @@ function InlinePick({ category, pick, alternatives = [], isLast = false, dayInde
                 {alternatives.length > 0 && (
                   <div style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: `${s.color}90`, marginTop: 9 }}>
                     +{alternatives.length} alternative{alternatives.length > 1 ? 's' : ''}
+                  </div>
+                )}
+                {/* Reaction indicator */}
+                {currentReaction && (
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    marginTop: 9, padding: '3px 8px', borderRadius: 4,
+                    background: currentReaction === 'fire' ? `${C.goldenAmber}12` : currentReaction === 'up' ? `${C.seaGlass}12` : `${C.sunSalmon}12`,
+                    border: `1px solid ${currentReaction === 'fire' ? `${C.goldenAmber}28` : currentReaction === 'up' ? `${C.seaGlass}28` : `${C.sunSalmon}28`}`,
+                  }}>
+                    <span style={{ fontSize: 11 }}>
+                      {currentReaction === 'fire' ? '🔥' : currentReaction === 'up' ? '👍' : '👎'}
+                    </span>
+                    <span style={{
+                      fontFamily: F, fontSize: 9, fontWeight: 600,
+                      color: currentReaction === 'fire' ? C.goldenAmber : currentReaction === 'up' ? C.seaGlass : C.sunSalmon,
+                      letterSpacing: '0.04em',
+                    }}>
+                      {currentReaction === 'fire' ? 'Must do' : currentReaction === 'up' ? 'Love it' : 'Not for me'}
+                    </span>
                   </div>
                 )}
               </div>
@@ -1420,7 +1446,7 @@ function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenPanel, activit
                 {day.picks && day.picks.map((p, i) => (
                   <InlinePick key={i} category={p.category} pick={p.pick} dayIndex={dayIndex}
                     pickIndex={i} alternatives={p.alternatives || []} isLast={i === day.picks.length - 1}
-                    onOpenPanel={onOpenPanel} />
+                    onOpenPanel={onOpenPanel} activityFeedback={activityFeedback} />
                 ))}
               </div>
             </>
