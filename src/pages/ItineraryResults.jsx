@@ -2245,7 +2245,7 @@ function TripPulse({ overallNote, setOverallNote, pulse, setPulse, onPulseSelect
 /* ── refine CTA + premium gate ─────────────────────────────────────────── */
 
 function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpgradeClick }) {
-  const maxFree = 2;
+  const maxFree = 10;
   const remaining = maxFree - iteration;
   const isPremiumGated = iteration >= maxFree;
   const featuresRef = useRef(null);
@@ -2293,6 +2293,30 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
 
   if (isPremiumGated) {
     return (
+      <div style={{ textAlign: 'center', padding: '24px 20px 0' }}>
+        <p style={{ fontFamily: F, fontSize: 12, fontWeight: 400, color: C.muted, lineHeight: 1.6, maxWidth: 360, margin: '0 auto' }}>
+          You're in early access — refinements are unlimited for now. Paid plans coming soon.
+        </p>
+        <div style={{ marginTop: 14 }}>
+          <button onClick={onRefine} disabled={!hasFeedback} style={{
+            fontFamily: F, fontSize: 13, fontWeight: 600,
+            color: hasFeedback ? C.white : `${C.sage}50`,
+            background: hasFeedback ? C.oceanTeal : `${C.sage}08`,
+            border: hasFeedback ? 'none' : `1px solid ${C.sage}15`,
+            borderRadius: 24, padding: '12px 28px',
+            cursor: hasFeedback ? 'pointer' : 'default',
+            WebkitTapHighlightColor: 'transparent',
+            boxShadow: hasFeedback ? `0 2px 12px ${C.oceanTeal}20` : 'none',
+            transition: 'all 0.3s', display: 'inline-flex', alignItems: 'center', gap: 7,
+          }}>
+            <SparkleIcon size={14} color={hasFeedback ? C.white : `${C.sage}40`} />
+            Refine this trip
+          </button>
+        </div>
+      </div>
+    );
+    /* ── Paywall UI (disabled during beta) ──────────────────────────────
+    return (
       <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.oceanTeal}20`, boxShadow: `0 2px 16px ${C.oceanTeal}08`, padding: '24px 20px', marginTop: 20, textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 12px', borderRadius: 8, background: `${C.oceanTeal}10`, border: `1px solid ${C.oceanTeal}20`, marginBottom: 14 }}>
           <SparkleIcon size={12} color={C.oceanTeal} />
@@ -2315,13 +2339,13 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
             </div>
           ))}
         </div>
-        {/* TODO: Connect to payment/upgrade flow */}
         <button onClick={onUpgradeClick} style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.white, background: C.oceanTeal, border: 'none', borderRadius: 24, padding: '12px 28px', cursor: 'pointer', WebkitTapHighlightColor: 'transparent', boxShadow: `0 2px 12px ${C.oceanTeal}25`, transition: 'all 0.2s' }}>
           Upgrade to Lila Pro
         </button>
         <div style={{ fontFamily: F, fontSize: 11, color: `${C.slate}65`, marginTop: 8 }}>Starting at $9/trip</div>
       </div>
     );
+    ────────────────────────────────────────────────────────────────────── */
   }
 
   return (
@@ -2402,7 +2426,7 @@ function RefiningOverlay({ visible, iteration = 0 }) {
   if (!visible) return null;
 
   const ringScale = 0.9 + breathPhase * 0.1;
-  const maxFree = 2;
+  const maxFree = 10;
   const remaining = maxFree - iteration;
 
   return (
@@ -2713,7 +2737,7 @@ function FirstDraftModal({ onDismiss }) {
 
         {/* Freemium note */}
         <p style={{ fontFamily: F, fontSize: 11.5, fontWeight: 400, color: `${C.slate}80`, lineHeight: 1.65, textAlign: 'center', marginBottom: 24 }}>
-          You have <span style={{ fontWeight: 700, color: `${C.slate}A6` }}>2 free refinements</span> — shape it until it feels right, then upgrade to Lila Pro for unlimited.
+          You're in early access — refinements are unlimited for now. Shape it until it feels right.
         </p>
 
         {/* CTA */}
