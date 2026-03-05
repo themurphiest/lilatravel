@@ -207,14 +207,10 @@ function IconPerson({ size, color }) {
 function IconStars({ size, color }) {
   return (
     <Icon size={size} color={color}>
-      <circle cx="6" cy="6" r="1" fill={color} stroke="none" />
-      <circle cx="18" cy="4" r="0.8" fill={color} stroke="none" />
-      <circle cx="12" cy="3" r="1.2" fill={color} stroke="none" />
-      <circle cx="4" cy="14" r="0.6" fill={color} stroke="none" />
-      <circle cx="20" cy="12" r="0.7" fill={color} stroke="none" />
-      <path d="M8 10 L9 8 L10 10 L8 10Z" fill={color} stroke="none" />
-      <path d="M14 14 L15.5 11 L17 14 L14 14Z" fill={color} stroke="none" />
-      <path d="M10 18 L11 16 L12 18 L10 18Z" fill={`${color}60`} stroke="none" />
+      <path d="M18 12 C18 7 13 3 8 5 C12 5 15 8 15 12 C15 16 12 19 8 19 C13 21 18 17 18 12Z" fill={`${color}10`} />
+      <path d="M4 5 L4.8 3 L5.6 5" />
+      <path d="M3 9 L3.5 8 L4 9" />
+      <path d="M6 3 L6.4 2 L6.8 3" />
     </Icon>
   );
 }
@@ -254,6 +250,49 @@ function IconSoundBath({ size, color }) {
   );
 }
 
+function IconBike({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <circle cx="7" cy="16" r="3.5" />
+      <circle cx="17" cy="16" r="3.5" />
+      <path d="M7 16 L10 8 L14 8" />
+      <path d="M14 8 L17 16 L12 16 L10 8" />
+    </Icon>
+  );
+}
+
+function IconBird({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M3 14 C6 8 10 6 14 8 C16 9 18 8 21 6" />
+      <path d="M14 8 C12 11 10 13 3 14" fill={`${color}10`} />
+      <path d="M14 8 L16 12" />
+    </Icon>
+  );
+}
+
+function IconMusic({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <path d="M9 18 L9 6 L19 4 L19 16" />
+      <circle cx="6.5" cy="18" r="2.5" fill={`${color}10`} />
+      <circle cx="16.5" cy="16" r="2.5" fill={`${color}10`} />
+    </Icon>
+  );
+}
+
+function IconPaw({ size, color }) {
+  return (
+    <Icon size={size} color={color}>
+      <ellipse cx="12" cy="15" rx="4" ry="3.5" fill={`${color}10`} />
+      <circle cx="7.5" cy="10" r="1.8" fill={`${color}10`} />
+      <circle cx="10.5" cy="7.5" r="1.8" fill={`${color}10`} />
+      <circle cx="13.5" cy="7.5" r="1.8" fill={`${color}10`} />
+      <circle cx="16.5" cy="10" r="1.8" fill={`${color}10`} />
+    </Icon>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // STEP DATA
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -288,6 +327,10 @@ const PRACTICES = [
   { id: "service", label: "Service Work", icon: IconDharmaWheel, color: C.seaGlass },
   { id: "plantMedicine", label: "Plant Medicine", icon: IconBodhiLeaf, color: C.sage },
   { id: "massage", label: "Massage", icon: IconMassage, color: C.coralBlush },
+  { id: "biking", label: "Biking", icon: IconBike, color: C.skyBlue },
+  { id: "birding", label: "Birding", icon: IconBird, color: C.sage },
+  { id: "liveMusic", label: "Live Music", icon: IconMusic, color: C.sunSalmon },
+  { id: "wildlife", label: "Wildlife", icon: IconPaw, color: C.goldenAmber },
 ];
 
 const BUDGET_TIERS = [
