@@ -65,8 +65,11 @@ import ItineraryResults from './pages/ItineraryResults';
 
 // ─── Dedicated Guides ───────────────────────────────────────────────────────
 import ZionGuide from '@pages/guides/ZionGuide';
-// import BigSurGuide from '@pages/guides/BigSurGuide';
-// import JoshuaTreeGuide from '@pages/guides/JoshuaTreeGuide';
+import BigSurGuide from '@pages/guides/BigSurGuide';
+import JoshuaTreeGuide from '@pages/guides/JoshuaTreeGuide';
+import OlympicPeninsulaGuide from '@pages/guides/OlympicPeninsulaGuide';
+import VancouverIslandGuide from '@pages/guides/VancouverIslandGuide';
+import KauaiGuide from '@pages/guides/KauaiGuide';
 
 // ─── Itineraries ────────────────────────────────────────────────────────────
 import UtahTripGuide from './itineraries/utah/UtahTripGuide';
@@ -105,7 +108,11 @@ export default function App() {
           <Route path="/destinations" element={<DestinationsPage />} />
           {/* ↓ Dedicated guides go HERE (above the generic :slug catch-all) */}
           <Route path="/destinations/zion-canyon" element={<ZionGuide />} />
-          {/* <Route path="/destinations/big-sur" element={<BigSurGuide />} /> */}
+          <Route path="/destinations/big-sur" element={<BigSurGuide />} />
+          <Route path="/destinations/joshua-tree" element={<JoshuaTreeGuide />} />
+          <Route path="/destinations/olympic-peninsula" element={<OlympicPeninsulaGuide />} />
+          <Route path="/destinations/vancouver-island" element={<VancouverIslandGuide />} />
+          <Route path="/destinations/kauai" element={<KauaiGuide />} />
           {/* ↓ Generic guide for destinations without a dedicated page */}
           <Route path="/destinations/:slug" element={<DestinationGuide />} />
 
