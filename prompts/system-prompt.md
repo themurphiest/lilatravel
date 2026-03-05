@@ -115,9 +115,17 @@ Return this structure:
       "picks": [
         {
           "category": "eat",
-          "pick": { "name": "Bit & Spur", "why": "1 sentence why this is the pick.", "url": "https://bitandspur.com/" },
+          "pick": {
+            "name": "Bit & Spur",
+            "why": "1-2 sentences, editorial Lila voice.",
+            "vibe": "Casual · Local · Southwest flavors",
+            "url": "https://bitandspur.com/",
+            "cuisine": "American / Southwest",
+            "priceRange": "$$",
+            "bestFor": "Post-hike fuel"
+          },
           "alternatives": [
-            { "name": "Whiptail Grill", "why": "1 sentence.", "url": "https://www.whiptailgrillzion.com/" }
+            { "name": "Whiptail Grill", "why": "1 sentence.", "vibe": "Casual · Patio · Value", "url": "https://www.whiptailgrillzion.com/", "priceRange": "$" }
           ]
         }
       ]
@@ -135,6 +143,13 @@ Return this structure:
 
 - timeline.timeOfDay: one of "morning", "midday", "afternoon", "evening", "night"
 - picks.category: one of "stay", "eat", "gear", "wellness"
+- picks.pick fields: name (string), why (string, 1-2 sentences), vibe (string, 2-3 descriptors separated by ·), url (string, optional)
+  - stay only: stayType ("Boutique Hotel" | "Glamping" | "Resort" | "Hostel" | "Lodge" | "Vacation Rental"), priceRange ("$" | "$$" | "$$$" | "$$$$"), distanceFromPark (e.g. "0.3 miles to south entrance")
+  - eat only: cuisine (e.g. "American / Southwest"), priceRange, bestFor (e.g. "Post-hike fuel" | "Slow dinner" | "Quick breakfast")
+  - wellness only: duration (e.g. "75 min"), difficulty ("All levels" | "Intermediate"), bestTimeOfDay (e.g. "Early morning · 7–8:30 AM")
+  - gear only: priceRange, whereToGet (e.g. "In-store · Springdale" | "Salt Lake City · Pre-trip")
+- picks.alternatives: same as pick but also accept vibe, priceRange, duration, whereToGet where relevant
+- For each pick, include the type-specific metadata fields (vibe, priceRange, cuisine, etc.) wherever you have reliable knowledge. These fields enrich the card UI. Omit a field only if you genuinely don't know it — don't guess. The vibe field should always be present and should read like 2-3 evocative descriptors separated by a center dot (·).
 - snapshot: brief day overview with → arrows, shown when collapsed
 - **snapshot (top-level)**: ALWAYS include this object. Use the destination guide's monthly data to populate concrete values:
   - **seasonalNote**: 1 evocative sentence about this time of year at this destination

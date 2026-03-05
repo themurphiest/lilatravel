@@ -463,6 +463,54 @@ function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', u
 
 /* ── inline pick ───────────────────────────────────────────────────────── */
 
+function MetaChip({ label, color }) {
+  return (
+    <span style={{
+      fontFamily: F, fontSize: 10, fontWeight: 600,
+      color: color || C.muted,
+      background: color ? `${color}12` : `${C.sage}0c`,
+      border: `1px solid ${color ? `${color}25` : `${C.sage}18`}`,
+      borderRadius: 3,
+      padding: '2px 7px',
+      letterSpacing: '0.04em',
+      whiteSpace: 'nowrap',
+    }}>
+      {label}
+    </span>
+  );
+}
+
+function MetaStrip({ category, pick, color }) {
+  const chips = [];
+
+  if (category === 'stay') {
+    if (pick.priceRange)       chips.push({ label: pick.priceRange, accent: true });
+    if (pick.stayType)         chips.push({ label: pick.stayType });
+    if (pick.distanceFromPark) chips.push({ label: pick.distanceFromPark });
+  } else if (category === 'eat') {
+    if (pick.cuisine)    chips.push({ label: pick.cuisine, accent: true });
+    if (pick.priceRange) chips.push({ label: pick.priceRange });
+    if (pick.bestFor)    chips.push({ label: `Best for: ${pick.bestFor}` });
+  } else if (category === 'wellness') {
+    if (pick.duration)      chips.push({ label: pick.duration, accent: true });
+    if (pick.difficulty)    chips.push({ label: pick.difficulty });
+    if (pick.bestTimeOfDay) chips.push({ label: pick.bestTimeOfDay });
+  } else if (category === 'gear') {
+    if (pick.priceRange)  chips.push({ label: pick.priceRange, accent: true });
+    if (pick.whereToGet)  chips.push({ label: pick.whereToGet });
+  }
+
+  if (!chips.length) return null;
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 8 }}>
+      {chips.map((c, i) => (
+        <MetaChip key={i} label={c.label} color={c.accent ? color : null} />
+      ))}
+    </div>
+  );
+}
+
 function InlinePick({ category, pick, alternatives = [], isLast = false, dayIndex = 0, pickIndex = 0, onOpenPanel }) {
   const s = PICK_STYLES[category] || PICK_STYLES.stay;
 
@@ -490,20 +538,37 @@ function InlinePick({ category, pick, alternatives = [], isLast = false, dayInde
             </div>
           </div>
           {/* Content */}
-          <div style={{ padding: '12px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 4 }}>
-                <span style={{ fontFamily: F, fontSize: 15, fontWeight: 700, color: C.ink }}>{pick.name}</span>
-                {(pick.url || lookupUrl(pick.name)) && <ExternalLinkIcon size={10} color={`${C.sage}40`} />}
-              </div>
-              <div style={{ fontFamily: F, fontSize: 12.5, color: C.body, lineHeight: 1.6 }}>{pick.why}</div>
-              {alternatives.length > 0 && (
-                <div style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: s.color, marginTop: 8 }}>
-                  +{alternatives.length} other option{alternatives.length > 1 ? 's' : ''}
+          <div style={{ padding: '12px 14px 13px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                {/* Name row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 4 }}>
+                  <span style={{ fontFamily: F, fontSize: 15, fontWeight: 700, color: C.ink, lineHeight: 1.2 }}>{pick.name}</span>
+                  {(pick.url || lookupUrl(pick.name)) && <ExternalLinkIcon size={10} color={`${C.sage}40`} />}
                 </div>
-              )}
+                {/* Vibe line */}
+                {pick.vibe && (
+                  <div style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, lineHeight: 1.4, marginBottom: 5 }}>
+                    {pick.vibe}
+                  </div>
+                )}
+                {/* Why — truncated to ~100 chars on the tile */}
+                <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.6 }}>
+                  {pick.why && pick.why.length > 100
+                    ? pick.why.slice(0, 100).trimEnd() + '…'
+                    : pick.why}
+                </div>
+                {/* Meta chip strip */}
+                <MetaStrip category={category} pick={pick} color={s.color} />
+                {/* Alt count */}
+                {alternatives.length > 0 && (
+                  <div style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: `${s.color}90`, marginTop: 9 }}>
+                    +{alternatives.length} alternative{alternatives.length > 1 ? 's' : ''}
+                  </div>
+                )}
+              </div>
+              <ArrowRightIcon size={10} color={`${C.sage}50`} />
             </div>
-            <ArrowRightIcon size={10} color={`${C.sage}50`} />
           </div>
         </button>
     </div>
@@ -849,6 +914,58 @@ function CompanionPanelContent({ type, data, id, feedback, onFeedback }) {
 
 /* ── DetailPanel (unified side panel / bottom sheet) ───────────────────── */
 
+function DetailBlock({ category, pick, color }) {
+  const rows = [];
+
+  if (category === 'stay') {
+    if (pick.stayType)         rows.push(['Type',      pick.stayType]);
+    if (pick.priceRange)       rows.push(['Price',     pick.priceRange]);
+    if (pick.distanceFromPark) rows.push(['Distance',  pick.distanceFromPark]);
+  } else if (category === 'eat') {
+    if (pick.cuisine)    rows.push(['Cuisine',  pick.cuisine]);
+    if (pick.priceRange) rows.push(['Price',    pick.priceRange]);
+    if (pick.bestFor)    rows.push(['Best for', pick.bestFor]);
+  } else if (category === 'wellness') {
+    if (pick.duration)      rows.push(['Duration',  pick.duration]);
+    if (pick.difficulty)    rows.push(['Level',     pick.difficulty]);
+    if (pick.bestTimeOfDay) rows.push(['Best time', pick.bestTimeOfDay]);
+  } else if (category === 'gear') {
+    if (pick.priceRange)  rows.push(['Price range',  pick.priceRange]);
+    if (pick.whereToGet)  rows.push(['Where to get', pick.whereToGet]);
+  }
+
+  if (!rows.length) return null;
+
+  return (
+    <div style={{
+      border: `1px solid ${color}18`,
+      borderRadius: 2,
+      overflow: 'hidden',
+      marginBottom: 20,
+      background: `${color}04`,
+    }}>
+      {rows.map(([label, value], i) => (
+        <div key={i} style={{
+          display: 'flex', alignItems: 'baseline',
+          padding: '10px 14px', gap: 12,
+          borderBottom: i < rows.length - 1 ? `1px solid ${color}10` : 'none',
+        }}>
+          <span style={{
+            fontFamily: F, fontSize: 10, fontWeight: 700,
+            letterSpacing: '0.1em', textTransform: 'uppercase',
+            color: `${C.sage}70`, minWidth: 90, flexShrink: 0,
+          }}>
+            {label}
+          </span>
+          <span style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.ink }}>
+            {value}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
   if (!item) return null;
   const { type, data, thumbId } = item;
@@ -933,20 +1050,66 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
         {(data.url || lookupUrl(data.name)) && <> <ExternalLinkIcon size={12} color={`${C.sage}40`} /></>}
       </h1>
 
+      {/* Vibe line */}
+      {data.vibe && (
+        <div style={{
+          fontFamily: F, fontSize: 12, fontWeight: 500,
+          color: C.muted, lineHeight: 1.4, marginBottom: 14,
+        }}>
+          {data.vibe}
+        </div>
+      )}
+
       {/* Why */}
       <p style={{ fontFamily: F, fontSize: 14.5, color: `${C.slate}6a`, lineHeight: 1.7, marginBottom: 20 }}>{data.why}</p>
+
+      {/* Structured detail block */}
+      <DetailBlock category={type} pick={data} color={s.color} />
+
+      {/* CTA for stay / eat */}
+      {(data.url || lookupUrl(data.name)) && (type === 'stay' || type === 'eat') && (
+        <a
+          href={data.url || lookupUrl(data.name)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackEvent('external_link_clicked', { name: data.name, link_type: type })}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 7,
+            fontFamily: F, fontSize: 12, fontWeight: 700,
+            color: s.color, textDecoration: 'none',
+            padding: '9px 18px',
+            border: `1.5px solid ${s.color}35`,
+            background: `${s.color}08`,
+            borderRadius: 2,
+            letterSpacing: '0.05em',
+            marginBottom: 24,
+          }}
+        >
+          {type === 'stay' ? 'View Hotel' : 'View Restaurant'}
+          <ExternalLinkIcon size={11} color={s.color} />
+        </a>
+      )}
 
       {/* Alternatives listed flat */}
       {alternatives.length > 0 && (
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${C.sage}55`, marginBottom: 10 }}>Other Options</div>
           {alternatives.map((alt, i) => (
-            <div key={i} style={{ padding: '10px 0', borderBottom: i < alternatives.length - 1 ? `1px solid ${C.sage}08` : 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
-                <LinkedName name={alt.name} url={alt.url} linkType="alternative" style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.slate }} />
-                {(alt.url || lookupUrl(alt.name)) && <ExternalLinkIcon size={9} color={`${C.sage}35`} />}
+            <div key={i} style={{ padding: '12px 14px', borderRadius: 2, background: `${s.color}05`, border: `1px solid ${s.color}15`, marginBottom: 8 }}>
+              <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 700, color: C.ink, marginBottom: 4 }}>
+                {alt.name}
               </div>
+              {alt.vibe && (
+                <div style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, marginBottom: 4 }}>
+                  {alt.vibe}
+                </div>
+              )}
               <div style={{ fontFamily: F, fontSize: 12, color: `${C.slate}70`, lineHeight: 1.55 }}>{alt.why}</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 7 }}>
+                {alt.priceRange && <MetaChip label={alt.priceRange} />}
+                {alt.duration && <MetaChip label={alt.duration} />}
+                {alt.whereToGet && <MetaChip label={alt.whereToGet} />}
+              </div>
             </div>
           ))}
         </div>
