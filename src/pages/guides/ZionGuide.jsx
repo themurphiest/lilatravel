@@ -310,6 +310,208 @@ function WildlifeEntry({ name, season, detail, accent, isMobile }) {
 }
 
 
+// ─── Park Passport Card ─────────────────────────────────────────────────────
+
+function ParkPassport({ park, isMobile }) {
+  return (
+    <div style={{
+      flex: park.isPrimary ? "1.35" : "1",
+      minWidth: isMobile ? "100%" : 0,
+      border: `1px solid ${park.isPrimary ? park.accent + "60" : C.stone}`,
+      background: park.isPrimary ? `${park.accent}06` : C.cream,
+      padding: isMobile ? "20px 18px" : "24px 22px",
+      display: "flex",
+      flexDirection: "column",
+    }}>
+      {/* Header */}
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+          <div style={{
+            fontFamily: "'Quicksand', sans-serif",
+            fontSize: 9, fontWeight: 700,
+            letterSpacing: "0.28em", textTransform: "uppercase",
+            color: park.accent,
+          }}>
+            {park.isPrimary ? "Anchor Park" : `Est. ${park.established}`}
+          </div>
+          {!park.isPrimary && park.driveFrom && (
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: "0.08em", color: "#7A857E" }}>
+              {park.driveFrom}
+            </div>
+          )}
+        </div>
+        <div style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: park.isPrimary ? "clamp(22px, 3vw, 28px)" : "clamp(18px, 2.5vw, 22px)",
+          fontWeight: 400, color: C.darkInk, lineHeight: 1.1, marginBottom: 8,
+        }}>{park.name}</div>
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: 12, fontWeight: 400, color: "#4A5650", lineHeight: 1.6, fontStyle: "italic",
+        }}>{park.soul}</div>
+      </div>
+
+      {/* NPS Stats */}
+      <div style={{
+        display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 12px",
+        padding: "12px 0", borderTop: `1px solid ${C.stone}`, borderBottom: `1px solid ${C.stone}`,
+        marginBottom: 14,
+      }}>
+        {park.isPrimary && (
+          <div style={{ gridColumn: "1 / -1" }}>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#7A857E", marginBottom: 2 }}>Established</div>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, fontWeight: 600, color: C.darkInk }}>{park.established}</div>
+          </div>
+        )}
+        <div>
+          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#7A857E", marginBottom: 2 }}>Acreage</div>
+          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 600, color: C.darkInk }}>{park.acreage}</div>
+        </div>
+        <div>
+          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#7A857E", marginBottom: 2 }}>Elevation</div>
+          <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 600, color: C.darkInk }}>{park.elevation}</div>
+        </div>
+      </div>
+
+      {/* Defining facts */}
+      <div style={{ flex: 1 }}>
+        {park.facts.map((fact, i) => (
+          <div key={i} style={{ display: "flex", gap: 8, marginBottom: 7, alignItems: "flex-start" }}>
+            <div style={{ width: 4, height: 4, borderRadius: "50%", background: park.accent, opacity: 0.6, marginTop: 6, flexShrink: 0 }} />
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 400, color: "#4A5650", lineHeight: 1.6 }}>{fact}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* NPS link */}
+      <a href={park.npsUrl} target="_blank" rel="noopener noreferrer" style={{
+        marginTop: 16,
+        fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700,
+        letterSpacing: "0.18em", textTransform: "uppercase",
+        color: park.accent, textDecoration: "none",
+      }}>
+        NPS Page ↗
+      </a>
+    </div>
+  );
+}
+
+// ─── Wildlife Drawer ────────────────────────────────────────────────────────
+
+function WildlifeDrawer({ isMobile }) {
+  const [open, setOpen] = useState(false);
+  const [activeGroup, setActiveGroup] = useState("Mammals");
+  const [expandedEntry, setExpandedEntry] = useState(null);
+
+  const group = WILDLIFE_GROUPS.find(g => g.label === activeGroup);
+
+  return (
+    <div style={{ border: `1px solid ${C.stone}`, background: C.cream, marginTop: 28 }}>
+      {/* Trigger */}
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: "100%", padding: isMobile ? "16px 18px" : "18px 22px",
+          background: "none", border: "none", cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M9 2C9 2 3 5 3 10C3 13.3137 5.68629 16 9 16C12.3137 16 15 13.3137 15 10C15 5 9 2 9 2Z"
+              stroke={C.seaGlass} strokeWidth="1.2" fill="none" />
+            <line x1="9" y1="16" x2="9" y2="8" stroke={C.seaGlass} strokeWidth="1.2" />
+            <line x1="9" y1="11" x2="6" y2="9" stroke={C.seaGlass} strokeWidth="1" />
+            <line x1="9" y1="13" x2="12" y2="11" stroke={C.seaGlass} strokeWidth="1" />
+          </svg>
+          <div>
+            <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.24em", textTransform: "uppercase", color: C.seaGlass, marginBottom: 2 }}>
+              The Living Corridor
+            </div>
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? 17 : 19, fontWeight: 400, color: C.darkInk, lineHeight: 1.1 }}>
+              Plants &amp; Wildlife
+            </div>
+          </div>
+        </div>
+        <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: "0.12em", color: "#7A857E", display: "flex", alignItems: "center", gap: 6 }}>
+          <span>{open ? "Collapse" : "Explore"}</span>
+          <span style={{ display: "inline-block", transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s ease", fontSize: 12 }}>↓</span>
+        </div>
+      </button>
+
+      {/* Body */}
+      <div style={{ maxHeight: open ? 1200 : 0, overflow: "hidden", transition: "max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1)" }}>
+        <div style={{ borderTop: `1px solid ${C.stone}` }}>
+          {/* Intro */}
+          <div style={{ padding: isMobile ? "16px 18px 12px" : "18px 22px 12px" }}>
+            <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 400, color: "#4A5650", lineHeight: 1.7, margin: 0 }}>
+              Zion sits at the crossroads of four ecological zones. Bryce's high plateaus add a fifth dimension. Capitol Reef's Waterpocket Fold creates micro-climates found nowhere else. Together, the corridor hosts 78 mammal species, 291 birds, and plant life that shifts from desert floor to subalpine forest within a single day's drive.
+            </p>
+          </div>
+
+          {/* Tabs */}
+          <div style={{ display: "flex", borderTop: `1px solid ${C.stone}`, borderBottom: `1px solid ${C.stone}` }}>
+            {WILDLIFE_GROUPS.map(g => (
+              <button key={g.label}
+                onClick={() => { setActiveGroup(g.label); setExpandedEntry(null); }}
+                style={{
+                  flex: 1, padding: "11px 8px", background: activeGroup === g.label ? `${g.accent}10` : "transparent",
+                  border: "none", borderBottom: `2px solid ${activeGroup === g.label ? g.accent : "transparent"}`,
+                  cursor: "pointer", fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700,
+                  letterSpacing: "0.18em", textTransform: "uppercase",
+                  color: activeGroup === g.label ? g.accent : "#7A857E", transition: "all 0.2s",
+                }}
+              >{g.label}</button>
+            ))}
+          </div>
+
+          {/* Entries */}
+          <div style={{ padding: "4px 0 8px" }}>
+            {group.entries.map((entry, i) => {
+              const isExpanded = expandedEntry === i;
+              return (
+                <div key={i} style={{ borderBottom: i < group.entries.length - 1 ? `1px solid ${C.stone}` : "none" }}>
+                  <button
+                    onClick={() => setExpandedEntry(isExpanded ? null : i)}
+                    style={{
+                      width: "100%", padding: isMobile ? "13px 18px" : "14px 22px",
+                      background: isExpanded ? `${group.accent}08` : "transparent",
+                      border: "none", cursor: "pointer",
+                      display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, textAlign: "left",
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 3 }}>
+                        <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 13, fontWeight: 600, color: C.darkInk }}>{entry.name}</span>
+                        <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: group.accent }}>{entry.season}</span>
+                      </div>
+                      <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                        {entry.parks.map((p, pi) => (
+                          <span key={p} style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 500, color: "#7A857E", letterSpacing: "0.04em" }}>
+                            {p}{pi < entry.parks.length - 1 ? " ·" : ""}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <span style={{ display: "inline-block", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s", color: "#7A857E", fontSize: 12, flexShrink: 0, marginTop: 2 }}>↓</span>
+                  </button>
+                  <div style={{ maxHeight: isExpanded ? 200 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.4,0,0.2,1)" }}>
+                    <div style={{ padding: isMobile ? "0 18px 16px" : "0 22px 16px" }}>
+                      <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 400, color: "#4A5650", lineHeight: 1.75, margin: 0, borderLeft: `2px solid ${group.accent}50`, paddingLeft: 12 }}>
+                        {entry.detail}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Offering Cards (new) ────────────────────────────────────────────────────
 
 function OfferingCard({ icon, label, title, description, cta, ctaAction, accent, secondary }) {
@@ -633,6 +835,95 @@ function TimingAlertCapture() {
   );
 }
 
+
+// ─── Corridor Parks & Wildlife Data ──────────────────────────────────────────
+
+const CORRIDOR_PARKS = [
+  {
+    id: "zion",
+    name: "Zion",
+    full: "Zion National Park",
+    soul: "The canyon that stops you mid-sentence.",
+    established: 1919,
+    acreage: "147,242",
+    elevation: "3,666 – 8,726 ft",
+    npsUrl: "https://www.nps.gov/zion/",
+    facts: [
+      "Carved by the Virgin River over 250 million years",
+      "Home to the slot canyon known as The Narrows",
+      "Named Mukuntuweap by the Southern Paiute",
+    ],
+    driveFrom: null,
+    accent: C.sunSalmon,
+    isPrimary: true,
+  },
+  {
+    id: "bryce",
+    name: "Bryce Canyon",
+    full: "Bryce Canyon National Park",
+    soul: "A forest of stone spires that blushed and never recovered.",
+    established: 1928,
+    acreage: "35,835",
+    elevation: "8,000 – 9,115 ft",
+    npsUrl: "https://www.nps.gov/brca/",
+    facts: [
+      "Not a canyon — a series of natural amphitheaters",
+      "One of the darkest night skies in the continental US",
+      "Named for settler Ebenezer Bryce, who called it 'a hell of a place to lose a cow'",
+    ],
+    driveFrom: "~1.5 hrs from Zion",
+    accent: C.goldenAmber,
+    isPrimary: false,
+  },
+  {
+    id: "capitol-reef",
+    name: "Capitol Reef",
+    full: "Capitol Reef National Park",
+    soul: "The hidden wrinkle in the earth that most people drive past.",
+    established: 1971,
+    acreage: "241,904",
+    elevation: "3,900 – 8,960 ft",
+    npsUrl: "https://www.nps.gov/care/",
+    facts: [
+      "The Waterpocket Fold — a 100-mile warp in the earth's crust",
+      "Fruita Historic District: an orchard still harvested by visitors",
+      "Far fewer crowds than Zion or Bryce despite comparable grandeur",
+    ],
+    driveFrom: "~3 hrs from Zion",
+    accent: C.oceanTeal,
+    isPrimary: false,
+  },
+];
+
+const WILDLIFE_GROUPS = [
+  {
+    label: "Mammals",
+    accent: C.sunSalmon,
+    entries: [
+      { name: "Desert Bighorn Sheep", parks: ["Zion", "Capitol Reef"], season: "Year-round", detail: "Often spotted on sheer canyon walls where no foothold seems possible. They descend to water sources at dawn. In Zion, Angels Landing and the Kayenta Trail are reliable sighting zones." },
+      { name: "Mule Deer", parks: ["Zion", "Bryce Canyon", "Capitol Reef"], season: "Year-round", detail: "The canyon's most visible mammal. They gather along river corridors at dusk, moving unhurried through cottonwood groves. Early morning light finds them best near Zion Lodge meadows." },
+      { name: "Pronghorn", parks: ["Bryce Canyon", "Capitol Reef"], season: "Spring – Fall", detail: "The fastest land animal in the Western Hemisphere, capable of 55 mph. Spotted most often on open plateaus above Bryce and in Capitol Reef's Fruita Valley." },
+    ],
+  },
+  {
+    label: "Birds",
+    accent: C.skyBlue,
+    entries: [
+      { name: "California Condor", parks: ["Zion"], season: "Year-round", detail: "One of the rarest birds on earth. With a wingspan over nine feet, condors ride thermal columns above the canyon walls — often spotted near Angels Landing. There are roughly 95 flying free in Arizona and Utah." },
+      { name: "Peregrine Falcon", parks: ["Zion", "Capitol Reef"], season: "Mar – Sep", detail: "Nesting on sheer sandstone faces, they dive at speeds exceeding 240 mph. The canyon walls amplify their call — a sharp, insistent cry that bounces between the walls before you locate the source." },
+      { name: "Steller's Jay", parks: ["Bryce Canyon"], season: "Year-round", detail: "Electric blue against the red hoodoos. Bryce's high-elevation ponderosa forest is prime territory. Bold and social — they'll find your lunch before you do." },
+    ],
+  },
+  {
+    label: "Plants",
+    accent: C.seaGlass,
+    entries: [
+      { name: "Desert Wildflowers", parks: ["Zion", "Capitol Reef"], season: "Mar – Apr", detail: "After a wet winter, the canyon floor erupts — sacred datura, cliffrose, scarlet gilia, and prickly pear in bloom. Capitol Reef's orchards blossom simultaneously, for one of the most extraordinary weeks in Utah." },
+      { name: "Fremont Cottonwood", parks: ["Zion", "Capitol Reef"], season: "Late Sep – Oct", detail: "The cottonwoods lining the Virgin River and Capitol Reef's Fremont River turn gold in late September. A transformation that lasts only a few weeks — the quiet crescendo most visitors don't know to look for." },
+      { name: "Bristlecone Pine", parks: ["Bryce Canyon"], season: "Year-round", detail: "Among the oldest living organisms on Earth — some individuals exceed 1,600 years. Found at Bryce's highest elevations, twisted by wind, stripped to silver by weather. They look like they've seen everything. They have." },
+    ],
+  },
+];
 
 // ─── Guide Section Navigation (sticky anchor bar) ───────────────────────────
 
@@ -1304,39 +1595,46 @@ export default function ZionGuide() {
               <p style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(14px, 1.8vw, 15px)", lineHeight: 1.8,
-                fontWeight: 400, color: "#4A5650", margin: "0 0 24px",
+                fontWeight: 400, color: "#4A5650", margin: "0 0 28px",
               }}>
-                This guide covers the full orbit — not just the park, but the surrounding area that makes a trip here extraordinary. From yoga studios in Springdale to the hoodoos of Bryce Canyon and the starlit mesas of Capitol Reef, drawn from the lived experience of locals, guides, and travelers who return again and again.
+                This guide covers the full orbit — three parks, three personalities, one continuous landscape. Zion pulls you in. Bryce lifts you up. Capitol Reef reminds you the earth is still becoming.
               </p>
             </FadeIn>
-            <FadeIn delay={0.08}>
-              <div style={{ margin: "28px 0 0" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
-                  <div style={{ flex: 1, height: 1, background: C.stone }} />
-                  <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.24em", textTransform: "uppercase", color: "#7A857E", whiteSpace: "nowrap" }}>Plants &amp; Wildlife</span>
-                  <div style={{ flex: 1, height: 1, background: C.stone }} />
-                </div>
-                <p style={{ fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 1.6vw, 14px)", fontWeight: 400, color: "#4A5650", lineHeight: 1.75, margin: "0 0 20px" }}>
-                  Zion sits at the crossroads of four ecological zones — Colorado Plateau, Great Basin, Mojave Desert, and Basin and Range. The result is a landscape improbably alive: 78 species of mammals, 291 birds, and a plant life that shifts from cottonwood groves along the river floor to ancient ponderosa pines on the high plateaus.
-                </p>
-                <div>
-                  <WildlifeEntry isMobile={isMobile} name="California Condor" season="Year-round" accent={C.sunSalmon}
-                    detail="One of the rarest birds on earth. With a wingspan over nine feet, condors ride thermal columns above the canyon walls — often spotted near Angels Landing and the Court of the Patriarchs. There are roughly 95 flying free in Arizona and Utah. Seeing one is not incidental." />
-                  <WildlifeEntry isMobile={isMobile} name="Mule Deer" season="Year-round" accent={C.seaGlass}
-                    detail="The canyon's most visible mammals. They gather along the Virgin River at dusk, moving unhurried through the meadows near the Zion Lodge and Emerald Pools trails. Early morning is when the light finds them best." />
-                  <WildlifeEntry isMobile={isMobile} name="Desert Wildflowers" season="Mar – Apr" accent={C.goldenAmber}
-                    detail="After a wet winter, the canyon floor erupts — sacred datura, cliffrose, scarlet gilia, and prickly pear in bloom. The timing is unpredictable, which is part of the magic. In good years, the color rivals anything in the American Southwest." />
-                  <WildlifeEntry isMobile={isMobile} name="Cottonwoods" season="Late Sep – Oct" accent={C.oceanTeal}
-                    detail="The Fremont cottonwoods lining the Virgin River turn gold in late September — a transformation that lasts only a few weeks. The canyon amplifies it: warm amber light off sandstone walls, golden canopy below. This is the quiet crescendo most visitors don't know to look for." />
-                </div>
+
+            {/* ── Park Passports ── */}
+            <FadeIn delay={0.06}>
+              <div style={{
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                gap: isMobile ? 12 : 8,
+                marginBottom: 4,
+              }}>
+                {CORRIDOR_PARKS.map(park => (
+                  <ParkPassport key={park.id} park={park} isMobile={isMobile} />
+                ))}
               </div>
+              {!isMobile && (
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8, marginBottom: 4 }}>
+                  <div style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 500, letterSpacing: "0.12em", color: "#7A857E" }}>
+                    Zion → Bryce Canyon: 1.5 hrs &nbsp;·&nbsp; Bryce → Capitol Reef: 2 hrs
+                  </div>
+                </div>
+              )}
             </FadeIn>
+
+            {/* ── Wildlife Drawer ── */}
             <FadeIn delay={0.1}>
+              <WildlifeDrawer isMobile={isMobile} />
+            </FadeIn>
+
+            {/* ── Quick Stats Bar ── */}
+            <FadeIn delay={0.12}>
               <div style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
                 gap: isMobile ? 12 : 16, padding: isMobile ? 16 : 20,
                 background: C.cream, border: `1px solid ${C.stone}`,
+                marginTop: 24,
               }}>
                 {[
                   { l: "Recommended", v: "4–7 days" },
