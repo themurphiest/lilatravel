@@ -4,7 +4,7 @@ import { C as BrandC } from '@data/brand';
 import { lookupUrl } from '@data/destinations/zion-urls';
 import JSON5 from 'json5';
 import { trackEvent } from '@utils/analytics';
-import { getPracticesForItinerary, TRADITIONS } from '@services/practicesService';
+import { getPracticesForItinerary, TRADITIONS, ENTRIES } from '@services/practicesService';
 import { assignCompanions } from '@services/companionAssigner';
 import { saveItinerary, saveFeedback } from '@services/feedbackService';
 import { clearSession } from '@services/sessionManager';
@@ -54,6 +54,16 @@ const PICK_STYLES = {
 };
 
 const F = "'Quicksand', sans-serif";
+const F_SERIF = "'Cormorant Garamond', 'Georgia', serif";
+
+const TRADITION_GLYPHS = {
+  hinduism: 'ॐ',
+  buddhism: '☸',
+  taoism: '☯',
+  shinto: '⛩',
+  stoicism: '◎',
+  crossCultural: '◈',
+};
 
 /* ── SVG icons ─────────────────────────────────────────────────────────── */
 
@@ -1006,6 +1016,49 @@ function ActivityThumbs({ id, feedback, onFeedback }) {
   );
 }
 
+/* ── wisdom banner — "Today's Teaching" strip inside day cards ─────────── */
+
+function WisdomBanner({ entry, onOpen }) {
+  if (!entry) return null;
+  const tradition = TRADITIONS[entry.tradition];
+  if (!tradition) return null;
+  const accent = tradition.color;
+  const glyph = TRADITION_GLYPHS[entry.tradition] || '◈';
+  const typeLabel = entry.type === 'ceremony' ? "Today's Ceremony"
+    : entry.type === 'practice' ? "Today's Practice"
+    : "Today's Teaching";
+
+  return (
+    <button onClick={onOpen} style={{
+      display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+      padding: '10px 14px', borderRadius: 8,
+      background: `${accent}14`, border: `1px solid ${accent}30`,
+      cursor: 'pointer', textAlign: 'left',
+      WebkitTapHighlightColor: 'transparent', transition: 'background 0.2s',
+      marginBottom: 4,
+    }}>
+      {/* Glyph */}
+      <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0, opacity: 0.7 }}>{glyph}</span>
+      {/* Text */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent }}>{typeLabel}</span>
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 500, color: `${C.sage}60` }}>{tradition.shortName}</span>
+        </div>
+        <div style={{
+          fontFamily: F_SERIF, fontSize: 13.5, fontStyle: 'italic', fontWeight: 400,
+          color: C.body, lineHeight: 1.4,
+          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+        }}>
+          {entry.name} — {entry.summary}
+        </div>
+      </div>
+      {/* Arrow */}
+      <ArrowRightIcon size={10} color={`${accent}60`} />
+    </button>
+  );
+}
+
 /* ── DayNote — conditional per-day note ───────────────────────────────── */
 
 function DayFeedbackStrip({ dayIndex, feedback, onFeedback }) {
@@ -1533,9 +1586,122 @@ function DetailBlock({ category, pick, color }) {
   );
 }
 
+/* ── wisdom detail content — for the detail sheet ─────────────────────── */
+
+function WisdomDetailContent({ entry }) {
+  if (!entry) return null;
+  const tradition = TRADITIONS[entry.tradition];
+  const accent = tradition?.color || C.sage;
+  const glyph = TRADITION_GLYPHS[entry.tradition] || '◈';
+  const typeLabel = entry.type === 'ceremony' ? 'Ceremony'
+    : entry.type === 'practice' ? 'Practice'
+    : 'Teaching';
+
+  return (
+    <div style={{ maxWidth: 500, margin: '0 auto' }}>
+      {/* Tinted header with watermark glyph */}
+      <div style={{
+        position: 'relative', overflow: 'hidden',
+        padding: '28px 20px 22px',
+        background: `linear-gradient(180deg, ${accent}12, ${accent}06)`,
+      }}>
+        {/* Watermark glyph */}
+        <span style={{
+          position: 'absolute', top: -10, right: -5,
+          fontSize: 100, lineHeight: 1, opacity: 0.06,
+          pointerEvents: 'none', userSelect: 'none',
+        }}>{glyph}</span>
+
+        {/* Type pill */}
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 5,
+          padding: '4px 11px', borderRadius: 7,
+          background: `${accent}14`, border: `1px solid ${accent}25`,
+          marginBottom: 12,
+        }}>
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent }}>{typeLabel}</span>
+        </div>
+
+        {/* Tradition subtitle */}
+        <div style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${accent}90`, marginBottom: 6 }}>{tradition?.name || entry.tradition}</div>
+
+        {/* Title */}
+        <h1 style={{ fontFamily: F, fontSize: 'clamp(21px, 6vw, 27px)', fontWeight: 600, color: C.slate, lineHeight: 1.25, margin: 0 }}>{entry.name}</h1>
+      </div>
+
+      {/* Body */}
+      <div style={{ padding: '20px 20px 60px' }}>
+        {/* Summary */}
+        <p style={{ fontFamily: F, fontSize: 14.5, color: `${C.slate}6a`, lineHeight: 1.7, marginBottom: 20 }}>{entry.summary}</p>
+
+        {/* Deeper */}
+        {entry.deeper && (
+          <p style={{ fontFamily: F, fontSize: 14, color: `${C.slate}70`, lineHeight: 1.7, marginBottom: 20 }}>{entry.deeper}</p>
+        )}
+
+        {/* Quote block */}
+        {entry.quote?.text && (
+          <div style={{
+            padding: '16px 18px', marginBottom: 20,
+            borderLeft: `3px solid ${accent}30`,
+            background: `${accent}05`, borderRadius: '0 8px 8px 0',
+          }}>
+            <p style={{
+              fontFamily: F_SERIF, fontSize: 16, fontStyle: 'italic', fontWeight: 400,
+              color: `${C.slate}80`, lineHeight: 1.6, margin: 0,
+            }}>"{entry.quote.text}"</p>
+            {entry.quote.source && (
+              <p style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, margin: '8px 0 0' }}>— {entry.quote.source}</p>
+            )}
+          </div>
+        )}
+
+        {/* Practice-specific fields */}
+        {entry.type !== 'teaching' && (entry.duration || entry.when || entry.howTo) && (
+          <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, padding: '13px 15px', marginBottom: 20 }}>
+            {entry.duration && (
+              <div style={{ marginBottom: (entry.when || entry.howTo) ? 10 : 0 }}>
+                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 1 }}>Duration</div>
+                <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 500, color: C.slate }}>{entry.duration}</div>
+              </div>
+            )}
+            {entry.when && (
+              <div style={{ borderTop: entry.duration ? `1px solid ${C.sage}08` : 'none', paddingTop: entry.duration ? 10 : 0, marginBottom: entry.howTo ? 10 : 0 }}>
+                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 1 }}>When</div>
+                <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 500, color: `${C.slate}70`, lineHeight: 1.45 }}>{entry.when}</div>
+              </div>
+            )}
+            {entry.howTo && (
+              <div style={{ borderTop: (entry.duration || entry.when) ? `1px solid ${C.sage}08` : 'none', paddingTop: (entry.duration || entry.when) ? 10 : 0 }}>
+                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 3 }}>How To</div>
+                <div style={{ fontFamily: F, fontSize: 13, fontWeight: 400, color: `${C.slate}70`, lineHeight: 1.6 }}>{entry.howTo}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Attribution */}
+        {entry.sources?.[0] && (
+          <div style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, lineHeight: 1.5 }}>
+            — {entry.sources[0].author && <span style={{ fontWeight: 600 }}>{entry.sources[0].author}</span>}
+            {entry.sources[0].author && entry.sources[0].text && ', '}
+            {entry.sources[0].text && <em>{entry.sources[0].text}</em>}
+            {entry.sources[0].section && ` (${entry.sources[0].section})`}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
   if (!item) return null;
   const { type, data, thumbId } = item;
+
+  // Wisdom entry (from WisdomBanner)
+  if (type === 'wisdom') {
+    return <WisdomDetailContent entry={data} />;
+  }
 
   // Companion content (teaching / practice)
   if (type === 'teaching' || type === 'practice') {
@@ -1847,6 +2013,8 @@ function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenPanel, activit
   const hasCompanion = day.companion && (day.companion.teaching || day.companion.practice);
   const hasPicks = day.picks && day.picks.length > 0;
   const hasRecommendations = hasCompanion || hasPicks;
+  // TODO: itinerary system prompt needs updating to include practice assignment per day (day.practice)
+  const wisdomEntry = day.practice ? ENTRIES.find(e => e.id === day.practice) : null;
 
   return (
     <div style={{
@@ -1904,8 +2072,18 @@ function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenPanel, activit
             </div>
           )}
 
+          {/* Wisdom banner — Today's Teaching / Practice / Ceremony */}
+          {wisdomEntry && (
+            <div style={{ paddingTop: day.intro ? 14 : 16, paddingBottom: 6 }}>
+              <WisdomBanner entry={wisdomEntry} onOpen={() => {
+                trackEvent('wisdom_banner_tapped', { day_index: dayIndex, entry_id: wisdomEntry.id, type: wisdomEntry.type });
+                onOpenPanel({ type: 'wisdom', data: wisdomEntry, thumbId: `day_${dayIndex}_wisdom` });
+              }} />
+            </div>
+          )}
+
           {/* ZONE 1: The Flow — timeline activities */}
-          <div style={{ paddingTop: day.intro ? 16 : 0 }}>
+          <div style={{ paddingTop: (day.intro && !wisdomEntry) ? 16 : 0 }}>
             {day.timeline && day.timeline.map((b, i) => {
               const isTrail = !!(b.trailData) || b.activityType === 'trail';
               const isLast = i === day.timeline.length - 1;
