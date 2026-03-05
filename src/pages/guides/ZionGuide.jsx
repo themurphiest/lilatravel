@@ -1253,7 +1253,7 @@ function GuideNav({ isMobile }) {
           top: isSticky ? MAIN_NAV_HEIGHT : "auto",
           left: 0,
           right: 0,
-          zIndex: 99,
+          zIndex: 90,
           background: isSticky ? "rgba(250, 247, 243, 0.97)" : C.cream,
           backdropFilter: isSticky ? "blur(12px)" : "none",
           WebkitBackdropFilter: isSticky ? "blur(12px)" : "none",
@@ -1944,7 +1944,7 @@ export default function ZionGuide() {
               </div>
             </FadeIn>
 
-            <FadeIn delay={0.1}>
+            <div>
               <ExpandableList initialCount={4} label="places to stay">
                 <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="elemental" name="Under Canvas Zion" location="Virgin, UT" featured
                   url="https://www.undercanvas.com/camps/zion/"
@@ -2003,7 +2003,7 @@ export default function ZionGuide() {
                   detail="14 rooms and 6 glamping domes in Utah's first Dark Sky designated community. Rooftop stargazing, minimalist design, and a genuinely remote feel. The best boutique option in Torrey."
                   tags={["Dark Sky", "Glamping Domes", "Boutique", "Rooftop Stargazing"]} />
               </ExpandableList>
-            </FadeIn>
+            </div>
           </section>
 
 
