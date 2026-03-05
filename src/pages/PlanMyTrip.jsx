@@ -1280,8 +1280,8 @@ function StepPracticeInterests({ data, onChange, onNext, onBack }) {
       />
       <div style={{ maxWidth: 460, margin: "0 auto", padding: "0 28px" }}>
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 10, maxWidth: 380, margin: "0 auto",
+          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 10, maxWidth: 420, margin: "0 auto",
         }}>
           {PRACTICES.map(p => {
             const active = selected.includes(p.id);
