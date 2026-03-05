@@ -214,7 +214,7 @@ function StayItem({ name, location, tier, detail, tags, url, featured, isMobile 
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", gap: 14, padding: "18px 0", borderBottom: `1px solid ${C.stone}` }}>
+    <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "stretch" : "center", gap: 14, padding: "18px 0", borderBottom: `1px solid ${C.stone}` }}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }}>
           <span style={{
@@ -1219,6 +1219,8 @@ function CelestialDrawer({ isMobile }) {
 
   return (
     <div style={{
+      position: "relative",
+      zIndex: 100,
       background: C.warmWhite,
       borderBottom: `1px solid ${C.stone}`,
     }}>
@@ -1707,7 +1709,7 @@ export default function ZionGuide() {
                   { label: "Rooted", desc: "Boutique, local", color: C.oceanTeal },
                   { label: "Premium", desc: "World-class", color: C.goldenAmber },
                 ].map((t, i) => (
-                  <div key={i} style={{ flex: "1 1 140px" }}>
+                  <div key={i} style={{ flex: isMobile ? "0 0 auto" : "1 1 140px" }}>
                     <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: t.color }}>{t.label}</span>
                     <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 400, color: "#4A5650", marginLeft: 6 }}>{t.desc}</span>
                   </div>
