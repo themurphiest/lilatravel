@@ -966,12 +966,12 @@ function CelestialDrawer({ isMobile }) {
         )}
         <span style={{
           fontFamily: "'Quicksand', sans-serif",
-          fontSize: 10, fontWeight: 400,
-          color: "#b8b0a8",
-          transition: "transform 0.3s ease",
-          transform: open ? "rotate(180deg)" : "rotate(0deg)",
-          marginLeft: 2, flexShrink: 0,
-        }}>{"▾"}</span>
+          fontSize: 10, fontWeight: 600,
+          color: open ? C.oceanTeal : "#b8b0a8",
+          letterSpacing: "0.1em",
+          transition: "color 0.3s ease",
+          marginLeft: 4, flexShrink: 0,
+        }}>{open ? "▲ Close" : "▾"}</span>
       </button>
 
       {/* Expandable content */}
@@ -981,7 +981,7 @@ function CelestialDrawer({ isMobile }) {
         transition: "max-height 0.5s ease",
       }}>
         <div ref={contentRef} style={{
-          padding: isMobile ? "0 20px 24px" : "0 52px 32px",
+          padding: isMobile ? "16px 20px 24px" : "20px 52px 32px",
           maxWidth: 920, margin: "0 auto",
         }}>
           {/* Data grid — open layout, no heavy borders */}
