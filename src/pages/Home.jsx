@@ -748,7 +748,9 @@ export default function HomePage() {
           position: relative;
           overflow: hidden;
           display: block;
-          cursor: default;
+          cursor: pointer;
+          text-decoration: none;
+          color: inherit;
         }
         .bento-tile img {
           width: 100%;
@@ -810,8 +812,9 @@ export default function HomePage() {
               }).map((d, i) => {
                 const isHero = i < 2; // first two after sort are the hero tiles
                 return (
-                  <div
+                  <Link
                     key={d.slug}
+                    to={`/destinations/${d.slug}`}
                     className="bento-tile"
                     style={{
                       gridColumn: isHero ? "span 1" : "span 1",
@@ -901,7 +904,7 @@ export default function HomePage() {
                         }}>{d.description}</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

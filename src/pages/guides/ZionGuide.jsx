@@ -137,8 +137,10 @@ function SectionIcon({ type }) {
   );
 }
 
-function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
-  const nameEl = url ? (
+function ListItem({ name, detail, note, tags, featured, url, isMobile, onOpenSheet, location }) {
+  const nameEl = onOpenSheet ? (
+    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 15, fontWeight: 600, color: C.darkInk }}>{name}</span>
+  ) : url ? (
     <a href={url} target="_blank" rel="noopener noreferrer" style={{
       fontFamily: "'Quicksand', sans-serif", fontSize: 15, fontWeight: 600,
       color: C.darkInk, textDecoration: "none",
@@ -153,7 +155,15 @@ function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", gap: 14, padding: "16px 0", borderBottom: `1px solid ${C.stone}` }}>
+    <div
+      onClick={onOpenSheet ? () => onOpenSheet({ type: 'list', name, detail, note, tags, featured, url, location }) : undefined}
+      style={{
+        display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", gap: 14, padding: "16px 0", borderBottom: `1px solid ${C.stone}`,
+        ...(onOpenSheet ? { cursor: 'pointer', transition: 'background 0.15s' } : {}),
+      }}
+      onMouseEnter={onOpenSheet ? e => { e.currentTarget.style.background = `${C.stone}30`; } : undefined}
+      onMouseLeave={onOpenSheet ? e => { e.currentTarget.style.background = 'transparent'; } : undefined}
+    >
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 3 }}>
           {nameEl}
@@ -192,14 +202,16 @@ function ListItem({ name, detail, note, tags, featured, url, isMobile }) {
   );
 }
 
-function StayItem({ name, location, tier, detail, tags, url, featured, isMobile }) {
+function StayItem({ name, location, tier, detail, tags, url, featured, isMobile, onOpenSheet }) {
   const styles = {
     elemental: { color: C.seaGlass, label: "Elemental", bg: `${C.seaGlass}15` },
     rooted: { color: C.oceanTeal, label: "Rooted", bg: `${C.oceanTeal}12` },
     premium: { color: C.goldenAmber, label: "Premium", bg: `${C.goldenAmber}15` },
   };
   const s = styles[tier];
-  const nameEl = url ? (
+  const nameEl = onOpenSheet ? (
+    <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 15, fontWeight: 600, color: C.darkInk }}>{name}</span>
+  ) : url ? (
     <a href={url} target="_blank" rel="noopener noreferrer" style={{
       fontFamily: "'Quicksand', sans-serif", fontSize: 15, fontWeight: 600,
       color: C.darkInk, textDecoration: "none",
@@ -214,7 +226,15 @@ function StayItem({ name, location, tier, detail, tags, url, featured, isMobile 
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "stretch" : "center", gap: 14, padding: "18px 0", borderBottom: `1px solid ${C.stone}` }}>
+    <div
+      onClick={onOpenSheet ? () => onOpenSheet({ type: 'stay', name, location, tier, detail, tags, featured, url }) : undefined}
+      style={{
+        display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "stretch" : "center", gap: 14, padding: "18px 0", borderBottom: `1px solid ${C.stone}`,
+        ...(onOpenSheet ? { cursor: 'pointer', transition: 'background 0.15s' } : {}),
+      }}
+      onMouseEnter={onOpenSheet ? e => { e.currentTarget.style.background = `${C.stone}30`; } : undefined}
+      onMouseLeave={onOpenSheet ? e => { e.currentTarget.style.background = 'transparent'; } : undefined}
+    >
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }}>
           <span style={{
@@ -291,6 +311,205 @@ function ExpandableList({ children, initialCount = 5, label = "more" }) {
         </button>
       )}
     </div>
+  );
+}
+
+function GuideDetailSheet({ item, onClose, isMobile }) {
+  const sheetRef = useRef(null);
+  const dragStartY = useRef(null);
+  const dragCurrentY = useRef(0);
+
+  if (!item) return null;
+
+  const onTouchStart = (e) => { dragStartY.current = e.touches[0].clientY; };
+  const onTouchMove = (e) => {
+    if (dragStartY.current === null) return;
+    const dy = e.touches[0].clientY - dragStartY.current;
+    dragCurrentY.current = dy;
+    if (dy > 0 && sheetRef.current) sheetRef.current.style.transform = `translateY(${dy}px)`;
+  };
+  const onTouchEnd = () => {
+    if (dragCurrentY.current > 80) { onClose(); }
+    else if (sheetRef.current) { sheetRef.current.style.transform = 'translateY(0)'; }
+    dragStartY.current = null;
+    dragCurrentY.current = 0;
+  };
+
+  const tierStyles = {
+    elemental: { color: C.seaGlass, label: "Elemental", bg: `${C.seaGlass}15` },
+    rooted: { color: C.oceanTeal, label: "Rooted", bg: `${C.oceanTeal}12` },
+    premium: { color: C.goldenAmber, label: "Premium", bg: `${C.goldenAmber}15` },
+  };
+
+  const content = (
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '26px 20px 60px' }}>
+      {/* Badge row */}
+      {item.type === 'stay' && item.tier && tierStyles[item.tier] && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
+          <span style={{
+            padding: '2px 10px', background: tierStyles[item.tier].bg,
+            fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700,
+            letterSpacing: '0.18em', textTransform: 'uppercase', color: tierStyles[item.tier].color,
+          }}>{tierStyles[item.tier].label}</span>
+          {item.location && (
+            <span style={{ fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 500, color: '#7A857E' }}>{item.location}</span>
+          )}
+        </div>
+      )}
+      {item.type === 'list' && item.section && (
+        <span style={{
+          display: 'inline-block', padding: '2px 10px', background: `${C.skyBlue}15`,
+          fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700,
+          letterSpacing: '0.18em', textTransform: 'uppercase', color: C.skyBlue, marginBottom: 10,
+        }}>{item.section}</span>
+      )}
+
+      {/* Name */}
+      <h3 style={{
+        fontFamily: "'Cormorant Garamond', serif",
+        fontSize: 'clamp(22px, 4vw, 28px)', fontWeight: 400,
+        color: C.darkInk, margin: '0 0 10px', lineHeight: 1.2,
+      }}>{item.name}</h3>
+
+      {/* Lila Pick */}
+      {item.featured && (
+        <span style={{
+          display: 'inline-block', padding: '2px 10px', border: `1px solid ${C.sunSalmon}40`,
+          fontFamily: "'Quicksand', sans-serif", fontSize: 9, fontWeight: 700,
+          letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sunSalmon, marginBottom: 14,
+        }}>Lila Pick</span>
+      )}
+
+      {/* Detail */}
+      {item.detail && (
+        <p style={{
+          fontFamily: "'Quicksand', sans-serif", fontSize: 14, fontWeight: 400,
+          color: '#4A5650', lineHeight: 1.7, margin: '0 0 14px',
+        }}>{item.detail}</p>
+      )}
+
+      {/* Note */}
+      {item.note && (
+        <div style={{
+          fontFamily: "'Quicksand', sans-serif", fontSize: 12, fontWeight: 600,
+          color: C.oceanTeal, marginBottom: 14,
+        }}>{item.note}</div>
+      )}
+
+      {/* Tags */}
+      {item.tags && item.tags.length > 0 && (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
+          {item.tags.map((t, i) => (
+            <span key={i} style={{
+              padding: '3px 10px', background: C.stone + '60',
+              fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 600, color: '#7A857E',
+            }}>{t}</span>
+          ))}
+        </div>
+      )}
+
+      {/* Visit Website link */}
+      {item.url && (
+        <a href={item.url} target="_blank" rel="noopener noreferrer" style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '10px 20px', border: `1.5px solid ${C.oceanTeal}`,
+          fontFamily: "'Quicksand', sans-serif", fontSize: 11, fontWeight: 700,
+          letterSpacing: '0.16em', textTransform: 'uppercase',
+          color: C.oceanTeal, textDecoration: 'none', transition: 'all 0.25s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = C.oceanTeal; e.currentTarget.style.color = '#fff'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = C.oceanTeal; }}
+        >Visit Website <span style={{ fontSize: 12 }}>↗</span></a>
+      )}
+    </div>
+  );
+
+  if (!isMobile) {
+    return (
+      <>
+        <style>{`
+          @keyframes guideSheetSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+          @keyframes guideSheetBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+        `}</style>
+        <div onClick={onClose} style={{
+          position: 'fixed', inset: 0, zIndex: 249,
+          background: 'rgba(0,0,0,0.3)',
+          animation: 'guideSheetBackdropIn 0.25s ease',
+        }} />
+        <div style={{
+          position: 'fixed', top: 0, right: 0, bottom: 0,
+          width: 440, zIndex: 250,
+          background: C.cream, overflowY: 'auto',
+          animation: 'guideSheetSlideIn 0.3s ease',
+          boxShadow: '-4px 0 24px rgba(0,0,0,0.08)',
+        }}>
+          <div style={{
+            position: 'sticky', top: 0, zIndex: 10,
+            display: 'flex', justifyContent: 'flex-end',
+            padding: '12px 14px 0 0',
+          }}>
+            <button onClick={onClose} style={{
+              width: 32, height: 32,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: `${C.white}e0`, border: `1px solid ${C.sage}15`,
+              borderRadius: '50%', cursor: 'pointer',
+              fontFamily: "'Quicksand', sans-serif", fontSize: 15, color: C.sage, lineHeight: 1,
+              WebkitTapHighlightColor: 'transparent',
+              boxShadow: `0 2px 8px ${C.ink}08`,
+            }} aria-label="Close">✕</button>
+          </div>
+          {content}
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <style>{`
+        @keyframes guideSheetSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes guideSheetBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+      `}</style>
+      <div onClick={onClose} style={{
+        position: 'fixed', inset: 0, zIndex: 249,
+        background: 'rgba(0,0,0,0.3)',
+        animation: 'guideSheetBackdropIn 0.25s ease',
+      }} />
+      <div ref={sheetRef} style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0,
+        height: '82vh', zIndex: 250,
+        background: C.cream,
+        borderRadius: '16px 16px 0 0',
+        animation: 'guideSheetSlideUp 0.3s ease',
+        boxShadow: '0 -4px 24px rgba(0,0,0,0.1)',
+        display: 'flex', flexDirection: 'column',
+      }}>
+        <div
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          style={{ padding: '10px 14px 6px', flexShrink: 0, position: 'relative', zIndex: 10 }}
+        >
+          <div style={{
+            width: 36, height: 4, borderRadius: 2,
+            background: `${C.sage}30`, margin: '0 auto 8px',
+          }} />
+          <button onClick={(e) => { e.stopPropagation(); onClose(); }} style={{
+            position: 'absolute', top: 8, right: 14,
+            width: 36, height: 36,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: `${C.white}e0`, border: `1px solid ${C.sage}15`,
+            borderRadius: '50%', cursor: 'pointer',
+            fontFamily: "'Quicksand', sans-serif", fontSize: 15, color: C.sage, lineHeight: 1,
+            WebkitTapHighlightColor: 'transparent',
+            boxShadow: `0 2px 8px ${C.ink}08`,
+          }} aria-label="Close">✕</button>
+        </div>
+        <div style={{ overflowY: 'auto', flex: 1, WebkitOverflowScrolling: 'touch' }}>
+          {content}
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -1397,6 +1616,14 @@ export default function ZionGuide() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
+  const [activeSheet, setActiveSheet] = useState(null);
+  useEffect(() => {
+    if (activeSheet) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [activeSheet]);
+  const openSheet = (section) => (item) => setActiveSheet({ ...item, section });
+
   return (
     <>
       <Nav />
@@ -1668,16 +1895,16 @@ export default function ZionGuide() {
             </FadeIn>
             <FadeIn delay={0.08}>
               <div>
-                <ListItem isMobile={isMobile} name={"Early Autumn — The Golden Corridor"} featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('When to Go')} name={"Early Autumn — The Golden Corridor"} featured
                   detail="Cottonwoods turn gold along the Virgin River. Crowds thin. Light goes amber. Best hiking weather of the year."
                   tags={["Late Sep – Oct", "Golden Light", "Best Weather"]} />
-                <ListItem isMobile={isMobile} name="Desert Bloom" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('When to Go')} name="Desert Bloom" featured
                   detail="After a wet winter, the desert floor erupts in wildflowers. Cacti crown themselves. Timing is everything — and unpredictable."
                   tags={["Mar – Apr", "Wildflowers", "Variable"]} />
-                <ListItem isMobile={isMobile} name="Winter Solstice"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('When to Go')} name="Winter Solstice"
                   detail="Shortest day, most dramatic canyon light. Snow dusting the upper walls at sunset. Fewer people, deeper silence."
                   tags={["Dec 19–22", "Solstice", "Canyon Light"]} />
-                <ListItem isMobile={isMobile} name="Dark Sky Season"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('When to Go')} name="Dark Sky Season"
                   detail="Late summer and early fall offer warm nights for stargazing. The Milky Way peaks overhead from June through September."
                   tags={["Jun – Sep", "Milky Way", "Warm Nights"]} />
               </div>
@@ -1719,59 +1946,59 @@ export default function ZionGuide() {
 
             <FadeIn delay={0.1}>
               <ExpandableList initialCount={4} label="places to stay">
-                <StayItem isMobile={isMobile} tier="elemental" name="Under Canvas Zion" location="Virgin, UT" featured
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="elemental" name="Under Canvas Zion" location="Virgin, UT" featured
                   url="https://www.undercanvas.com/camps/zion/"
                   detail="Safari-style tents on 196 acres. DarkSky certified. Stargazer tents with sky windows above your bed. No WiFi — by design."
                   tags={["Glamping", "DarkSky", "Seasonal"]} />
-                <StayItem isMobile={isMobile} tier="elemental" name="AutoCamp Zion" location="Virgin, UT" featured
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="elemental" name="AutoCamp Zion" location="Virgin, UT" featured
                   url="https://autocamp.com/zion/"
                   detail="Climate-controlled Airstream suites with midcentury design. Retro charm, modern comfort."
                   tags={["Airstreams", "Climate-Controlled", "Hilton Points"]} />
-                <StayItem isMobile={isMobile} tier="rooted" name="Cliffrose Springdale" location="Springdale" featured
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="rooted" name="Cliffrose Springdale" location="Springdale" featured
                   url="https://www.cliffroselodge.com/"
                   detail="Five acres of gardens on the Virgin River. Heated pools year-round. Anthera restaurant. Steps from the park."
                   tags={["Riverfront", "Restaurant", "Spa", "Pool"]} />
-                <StayItem isMobile={isMobile} tier="premium" name="Amangiri" location="Canyon Point, UT" featured
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="premium" name="Amangiri" location="Canyon Point, UT" featured
                   url="https://www.aman.com/hotels/amangiri"
                   detail="34 modernist suites on 900 acres. Camp Sarika with private plunge pools. Aman Spa with Navajo healing traditions."
                   tags={["Ultra-Luxury", "Via Ferrata", "Spa"]} />
-                <StayItem isMobile={isMobile} tier="elemental" name="Open Sky Zion" location="Virgin, UT"
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="elemental" name="Open Sky Zion" location="Virgin, UT"
                   url="https://www.openskyzion.com/"
                   detail="Private and immersive. Farm-to-table at Black Sage restaurant. Wellness woven into every element."
                   tags={["Luxury Glamping", "Farm-to-Table", "Wellness"]} />
-                <StayItem isMobile={isMobile} tier="rooted" name="Desert Pearl Inn" location="Springdale"
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="rooted" name="Desert Pearl Inn" location="Springdale"
                   url="https://www.desertpearl.com/"
                   detail="Family-owned 20+ years. Built with reclaimed Douglas fir from a century-old railroad trestle. Rated #1 in Springdale."
                   tags={["Family-Owned", "Riverside", "Kitchenette"]} />
-                <StayItem isMobile={isMobile} tier="rooted" name={"Flanigan's Resort"} location="Springdale"
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="rooted" name={"Flanigan's Resort"} location="Springdale"
                   url="https://flanigans.com/"
                   detail="Park lodge with Deep Canyon Spa, Spotted Dog restaurant, and hillside yoga. Best wellness integration in town."
                   tags={["Spa", "Restaurant", "Yoga"]} />
-                <StayItem isMobile={isMobile} tier="premium" name="The Inn at Entrada" location="St. George, UT"
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="premium" name="The Inn at Entrada" location="St. George, UT"
                   url="https://www.innatentrada.com/"
                   detail="Luxury casitas near Snow Canyon. Red rock panoramas, championship golf, full-service spa."
                   tags={["Casitas", "Golf", "Spa"]} />
 
                 {/* ── Bryce Canyon Stay ──────────────────────────── */}
-                <StayItem isMobile={isMobile} tier="rooted" name="The Lodge at Bryce Canyon" location="Inside Bryce Canyon NP" featured
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="rooted" name="The Lodge at Bryce Canyon" location="Inside Bryce Canyon NP" featured
                   url="https://www.visitbrycecanyon.com/lodging/the-lodge-at-bryce-canyon"
                   detail="The only lodging inside the park. Historic 1920s lodge with western cabins (gas fireplaces, private porches), motel rooms with canyon balconies, and no TV or WiFi by design. Steps from the rim and the trailheads."
                   tags={["Inside the Park", "Historic Lodge", "Cabins", "Rim Access"]} />
-                <StayItem isMobile={isMobile} tier="premium" name="Clear Sky Resorts" location="Cannonville, UT" featured
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="premium" name="Clear Sky Resorts" location="Cannonville, UT" featured
                   url="https://brycecanyon.clearskyresorts.com/"
                   detail="Geodesic Sky Domes with panoramic glass walls for unobstructed stargazing from your bed. Private canyon on Scenic Byway 12, 15 minutes from the park. One of the best astrotourism stays in the country."
                   tags={["Dark Sky", "Geodesic Domes", "Byway 12", "Stargazing"]} />
-                <StayItem isMobile={isMobile} tier="rooted" name="Stone Canyon Inn" location="Tropic, UT"
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="rooted" name="Stone Canyon Inn" location="Tropic, UT"
                   url="https://www.stonecanyoninn.com/"
                   detail="Boutique lodge 6 miles from Bryce with sweeping canyon views from every cottage. Award-winning service, no two rooms alike. A quiet, beautifully situated base."
                   tags={["Boutique", "Canyon Views", "Cottages"]} />
 
                 {/* ── Capitol Reef Stay ──────────────────────────── */}
-                <StayItem isMobile={isMobile} tier="premium" name="Capitol Reef Resort" location="Torrey, UT" featured
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="premium" name="Capitol Reef Resort" location="Torrey, UT" featured
                   url="https://capitolreefresort.com/"
                   detail="58 acres one mile from the park entrance. Luxury cabins with red cliff views, spa bathrooms, and private verandas. Glamping options include teepees and Conestoga wagons. On-site restaurant, pool, and llama hikes."
                   tags={["1 Mile to Park", "Luxury Cabins", "Glamping", "Pool"]} />
-                <StayItem isMobile={isMobile} tier="rooted" name="Skyview Hotel" location="Torrey, UT"
+                <StayItem isMobile={isMobile} onOpenSheet={setActiveSheet} tier="rooted" name="Skyview Hotel" location="Torrey, UT"
                   url="https://skyviewhotel.com/"
                   detail="14 rooms and 6 glamping domes in Utah's first Dark Sky designated community. Rooftop stargazing, minimalist design, and a genuinely remote feel. The best boutique option in Torrey."
                   tags={["Dark Sky", "Glamping Domes", "Boutique", "Rooftop Stargazing"]} />
@@ -1794,85 +2021,85 @@ export default function ZionGuide() {
             </FadeIn>
             <FadeIn delay={0.08}>
               <ExpandableList initialCount={5} label="trails & adventures">
-                <ListItem isMobile={isMobile} name="Angels Landing" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Angels Landing" featured
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail={"The iconic chain-assisted ridgeline summit. Exposure, adrenaline, and views that justify every step. Permit required — book 3 months out."}
                   note="Permit required — recreation.gov · Seasonal lottery"
                   tags={["5.4 mi RT", "Strenuous", "1,488 ft gain", "Permit"]} />
-                <ListItem isMobile={isMobile} name="The Narrows" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="The Narrows" featured
                   url="https://www.nps.gov/zion/planyourvisit/thenarrows.htm"
                   detail="Hiking through the Virgin River between thousand-foot walls. Water levels dictate access — check conditions daily. Rent gear in Springdale."
                   note="River-level dependent — check NPS morning reports"
                   tags={["Up to 10 mi", "Moderate–Strenuous", "Water Hiking"]} />
-                <ListItem isMobile={isMobile} name="The Subway" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="The Subway" featured
                   url="https://www.nps.gov/zion/planyourvisit/the-subway.htm"
                   detail="A tunnel-shaped canyon carved by flowing water. Technical bottom-up route or wilderness top-down. Unforgettable geology."
                   tags={["9 mi RT", "Technical", "Permit Required"]} />
-                <ListItem isMobile={isMobile} name="Canyon Overlook Trail"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Canyon Overlook Trail"
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Short, punchy, with one of the best views in the park. East side of the tunnel. Arrive early or at sunset."
                   tags={["1 mi RT", "Easy–Moderate", "Sunset", "Family Friendly"]} />
-                <ListItem isMobile={isMobile} name="Observation Point"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Observation Point"
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Higher than Angels Landing, quieter, arguably more stunning. Full panorama of Zion Canyon."
                   tags={["8 mi RT", "Strenuous", "2,150 ft gain"]} />
-                <ListItem isMobile={isMobile} name="Kolob Canyons"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Kolob Canyons"
                   url="https://www.nps.gov/zion/planyourvisit/kolob-canyons-wilderness-hiking-trails.htm"
                   detail={"Zion's quiet northern section. Fewer visitors, deeper solitude. Finger canyons of red Navajo sandstone."}
                   tags={["Multiple Trails", "Remote", "Separate Entrance"]} />
-                <ListItem isMobile={isMobile} name="Hidden Canyon"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Hidden Canyon"
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="A narrow slot canyon reached by a chain-assisted trail. Small, intimate, often overlooked."
                   tags={["2.4 mi RT", "Moderate–Strenuous", "Chains"]} />
-                <ListItem isMobile={isMobile} name="Emerald Pools"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Emerald Pools"
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Three tiers of pools and waterfalls, increasingly beautiful as you climb. Upper pool is the reward."
                   tags={["1–3 mi RT", "Easy–Moderate", "Family Friendly"]} />
-                <ListItem isMobile={isMobile} name={"Pa'rus Trail"}
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name={"Pa'rus Trail"}
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Flat, paved riverside trail. Bikes allowed. Perfect for decompression, morning walks, or families."
                   tags={["3.5 mi RT", "Easy", "Paved", "Bikes OK"]} />
-                <ListItem isMobile={isMobile} name="Snow Canyon State Park"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Snow Canyon State Park"
                   url="https://stateparks.utah.gov/parks/snow-canyon/"
                   detail="Red and white sandstone, lava flows, and sand dunes 45 min from Zion. Far fewer crowds."
                   note="Near St. George — great half-day trip"
                   tags={["State Park", "Lava Tubes", "Less Crowded"]} />
-                <ListItem isMobile={isMobile} name="Scenic Drive to Capitol Reef"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Scenic Drive to Capitol Reef"
                   detail="The 2.5-hour drive via Highway 12 is one of the most beautiful roads in America. Make it the journey, not the commute."
                   tags={["Scenic Drive", "Half Day", "Highway 12"]} />
 
                 {/* ── Bryce Canyon Trails ──────────────────────────── */}
-                <ListItem isMobile={isMobile} name="Navajo Loop Trail" location="Bryce Canyon NP" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Navajo Loop Trail" location="Bryce Canyon NP" featured
                   url="https://www.nps.gov/brca/planyourvisit/navajo-loop-trail.htm"
                   detail="Drops you into the amphitheater via Wall Street — a narrow slot between hoodoos that blocks the sky. The most visceral way to enter Bryce. Combine with Queen's Garden for the best loop in the park."
                   tags={["1.4 mi RT", "Moderate", "Hoodoos", "1.5 hrs from Zion"]} />
-                <ListItem isMobile={isMobile} name="Fairyland Loop" location="Bryce Canyon NP" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Fairyland Loop" location="Bryce Canyon NP" featured
                   url="https://www.nps.gov/brca/planyourvisit/fairyland-loop-trail.htm"
                   detail="The park's most rewarding full-day hike. Ridge walks, dense hoodoo forests, Tower Bridge arch, and views of the surrounding valley in every direction. Far fewer people than the main amphitheater trails."
                   tags={["7.8 mi Loop", "Strenuous", "1,545 ft gain", "Full Day"]} />
-                <ListItem isMobile={isMobile} name="Bristlecone Loop" location="Bryce Canyon NP"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Bristlecone Loop" location="Bryce Canyon NP"
                   url="https://www.nps.gov/brca/planyourvisit/bristlecone-loop-trail.htm"
                   detail="High-elevation loop through ancient bristlecone pines — some over 1,600 years old. Quiet, meditative, otherworldly. Best panoramic views in the park from Rainbow Point at 9,115 feet."
                   tags={["1 mi Loop", "Easy", "9,115 ft", "Rainbow Point"]} />
-                <ListItem isMobile={isMobile} name="Mossy Cave Trail" location="Bryce Canyon NP"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Mossy Cave Trail" location="Bryce Canyon NP"
                   url="https://www.nps.gov/brca/planyourvisit/mossycave.htm"
                   detail="Off the beaten path on the east side of the park. Follows Water Canyon past hoodoos and arches to a small waterfall and ice-filled grotto. Outside the fee station — no park pass needed."
                   tags={["1 mi RT", "Easy", "Waterfall", "No Fee"]} />
 
                 {/* ── Capitol Reef Trails ──────────────────────────── */}
-                <ListItem isMobile={isMobile} name="Hickman Bridge Trail" location="Capitol Reef NP" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Hickman Bridge Trail" location="Capitol Reef NP" featured
                   url="https://www.nps.gov/care/planyourvisit/hickman-bridge.htm"
                   detail="The park's signature hike. Follows the Fremont River then climbs to a 133-foot natural bridge with a 360-foot drop to the canyon below. Passes ancient Fremont granaries and a pit house ruin on the way up."
                   tags={["1.8 mi RT", "Moderate", "Natural Bridge", "Fremont Ruins"]} />
-                <ListItem isMobile={isMobile} name="Navajo Knobs Trail" location="Capitol Reef NP" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Navajo Knobs Trail" location="Capitol Reef NP" featured
                   url="https://www.nps.gov/care/planyourvisit/navajoknobbstrail.htm"
                   detail="The park's finest dayhike. Starts at the Hickman Bridge trailhead and climbs to 360-degree views at 6,979 feet — the Waterpocket Fold, the Henry Mountains, and formations like Pectols Pyramid spread out below. Almost no one does it."
                   tags={["9.4 mi RT", "Strenuous", "1,620 ft gain", "Best Views"]} />
-                <ListItem isMobile={isMobile} name="Cohab Canyon Trail" location="Capitol Reef NP"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Cohab Canyon Trail" location="Capitol Reef NP"
                   url="https://www.nps.gov/care/planyourvisit/cohabcanyontrail.htm"
                   detail="Steep switchbacks climb to sweeping aerial views over Fruita, the orchard, and the Waterpocket Fold. The hidden slot canyons tucked into the walls reward anyone who wanders off the main path."
                   tags={["3.4 mi RT", "Moderate", "Canyon Views", "Fruita Overlook"]} />
-                <ListItem isMobile={isMobile} name="Grand Wash Trail" location="Capitol Reef NP"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Trails')} name="Grand Wash Trail" location="Capitol Reef NP"
                   url="https://www.nps.gov/care/planyourvisit/grandwash.htm"
                   detail="A flat walk through the Waterpocket Fold between canyon walls that press to shoulder-width at the Narrows. Connects to the Cassidy Arch Trail for a longer loop. The easiest way to feel the scale of Capitol Reef."
                   tags={["4.5 mi RT", "Easy", "Slot Canyon", "Connects to Cassidy Arch"]} />
@@ -1895,66 +2122,66 @@ export default function ZionGuide() {
             </FadeIn>
             <FadeIn delay={0.08}>
               <ExpandableList initialCount={6} label="wellness options">
-                <ListItem isMobile={isMobile} name={"Hillside Yoga at Flanigan's"} featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name={"Hillside Yoga at Flanigan's"} featured
                   url="https://flanigans.com/spa/"
                   detail={"Gentle yoga with sound bath on a terrace overlooking Zion. The vibration carries differently at this elevation. All levels welcome — come for the practice, stay for the view."}
                   note={"At Flanigan's Resort — check schedule for sound bath sessions"}
                   tags={["Sound Bath", "Canyon Views", "All Levels"]} />
-                <ListItem isMobile={isMobile} name="Zion Guru Skydeck Yoga" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Zion Guru Skydeck Yoga" featured
                   url="https://www.zionguru.com/"
                   detail="Open-air deck with the Watchman as your backdrop. Morning sessions catch first light on the canyon walls."
                   tags={["Outdoor", "Morning", "All Levels"]} />
-                <ListItem isMobile={isMobile} name="Deep Canyon Spa" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Deep Canyon Spa" featured
                   url="https://flanigans.com/spa/"
                   detail={"Full-service spa inside Flanigan's Resort. Massages, body treatments, and facials after long trail days. The canyon's first spa, open since 1994."}
                   tags={["Full Spa", "Springdale", "Walk-In"]} />
-                <ListItem isMobile={isMobile} name="Open Sky Wellness Programs" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Open Sky Wellness Programs" featured
                   url="https://www.openskyzion.com/"
                   detail="Immersive yoga, meditation, and sound healing in an off-grid desert setting. Multi-day programs available."
                   tags={["Multi-Day", "Off-Grid", "Immersive"]} />
-                <ListItem isMobile={isMobile} name="Zion Canyon Hot Springs" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Zion Canyon Hot Springs" featured
                   url="https://www.zioncanyonhotsprings.com/"
                   detail="32 geothermal hot springs, globally-inspired mineral pools, Finnish barrel saunas, and cold plunges in La Verkin — 30 minutes from the park. The 21+ Premier area has cocktails by the firepit and its own saunas. This is your post-hike recovery circuit."
                   tags={["Hot Springs", "Sauna", "Cold Plunge", "21+ Area"]} />
-                <ListItem isMobile={isMobile} name="True North Float" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="True North Float" featured
                   url="https://www.tnfloat.com/"
                   detail="Sensory deprivation float tanks, fire & ice suite (sauna + cold plunge), vibroacoustic therapy, and massage in St. George — 45 minutes from Zion. Founded by a wellness seeker who left corporate life. The real deal."
                   tags={["Float Tank", "Sauna", "Cold Plunge", "St. George"]} />
-                <ListItem isMobile={isMobile} name="Cable Mountain Spa"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Cable Mountain Spa"
                   url="https://cablemountainspa.com/"
                   detail="Full-service spa with sauna at the park entrance. Massage, facials, and body treatments. Walk-in friendly."
                   tags={["Full Spa", "Sauna", "Springdale"]} />
-                <ListItem isMobile={isMobile} name="Homebody Healing"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Homebody Healing"
                   url="https://www.homebodyhealing.love/"
                   detail="Weekly yoga classes at Cable Mountain Spa — vinyasa, hatha, yin, restorative, breathwork, and meditation. Private somatic sessions available. A deeply rooted local teacher."
                   tags={["Yoga", "Breathwork", "Meditation", "Weekly Classes"]} />
-                <ListItem isMobile={isMobile} name="Cosmic Flow Yoga"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Cosmic Flow Yoga"
                   url="https://www.yogainzion.com/"
                   detail="Yoga, meditation, and sound healing with sessions across Springdale, Kanab, and St. George. Riverside location in Springdale next to the Virgin River. Private group sessions available."
                   tags={["Yoga", "Sound Healing", "Multiple Locations"]} />
-                <ListItem isMobile={isMobile} name="Zion Yogis"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Zion Yogis"
                   url="https://www.zionyogis.com/"
                   detail="Outdoor yoga sessions in and around Zion National Park. Calming flow classes designed as the perfect cool-down after a day on the trails."
                   tags={["Yoga", "Outdoor", "Post-Hike"]} />
-                <ListItem isMobile={isMobile} name="Amangiri Spa" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Amangiri Spa" featured
                   url="https://www.aman.com/hotels/amangiri"
                   detail="Aman's desert spa draws from Navajo healing traditions. Flotation therapy, desert clay wraps, and a water pavilion carved into the mesa. A pilgrimage in itself — 90 minutes from Springdale at Canyon Point."
                   tags={["Ultra-Luxury", "Navajo Traditions", "Float", "Canyon Point"]} />
-                <ListItem isMobile={isMobile} name="Elite Float Spa"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Elite Float Spa"
                   detail="Southern Utah's first float spa in St. George. Floatation therapy, infrared sauna, and massage. Small family-owned operation with deep expertise."
                   note="St. George, UT — find them on Yelp or TripAdvisor"
                   tags={["Float Tank", "Infrared Sauna", "St. George"]} />
-                <ListItem isMobile={isMobile} name="Five Petals Spa at the Cliffrose"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Five Petals Spa at the Cliffrose"
                   url="https://www.cliffroselodge.com/"
                   detail="Riverfront spa steps from the park. Deep-tissue, hot stone, and custom facials."
                   tags={["Riverfront", "Hotel Spa"]} />
-                <ListItem isMobile={isMobile} name="Sunrise Meditation at Canyon Junction"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Sunrise Meditation at Canyon Junction"
                   detail="Arrive before the shuttles. Sit at the Pine Creek bridge. Watch the walls ignite in silence. No teacher needed."
                   tags={["Free", "Early AM", "Solo", "Self-Guided"]} />
-                <ListItem isMobile={isMobile} name="Earthing on the Canyon Floor"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Earthing on the Canyon Floor"
                   detail="Take your shoes off. Stand on the sandstone. Feel the warmth the rock has been collecting for 200 million years."
                   tags={["Free", "Grounding", "Self-Guided"]} />
-                <ListItem isMobile={isMobile} name="Journaling at the Virgin River"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Wellness')} name="Journaling at the Virgin River"
                   detail={"Find a bench along the Pa'rus Trail. The sound of the river is its own kind of teacher."}
                   tags={["Free", "Contemplative", "Self-Guided"]} />
               </ExpandableList>
@@ -1976,25 +2203,25 @@ export default function ZionGuide() {
             </FadeIn>
             <FadeIn delay={0.08}>
               <ExpandableList initialCount={4} label="experiences">
-                <ListItem isMobile={isMobile} name="Stargazing from the Canyon Floor" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Light & Sky')} name="Stargazing from the Canyon Floor" featured
                   url="https://www.nps.gov/thingstodo/stargazing-in-zion.htm"
                   detail={"Zion is a certified International Dark Sky Park. On a moonless night, the Milky Way arcs directly overhead between the canyon walls. Bring a blanket, lie down, and give yourself an hour."}
                   tags={["Free", "Night", "Dark Sky Park"]} />
-                <ListItem isMobile={isMobile} name="Sunrise at the Watchman" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Light & Sky')} name="Sunrise at the Watchman" featured
                   url="https://www.nps.gov/zion/planyourvisit/zion-canyon-trail-descriptions.htm"
                   detail="Get to the trailhead before first light. Watch the canyon walls ignite one layer at a time. Worth every minute of lost sleep."
                   tags={["3.3 mi RT", "Moderate", "Early AM"]} />
-                <ListItem isMobile={isMobile} name="Drive Historic Highway 12" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Light & Sky')} name="Drive Historic Highway 12" featured
                   detail="One of America's most dramatic scenic byways. 124 miles from Bryce Canyon to Capitol Reef through red rock canyons, hogbacks with thousand-foot drops on both sides, and the high forests of Boulder Mountain. Don't rush it."
                   tags={["Scenic Drive", "Half Day", "Bryce to Capitol Reef"]} />
-                <ListItem isMobile={isMobile} name="Drive the Mt. Carmel Tunnel" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Light & Sky')} name="Drive the Mt. Carmel Tunnel" featured
                   detail="The 1.1-mile tunnel carved through sandstone in 1930. Emerge on the east side to a completely different landscape — checkerboard mesas, white slickrock, open sky."
                   tags={["Scenic Drive", "East Side", "Historic"]} />
-                <ListItem isMobile={isMobile} name="NPS Ranger Stargazing Program"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Light & Sky')} name="NPS Ranger Stargazing Program"
                   url="https://www.nps.gov/zion/planyourvisit/sunset-stargazing.htm"
                   detail="Free ranger-led night sky programs. Telescopes provided, no reservation needed. Check the park calendar for dates."
                   tags={["Free", "Ranger-Led", "Seasonal"]} />
-                <ListItem isMobile={isMobile} name={"Bryce Canyon Under Stars"}
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Light & Sky')} name={"Bryce Canyon Under Stars"}
                   url="https://www.nps.gov/thingstodo/stargazing-at-bryce-canyon.htm"
                   detail={"Some of the darkest skies in the country. The hoodoos by starlight are otherworldly. Ranger-led telescope programs available."}
                   tags={["Day Trip", "Dark Sky", "Telescope Programs"]} />
@@ -2017,84 +2244,84 @@ export default function ZionGuide() {
             </FadeIn>
             <FadeIn delay={0.08}>
               <ExpandableList initialCount={4} label="places">
-                <ListItem isMobile={isMobile} name={"Live Music at Zion Canyon Brew Pub"} featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name={"Live Music at Zion Canyon Brew Pub"} featured
                   url="https://zionbrewery.com/"
                   detail={"Cold beer, outdoor patio right on the Virgin River, canyon walls glowing overhead, and live music drifting through it all. Southern Utah's first brewery, and still the best post-hike spot in town."}
                   note="Live music Tuesdays, Fridays, and weekends — 95 Zion Park Blvd"
                   tags={["Live Music", "Outdoor Patio", "Craft Beer", "Canyon Views"]} />
-                <ListItem isMobile={isMobile} name={"King's Landing Bistro"} featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name={"King's Landing Bistro"} featured
                   url="https://www.kingslanding-zion.com/"
                   detail={"The canyon's most celebrated table. Seasonal, Southwest-rooted. Reserve ahead."}
                   tags={["Dinner", "Fine Dining", "Reservations", "$$–$$$"]} />
-                <ListItem isMobile={isMobile} name={"Spotted Dog Café"}
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name={"Spotted Dog Café"}
                   url="https://flanigans.com/"
                   detail={"Inside Flanigan's lodge. Organic, local, elevated comfort food."}
                   tags={["Dinner", "Organic", "$$"]} />
-                <ListItem isMobile={isMobile} name={"Oscar's Café"}
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name={"Oscar's Café"}
                   url="https://www.oscarscafe.com/"
                   detail="Big portions, excellent huevos rancheros. The local gathering spot."
                   tags={["Breakfast", "Lunch", "Casual", "$–$$"]} />
-                <ListItem isMobile={isMobile} name="Deep Creek Coffee"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Deep Creek Coffee"
                   detail="The first stop every morning. Single-origin pour-overs and house-baked pastries."
                   tags={["Coffee", "Pastries", "$"]} />
-                <ListItem isMobile={isMobile} name="Whiptail Grill"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Whiptail Grill"
                   url="https://www.whiptailgrillzion.com/"
                   detail="Mexican-inspired, great patio, solid margaritas, reasonable for Springdale."
                   tags={["Lunch", "Dinner", "Mexican", "$–$$"]} />
-                <ListItem isMobile={isMobile} name="Tribal Arts Zion"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Tribal Arts Zion"
                   detail="Native American art and jewelry sourced directly from tribal artists."
                   tags={["Native Art", "Jewelry", "Gallery"]} />
-                <ListItem isMobile={isMobile} name="David J. West Gallery"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="David J. West Gallery"
                   url="https://www.davidjwest.com/"
                   detail={"Fine art photography of the Southwest in light that makes you question whether you've ever really seen these places."}
                   tags={["Photography", "Fine Art"]} />
-                <ListItem isMobile={isMobile} name="Sol Foods Market"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Sol Foods Market"
                   detail="Small but mighty grocery. Good sandwiches for the trail, cold drinks, local provisions."
                   tags={["Grocery", "Deli", "Trail Provisions"]} />
-                <ListItem isMobile={isMobile} name="Springdale Farmers Market"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Springdale Farmers Market"
                   detail="Saturday mornings in season. Local produce, artisan goods."
                   tags={["Seasonal", "Saturday AM", "Local"]} />
 
                 {/* ── Cultural Heritage & Service ──────────────────────── */}
-                <ListItem isMobile={isMobile} name="Paiute Cultural Heritage" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Paiute Cultural Heritage" featured
                   url="https://pitu.gov/culture/"
                   detail={"The Southern Paiute called this land Mukuntuweap long before it was Zion. The Paiute Indian Tribe of Utah preserves language, oral history, and traditions through cultural programs and the annual Restoration Powwow in Cedar City each June."}
                   note="Paiute Indian Tribe of Utah — pitu.gov"
                   tags={["Indigenous Heritage", "Cultural", "Cedar City"]} />
-                <ListItem isMobile={isMobile} name="Pipe Spring National Monument" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Pipe Spring National Monument" featured
                   url="https://www.nps.gov/pisp/"
                   detail={"Jointly managed by NPS and the Kaibab Band of Paiutes. A desert oasis that tells the layered story of water, sovereignty, and survival — Native, pioneer, and ranching history in one place. The Kaibab Paiutes operate the visitor center."}
                   tags={["NPS Monument", "Indigenous History", "Day Trip"]} />
-                <ListItem isMobile={isMobile} name="Zion Forever Project" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Zion Forever Project" featured
                   url="https://www.zionpark.org/"
                   detail={"The park's official nonprofit partner. Conservation volunteer days, trail restoration, hanging garden protection, and dark sky preservation. A way to give back to the land that gives so much."}
                   note="Volunteer opportunities available — zionpark.org"
                   tags={["Conservation", "Volunteer", "Nonprofit"]} />
-                <ListItem isMobile={isMobile} name="Conserve Southwest Utah" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Conserve Southwest Utah" featured
                   url="https://www.conserveswu.org/stewardship"
                   detail={"Hands-on desert habitat restoration at Red Cliffs NCA near St. George. Planting native shrubs, protecting threatened Mojave desert tortoise habitat, invasive species removal. Over 5,000 native plants restored since 2020."}
                   note="Regular volunteer days — 45 min from Zion"
                   tags={["Habitat Restoration", "Volunteer", "Desert Tortoise"]} />
-                <ListItem isMobile={isMobile} name="Parowan Gap Petroglyphs"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Parowan Gap Petroglyphs"
                   detail={"A free, open-air gallery of ancient rock art attributed to the Fremont people, near Cedar City. Hundreds of petroglyphs etched into the canyon walls — a contemplative stop that asks nothing but attention."}
                   tags={["Free", "Ancient Rock Art", "Self-Guided", "Cedar City"]} />
 
                 {/* ── Bryce Canyon Area Food ──────────────────────── */}
-                <ListItem isMobile={isMobile} name="The Lodge at Bryce Canyon Restaurant" location="Inside Bryce Canyon NP" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="The Lodge at Bryce Canyon Restaurant" location="Inside Bryce Canyon NP" featured
                   url="https://www.visitbrycecanyon.com/dining"
                   detail="High-beam ceilings, stone fireplace, towering pines outside the windows. Elk chili, buffalo sirloin, almond-crusted trout using organic and sustainable ingredients. Open April–November. The most atmospheric dining room in the corridor."
                   tags={["Dinner", "Inside the Park", "Sustainable", "Apr–Nov", "$–$$"]} />
-                <ListItem isMobile={isMobile} name="Bryce Canyon Pines Restaurant" location="Hwy 12, near Bryce"
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Bryce Canyon Pines Restaurant" location="Hwy 12, near Bryce"
                   url="https://www.brycecanyonmotel.com/"
                   detail="A beloved Utah roadside institution. Hearty breakfasts, elk burgers, rib-eyes, rainbow trout — and homemade pie in more flavors than you can count. The top draw for a reason."
                   tags={["Breakfast", "Dinner", "Pie", "Classic", "$–$"]} />
 
                 {/* ── Capitol Reef / Torrey Food ──────────────────── */}
-                <ListItem isMobile={isMobile} name="Hell's Backbone Grill & Farm" location="Boulder, UT" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Hell's Backbone Grill & Farm" location="Boulder, UT" featured
                   url="https://www.hellsbackbonegrill.com/"
                   detail="The most celebrated restaurant between Zion and Moab, on Scenic Byway 12 in Boulder. Chef-owners Jen Castle and Blake Spalding follow Buddhist principles of sustainability — organic farm on-site, James Beard semifinalist since 2017. Worth the detour. Seasonal: mid-March through November."
                   tags={["Farm-to-Table", "James Beard", "Boulder", "Byway 12", "Seasonal", "$–$$"]} />
-                <ListItem isMobile={isMobile} name="Fruita Orchards at Capitol Reef" location="Capitol Reef NP" featured
+                <ListItem isMobile={isMobile} onOpenSheet={openSheet('Food & Culture')} name="Fruita Orchards at Capitol Reef" location="Capitol Reef NP" featured
                   url="https://www.nps.gov/care/planyourvisit/fruita.htm"
                   detail="The park's historic orchard — apricot, cherry, peach, pear, apple — is still harvested by visitors in season. Walk in, pick fruit off the tree, pay by the pound. One of the most quietly extraordinary things you can do in any national park."
                   tags={["Free to Enter", "U-Pick", "In-Season", "Historic"]} />
@@ -2280,6 +2507,11 @@ export default function ZionGuide() {
         </div>
       </section>
 
+      <GuideDetailSheet
+        item={activeSheet}
+        onClose={() => setActiveSheet(null)}
+        isMobile={isMobile}
+      />
       <Footer />
     </>
   );

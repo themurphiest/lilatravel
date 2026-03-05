@@ -2,6 +2,7 @@
 // PAGE: DESTINATIONS LANDING
 // ═══════════════════════════════════════════════════════════════════════════════
 
+import { Link } from 'react-router-dom';
 import { Nav, Footer, FadeIn, PageHeader } from '@components';
 import { C } from '@data/brand';
 import { destinations } from '@data/destinations';
@@ -24,7 +25,9 @@ export default function DestinationsPage() {
           position: relative;
           overflow: hidden;
           display: block;
-          cursor: default;
+          cursor: pointer;
+          text-decoration: none;
+          color: inherit;
         }
         .bento-tile img {
           width: 100%;
@@ -83,9 +86,11 @@ export default function DestinationsPage() {
               const isHero = i === 0;
               return (
                 <FadeIn key={d.slug} delay={i * 0.06}>
-                  <div
+                  <Link
+                    to={`/destinations/${d.slug}`}
                     className="bento-tile"
                     style={{ height: '100%' }}
+                    onClick={() => trackEvent('destination_selected', { destination: d.slug })}
                   >
                     {d.photo ? (
                       <img src={d.photo} alt={d.name} />
@@ -174,7 +179,7 @@ export default function DestinationsPage() {
                         }}>{d.description}</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </FadeIn>
               );
             })}
