@@ -984,21 +984,16 @@ function CelestialDrawer({ isMobile }) {
           padding: isMobile ? "0 20px 24px" : "0 52px 32px",
           maxWidth: 920, margin: "0 auto",
         }}>
-          {/* Data grid */}
+          {/* Data grid — open layout, no heavy borders */}
           <div style={{
             display: "grid",
-            gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
-            gap: 0,
-            border: `1px solid ${C.stone}`,
-            background: "white",
+            gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+            gap: isMobile ? "20px 24px" : "24px 40px",
+            paddingBottom: 20,
+            borderBottom: `1px solid ${C.stone}`,
           }}>
-            {/* Conditions */}
             {weather && (
-              <div style={{
-                padding: isMobile ? "16px 14px" : "18px 18px",
-                borderBottom: `1px solid ${C.stone}`,
-                borderRight: `1px solid ${C.stone}`,
-              }}>
+              <div>
                 <div style={LABEL_STYLE}>Conditions</div>
                 <span style={{
                   fontFamily: "'Cormorant Garamond', serif",
@@ -1008,39 +1003,22 @@ function CelestialDrawer({ isMobile }) {
                 <div style={SUB_STYLE}>H {weather.high}° / L {weather.low}° · {weather.condition}</div>
               </div>
             )}
-
-            {/* Daylight */}
             {sun && (
-              <div style={{
-                padding: isMobile ? "16px 14px" : "18px 18px",
-                borderBottom: `1px solid ${C.stone}`,
-                borderRight: isMobile ? "none" : `1px solid ${C.stone}`,
-              }}>
+              <div>
                 <div style={LABEL_STYLE}>Daylight</div>
                 <div style={{ ...VAL_STYLE, color: C.goldenAmber }}>{sun.daylight}</div>
                 <div style={SUB_STYLE}>{sun.rise} – {sun.set}</div>
               </div>
             )}
-
-            {/* Moon */}
             {moon && (
-              <div style={{
-                padding: isMobile ? "16px 14px" : "18px 18px",
-                borderBottom: `1px solid ${C.stone}`,
-                borderRight: `1px solid ${C.stone}`,
-              }}>
+              <div>
                 <div style={LABEL_STYLE}>Moon</div>
                 <div style={VAL_STYLE}>{moon.name}</div>
                 <div style={SUB_STYLE}>{moon.phase}% illuminated</div>
               </div>
             )}
-
-            {/* Night Sky */}
             {sky && (
-              <div style={{
-                padding: isMobile ? "16px 14px" : "18px 18px",
-                borderBottom: `1px solid ${C.stone}`,
-              }}>
+              <div>
                 <div style={LABEL_STYLE}>Tonight's Sky</div>
                 <div style={{ ...VAL_STYLE, color: C.goldenAmber }}>{sky.label}</div>
                 <div style={SUB_STYLE}>
@@ -1049,23 +1027,8 @@ function CelestialDrawer({ isMobile }) {
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Bottom row: River + Next Event */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-            gap: 0,
-            border: `1px solid ${C.stone}`,
-            borderTop: "none",
-            background: "white",
-          }}>
             {river && (
-              <div style={{
-                padding: isMobile ? "16px 14px" : "18px 18px",
-                borderRight: isMobile ? "none" : `1px solid ${C.stone}`,
-                borderBottom: isMobile ? `1px solid ${C.stone}` : "none",
-              }}>
+              <div>
                 <div style={LABEL_STYLE}>Virgin River</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{
@@ -1077,11 +1040,8 @@ function CelestialDrawer({ isMobile }) {
                 <div style={SUB_STYLE}>{river.cfs} cfs · {river.tempF}°F water</div>
               </div>
             )}
-
             {nextEvent && (
-              <div style={{
-                padding: isMobile ? "16px 14px" : "18px 18px",
-              }}>
+              <div>
                 <div style={LABEL_STYLE}>Next Celestial Event</div>
                 <div style={VAL_STYLE}>{nextEvent.name}</div>
                 <div style={SUB_STYLE}>{nextEvent.date} · {nextEvent.daysAway}d away</div>
@@ -1092,9 +1052,7 @@ function CelestialDrawer({ isMobile }) {
           {/* NPS Alerts */}
           {alerts && alerts.length > 0 && (
             <div style={{
-              padding: "10px 14px", marginTop: 8,
-              background: `${C.sunSalmon}08`,
-              border: `1px solid ${C.sunSalmon}20`,
+              padding: "10px 0", marginTop: 12,
             }}>
               {alerts.map((alert, i) => (
                 <div key={i} style={{
