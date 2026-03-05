@@ -541,34 +541,35 @@ function ActivityThumbs({ id, feedback, onFeedback }) {
 
   const reactions = [
     { key: 'fire', icon: FlameIcon, color: C.goldenAmber, label: 'Must do',
-      restBg: `${C.goldenAmber}08`, restBorder: `${C.goldenAmber}22`, restIcon: `${C.goldenAmber}70`,
-      activeBg: `${C.goldenAmber}18`, activeBorder: `${C.goldenAmber}45` },
+      restBg: `${C.goldenAmber}10`, restBorder: `${C.goldenAmber}30`, restIcon: C.goldenAmber,
+      activeBg: `${C.goldenAmber}1c`, activeBorder: `${C.goldenAmber}50` },
     { key: 'up', icon: ThumbUp, color: C.seaGlass, label: 'Love it',
-      restBg: `${C.seaGlass}08`, restBorder: `${C.seaGlass}25`, restIcon: `${C.seaGlass}80`,
-      activeBg: `${C.seaGlass}18`, activeBorder: `${C.seaGlass}45` },
+      restBg: `${C.seaGlass}10`, restBorder: `${C.seaGlass}30`, restIcon: C.seaGlass,
+      activeBg: `${C.seaGlass}1c`, activeBorder: `${C.seaGlass}50` },
     { key: 'down', icon: ThumbDown, color: C.sunSalmon, label: 'Not for me',
-      restBg: `${C.sunSalmon}08`, restBorder: `${C.sunSalmon}25`, restIcon: `${C.sunSalmon}80`,
-      activeBg: `${C.sunSalmon}18`, activeBorder: `${C.sunSalmon}45` },
+      restBg: `${C.sunSalmon}10`, restBorder: `${C.sunSalmon}30`, restIcon: C.sunSalmon,
+      activeBg: `${C.sunSalmon}1c`, activeBorder: `${C.sunSalmon}50` },
   ];
 
   return (
-    <div style={{ marginTop: 10 }}>
-      <div style={{ display: 'flex', gap: 6 }}>
+    <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${C.sage}0c` }}>
+      <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 8 }}>How does this feel?</div>
+      <div style={{ display: 'flex', gap: 7 }}>
         {reactions.map(r => {
           const active = currentReaction === r.key;
           const Ic = r.icon;
           return (
             <button key={r.key} onClick={() => toggle(r.key)} style={{
-              display: 'flex', alignItems: 'center', gap: 4,
-              padding: active ? '5px 10px' : '5px 8px',
-              borderRadius: 8,
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '6px 11px',
+              borderRadius: 9,
               background: active ? r.activeBg : r.restBg,
-              border: `1px solid ${active ? r.activeBorder : r.restBorder}`,
+              border: `1.5px solid ${active ? r.activeBorder : r.restBorder}`,
               cursor: 'pointer', transition: 'all 0.2s',
               WebkitTapHighlightColor: 'transparent',
             }}>
               <Ic size={14} color={active ? r.color : r.restIcon} active={active} />
-              {active && <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: r.color }}>{r.label}</span>}
+              <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: active ? r.color : `${r.color}90` }}>{r.label}</span>
             </button>
           );
         })}
