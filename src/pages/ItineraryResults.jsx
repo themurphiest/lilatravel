@@ -6,7 +6,7 @@ import JSON5 from 'json5';
 import { trackEvent } from '@utils/analytics';
 import { getPracticesForItinerary, TRADITIONS } from '@services/practicesService';
 import { assignCompanions } from '@services/companionAssigner';
-import CelestialMonthStrip from '@components/CelestialMonthStrip';
+// CelestialMonthStrip consolidated into CelestialSnapshot below
 
 /*
  * ItineraryResults — Merged V3
@@ -220,7 +220,164 @@ function LinkedName({ name, url, style = {}, linkType = 'activity' }) {
   return <span style={style}>{name}</span>;
 }
 
-/* ── snapshot ───────────────────────────────────────────────────────────── */
+/* ── celestial snapshot ─────────────────────────────────────────────────── */
+
+// Per-month celestial event data (mirrors CelestialMonthStrip)
+const CELESTIAL_BY_MONTH = {
+  january:   { sky: 'Deep Winter Sky',  events: [{ icon: '🌑', name: 'New Moon',       date: 'Jan 29', note: 'Darkest skies of the month. Prime stargazing.' }, { icon: '🌕', name: 'Full Moon',       date: 'Jan 13', note: 'Wolf Moon. Canyon walls glow under full light.' }, { icon: '❄️', name: 'Winter Cold',     date: 'Jan',     note: 'Coldest temps. Snow possible on upper trails.' }] },
+  february:  { sky: 'Late Winter Sky',  events: [{ icon: '🌑', name: 'New Moon',       date: 'Feb 27', note: 'Best night-sky window. Milky Way returns.' }, { icon: '🌕', name: 'Full Moon',       date: 'Feb 12', note: 'Snow Moon. Cold brilliance over the canyon.' }, { icon: '🌸', name: 'First Blooms',    date: 'Late Feb', note: 'Desert willow and redbud begin to bud.' }] },
+  march:     { sky: 'Spring Equinox',   events: [{ icon: '☀️', name: 'Spring Equinox', date: 'Mar 20', note: 'Equal day and night. Canyon light turns golden.' }, { icon: '🌑', name: 'New Moon',       date: 'Mar 29', note: 'Clear skies for deep-sky viewing.' }, { icon: '🌸', name: 'Desert Bloom',   date: 'Mar–Apr', note: 'Wildflowers begin. Color spreads canyon floor.' }] },
+  april:     { sky: 'Desert Bloom Sky', events: [{ icon: '🌸', name: 'Peak Bloom',     date: 'Apr',    note: 'Sacred datura, prickly pear, cliffrose in flower.' }, { icon: '🌑', name: 'New Moon',       date: 'Apr 27', note: 'Warm nights. Ideal for camping under stars.' }, { icon: '🌕', name: 'Full Moon',       date: 'Apr 12', note: 'Pink Moon. Soft light over sandstone.' }] },
+  may:       { sky: 'Late Spring Sky',  events: [{ icon: '🌑', name: 'New Moon',       date: 'May 26', note: 'Pre-summer clarity. Milky Way rising.' }, { icon: '🌕', name: 'Full Moon',       date: 'May 12', note: 'Flower Moon. Warm evenings canyon-side.' }, { icon: '🌿', name: 'Green Canyon',   date: 'May',    note: 'Virgin River runs lush. Cottonwoods fully leafed.' }] },
+  june:      { sky: 'Summer Solstice',  events: [{ icon: '☀️', name: 'Summer Solstice',date: 'Jun 21', note: 'Longest day. Canyon walls catch last light longest.' }, { icon: '🌌', name: 'Milky Way Peak', date: 'Jun–Sep', note: 'Galaxy rises overhead on clear nights.' }, { icon: '🌑', name: 'New Moon',       date: 'Jun 25', note: 'Best stargazing window of summer.' }] },
+  july:      { sky: 'Monsoon Sky',      events: [{ icon: '⛈️', name: 'Monsoon Season', date: 'Jul–Aug', note: 'Afternoon storms. Flash flood risk. Dramatic skies.' }, { icon: '🌌', name: 'Milky Way',      date: 'Jul',    note: 'Core overhead mid-summer. Spectacular from the rim.' }, { icon: '🌕', name: 'Full Moon',       date: 'Jul 10', note: 'Buck Moon. Warm light, warm nights.' }] },
+  august:    { sky: 'Late Summer Sky',  events: [{ icon: '🌠', name: 'Perseids',        date: 'Aug 11–13', note: 'Peak meteor shower. Up to 100 meteors/hour.' }, { icon: '⛈️', name: 'Monsoon Tail',  date: 'Early Aug', note: 'Storms taper. Stunning post-rain clarity.' }, { icon: '🌑', name: 'New Moon',       date: 'Aug 23', note: 'Moonless nights for star-heavy viewing.' }] },
+  september: { sky: 'Early Autumn Sky', events: [{ icon: '☀️', name: 'Autumn Equinox', date: 'Sep 22', note: 'Light shifts. Cottonwoods begin to turn.' }, { icon: '🌑', name: 'New Moon',       date: 'Sep 11', note: 'Best night-sky viewing. Ideal for stargazing.' }, { icon: '🌕', name: 'Full Moon',       date: 'Sep 25', note: 'Bright moonlit canyon walks.' }] },
+  october:   { sky: 'Golden Corridor',  events: [{ icon: '🍂', name: 'Peak Color',      date: 'Oct',    note: 'Cottonwoods gold. Best light of the year.' }, { icon: '🌑', name: 'New Moon',       date: 'Oct 21', note: 'Dark skies over golden canyon walls.' }, { icon: '🌕', name: 'Full Moon',       date: 'Oct 6',  note: "Hunter's Moon. Canyon glows at midnight." }] },
+  november:  { sky: 'Deep Autumn Sky',  events: [{ icon: '🌕', name: 'Full Moon',       date: 'Nov 5',  note: 'Beaver Moon over bare cottonwoods.' }, { icon: '🌠', name: 'Leonids',         date: 'Nov 17', note: 'Meteor shower. 15–20 per hour at peak.' }, { icon: '🌑', name: 'New Moon',       date: 'Nov 20', note: 'Clear, cold. Best Milky Way of autumn.' }] },
+  december:  { sky: 'Winter Solstice',  events: [{ icon: '☀️', name: 'Winter Solstice', date: 'Dec 21', note: 'Shortest day. Most dramatic canyon light.' }, { icon: '🌠', name: 'Geminids',        date: 'Dec 13–14', note: 'Best meteor shower of the year. 120/hour at peak.' }, { icon: '🌑', name: 'New Moon',       date: 'Dec 30', note: 'Year-end dark sky. Snow-dusted walls.' }] },
+};
+
+// Moon phase emojis for the pill display
+const MOON_EMOJI = {
+  'New Moon': '🌑', 'Waxing Crescent': '🌒', 'First Quarter': '🌓',
+  'Waxing Gibbous': '🌔', 'Full Moon': '🌕', 'Waning Gibbous': '🌖',
+  'Last Quarter': '🌗', 'Waning Crescent': '🌘',
+};
+
+function CelestialSnapshot({ snapshot, celestial, weather, month }) {
+  // Resolve data
+  const avgHigh   = snapshot?.avgHigh ?? (weather?.length > 0 ? Math.round(weather.map(d=>d.high).reduce((a,b)=>a+b,0)/weather.length) : null);
+  const avgLow    = snapshot?.avgLow  ?? (weather?.length > 0 ? Math.round(weather.map(d=>d.low).reduce((a,b)=>a+b,0)/weather.length) : null);
+  const sunrise   = snapshot?.sunrise ?? celestial?.days?.[0]?.sunrise ?? null;
+  const sunset    = snapshot?.sunset  ?? celestial?.days?.[0]?.sunset  ?? null;
+  const moonName  = snapshot?.moonPhase ?? celestial?.moonPhase?.name  ?? null;
+  const stargazing = snapshot?.stargazing ?? celestial?.moonPhase?.stargazing ?? null;
+
+  const monthKey  = (month || '').toLowerCase();
+  const monthData = CELESTIAL_BY_MONTH[monthKey] ?? CELESTIAL_BY_MONTH['september'];
+  const { sky, events } = monthData;
+
+  // Don't render if truly nothing
+  if (!sky && !snapshot?.seasonalNote) return null;
+
+  const DARK_BG   = '#111B22';       // same deep navy as ZionGuide celestial drawer
+  const CARD_BG   = 'rgba(255,255,255,0.045)';
+  const CARD_BORDER = 'rgba(255,255,255,0.09)';
+  const LABEL_COL = '#7A9A8E';       // muted teal
+  const VAL_COL   = '#E8E2D8';       // warm off-white
+  const SUB_COL   = '#8A9A94';       // soft muted
+  const GOLD      = C.goldenAmber;
+  const SERIF     = "'Cormorant Garamond', serif";
+
+  return (
+    <div style={{
+      background: DARK_BG,
+      borderRadius: 2,
+      marginBottom: 20,
+      overflow: 'hidden',
+    }}>
+      {/* Header row */}
+      <div style={{ padding: '20px 22px 16px', borderBottom: `1px solid ${CARD_BORDER}` }}>
+        <div style={{
+          fontFamily: F, fontSize: 9, fontWeight: 700,
+          letterSpacing: '0.22em', textTransform: 'uppercase',
+          color: LABEL_COL, marginBottom: 6,
+        }}>Celestial Snapshot</div>
+        <div style={{
+          fontFamily: SERIF, fontSize: 20, fontWeight: 300,
+          color: VAL_COL, lineHeight: 1.2, letterSpacing: '0.01em',
+        }}>{sky}</div>
+        {snapshot?.seasonalNote && (
+          <div style={{
+            fontFamily: F, fontSize: 12, fontWeight: 400,
+            color: SUB_COL, lineHeight: 1.6, marginTop: 8,
+          }}>{snapshot.seasonalNote}</div>
+        )}
+      </div>
+
+      {/* Event cards — 3-column */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 1,
+        background: CARD_BORDER,
+        borderBottom: `1px solid ${CARD_BORDER}`,
+      }}>
+        {events.map((ev, i) => (
+          <div key={i} style={{
+            background: DARK_BG,
+            padding: '18px 16px 16px',
+          }}>
+            <div style={{ fontSize: 22, marginBottom: 10, lineHeight: 1 }}>{ev.icon}</div>
+            <div style={{
+              fontFamily: F, fontSize: 13, fontWeight: 600,
+              color: VAL_COL, marginBottom: 4, lineHeight: 1.2,
+            }}>{ev.name}</div>
+            <div style={{
+              fontFamily: F, fontSize: 11, fontWeight: 600,
+              color: GOLD, marginBottom: 6,
+            }}>{ev.date}</div>
+            <div style={{
+              fontFamily: F, fontSize: 11, fontWeight: 400,
+              color: SUB_COL, lineHeight: 1.5,
+            }}>{ev.note}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom data bar — temp · sunrise · sunset · moon */}
+      {(avgHigh !== null || sunrise || moonName) && (
+        <div style={{
+          display: 'flex', flexWrap: 'wrap',
+          borderBottom: `1px solid ${CARD_BORDER}`,
+        }}>
+          {avgHigh !== null && (
+            <div style={{ flex: '1 1 80px', padding: '13px 16px', borderRight: `1px solid ${CARD_BORDER}` }}>
+              <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>AVG HIGH</div>
+              <div style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 300, color: VAL_COL, lineHeight: 1 }}>
+                {avgHigh}°
+                {avgLow !== null && <span style={{ fontSize: 14, color: SUB_COL, marginLeft: 3 }}>/{avgLow}°</span>}
+              </div>
+            </div>
+          )}
+          {sunrise && (
+            <div style={{ flex: '1 1 80px', padding: '13px 16px', borderRight: `1px solid ${CARD_BORDER}` }}>
+              <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>SUNRISE</div>
+              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: VAL_COL }}>{sunrise}</div>
+            </div>
+          )}
+          {sunset && (
+            <div style={{ flex: '1 1 80px', padding: '13px 16px', borderRight: moonName ? `1px solid ${CARD_BORDER}` : 'none' }}>
+              <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>SUNSET</div>
+              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: VAL_COL }}>{sunset}</div>
+            </div>
+          )}
+          {moonName && (
+            <div style={{ flex: '1 1 80px', padding: '13px 16px' }}>
+              <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>MOON</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 16 }}>{MOON_EMOJI[moonName] ?? '🌙'}</span>
+                <div>
+                  <div style={{ fontFamily: F, fontSize: 12, fontWeight: 600, color: VAL_COL, lineHeight: 1.2 }}>{moonName}</div>
+                  {stargazing && <div style={{ fontFamily: F, fontSize: 10, fontWeight: 400, color: SUB_COL, marginTop: 2 }}>{stargazing}</div>}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Packing hint */}
+      {snapshot?.packingHint && (
+        <div style={{ padding: '12px 22px' }}>
+          <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>PACK</div>
+          <div style={{ fontFamily: F, fontSize: 12, fontWeight: 400, color: SUB_COL, lineHeight: 1.55 }}>{snapshot.packingHint}</div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function MiniMoon({ phaseName, size = 22 }) {
   const ILLUMINATION = {
@@ -287,94 +444,6 @@ function TripProfileSummary({ formData }) {
           }}>{chip}</span>
         ))}
       </div>
-    </div>
-  );
-}
-
-function DestinationSnapshot({ snapshot, celestial, weather }) {
-  // Resolve values — prefer AI snapshot fields, fall back to API data
-  let avgHigh = snapshot?.avgHigh ?? null;
-  let avgLow = snapshot?.avgLow ?? null;
-  let sunrise = snapshot?.sunrise ?? null;
-  let sunset = snapshot?.sunset ?? null;
-  let moonName = snapshot?.moonPhase ?? null;
-  let stargazing = snapshot?.stargazing ?? null;
-
-  // API fallbacks
-  if (avgHigh === null && weather && weather.length > 0) {
-    const highs = weather.map(d => d.high);
-    const lows = weather.map(d => d.low);
-    avgHigh = Math.round(highs.reduce((a, b) => a + b, 0) / highs.length);
-    avgLow = Math.round(lows.reduce((a, b) => a + b, 0) / lows.length);
-  }
-  if (!sunrise && celestial?.days?.[0]) {
-    sunrise = celestial.days[0].sunrise;
-    sunset = celestial.days[0].sunset;
-  }
-  if (!moonName && celestial?.moonPhase) {
-    moonName = celestial.moonPhase.name;
-    stargazing = celestial.moonPhase.stargazing;
-  }
-
-  const hasData = avgHigh !== null || sunrise || moonName;
-  if (!hasData && !snapshot?.seasonalNote) return null;
-
-  // Build adaptive cells array
-  const cells = [];
-  if (avgHigh !== null) cells.push({ key: 'temp', label: 'AVG TEMP', render: () => (
-    <div style={{ textAlign: 'center' }}>
-      <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 300, color: C.slate }}>{avgHigh}°</span>
-      {avgLow !== null && <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, fontWeight: 300, color: `${C.slate}65`, marginLeft: 2 }}>/{avgLow}°</span>}
-    </div>
-  )});
-  if (moonName) cells.push({ key: 'moon', label: moonName.split(' ')[0].toUpperCase(), render: () => (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <MiniMoon phaseName={moonName} />
-    </div>
-  )});
-  if (sunrise) cells.push({ key: 'sunrise', label: 'SUNRISE', render: () => (
-    <div style={{ fontFamily: F, fontSize: 15, fontWeight: 600, color: C.slate, textAlign: 'center' }}>{sunrise}</div>
-  )});
-  if (sunset) cells.push({ key: 'sunset', label: 'SUNSET', render: () => (
-    <div style={{ fontFamily: F, fontSize: 15, fontWeight: 600, color: C.slate, textAlign: 'center' }}>{sunset}</div>
-  )});
-
-  const SERIF = "'Cormorant Garamond', serif";
-  const cellLabel = { fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginTop: 6, textAlign: 'center' };
-
-  return (
-    <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}12`, marginBottom: 20 }}>
-      {/* Header */}
-      <div style={{ padding: '18px 22px 14px', borderBottom: `1px solid ${C.sage}08` }}>
-        <div style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 300, color: C.slate, lineHeight: 1.3 }}>Trip Conditions</div>
-        {snapshot?.seasonalNote && (
-          <div style={{ fontFamily: F, fontSize: 13, fontWeight: 400, color: `${C.slate}70`, lineHeight: 1.6, marginTop: 4 }}>{snapshot.seasonalNote}</div>
-        )}
-      </div>
-
-      {/* Data grid */}
-      {cells.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cells.length}, 1fr)` }}>
-          {cells.map((cell, i) => (
-            <div key={cell.key} style={{
-              padding: '16px 12px 14px',
-              borderRight: i < cells.length - 1 ? `1px solid ${C.sage}08` : 'none',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {cell.render()}
-              <div style={cellLabel}>{cell.label}</div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Packing hint */}
-      {snapshot?.packingHint && (
-        <div style={{ padding: '14px 22px', borderTop: `1px solid ${C.sage}08` }}>
-          <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 6 }}>PACK</div>
-          <div style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: `${C.slate}70`, lineHeight: 1.5 }}>{snapshot.packingHint}</div>
-        </div>
-      )}
     </div>
   );
 }
@@ -2020,19 +2089,19 @@ export default function ItineraryResults() {
         {/* Trip Profile Summary */}
         {isStructured && formData && <TripProfileSummary formData={formData} />}
 
-        {/* Snapshot */}
+        {/* Celestial Snapshot — unified block */}
         {isStructured && (
-          <DestinationSnapshot snapshot={itinerary.snapshot} celestial={metadata?.celestial} weather={metadata?.weather} />
+          <CelestialSnapshot
+            snapshot={itinerary.snapshot}
+            celestial={metadata?.celestial}
+            weather={metadata?.weather}
+            month={formData?.month}
+          />
         )}
 
         {/* Trip Overview */}
         {isStructured && enrichedDays.length > 1 && (
           <TripOverview days={enrichedDays} onDayClick={scrollToDay} dayFeedback={dayFeedback} />
-        )}
-
-        {/* Celestial Month Strip */}
-        {isStructured && formData?.month && (
-          <CelestialMonthStrip month={formData.month} destinationKey={formData?.destination} />
         )}
 
         {/* Day Cards / Markdown Fallback */}
