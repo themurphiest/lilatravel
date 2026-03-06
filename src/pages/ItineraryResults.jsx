@@ -1203,6 +1203,52 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
   if (!item) return null;
   const { type, data, thumbId } = item;
 
+  // Logistics form panels
+  if (type === 'flights') {
+    return <FlightFormPanel data={item.savedData} logistics={item.logistics} onSave={item.onSave} />;
+  }
+  if (type === 'rental') {
+    return <RentalFormPanel data={item.savedData} logistics={item.logistics} onSave={item.onSave} />;
+  }
+  if (type === 'accommodation') {
+    const accom = data;
+    const s = PICK_STYLES.stay;
+    const alts = item.alternatives || [];
+    return (
+      <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${s.color}0e`, border: `1px solid ${s.color}18` }}>
+            <CategoryIcon category="stay" color={s.color} size={12} />
+            <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
+          </div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 20, border: `1px solid ${s.color}20`, background: `${s.color}04` }}>
+            <LilaStar size={9} color={s.color} />
+            <span style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: s.color }}>Lila Pick</span>
+          </div>
+        </div>
+        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 4 }}>{accom.name}</h1>
+        {accom.vibe && <div style={{ fontFamily: F, fontSize: 12, fontWeight: 500, color: C.muted, lineHeight: 1.4, marginBottom: 14 }}>{accom.vibe}</div>}
+        <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{accom.why}</p>
+        <DetailBlock category="stay" pick={accom} color={s.color} />
+        {alts.length > 0 && (
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted, marginBottom: 10 }}>Other Options</div>
+            {alts.map((alt, i) => (
+              <div key={i} style={{ padding: '12px 14px', borderRadius: 8, background: `${s.color}05`, border: `1px solid ${s.color}15`, marginBottom: 8 }}>
+                <div style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.ink, marginBottom: 4 }}>{alt.name}</div>
+                {alt.vibe && <div style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, marginBottom: 4 }}>{alt.vibe}</div>}
+                <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.55 }}>{alt.why}</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 7 }}>
+                  {alt.priceRange && <MetaChip label={alt.priceRange} />}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // Wisdom entry (from WisdomBanner)
   if (type === 'wisdom') {
     return <WisdomDetailContent entry={data} />;
@@ -1369,6 +1415,115 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
   );
 }
 
+/* ── logistics form panels ─────────────────────────────────────────────── */
+
+const logisticsLabelStyle = { fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.muted, marginBottom: 4, display: 'block' };
+const logisticsInputStyle = { width: '100%', padding: '9px 12px', fontFamily: F, fontSize: 12, color: C.ink, background: C.white, border: `1px solid ${C.border}`, borderRadius: 8, outline: 'none', boxSizing: 'border-box' };
+
+function FlightFormPanel({ data, logistics, onSave }) {
+  const [form, setForm] = useState(data || { airline: '', flightNumber: '', departureAirport: '', arrivalAirport: logistics?.arrivalAirport || '', date: '', departureTime: '' });
+  const set = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
+
+  if (data && !form._editing) {
+    return (
+      <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${C.teal}0e`, border: `1px solid ${C.teal}18`, marginBottom: 10 }}>
+          <PlaneIcon size={12} color={C.teal} />
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.teal }}>Flights</span>
+        </div>
+        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 16 }}>Your Flight Details</h1>
+        <div style={{ ...CARD_STYLE, padding: '16px 18px', marginBottom: 16 }}>
+          <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 6 }}>{data.airline} {data.flightNumber}</div>
+          <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.6 }}>
+            {data.departureAirport && <>{data.departureAirport} → {data.arrivalAirport}<br /></>}
+            {data.date && <>{data.date}{data.departureTime ? ` · ${data.departureTime}` : ''}</>}
+          </div>
+        </div>
+        <button onClick={() => setForm({ ...data, _editing: true })} style={{ fontFamily: F, fontSize: 12, fontWeight: 600, color: C.teal, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Edit →</button>
+      </div>
+    );
+  }
+
+  const handleSave = () => {
+    const { _editing, ...clean } = form;
+    onSave(clean);
+  };
+
+  return (
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${C.teal}0e`, border: `1px solid ${C.teal}18`, marginBottom: 10 }}>
+        <PlaneIcon size={12} color={C.teal} />
+        <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.teal }}>Flights</span>
+      </div>
+      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 20 }}>Your Flight Details</h1>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div><label style={logisticsLabelStyle}>Airline</label><input style={logisticsInputStyle} value={form.airline} onChange={e => set('airline', e.target.value)} placeholder="e.g. United Airlines" /></div>
+        <div><label style={logisticsLabelStyle}>Flight Number</label><input style={logisticsInputStyle} value={form.flightNumber} onChange={e => set('flightNumber', e.target.value)} placeholder="e.g. UA 1234" /></div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div><label style={logisticsLabelStyle}>Departure Airport</label><input style={logisticsInputStyle} value={form.departureAirport} onChange={e => set('departureAirport', e.target.value)} placeholder="e.g. SFO" /></div>
+          <div><label style={logisticsLabelStyle}>Arrival Airport</label><input style={logisticsInputStyle} value={form.arrivalAirport} onChange={e => set('arrivalAirport', e.target.value)} placeholder="e.g. LAS" /></div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div><label style={logisticsLabelStyle}>Date</label><input style={logisticsInputStyle} value={form.date} onChange={e => set('date', e.target.value)} placeholder="e.g. Mar 15, 2026" /></div>
+          <div><label style={logisticsLabelStyle}>Departure Time</label><input style={logisticsInputStyle} value={form.departureTime} onChange={e => set('departureTime', e.target.value)} placeholder="e.g. 8:30 AM" /></div>
+        </div>
+        <button onClick={handleSave} style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.white, background: C.teal, border: 'none', borderRadius: 20, padding: '10px 28px', cursor: 'pointer', alignSelf: 'flex-start', marginTop: 4 }}>Save Flight</button>
+      </div>
+    </div>
+  );
+}
+
+function RentalFormPanel({ data, logistics, onSave }) {
+  const [form, setForm] = useState(data || { company: '', confirmationNumber: '', pickupLocation: logistics?.pickupLocation || '', pickupDate: '', returnDate: '' });
+  const set = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
+
+  if (data && !form._editing) {
+    return (
+      <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${C.teal}0e`, border: `1px solid ${C.teal}18`, marginBottom: 10 }}>
+          <CarIcon size={12} color={C.teal} />
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.teal }}>Rental Car</span>
+        </div>
+        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 16 }}>Your Rental Details</h1>
+        <div style={{ ...CARD_STYLE, padding: '16px 18px', marginBottom: 16 }}>
+          <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 6 }}>{data.company}</div>
+          <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.6 }}>
+            {data.confirmationNumber && <>Conf: {data.confirmationNumber}<br /></>}
+            {data.pickupLocation && <>Pickup: {data.pickupLocation}<br /></>}
+            {data.pickupDate && <>{data.pickupDate}{data.returnDate ? ` → ${data.returnDate}` : ''}</>}
+          </div>
+        </div>
+        <button onClick={() => setForm({ ...data, _editing: true })} style={{ fontFamily: F, fontSize: 12, fontWeight: 600, color: C.teal, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Edit →</button>
+      </div>
+    );
+  }
+
+  const handleSave = () => {
+    const { _editing, ...clean } = form;
+    onSave(clean);
+  };
+
+  return (
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${C.teal}0e`, border: `1px solid ${C.teal}18`, marginBottom: 10 }}>
+        <CarIcon size={12} color={C.teal} />
+        <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.teal }}>Rental Car</span>
+      </div>
+      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 20 }}>Your Rental Details</h1>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div><label style={logisticsLabelStyle}>Rental Company</label><input style={logisticsInputStyle} value={form.company} onChange={e => set('company', e.target.value)} placeholder="e.g. Enterprise" /></div>
+        <div><label style={logisticsLabelStyle}>Confirmation Number</label><input style={logisticsInputStyle} value={form.confirmationNumber} onChange={e => set('confirmationNumber', e.target.value)} placeholder="e.g. ABC123456" /></div>
+        <div><label style={logisticsLabelStyle}>Pickup Location</label><input style={logisticsInputStyle} value={form.pickupLocation} onChange={e => set('pickupLocation', e.target.value)} placeholder="e.g. LAS Airport" /></div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div><label style={logisticsLabelStyle}>Pickup Date</label><input style={logisticsInputStyle} value={form.pickupDate} onChange={e => set('pickupDate', e.target.value)} placeholder="e.g. Mar 15, 2026" /></div>
+          <div><label style={logisticsLabelStyle}>Return Date</label><input style={logisticsInputStyle} value={form.returnDate} onChange={e => set('returnDate', e.target.value)} placeholder="e.g. Mar 20, 2026" /></div>
+        </div>
+        <button onClick={handleSave} style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.white, background: C.teal, border: 'none', borderRadius: 20, padding: '10px 28px', cursor: 'pointer', alignSelf: 'flex-start', marginTop: 4 }}>Save Rental</button>
+      </div>
+    </div>
+  );
+}
+
 function DetailPanel({ item, onClose, activityFeedback, onActivityFeedback }) {
   const isDesktop = useIsDesktop();
   const sheetRef = useRef(null);
@@ -1511,8 +1666,22 @@ function DetailPanel({ item, onClose, activityFeedback, onActivityFeedback }) {
 const DESTINATION_LOGISTICS = {
   zion: {
     flights: 'Fly into Las Vegas (LAS) \u2014 2.5 hrs to Springdale.',
+    arrivalAirport: 'LAS',
     car: 'A car is essential. Pick up at LAS airport.',
-    accommodation: 'Cable Mountain Lodge, Springdale',
+    pickupLocation: 'LAS Airport',
+    accommodation: {
+      name: 'Cable Mountain Lodge',
+      location: 'Springdale',
+      vibe: 'Rustic-modern lodge steps from the park entrance',
+      why: 'Walking distance to the Zion Canyon shuttle stop, pool and hot tub with red rock views, and kitchenettes for early-morning trail prep.',
+      stayType: 'Lodge',
+      priceRange: '$$$',
+      distanceFromPark: '0.2 miles from south entrance',
+    },
+    alternatives: [
+      { name: 'Cliffrose Lodge', vibe: 'Riverside retreat with gardens', why: 'Waterfront property on the Virgin River with direct park access.', priceRange: '$$$$' },
+      { name: 'La Quinta Inn Springdale', vibe: 'Clean and affordable base camp', why: 'Budget-friendly with shuttle stop access and continental breakfast.', priceRange: '$$' },
+    ],
   },
 };
 
@@ -1521,8 +1690,23 @@ function getLogistics(destination) {
   return DESTINATION_LOGISTICS[key] || DESTINATION_LOGISTICS.zion;
 }
 
-function LogisticsPanel({ destination, sticky = true }) {
+function LogisticsPanel({ destination, sticky = true, tripLogistics, onOpenPanel }) {
   const logistics = getLogistics(destination);
+  const savedFlight = tripLogistics?.flights;
+  const savedRental = tripLogistics?.rental;
+  const accomName = typeof logistics.accommodation === 'object' ? logistics.accommodation.name : logistics.accommodation;
+
+  const openFlights = () => onOpenPanel && onOpenPanel({
+    type: 'flights', savedData: savedFlight, logistics,
+    onSave: (d) => onOpenPanel({ _updateLogistics: { flights: d } }),
+  });
+  const openRental = () => onOpenPanel && onOpenPanel({
+    type: 'rental', savedData: savedRental, logistics,
+    onSave: (d) => onOpenPanel({ _updateLogistics: { rental: d } }),
+  });
+  const openAccommodation = () => onOpenPanel && onOpenPanel({
+    type: 'accommodation', data: logistics.accommodation, alternatives: logistics.alternatives || [],
+  });
 
   return (
     <div style={{
@@ -1547,12 +1731,21 @@ function LogisticsPanel({ destination, sticky = true }) {
           <PlaneIcon size={12} color={C.muted} />
           <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted }}>Flights</span>
         </div>
-        <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5, marginBottom: 8 }}>
-          {logistics.flights}
-        </div>
-        <button style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
-          + Add your flight →
-        </button>
+        {savedFlight ? (
+          <div onClick={openFlights} style={{ cursor: 'pointer' }}>
+            <div style={{ fontFamily: F, fontSize: 12, fontWeight: 600, color: C.ink, marginBottom: 2 }}>{savedFlight.airline} {savedFlight.flightNumber}</div>
+            <div style={{ fontFamily: F, fontSize: 11, color: C.muted }}>{savedFlight.departureAirport ? `${savedFlight.departureAirport} → ${savedFlight.arrivalAirport}` : ''}{savedFlight.date ? ` · ${savedFlight.date}` : ''}</div>
+          </div>
+        ) : (
+          <>
+            <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5, marginBottom: 8 }}>
+              {logistics.flights}
+            </div>
+            <button onClick={openFlights} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
+              + Add your flight →
+            </button>
+          </>
+        )}
       </div>
 
       {/* Rental Car */}
@@ -1561,12 +1754,21 @@ function LogisticsPanel({ destination, sticky = true }) {
           <CarIcon size={12} color={C.muted} />
           <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted }}>Rental Car</span>
         </div>
-        <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5, marginBottom: 8 }}>
-          {logistics.car}
-        </div>
-        <button style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
-          Browse rentals →
-        </button>
+        {savedRental ? (
+          <div onClick={openRental} style={{ cursor: 'pointer' }}>
+            <div style={{ fontFamily: F, fontSize: 12, fontWeight: 600, color: C.ink, marginBottom: 2 }}>{savedRental.company}</div>
+            <div style={{ fontFamily: F, fontSize: 11, color: C.muted }}>{savedRental.confirmationNumber ? `Conf: ${savedRental.confirmationNumber}` : ''}{savedRental.pickupDate ? ` · ${savedRental.pickupDate}` : ''}</div>
+          </div>
+        ) : (
+          <>
+            <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5, marginBottom: 8 }}>
+              {logistics.car}
+            </div>
+            <button onClick={openRental} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
+              Browse rentals →
+            </button>
+          </>
+        )}
       </div>
 
       {/* Accommodations */}
@@ -1575,18 +1777,18 @@ function LogisticsPanel({ destination, sticky = true }) {
           <CategoryIcon category="stay" color={C.muted} size={12} />
           <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted }}>Accommodations</span>
         </div>
-        <div style={{
+        <div onClick={openAccommodation} style={{
           background: 'rgba(61,139,139,0.06)',
-          borderRadius: 5, padding: '6px 9px', marginBottom: 8,
+          borderRadius: 5, padding: '6px 9px', marginBottom: 8, cursor: 'pointer',
         }}>
           <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, color: C.teal, marginBottom: 2 }}>LILA PICK</div>
-          <div style={{ fontFamily: F, fontSize: 12, fontWeight: 500, color: C.body }}>{logistics.accommodation}</div>
+          <div style={{ fontFamily: F, fontSize: 12, fontWeight: 500, color: C.body }}>{accomName}</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <button style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: C.teal, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
+          <button onClick={openAccommodation} style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: C.teal, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
             See other options →
           </button>
-          <button style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
+          <button onClick={openAccommodation} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
             + Add your reservation
           </button>
         </div>
@@ -2406,6 +2608,12 @@ export default function ItineraryResults() {
 
   // Feedback state
   const [dayFeedback, setDayFeedback] = useState({});
+
+  // Trip logistics form state (session-only)
+  const [tripLogistics, setTripLogistics] = useState({
+    flights: null,  // { airline, flightNumber, departureAirport, arrivalAirport, date, departureTime }
+    rental: null,   // { company, confirmationNumber, pickupLocation, pickupDate, returnDate }
+  });
   const [activityFeedback, setActivityFeedback] = useState({});
   const [pulse, setPulse] = useState(null);
   const [overallNote, setOverallNote] = useState('');
@@ -2751,7 +2959,25 @@ export default function ItineraryResults() {
 
               {/* Right: Logistics panel */}
               <div>
-                <LogisticsPanel destination={formData?.destination} sticky={!isMobile} />
+                <LogisticsPanel
+                  destination={formData?.destination}
+                  sticky={!isMobile}
+                  tripLogistics={tripLogistics}
+                  onOpenPanel={(panelItem) => {
+                    if (panelItem._updateLogistics) {
+                      setTripLogistics(prev => ({ ...prev, ...panelItem._updateLogistics }));
+                      setActivePanel(null);
+                      return;
+                    }
+                    if (panelItem.onSave) {
+                      const origSave = panelItem.onSave;
+                      panelItem.onSave = (d) => {
+                        origSave(d);
+                      };
+                    }
+                    setActivePanel(panelItem);
+                  }}
+                />
               </div>
             </div>
 
