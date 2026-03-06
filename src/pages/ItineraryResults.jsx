@@ -2694,16 +2694,25 @@ export default function ItineraryResults() {
     if (!shareToken || rawItinerary) return;
     (async () => {
       try {
+        // Fetch itinerary by share token (no join — FK not configured in Supabase)
         const { data, error } = await supabase
           .from('itineraries')
-          .select('id, raw_itinerary, destination, session_id, sessions(form_data)')
+          .select('id, raw_itinerary, destination, session_id')
           .eq('share_token', shareToken)
           .single();
         console.log('[SharedTrip] supabase result', { data, error });
         if (error || !data) { console.log('[SharedTrip] redirecting to /plan — error or no data'); navigate('/plan'); return; }
         setRawItinerary(data.raw_itinerary);
-        setFormData(data.sessions?.form_data || null);
         setItineraryId(data.id);
+        // Fetch form_data from the session separately
+        if (data.session_id) {
+          const { data: session } = await supabase
+            .from('sessions')
+            .select('form_data')
+            .eq('id', data.session_id)
+            .single();
+          if (session?.form_data) setFormData(session.form_data);
+        }
       } catch (e) {
         console.log('[SharedTrip] redirecting to /plan — caught exception', e);
         navigate('/plan');
