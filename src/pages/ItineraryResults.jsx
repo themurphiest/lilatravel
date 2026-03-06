@@ -2580,17 +2580,15 @@ function FirstDraftModal({ onDismiss }) {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 300,
-      background: 'rgba(0,0,0,0.15)',
-      backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+      background: `linear-gradient(180deg, ${C.cream} 0%, ${C.white} 40%, ${C.cream} 100%)`,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: 20,
     }}>
       <div style={{
         position: 'relative',
         width: '100%', maxWidth: 390,
-        background: C.cream, borderRadius: 2,
+        background: 'transparent', borderRadius: 2,
         padding: '40px 32px 32px',
-        boxShadow: 'none',
         opacity: show ? 1 : 0,
         transition: 'opacity 0.5s ease',
       }}>
