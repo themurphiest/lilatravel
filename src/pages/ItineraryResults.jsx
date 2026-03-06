@@ -1974,60 +1974,71 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
         }}>{day.title}</div>
       </div>
 
-      {/* Companion strip — teaching + practice teasers */}
-      {day.companion && (day.companion.teaching || day.companion.practice) && (
-        <div style={{ padding: '0 18px 6px' }}>
+      {/* Companion rows — teaching + practice as timeline rows */}
+      {day.companion && (day.companion.teaching || day.companion.practice) && <div style={{
+        fontFamily: F, fontSize: 9, fontWeight: 600,
+        letterSpacing: '0.12em', textTransform: 'uppercase',
+        color: C.teal, padding: '10px 18px 0',
+        borderTop: `1px solid ${C.border}`,
+      }}>Mindfulness Practice</div>}
+      {day.companion && (day.companion.teaching || day.companion.practice) && [
+        day.companion.teaching && { type: 'teaching', data: day.companion.teaching, Icon: TeachingIcon, label: 'Teaching', title: day.companion.teaching.title },
+        day.companion.practice && { type: 'practice', data: day.companion.practice, Icon: PracticeIcon, label: 'Practice', title: day.companion.practice.title },
+      ].filter(Boolean).map((item) => (
+        <div
+          key={item.type}
+          onClick={() => {
+            trackEvent('companion_opened', { type: item.type, title: item.title, day_index: dayIndex });
+            onOpenPanel({
+              type: item.type,
+              data: item.data,
+              thumbId: `day_${dayIndex}_${item.type}`,
+            });
+          }}
+          style={{
+            display: 'flex', alignItems: 'flex-start', gap: 10,
+            padding: '9px 18px 5px',
+            borderTop: `1px solid ${C.border}`,
+            cursor: 'pointer',
+            background: `${C.teal}06`,
+            transition: 'background 0.2s',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = `${C.teal}0c`}
+          onMouseLeave={e => e.currentTarget.style.background = `${C.teal}06`}
+        >
+          {/* Icon (replaces time column) */}
+          <span style={{
+            width: 44, flexShrink: 0, paddingTop: 2,
+            display: 'flex', justifyContent: 'center',
+          }}>
+            <item.Icon size={14} color={C.teal} />
+          </span>
+
+          {/* Dot */}
           <div style={{
-            fontFamily: F, fontSize: 9, fontWeight: 600,
-            letterSpacing: '0.12em', textTransform: 'uppercase',
-            color: C.muted, marginBottom: 6,
-          }}>Today's Mindfulness</div>
-          <div style={{ display: 'flex', gap: 8 }}>
-          {[
-            day.companion.teaching && { type: 'teaching', data: day.companion.teaching, icon: TeachingIcon, accent: C.amber, label: 'Teaching', teaser: day.companion.teaching.title },
-            day.companion.practice && { type: 'practice', data: day.companion.practice, icon: PracticeIcon, accent: C.sea, label: 'Practice', teaser: day.companion.practice.title },
-          ].filter(Boolean).map((item) => (
-            <button
-              key={item.type}
-              onClick={() => {
-                trackEvent('companion_opened', { type: item.type, title: item.teaser, day_index: dayIndex });
-                onOpenPanel({
-                  type: item.type,
-                  data: item.data,
-                  thumbId: `day_${dayIndex}_${item.type}`,
-                });
-              }}
-              style={{
-                flex: 1, minWidth: 0,
-                padding: '9px 12px',
-                borderRadius: 6,
-                background: `${item.accent}06`,
-                border: `1px solid ${item.accent}15`,
-                cursor: 'pointer', textAlign: 'left',
-                WebkitTapHighlightColor: 'transparent',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = `${item.accent}0c`}
-              onMouseLeave={e => e.currentTarget.style.background = `${item.accent}06`}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
-                <item.icon size={10} color={item.accent} />
-                <span style={{
-                  fontFamily: F, fontSize: 8, fontWeight: 700,
-                  letterSpacing: '0.12em', textTransform: 'uppercase',
-                  color: item.accent,
-                }}>{item.label}</span>
-              </div>
-              <div style={{
-                fontFamily: F_SERIF, fontSize: 13, fontWeight: 400,
-                color: C.ink, lineHeight: 1.3,
-                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-              }}>{item.teaser}</div>
-            </button>
-          ))}
+            width: 6, height: 6, borderRadius: '50%',
+            background: C.teal, opacity: 0.45,
+            flexShrink: 0, marginTop: 6,
+          }} />
+
+          {/* Content */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{
+              fontFamily: F, fontSize: 9, fontWeight: 700,
+              letterSpacing: '0.12em', textTransform: 'uppercase',
+              color: C.teal, marginBottom: 2,
+            }}>{item.label}</div>
+            <div style={{
+              fontFamily: F_SERIF, fontSize: 14, fontWeight: 500,
+              color: C.ink, lineHeight: 1.3,
+            }}>{item.title}</div>
           </div>
+
+          {/* Chevron */}
+          <Chevron open={false} color={`${C.sage}40`} />
         </div>
-      )}
+      ))}
 
       {/* Activity rows */}
       {day.timeline && day.timeline.map((b, i) => {
