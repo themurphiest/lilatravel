@@ -1683,15 +1683,13 @@ function DayFeedbackStrip({ dayIndex, feedback, onFeedback }) {
 
 /* ── day card (V2 flat) ────────────────────────────────────────────────── */
 
-function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityFeedback, dimmed, feedback, onFeedback }) {
+function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityFeedback, feedback, onFeedback }) {
   const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
 
   return (
     <div style={{
       ...CARD_STYLE,
       marginBottom: 16,
-      opacity: dimmed ? 0.5 : 1,
-      transition: 'opacity 0.3s',
     }}>
       {/* Header */}
       <div style={{ padding: '14px 18px 10px' }}>
@@ -2704,7 +2702,7 @@ export default function ItineraryResults() {
               <div>
                 {enrichedDays.map((day, i) => (
                   <div key={i} ref={el => dayRefs.current[i] = el} style={{ scrollMarginTop: 60 }}>
-                    <DayCard day={day} dayIndex={i} dimmed={i >= 2}
+                    <DayCard day={day} dayIndex={i}
                       feedback={dayFeedback[i]} onFeedback={handleDayFeedback}
                       activityFeedback={activityFeedback} onActivityFeedback={handleActivityFeedback}
                       onOpenPanel={(panelItem) => {
