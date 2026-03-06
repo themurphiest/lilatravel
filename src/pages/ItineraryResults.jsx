@@ -697,27 +697,30 @@ function InlineReactions({ id, feedback, onFeedback }) {
   const pills = [
     { key: 'fire', label: 'Must do',
       icon: (active, color) => <FlameIcon size={12} color={color} active={active} />,
-      activeColor: C.amber, activeBg: 'rgba(200,148,26,0.06)', activeBorder: C.amber },
+      activeColor: C.amber, activeBg: 'rgba(200,148,26,0.06)', activeBorder: C.amber,
+      restColor: 'rgba(200,148,26,0.55)', restBg: 'rgba(200,148,26,0.03)', restBorder: 'rgba(200,148,26,0.18)' },
     { key: 'up', label: 'Love it',
       icon: (active, color) => <ThumbUp size={12} color={color} active={active} />,
-      activeColor: C.sea, activeBg: 'rgba(127,181,160,0.06)', activeBorder: C.sea },
+      activeColor: C.sea, activeBg: 'rgba(127,181,160,0.06)', activeBorder: C.sea,
+      restColor: 'rgba(127,181,160,0.6)', restBg: 'rgba(127,181,160,0.03)', restBorder: 'rgba(127,181,160,0.18)' },
     { key: 'down', label: 'Not for me',
       icon: (active, color) => <ThumbDown size={12} color={color} active={active} />,
-      activeColor: C.salmon, activeBg: 'rgba(228,119,93,0.06)', activeBorder: C.salmon },
+      activeColor: C.salmon, activeBg: 'rgba(228,119,93,0.06)', activeBorder: C.salmon,
+      restColor: 'rgba(228,119,93,0.55)', restBg: 'rgba(228,119,93,0.03)', restBorder: 'rgba(228,119,93,0.18)' },
   ];
 
   return (
     <div onClick={e => e.stopPropagation()} style={{ display: 'flex', gap: 5, marginTop: 6 }}>
       {pills.map(p => {
         const active = currentReaction === p.key;
-        const color = active ? p.activeColor : C.muted;
+        const color = active ? p.activeColor : p.restColor;
         return (
           <button key={p.key} onClick={e => toggle(p.key, e)} style={{
             display: 'flex', alignItems: 'center', gap: 4,
             padding: '3px 9px',
             borderRadius: 20,
-            background: active ? p.activeBg : 'none',
-            border: `1px solid ${active ? p.activeBorder : C.border}`,
+            background: active ? p.activeBg : p.restBg,
+            border: `1px solid ${active ? p.activeBorder : p.restBorder}`,
             cursor: 'pointer', transition: 'all 0.2s',
             WebkitTapHighlightColor: 'transparent',
             fontFamily: F, fontSize: 10, fontWeight: 600,
