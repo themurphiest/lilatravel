@@ -710,7 +710,7 @@ function InlineReactions({ id, feedback, onFeedback }) {
   ];
 
   return (
-    <div onClick={e => e.stopPropagation()} style={{ display: 'flex', gap: 5, marginTop: 6 }}>
+    <div onClick={e => e.stopPropagation()} style={{ display: 'flex', gap: 5, marginTop: 8, marginBottom: 16 }}>
       {pills.map(p => {
         const active = currentReaction === p.key;
         const color = active ? p.activeColor : p.restColor;
@@ -770,7 +770,7 @@ function CompanionPanelContent({ type, data, id, feedback, onFeedback }) {
   const accent = isTeaching ? C.goldenAmber : C.seaGlass;
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', padding: '14px 20px 60px' }}>
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
       {/* Type badge */}
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${accent}0e`, border: `1px solid ${accent}18`, marginBottom: 10 }}>
         {isTeaching ? <TeachingIcon size={11} color={accent} /> : <PracticeIcon size={11} color={accent} />}
@@ -783,7 +783,7 @@ function CompanionPanelContent({ type, data, id, feedback, onFeedback }) {
       )}
 
       {/* Title */}
-      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
+      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 4 }}>{data.title}</h1>
 
       <InlineReactions id={id} feedback={feedback} onFeedback={onFeedback} />
 
@@ -857,7 +857,7 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
   const resolvedUrl = url || trailData.npsUrl || lookupUrl(title);
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', padding: '14px 20px 60px' }}>
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
 
       {/* Trail badge + time */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
@@ -874,7 +874,7 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
       </div>
 
       {/* Title */}
-      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.2, marginBottom: 10 }}>
+      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.2, marginBottom: 4 }}>
         {resolvedUrl ? (
           <a href={resolvedUrl} target="_blank" rel="noopener noreferrer"
             style={{ color: 'inherit', textDecoration: 'none', borderBottom: `2px solid ${C.teal}20` }}>
@@ -887,10 +887,10 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
       <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
 
       {/* Summary */}
-      <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.75, marginBottom: 12 }}>{summary}</p>
+      <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.75, marginBottom: 16 }}>{summary}</p>
 
       {/* NPS disclaimer (Step G) */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 24 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 18 }}>
         <ExternalLinkIcon size={9} color={C.muted} />
         <span style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, lineHeight: 1.4 }}>
           Trail info sourced from NPS documentation. Verify conditions before your visit.
@@ -1246,7 +1246,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
   if (type === 'activity') {
     const dot = WARM_DOT;
     return (
-      <div style={{ maxWidth: 500, margin: '0 auto', padding: '14px 20px 60px' }}>
+      <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
         {/* Time badge */}
         {data.time && (
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${dot}0e`, border: `1px solid ${dot}18`, marginBottom: 10 }}>
@@ -1256,7 +1256,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
         )}
 
         {/* Title */}
-        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
+        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 4 }}>{data.title}</h1>
 
         <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
 
@@ -1296,7 +1296,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
   const alternatives = data.alternatives || [];
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', padding: '14px 20px 60px' }}>
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
       {/* Category badge */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${s.color}0e`, border: `1px solid ${s.color}18` }}>
@@ -1310,7 +1310,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
       </div>
 
       {/* Pick name */}
-      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 6 }}>
+      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 4 }}>
         <LinkedName name={data.name} url={data.url} linkType="pick" style={{ fontFamily: F, fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }} />
         {(data.url || lookupUrl(data.name)) && <> <ExternalLinkIcon size={12} color={`${C.sage}40`} /></>}
       </h1>
