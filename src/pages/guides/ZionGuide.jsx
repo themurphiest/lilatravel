@@ -1439,7 +1439,7 @@ function CelestialDrawer({ isMobile }) {
   return (
     <div style={{
       position: "relative",
-      zIndex: 100,
+      zIndex: 90,
       background: C.warmWhite,
       borderBottom: `1px solid ${C.stone}`,
     }}>
