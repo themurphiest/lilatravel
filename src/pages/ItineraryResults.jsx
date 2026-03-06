@@ -22,30 +22,43 @@ import SavePill from '@components/SavePill';
 /* ── colors ────────────────────────────────────────────────────────────── */
 
 const C = {
-  cream:       BrandC.cream,
+  // V2 design tokens
+  warm:   '#F5F0E8',
+  white:  '#FFFFFF',
+  ink:    '#1C1C1A',
+  body:   '#3D3D38',
+  muted:  '#8C8C80',
+  sage:   '#6B7A72',
+  teal:   BrandC.oceanTeal,
+  amber:  BrandC.goldenAmber,
+  salmon: BrandC.sunSalmon,
+  sea:    BrandC.seaGlass,
+  sky:    BrandC.skyBlue,
+  border: 'rgba(28,28,26,0.10)',
+  // Legacy aliases for kept components
+  cream:       '#F5F0E8',
   slate:       BrandC.darkInk,
-  ink:         '#1E2825',     // V2: true ink for titles — high contrast
-  body:        '#4A5650',     // V2: warm dark for summaries
-  muted:       '#7A857E',     // V2: labels, secondary text
-  sage:        '#5A7068',     // V2: slightly warmer sage
-  sageLight:   '#8FA39A',
-  skyBlue:     BrandC.skyBlue,
   oceanTeal:   BrandC.oceanTeal,
-  sunSalmon:   BrandC.sunSalmon,
   goldenAmber: BrandC.goldenAmber,
+  sunSalmon:   BrandC.sunSalmon,
   seaGlass:    BrandC.seaGlass,
-  amber:       '#B8863A',     // V2: rich amber accent
-  warm:        '#D4A95A',     // V2: golden warm (timeline dots)
-  white:       '#FFFFFF',
+  skyBlue:     BrandC.skyBlue,
+  sageLight:   '#8FA39A',
 };
 
-// V2: consistent warm dots — time-of-day color system to be revisited in brand guide
 const WARM_DOT = '#D4A95A';
 
 const DAY_COLORS = [
-  C.goldenAmber, C.oceanTeal, C.skyBlue, C.sunSalmon,
-  C.seaGlass, '#8B7EC8', C.goldenAmber, C.oceanTeal,
+  C.amber, C.teal, C.sky, C.salmon,
+  C.sea, '#8B7EC8', C.amber, C.teal,
 ];
+
+const CARD_STYLE = {
+  background: C.white,
+  borderRadius: 8,
+  border: `1px solid ${C.border}`,
+  boxShadow: '0 2px 12px rgba(28,28,26,0.05)',
+};
 
 const PICK_STYLES = {
   stay: { label: 'Where to Stay', color: C.goldenAmber },
@@ -228,18 +241,6 @@ const ThumbDown = ({ size = 14, color = C.sunSalmon, active = false }) => (
   </svg>
 );
 
-/* ── smooth collapsible ─────────────────────────────────────────────────── */
-
-function Collapsible({ open, children }) {
-  const ref = useRef(null);
-  const [h, setH] = useState(0);
-  useEffect(() => { if (ref.current) setH(ref.current.scrollHeight); }, [open, children]);
-  return (
-    <div style={{ maxHeight: open ? h + 40 : 0, opacity: open ? 1 : 0, overflow: 'hidden', transition: 'max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease' }}>
-      <div ref={ref} style={{ paddingTop: 12 }}>{children}</div>
-    </div>
-  );
-}
 
 /* ── linked name (with lookupUrl fallback) ─────────────────────────────── */
 
@@ -301,147 +302,110 @@ function CelestialSnapshot({ snapshot, celestial, weather, month }) {
   // Don't render if truly nothing
   if (!sky && !snapshot?.seasonalNote) return null;
 
-  const DARK_BG   = '#2A3C46';       // Twilight Slate
-  const CARD_BG   = 'rgba(255,255,255,0.045)';
-  const CARD_BORDER = 'rgba(255,255,255,0.09)';
-  const LABEL_COL = '#93B5AE';       // muted teal
-  const VAL_COL   = '#E8E2D8';       // warm off-white
-  const SUB_COL   = '#A3BAB4';       // soft muted
-  const GOLD      = C.goldenAmber;
-  const SERIF     = "'Cormorant Garamond', serif";
-
   return (
     <div style={{
-      background: DARK_BG,
-      borderRadius: 2,
-      marginBottom: 20,
+      ...CARD_STYLE,
       overflow: 'hidden',
+      marginBottom: 24,
     }}>
-      {/* Header row */}
-      <div style={{ padding: '20px 22px 16px', borderBottom: `1px solid ${CARD_BORDER}` }}>
+      {/* Header */}
+      <div style={{ padding: '16px 20px 14px', borderBottom: `1px solid ${C.border}` }}>
         <div style={{
           fontFamily: F, fontSize: 9, fontWeight: 700,
-          letterSpacing: '0.22em', textTransform: 'uppercase',
-          color: LABEL_COL, marginBottom: 6,
+          letterSpacing: '0.2em', textTransform: 'uppercase',
+          color: C.muted, marginBottom: 6,
         }}>Celestial Snapshot</div>
         <div style={{
-          fontFamily: SERIF, fontSize: 20, fontWeight: 300,
-          color: VAL_COL, lineHeight: 1.2, letterSpacing: '0.01em',
+          fontFamily: F_SERIF, fontSize: 22, fontWeight: 300,
+          color: C.ink, marginBottom: 5,
         }}>{sky}</div>
         {snapshot?.seasonalNote && (
           <div style={{
             fontFamily: F, fontSize: 12, fontWeight: 400,
-            color: SUB_COL, lineHeight: 1.6, marginTop: 8,
+            color: C.body, lineHeight: 1.6,
           }}>{snapshot.seasonalNote}</div>
         )}
       </div>
 
-      {/* Event cards — 3-column */}
+      {/* Events grid — 3 columns */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: 1,
-        background: CARD_BORDER,
-        borderBottom: `1px solid ${CARD_BORDER}`,
+        borderBottom: `1px solid ${C.border}`,
       }}>
         {events.map((ev, i) => (
           <div key={i} style={{
-            background: DARK_BG,
-            padding: '18px 16px 16px',
+            padding: '14px 18px',
+            borderRight: i < events.length - 1 ? `1px solid ${C.border}` : 'none',
           }}>
-            <div style={{ fontSize: 22, marginBottom: 10, lineHeight: 1 }}>{ev.icon}</div>
+            <div style={{ fontSize: 18, marginBottom: 6 }}>{ev.icon}</div>
             <div style={{
               fontFamily: F, fontSize: 13, fontWeight: 600,
-              color: VAL_COL, marginBottom: 4, lineHeight: 1.2,
+              color: C.ink, marginBottom: 2,
             }}>{ev.name}</div>
             <div style={{
-              fontFamily: F, fontSize: 11, fontWeight: 600,
-              color: GOLD, marginBottom: 6,
+              fontFamily: F, fontSize: 10, fontWeight: 700,
+              letterSpacing: '0.06em', color: C.amber, marginBottom: 5,
             }}>{ev.date}</div>
             <div style={{
               fontFamily: F, fontSize: 11, fontWeight: 400,
-              color: SUB_COL, lineHeight: 1.5,
+              color: C.body, lineHeight: 1.5,
             }}>{ev.note}</div>
           </div>
         ))}
       </div>
 
-      {/* Bottom data bar — temp · sunrise · sunset · moon */}
+      {/* Weather row — 4 columns */}
       {(avgHigh !== null || sunrise || moonName) && (
         <div style={{
-          display: 'flex', flexWrap: 'wrap',
-          borderBottom: `1px solid ${CARD_BORDER}`,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          borderBottom: `1px solid ${C.border}`,
         }}>
           {avgHigh !== null && (
-            <div style={{ flex: '1 1 80px', padding: '13px 16px', borderRight: `1px solid ${CARD_BORDER}` }}>
-              <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>AVG HIGH</div>
-              <div style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 300, color: VAL_COL, lineHeight: 1 }}>
+            <div style={{ padding: '12px 18px', borderRight: `1px solid ${C.border}` }}>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted, marginBottom: 5 }}>Avg High</div>
+              <div style={{ fontSize: 18, fontWeight: 600, color: C.ink }}>
                 {avgHigh}°
-                {avgLow !== null && <span style={{ fontSize: 14, color: SUB_COL, marginLeft: 3 }}>/{avgLow}°</span>}
+                {avgLow !== null && <span style={{ fontSize: 12, color: C.muted, fontWeight: 400 }}> /{avgLow}°</span>}
               </div>
             </div>
           )}
           {sunrise && (
-            <div style={{ flex: '1 1 80px', padding: '13px 16px', borderRight: `1px solid ${CARD_BORDER}` }}>
-              <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>SUNRISE</div>
-              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: VAL_COL }}>{sunrise}</div>
+            <div style={{ padding: '12px 18px', borderRight: `1px solid ${C.border}` }}>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted, marginBottom: 5 }}>Sunrise</div>
+              <div style={{ fontSize: 16, fontWeight: 600, color: C.ink }}>{sunrise}</div>
             </div>
           )}
           {sunset && (
-            <div style={{ flex: '1 1 80px', padding: '13px 16px', borderRight: moonName ? `1px solid ${CARD_BORDER}` : 'none' }}>
-              <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>SUNSET</div>
-              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: VAL_COL }}>{sunset}</div>
+            <div style={{ padding: '12px 18px', borderRight: `1px solid ${C.border}` }}>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted, marginBottom: 5 }}>Sunset</div>
+              <div style={{ fontSize: 16, fontWeight: 600, color: C.ink }}>{sunset}</div>
             </div>
           )}
           {moonName && (
-            <div style={{ flex: '1 1 80px', padding: '13px 16px' }}>
-              <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>MOON</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: 16 }}>{MOON_EMOJI[moonName] ?? '🌙'}</span>
-                <div>
-                  <div style={{ fontFamily: F, fontSize: 12, fontWeight: 600, color: VAL_COL, lineHeight: 1.2 }}>{moonName}</div>
-                  {stargazing && <div style={{ fontFamily: F, fontSize: 10, fontWeight: 400, color: SUB_COL, marginTop: 2 }}>{stargazing}</div>}
-                </div>
+            <div style={{ padding: '12px 18px' }}>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted, marginBottom: 5 }}>Moon</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: C.ink, lineHeight: 1.3 }}>
+                {MOON_EMOJI[moonName] ?? '🌙'} {moonName}
               </div>
+              {stargazing && <div style={{ fontFamily: F, fontSize: 10, color: C.muted, marginTop: 2 }}>{stargazing}</div>}
             </div>
           )}
         </div>
       )}
 
-      {/* Packing hint */}
+      {/* Pack note */}
       {snapshot?.packingHint && (
-        <div style={{ padding: '12px 22px' }}>
-          <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: LABEL_COL, marginBottom: 5 }}>PACK</div>
-          <div style={{ fontFamily: F, fontSize: 12, fontWeight: 400, color: SUB_COL, lineHeight: 1.55 }}>{snapshot.packingHint}</div>
+        <div style={{ padding: '12px 20px', display: 'flex', gap: 10, alignItems: 'baseline' }}>
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted, flexShrink: 0 }}>Pack</span>
+          <span style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.6 }}>{snapshot.packingHint}</span>
         </div>
       )}
     </div>
   );
 }
 
-function MiniMoon({ phaseName, size = 22 }) {
-  const ILLUMINATION = {
-    'New Moon': 0, 'Waxing Crescent': 25, 'First Quarter': 50,
-    'Waxing Gibbous': 75, 'Full Moon': 100, 'Waning Gibbous': 75,
-    'Last Quarter': 50, 'Waning Crescent': 25,
-  };
-  const illum = (ILLUMINATION[phaseName] ?? 50) / 100;
-  return (
-    <svg width={size} height={size} viewBox="0 0 22 22">
-      <circle cx="11" cy="11" r="9.5" fill="#e8e0d0" />
-      {illum < 1 && (
-        <ellipse
-          cx={11 + (1 - illum) * 9.5}
-          cy="11"
-          rx={Math.max(0.5, (1 - illum) * 9.5)}
-          ry="9.5"
-          fill="#1a2a3a"
-          opacity="0.65"
-        />
-      )}
-    </svg>
-  );
-}
 
 /* ── Trip Profile Summary ─ shows user's selections so they feel heard ── */
 
@@ -473,107 +437,20 @@ function TripProfileSummary({ formData }) {
   if (chips.length === 0) return null;
 
   return (
-    <div style={{ textAlign: 'center', padding: '0 8px 16px' }}>
-      <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 10 }}>Built for You</div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
-        {chips.map((chip, i) => (
-          <span key={i} style={{
-            fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.slate}75`,
-            background: `${C.sage}0c`, border: `1px solid ${C.sage}12`,
-            borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap',
-          }}>{chip}</span>
-        ))}
-      </div>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, alignItems: 'center', paddingBottom: 20, marginBottom: 20, borderBottom: `1px solid ${C.border}` }}>
+      <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.muted, marginRight: 4 }}>Built for you</span>
+      {chips.map((chip, i) => (
+        <span key={i} style={{
+          fontFamily: F, fontSize: 11, fontWeight: 500, color: C.body,
+          background: C.white, border: `1px solid ${C.border}`,
+          borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap',
+        }}>{chip}</span>
+      ))}
     </div>
   );
 }
 
-/* ── trip overview ─────────────────────────────────────────────────────── */
 
-function TripOverview({ days, onDayClick, dayFeedback = {} }) {
-  return (
-    <div style={{ background: C.white, borderRadius: 2, border: `1px solid ${C.sage}15`, boxShadow: `0 3px 16px ${C.amber}08`, padding: '20px 20px', marginBottom: 20 }}>
-      <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 2, paddingLeft: 1 }}>Trip at a Glance</div>
-      <div style={{ fontFamily: F, fontSize: 14, fontWeight: 400, fontStyle: 'normal', color: `${C.slate}65`, marginBottom: 18, paddingLeft: 1 }}>Your day-by-day overview</div>
-
-      <div style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', left: 15, top: 8, bottom: 8, width: 1.5, background: `linear-gradient(180deg, ${C.sage}10, ${C.sage}05)`, borderRadius: 1 }} />
-
-        {days.map((day, i) => {
-          const color = DAY_COLORS[i % DAY_COLORS.length];
-          const fb = dayFeedback[i];
-          return (
-            <button key={i} onClick={() => { trackEvent('trip_overview_day_clicked', { day_index: i }); onDayClick(i); }} style={{
-              display: 'flex', alignItems: 'center', gap: 14, width: '100%',
-              padding: '10px 0', background: 'none', border: 'none', cursor: 'pointer',
-              textAlign: 'left', WebkitTapHighlightColor: 'transparent', position: 'relative',
-            }}>
-              <div style={{ width: 30, height: 30, borderRadius: '50%', background: `${color}10`, border: `1.5px solid ${color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>
-                <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color }}>{i + 1}</span>
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color, marginBottom: 2 }}>{day.label}</span>
-                  {fb?.reaction === 'spot-on' && <CheckIcon size={11} color={C.seaGlass} />}
-                  {fb?.reaction === 'needs-work' && <PencilIcon size={11} color={C.goldenAmber} />}
-                  {!fb?.reaction && fb?.note && <PencilIcon size={11} color={C.sage} />}
-                </div>
-                <div style={{ fontFamily: F, fontSize: 16, fontWeight: 600, color: C.slate, lineHeight: 1.3 }}>{day.title}</div>
-                {day.snapshot && (
-                  <div style={{ fontFamily: F, fontSize: 12, color: `${C.slate}80`, lineHeight: 1.45, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{day.snapshot}</div>
-                )}
-              </div>
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke={`${C.sage}50`} strokeWidth="1.5" strokeLinecap="round" style={{ flexShrink: 0 }}><polyline points="6,3 11,8 6,13" /></svg>
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-/* ── timeline block ────────────────────────────────────────────────────── */
-
-function TimelineBlock({ time, title, summary, details, timeOfDay = 'morning', url, isLast = false, dayIndex = 0, itemIndex = 0, onOpenPanel, activityFeedback, onActivityFeedback }) {
-  const dot = WARM_DOT;
-  const resolvedUrl = url || lookupUrl(title);
-  const interactive = !!(details || resolvedUrl);
-  const thumbId = `day_${dayIndex}_timeline_${itemIndex}`;
-  const tint = reactionTint(activityFeedback?.[thumbId]);
-
-  const handleClick = () => {
-    if (!interactive) return;
-    onOpenPanel({ type: 'activity', data: { time, title, summary, details, url: resolvedUrl, timeOfDay }, thumbId: `day_${dayIndex}_timeline_${itemIndex}` });
-  };
-
-  return (
-    <div style={{ display: 'flex', gap: 14, minHeight: 44 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 20, flexShrink: 0 }}>
-        <div style={{
-          width: 10, height: 10, borderRadius: '50%', background: dot,
-          boxShadow: `0 0 0 3px ${dot}15, 0 0 12px ${dot}15`,
-          flexShrink: 0, marginTop: 5,
-        }} />
-        {!isLast && <div style={{ width: 1.5, flex: 1, minHeight: 20, background: `linear-gradient(180deg, ${dot}30, ${C.sage}06)` }} />}
-      </div>
-      <div style={{ flex: 1, paddingBottom: isLast ? 0 : 16, background: tint || 'transparent', borderRadius: tint ? 6 : 0, transition: 'background 0.3s' }}>
-        <button onClick={handleClick} style={{
-          display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%',
-          background: 'none', border: 'none', cursor: interactive ? 'pointer' : 'default',
-          textAlign: 'left', padding: 0, gap: 8, WebkitTapHighlightColor: 'transparent',
-        }}>
-          <div>
-            {time && <div style={{ fontFamily: F, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', color: dot, marginBottom: 3 }}>{time}</div>}
-            <div style={{ fontFamily: F, fontSize: 16, fontWeight: 700, color: C.ink, lineHeight: 1.3 }}>{title}</div>
-            <div style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.6, marginTop: 4 }}>{summary}</div>
-          </div>
-          {interactive && <ArrowRightIcon size={10} color={`${C.sage}50`} />}
-        </button>
-        <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
-      </div>
-    </div>
-  );
-}
 
 /* ── trail components ─────────────────────────────────────────────────── */
 
@@ -642,153 +519,6 @@ function TrailStatChip({ icon, label, value, accent }) {
   );
 }
 
-function TrailCard({ time, title, summary, details, trailData = {}, url, isLast = false, dayIndex = 0, itemIndex = 0, onOpenPanel, activityFeedback, onActivityFeedback }) {
-  const dot = WARM_DOT;
-  const resolvedUrl = url || trailData.npsUrl || lookupUrl(title);
-  const thumbId = `day_${dayIndex}_timeline_${itemIndex}`;
-  const tint = reactionTint(activityFeedback?.[thumbId]);
-
-  const handleClick = () => {
-    onOpenPanel({
-      type: 'trail',
-      data: { time, title, summary, details, trailData, url: resolvedUrl },
-      thumbId: `day_${dayIndex}_timeline_${itemIndex}`,
-    });
-  };
-
-  const difficulty = trailData.difficulty;
-  const diffKey = difficulty?.toLowerCase();
-
-  return (
-    <div style={{ display: 'flex', gap: 14, minHeight: 44 }}>
-      {/* Timeline spine */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 20, flexShrink: 0 }}>
-        <div style={{
-          width: 10, height: 10, borderRadius: '50%', background: dot,
-          boxShadow: `0 0 0 3px ${dot}15, 0 0 12px ${dot}15`,
-          flexShrink: 0, marginTop: 5,
-        }} />
-        {!isLast && <div style={{ width: 1.5, flex: 1, minHeight: 20, background: `linear-gradient(180deg, ${dot}30, ${C.sage}06)` }} />}
-      </div>
-
-      {/* Card body */}
-      <div style={{ flex: 1, paddingBottom: isLast ? 0 : 16 }}>
-        {/* Time */}
-        {time && (
-          <div style={{ fontFamily: F, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', color: dot, marginBottom: 4 }}>
-            {time}
-          </div>
-        )}
-
-        <button onClick={handleClick} style={{
-          display: 'block', width: '100%', textAlign: 'left',
-          background: tint || C.white,
-          border: `1.5px solid ${C.sage}12`,
-          borderRadius: 2,
-          overflow: 'hidden',
-          cursor: 'pointer',
-          WebkitTapHighlightColor: 'transparent',
-          padding: 0,
-          boxShadow: `0 2px 10px ${C.amber}06`,
-          transition: 'background 0.3s',
-        }}>
-
-          {/* Card header: trail name + NPS label */}
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '10px 14px 8px',
-            background: `${C.sage}04`,
-            borderBottom: `1px solid ${C.sage}09`,
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <MountainIcon size={13} color={C.sage} />
-              <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.sage }}>
-                Trail
-              </span>
-            </div>
-            {(trailData.npsUrl || resolvedUrl) && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '2px 7px', borderRadius: 3, background: `${C.oceanTeal}08`, border: `1px solid ${C.oceanTeal}18` }}>
-                <span style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.oceanTeal }}>NPS Guide</span>
-                <ExternalLinkIcon size={8} color={C.oceanTeal} />
-              </div>
-            )}
-          </div>
-
-          {/* Trail name + summary */}
-          <div style={{ padding: '11px 14px 12px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 8 }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: F, fontSize: 16, fontWeight: 700, color: C.ink, lineHeight: 1.25, marginBottom: 4 }}>
-                  {title}
-                </div>
-                <div style={{ fontFamily: F, fontSize: 12.5, color: C.body, lineHeight: 1.6 }}>
-                  {summary && summary.length > 110 ? summary.slice(0, 110).trimEnd() + '…' : summary}
-                </div>
-              </div>
-              <ArrowRightIcon size={10} color={`${C.sage}50`} />
-            </div>
-
-            {/* Stats row */}
-            {(trailData.distance || trailData.elevationGain || trailData.trailType) && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
-                {trailData.distance && (
-                  <TrailStatChip
-                    icon={<RouteIcon size={11} color={C.sage} />}
-                    label="Distance"
-                    value={trailData.distance}
-                  />
-                )}
-                {trailData.elevationGain && (
-                  <TrailStatChip
-                    icon={<MountainIcon size={11} color={C.sage} />}
-                    label="Elevation"
-                    value={trailData.elevationGain}
-                  />
-                )}
-                {trailData.trailType && (
-                  <TrailStatChip
-                    icon={<RouteIcon size={11} color={C.sage} />}
-                    label="Type"
-                    value={trailData.trailType}
-                  />
-                )}
-              </div>
-            )}
-
-            {/* Difficulty + permit row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, flexWrap: 'wrap', gap: 6 }}>
-              {difficulty && <DifficultyBar difficulty={difficulty} />}
-              {trailData.permitRequired && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 3, background: `${C.goldenAmber}0c`, border: `1px solid ${C.goldenAmber}22` }}>
-                  <PermitIcon size={10} color={C.goldenAmber} />
-                  <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: C.goldenAmber }}>
-                    Permit Required
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Best start time note */}
-            {trailData.bestStartTime && (
-              <div style={{
-                marginTop: 10, padding: '7px 10px',
-                background: `${dot}08`, borderRadius: 2,
-                borderLeft: `2px solid ${dot}30`,
-                display: 'flex', alignItems: 'flex-start', gap: 6,
-              }}>
-                <ClockIcon size={10} color={dot} />
-                <span style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.slate}80`, lineHeight: 1.5 }}>
-                  {trailData.bestStartTime}
-                </span>
-              </div>
-            )}
-          </div>
-        </button>
-        <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
-      </div>
-    </div>
-  );
-}
 
 /* ── inline pick ───────────────────────────────────────────────────────── */
 
@@ -840,77 +570,6 @@ function MetaStrip({ category, pick, color }) {
   );
 }
 
-function InlinePick({ category, pick, alternatives = [], isLast = false, dayIndex = 0, pickIndex = 0, onOpenPanel, activityFeedback = {}, onActivityFeedback }) {
-  const s = PICK_STYLES[category] || PICK_STYLES.stay;
-
-  const handleClick = () => {
-    onOpenPanel({ type: category, data: { ...pick, alternatives }, thumbId: `day_${dayIndex}_pick_${pickIndex}` });
-  };
-
-  const thumbId = `day_${dayIndex}_pick_${pickIndex}`;
-  const currentFeedback = activityFeedback?.[thumbId] || null;
-  const currentReaction = typeof currentFeedback === 'string'
-    ? currentFeedback
-    : currentFeedback?.reaction || null;
-  const tint = reactionTint(currentFeedback);
-
-  return (
-    <div style={{ marginBottom: isLast ? 0 : 10 }}>
-      <button onClick={handleClick} style={{
-        display: 'block', width: '100%', textAlign: 'left',
-        background: tint || C.white, border: `1.5px solid ${s.color}20`, borderRadius: 2,
-        overflow: 'hidden', boxShadow: `0 2px 10px ${s.color}08`,
-        cursor: 'pointer', WebkitTapHighlightColor: 'transparent', padding: 0,
-      }}>
-          {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: `${s.color}05`, borderBottom: `1px solid ${s.color}10` }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <CategoryIcon category={category} color={s.color} size={14} />
-              <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 5, border: `1px solid ${s.color}20`, background: `${s.color}04` }}>
-              <LilaStar size={9} color={s.color} />
-              <span style={{ fontFamily: F, fontSize: 8, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: s.color }}>Lila Pick</span>
-            </div>
-          </div>
-          {/* Content */}
-          <div style={{ padding: '12px 14px 13px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                {/* Name row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 4 }}>
-                  <span style={{ fontFamily: F, fontSize: 15, fontWeight: 700, color: C.ink, lineHeight: 1.2 }}>{pick.name}</span>
-                  {(pick.url || lookupUrl(pick.name)) && <ExternalLinkIcon size={10} color={`${C.sage}40`} />}
-                </div>
-                {/* Vibe line */}
-                {pick.vibe && (
-                  <div style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, lineHeight: 1.4, marginBottom: 5 }}>
-                    {pick.vibe}
-                  </div>
-                )}
-                {/* Why — truncated to ~100 chars on the tile */}
-                <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.6 }}>
-                  {pick.why && pick.why.length > 100
-                    ? pick.why.slice(0, 100).trimEnd() + '…'
-                    : pick.why}
-                </div>
-                {/* Meta chip strip */}
-                <MetaStrip category={category} pick={pick} color={s.color} />
-                {/* Alt count */}
-                {alternatives.length > 0 && (
-                  <div style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: `${s.color}90`, marginTop: 9 }}>
-                    +{alternatives.length} alternative{alternatives.length > 1 ? 's' : ''}
-                  </div>
-                )}
-              </div>
-              <ArrowRightIcon size={10} color={`${C.sage}50`} />
-            </div>
-          </div>
-        </button>
-        <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
-    </div>
-  );
-}
 
 /* ── ActivityThumbs — inline reaction buttons for timeline blocks and pick cards ── */
 
@@ -1011,7 +670,8 @@ function ActivityThumbs({ id, feedback, onFeedback }) {
 function reactionTint(feedback) {
   if (!feedback) return null;
   const reaction = typeof feedback === 'string' ? feedback : feedback?.reaction || null;
-  if (reaction === 'fire' || reaction === 'up') return `${C.goldenAmber}08`;
+  if (reaction === 'fire') return 'rgba(200,148,26,0.04)';
+  if (reaction === 'up') return 'rgba(127,181,160,0.04)';
   if (reaction === 'down') return `${C.sage}08`;
   return null;
 }
@@ -1034,35 +694,33 @@ function InlineReactions({ id, feedback, onFeedback }) {
     }
   };
 
-  const reactions = [
-    { key: 'fire', icon: FlameIcon, color: C.goldenAmber, label: 'Must do',
-      restBg: `${C.goldenAmber}10`, restBorder: `${C.goldenAmber}30`,
-      activeBg: `${C.goldenAmber}1c`, activeBorder: `${C.goldenAmber}50` },
-    { key: 'up', icon: ThumbUp, color: C.seaGlass, label: 'Love it',
-      restBg: `${C.seaGlass}10`, restBorder: `${C.seaGlass}30`,
-      activeBg: `${C.seaGlass}1c`, activeBorder: `${C.seaGlass}50` },
-    { key: 'down', icon: ThumbDown, color: C.sunSalmon, label: 'Not for me',
-      restBg: `${C.sunSalmon}10`, restBorder: `${C.sunSalmon}30`,
-      activeBg: `${C.sunSalmon}1c`, activeBorder: `${C.sunSalmon}50` },
+  const pills = [
+    { key: 'fire', emoji: '🔥', label: 'Fire',
+      activeColor: C.amber, activeBg: 'rgba(200,148,26,0.06)', activeBorder: C.amber },
+    { key: 'up', emoji: '👍', label: '',
+      activeColor: C.sea, activeBg: 'rgba(127,181,160,0.06)', activeBorder: C.sea },
+    { key: 'down', emoji: '👎', label: '',
+      activeColor: C.muted, activeBg: 'rgba(140,140,128,0.06)', activeBorder: C.muted },
   ];
 
   return (
     <div onClick={e => e.stopPropagation()} style={{ display: 'flex', gap: 5, marginTop: 6 }}>
-      {reactions.map(r => {
-        const active = currentReaction === r.key;
-        const Ic = r.icon;
+      {pills.map(p => {
+        const active = currentReaction === p.key;
         return (
-          <button key={r.key} onClick={e => toggle(r.key, e)} style={{
+          <button key={p.key} onClick={e => toggle(p.key, e)} style={{
             display: 'flex', alignItems: 'center', gap: 4,
-            padding: '3px 8px',
-            borderRadius: 7,
-            background: active ? r.activeBg : r.restBg,
-            border: `1px solid ${active ? r.activeBorder : r.restBorder}`,
+            padding: '3px 9px',
+            borderRadius: 20,
+            background: active ? p.activeBg : 'none',
+            border: `1px solid ${active ? p.activeBorder : C.border}`,
             cursor: 'pointer', transition: 'all 0.2s',
             WebkitTapHighlightColor: 'transparent',
+            fontFamily: F, fontSize: 10, fontWeight: 600,
+            color: active ? p.activeColor : C.muted,
           }}>
-            <Ic size={11} color={r.color} active={active} />
-            <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, color: active ? r.color : `${r.color}90` }}>{r.label}</span>
+            <span style={{ fontSize: 11 }}>{p.emoji}</span>
+            {p.label && <span>{p.label}</span>}
           </button>
         );
       })}
@@ -1070,214 +728,8 @@ function InlineReactions({ id, feedback, onFeedback }) {
   );
 }
 
-/* ── wisdom banner — "Today's Teaching" strip inside day cards ─────────── */
 
-function WisdomBanner({ entry, onOpen }) {
-  if (!entry) return null;
-  const tradition = TRADITIONS[entry.tradition];
-  if (!tradition) return null;
-  const accent = tradition.color;
-  const glyph = TRADITION_GLYPHS[entry.tradition] || '◈';
-  const typeLabel = entry.type === 'ceremony' ? "Today's Ceremony"
-    : entry.type === 'practice' ? "Today's Practice"
-    : "Today's Teaching";
 
-  return (
-    <button onClick={onOpen} style={{
-      display: 'flex', alignItems: 'center', gap: 12, width: '100%',
-      padding: '10px 14px', borderRadius: 8,
-      background: `${accent}14`, border: `1px solid ${accent}30`,
-      cursor: 'pointer', textAlign: 'left',
-      WebkitTapHighlightColor: 'transparent', transition: 'background 0.2s',
-      marginBottom: 4,
-    }}>
-      {/* Glyph */}
-      <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0, opacity: 0.7 }}>{glyph}</span>
-      {/* Text */}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent }}>{typeLabel}</span>
-          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 500, color: `${C.sage}60` }}>{tradition.shortName}</span>
-        </div>
-        <div style={{
-          fontFamily: F_SERIF, fontSize: 13.5, fontStyle: 'italic', fontWeight: 400,
-          color: C.body, lineHeight: 1.4,
-          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-        }}>
-          {entry.name} — {entry.summary}
-        </div>
-      </div>
-      {/* Arrow */}
-      <ArrowRightIcon size={10} color={`${accent}60`} />
-    </button>
-  );
-}
-
-/* ── DayNote — conditional per-day note ───────────────────────────────── */
-
-function DayFeedbackStrip({ dayIndex, feedback, onFeedback }) {
-  const reaction = feedback?.reaction || null; // 'spot-on' | 'needs-work' | null
-  const noteText = feedback?.note || '';
-  const [text, setText] = useState(noteText);
-  const [noteFocused, setNoteFocused] = useState(false);
-  const textareaRef = useRef(null);
-
-  // Sync local text when external feedback changes (e.g. after refinement reset)
-  useEffect(() => { setText(feedback?.note || ''); }, [feedback?.note]);
-
-  const setReaction = (key) => {
-    const next = reaction === key ? null : key;
-    trackEvent('day_reaction', { day_index: dayIndex, reaction: next || 'cleared' });
-    onFeedback(dayIndex, { ...feedback, reaction: next });
-  };
-
-  const commitNote = () => {
-    const trimmed = text.trim();
-    if (trimmed !== noteText) {
-      onFeedback(dayIndex, { ...feedback, note: trimmed || undefined });
-      if (trimmed) trackEvent('day_note_saved', { day_index: dayIndex, note_length: trimmed.length });
-    }
-    setNoteFocused(false);
-  };
-
-  const reactions = [
-    { key: 'spot-on', label: 'Spot On', color: C.seaGlass, icon: <CheckIcon size={12} color={reaction === 'spot-on' ? C.seaGlass : `${C.sage}50`} /> },
-    { key: 'needs-work', label: 'Needs Work', color: C.goldenAmber, icon: <PencilIcon size={12} color={reaction === 'needs-work' ? C.goldenAmber : `${C.sage}50`} /> },
-  ];
-
-  return (
-    <div style={{ marginTop: 16, paddingTop: 12, borderTop: `1px solid ${C.sage}0c` }}>
-      {/* Reaction buttons */}
-      <div style={{ display: 'flex', gap: 8 }}>
-        {reactions.map(r => {
-          const active = reaction === r.key;
-          return (
-            <button key={r.key} onClick={() => setReaction(r.key)} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 5,
-              padding: '5px 12px', borderRadius: 20,
-              background: active ? `${r.color}10` : 'transparent',
-              border: `1px solid ${active ? `${r.color}30` : `${C.sage}12`}`,
-              cursor: 'pointer', WebkitTapHighlightColor: 'transparent',
-              transition: 'all 0.2s',
-            }}>
-              {r.icon}
-              <span style={{ fontFamily: F, fontSize: 11, fontWeight: active ? 600 : 500, color: active ? r.color : `${C.sage}70` }}>{r.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Inline note */}
-      <textarea ref={textareaRef} value={text}
-        onChange={e => { setText(e.target.value); e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }}
-        onFocus={() => setNoteFocused(true)}
-        onBlur={commitNote}
-        placeholder="Add a note..."
-        rows={1}
-        style={{
-          width: '100%', marginTop: 8, padding: '7px 0',
-          fontFamily: F, fontSize: 12, fontWeight: 400, color: C.body,
-          background: 'transparent', border: 'none', borderBottom: `1px solid ${noteFocused ? `${C.sage}30` : `${C.sage}0c`}`,
-          resize: 'none', overflow: 'hidden', lineHeight: 1.5,
-          outline: 'none', boxSizing: 'border-box',
-          transition: 'border-color 0.2s',
-        }}
-      />
-    </div>
-  );
-}
-
-/* ── companion card (teaching + practice recommendations) ──────────────── */
-
-function CompanionCard({ companion, onOpenPanel }) {
-  if (!companion) return null;
-  const { teaching, practice } = companion;
-  if (!teaching && !practice) return null;
-
-  return (
-    <div style={{
-      padding: '16px 16px',
-      background: `linear-gradient(145deg, ${C.cream}, ${C.white})`,
-      border: `1px solid ${C.sage}15`,
-      borderRadius: 2,
-      borderLeft: `4px solid ${C.seaGlass}50`,
-      marginBottom: 12,
-      boxShadow: `0 2px 12px ${C.amber}06, inset 0 1px 0 ${C.white}`,
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      {/* Subtle inner glow */}
-      <div style={{
-        position: 'absolute', top: 0, right: 0, width: 120, height: 120,
-        background: `radial-gradient(circle at top right, ${C.amber}06, transparent 70%)`,
-        pointerEvents: 'none',
-      }} />
-
-      {/* Teaching */}
-      {teaching && (
-        <button onClick={() => onOpenPanel({ type: 'teaching', data: teaching, thumbId: 'companion_teaching' })} style={{
-          display: 'flex', alignItems: 'flex-start', gap: 11, width: '100%', textAlign: 'left',
-          background: 'none', border: 'none', cursor: 'pointer',
-          padding: practice ? '0 0 14px' : 0,
-          borderBottom: practice ? `1px solid ${C.sage}0e` : 'none',
-          WebkitTapHighlightColor: 'transparent', position: 'relative',
-        }}>
-          <div style={{
-            width: 30, height: 30, borderRadius: 9,
-            background: `linear-gradient(135deg, ${C.goldenAmber}14, ${C.goldenAmber}08)`,
-            border: `1px solid ${C.goldenAmber}20`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, marginTop: 1,
-            boxShadow: `0 1px 4px ${C.goldenAmber}0c`,
-          }}>
-            <TeachingIcon size={14} color={C.goldenAmber} />
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.goldenAmber, marginBottom: 4 }}>Today's Teaching</div>
-            <div style={{ fontFamily: F, fontSize: 15, fontWeight: 700, color: C.ink, lineHeight: 1.3, marginBottom: 4 }}>{teaching.title}</div>
-            <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.55, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{teaching.essence}</div>
-          </div>
-          <ArrowRightIcon size={10} color={`${C.sage}50`} />
-        </button>
-      )}
-
-      {/* Practice */}
-      {practice && (
-        <button onClick={() => onOpenPanel({ type: 'practice', data: practice, thumbId: 'companion_practice' })} style={{
-          display: 'flex', alignItems: 'flex-start', gap: 11, width: '100%', textAlign: 'left',
-          background: 'none', border: 'none', cursor: 'pointer',
-          padding: teaching ? '14px 0 0' : 0,
-          WebkitTapHighlightColor: 'transparent', position: 'relative',
-        }}>
-          <div style={{
-            width: 30, height: 30, borderRadius: 9,
-            background: `linear-gradient(135deg, ${C.seaGlass}14, ${C.seaGlass}08)`,
-            border: `1px solid ${C.seaGlass}20`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, marginTop: 1,
-            boxShadow: `0 1px 4px ${C.seaGlass}0c`,
-          }}>
-            <PracticeIcon size={14} color={C.seaGlass} />
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-              <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.seaGlass }}>Today's Practice</span>
-              {practice.duration && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <ClockIcon size={8} color={C.muted} />
-                  <span style={{ fontFamily: F, fontSize: 9, fontWeight: 500, color: C.muted }}>{practice.duration}</span>
-                </span>
-              )}
-            </div>
-            <div style={{ fontFamily: F, fontSize: 15, fontWeight: 700, color: C.ink, lineHeight: 1.3, marginBottom: 4 }}>{practice.title}</div>
-            <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.55, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{practice.description}</div>
-          </div>
-          <ArrowRightIcon size={10} color={`${C.sage}50`} />
-        </button>
-      )}
-    </div>
-  );
-}
 
 /* ── useIsDesktop hook ─────────────────────────────────────────────────── */
 
@@ -1289,6 +741,18 @@ function useIsDesktop() {
     return () => window.removeEventListener('resize', handler);
   }, []);
   return isDesktop;
+}
+
+/* ── useIsMobile hook ──────────────────────────────────────────────────── */
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return isMobile;
 }
 
 /* ── companion panel content (shared between SidePanel & BottomSheet) ── */
@@ -2056,143 +1520,184 @@ function DetailPanel({ item, onClose, activityFeedback, onActivityFeedback }) {
   );
 }
 
-/* ── day card ──────────────────────────────────────────────────────────── */
+/* ── destination logistics ──────────────────────────────────────────────── */
 
-function DayCard({ day, dayIndex = 0, feedback, onFeedback, onOpenPanel, activityFeedback, onActivityFeedback }) {
-  const [open, setOpen] = useState(true);
-  const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
-  const hasCompanion = day.companion && (day.companion.teaching || day.companion.practice);
-  const hasPicks = day.picks && day.picks.length > 0;
-  const hasRecommendations = hasCompanion || hasPicks;
-  // TODO: itinerary system prompt needs updating to include practice assignment per day (day.practice)
-  const wisdomEntry = day.practice ? ENTRIES.find(e => e.id === day.practice) : null;
+const DESTINATION_LOGISTICS = {
+  zion: {
+    flights: 'Fly into Las Vegas (LAS) \u2014 2.5 hrs to Springdale.',
+    car: 'A car is essential. Pick up at LAS airport.',
+    accommodation: 'Cable Mountain Lodge, Springdale',
+  },
+};
+
+function getLogistics(destination) {
+  const key = (destination || '').toLowerCase().replace(/\s+/g, '');
+  return DESTINATION_LOGISTICS[key] || DESTINATION_LOGISTICS.zion;
+}
+
+function LogisticsPanel({ destination, sticky = true }) {
+  const logistics = getLogistics(destination);
 
   return (
     <div style={{
-      marginBottom: 16, borderRadius: 2, background: C.white,
-      border: `1px solid ${open ? `${color}28` : `${C.sage}10`}`,
-      boxShadow: open ? `0 6px 28px ${C.amber}12, 0 2px 6px ${C.ink}08` : `0 1px 6px ${C.sage}06`,
-      overflow: 'hidden', transition: 'border-color 0.3s, box-shadow 0.3s',
-      backgroundImage: open ? `linear-gradient(180deg, ${C.cream}40 0%, ${C.white} 60%)` : 'none',
+      ...CARD_STYLE,
+      ...(sticky ? { position: 'sticky', top: 56 } : {}),
     }}>
-      <button onClick={() => { const next = !open; trackEvent('day_card_toggled', { day_index: dayIndex, action: next ? 'expanded' : 'collapsed' }); setOpen(next); }} style={{
-        width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '22px 22px 18px', background: open ? `linear-gradient(160deg, ${color}13, ${C.amber}06, transparent)` : 'transparent',
-        border: 'none', cursor: 'pointer', textAlign: 'left',
-        borderBottom: open ? `1px solid ${color}15` : 'none',
-        transition: 'background 0.3s', WebkitTapHighlightColor: 'transparent', gap: 14,
-        position: 'relative', overflow: 'hidden',
+      {/* Header */}
+      <div style={{
+        padding: '12px 16px',
+        borderBottom: `1px solid ${C.border}`,
       }}>
-        {/* Subtle radial glow behind day number */}
-        {open && <div style={{
-          position: 'absolute', top: -20, left: -10, width: 100, height: 100,
-          background: `radial-gradient(circle, ${C.warm}0c 0%, transparent 70%)`,
-          pointerEvents: 'none',
-        }} />}
         <div style={{
-          width: 44, height: 44, borderRadius: 12,
-          background: open ? `linear-gradient(135deg, ${color}14, ${C.warm}0a)` : `${C.sage}06`,
-          border: `1.5px solid ${open ? `${color}25` : `${C.sage}12`}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0, transition: 'all 0.3s',
-          boxShadow: open ? `0 2px 8px ${color}10` : 'none',
-          position: 'relative',
+          fontFamily: F, fontSize: 10, fontWeight: 700,
+          letterSpacing: '0.18em', textTransform: 'uppercase',
+          color: C.ink,
+        }}>Trip Logistics</div>
+      </div>
+
+      {/* Flights */}
+      <div style={{ padding: '13px 16px', borderBottom: `1px solid ${C.border}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <PlaneIcon size={12} color={C.muted} />
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted }}>Flights</span>
+        </div>
+        <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5, marginBottom: 8 }}>
+          {logistics.flights}
+        </div>
+        <button style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
+          + Add your flight →
+        </button>
+      </div>
+
+      {/* Rental Car */}
+      <div style={{ padding: '13px 16px', borderBottom: `1px solid ${C.border}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <CarIcon size={12} color={C.muted} />
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted }}>Rental Car</span>
+        </div>
+        <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5, marginBottom: 8 }}>
+          {logistics.car}
+        </div>
+        <button style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
+          Browse rentals →
+        </button>
+      </div>
+
+      {/* Accommodations */}
+      <div style={{ padding: '13px 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <CategoryIcon category="stay" color={C.muted} size={12} />
+          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.muted }}>Accommodations</span>
+        </div>
+        <div style={{
+          background: 'rgba(61,139,139,0.06)',
+          borderRadius: 5, padding: '6px 9px', marginBottom: 8,
         }}>
-          <span style={{ fontFamily: F, fontSize: 16, fontWeight: 800, color: open ? color : `${C.sage}60`, transition: 'color 0.3s' }}>{dayIndex + 1}</span>
+          <div style={{ fontFamily: F, fontSize: 8, fontWeight: 700, color: C.teal, marginBottom: 2 }}>LILA PICK</div>
+          <div style={{ fontFamily: F, fontSize: 12, fontWeight: 500, color: C.body }}>{logistics.accommodation}</div>
         </div>
-        <div style={{ flex: 1, position: 'relative' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontFamily: F, fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: open ? color : C.sage, transition: 'color 0.3s', marginBottom: 4 }}>{day.label}</span>
-            {feedback?.reaction === 'spot-on' && <CheckIcon size={11} color={C.seaGlass} />}
-            {feedback?.reaction === 'needs-work' && <PencilIcon size={11} color={C.goldenAmber} />}
-            {!feedback?.reaction && feedback?.note && <PencilIcon size={11} color={C.sage} />}
-          </div>
-          <div style={{ fontFamily: F, fontSize: 19, fontWeight: 700, color: C.ink, lineHeight: 1.25 }}>{day.title}</div>
-          {!open && day.snapshot && (
-            <div style={{ fontFamily: F, fontSize: 12, color: C.muted, marginTop: 6, lineHeight: 1.55 }}>{day.snapshot}</div>
-          )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <button style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: C.teal, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
+            See other options →
+          </button>
+          <button style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}>
+            + Add your reservation
+          </button>
         </div>
-        <Chevron open={open} color={open ? `${color}60` : `${C.sage}40`} />
-      </button>
-      <Collapsible open={open}>
-        <div style={{ padding: '0 22px 24px' }}>
-          {/* Day intro — Quicksand, breathing room */}
-          {day.intro && (
-            <div style={{ padding: '20px 0 18px', marginBottom: 4, borderBottom: `1px solid ${C.sage}0a` }}>
-              <p style={{ fontFamily: F, fontSize: 14, fontWeight: 500, color: C.body, lineHeight: 1.75, margin: 0 }}>{day.intro}</p>
-            </div>
-          )}
+      </div>
+    </div>
+  );
+}
 
-          {/* Wisdom banner — Today's Teaching / Practice / Ceremony */}
-          {wisdomEntry && (
-            <div style={{ paddingTop: day.intro ? 14 : 16, paddingBottom: 6 }}>
-              <WisdomBanner entry={wisdomEntry} onOpen={() => {
-                trackEvent('wisdom_banner_tapped', { day_index: dayIndex, entry_id: wisdomEntry.id, type: wisdomEntry.type });
-                onOpenPanel({ type: 'wisdom', data: wisdomEntry, thumbId: `day_${dayIndex}_wisdom` });
-              }} />
-            </div>
-          )}
+/* ── day card (V2 flat) ────────────────────────────────────────────────── */
 
-          {/* ZONE 1: The Flow — timeline activities */}
-          <div style={{ paddingTop: (day.intro && !wisdomEntry) ? 16 : 0 }}>
-            {day.timeline && day.timeline.map((b, i) => {
-              const isTrail = !!(b.trailData) || b.activityType === 'trail';
-              const isLast = i === day.timeline.length - 1;
-              if (isTrail) {
-                return (
-                  <TrailCard key={i} time={b.time} title={b.title} summary={b.summary}
-                    details={b.details} trailData={b.trailData || {}} url={b.url}
-                    dayIndex={dayIndex} itemIndex={i} isLast={isLast}
-                    onOpenPanel={onOpenPanel}
-                    activityFeedback={activityFeedback} onActivityFeedback={onActivityFeedback} />
-                );
-              }
-              return (
-                <TimelineBlock key={i} time={b.time} title={b.title} summary={b.summary}
-                  details={b.details} timeOfDay={b.timeOfDay} url={b.url} dayIndex={dayIndex}
-                  itemIndex={i} isLast={isLast}
-                  onOpenPanel={onOpenPanel}
-                  activityFeedback={activityFeedback} onActivityFeedback={onActivityFeedback} />
-              );
-            })}
-          </div>
+function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityFeedback, dimmed }) {
+  const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
 
-          {/* ZONE 2: Recommendations — companion + picks */}
-          {hasRecommendations && (
-            <>
-              {/* Zone transition divider */}
-              <div style={{ marginTop: 22, position: 'relative', display: 'flex', alignItems: 'center', gap: 14, padding: '0 4px' }}>
-                <div style={{ flex: 1, height: '1.5px', background: `linear-gradient(90deg, transparent, ${C.warm}45, ${C.warm}25)` }} />
-                <div style={{ width: 5, height: 5, borderRadius: '50%', background: `${C.warm}50`, boxShadow: `0 0 8px ${C.warm}30` }} />
-                <div style={{ flex: 1, height: '1.5px', background: `linear-gradient(90deg, ${C.warm}25, ${C.warm}45, transparent)` }} />
-              </div>
+  return (
+    <div style={{
+      ...CARD_STYLE,
+      marginBottom: 16,
+      opacity: dimmed ? 0.5 : 1,
+      transition: 'opacity 0.3s',
+    }}>
+      {/* Header */}
+      <div style={{ padding: '14px 18px 10px' }}>
+        <div style={{
+          fontFamily: F, fontSize: 10, fontWeight: 600,
+          letterSpacing: '0.12em', textTransform: 'uppercase',
+          color: color, marginBottom: 4,
+        }}>DAY {dayIndex + 1} &middot; {day.label}</div>
+        <div style={{
+          fontFamily: F_SERIF, fontSize: 22, fontWeight: 300,
+          color: C.ink, lineHeight: 1.15,
+        }}>{day.title}</div>
+      </div>
 
+      {/* Activity rows */}
+      {day.timeline && day.timeline.map((b, i) => {
+        const thumbId = `day_${dayIndex}_timeline_${i}`;
+        const isTrail = !!(b.trailData) || b.activityType === 'trail';
+        const tint = reactionTint(activityFeedback?.[thumbId]);
+
+        return (
+          <div
+            key={i}
+            onClick={() => {
+              trackEvent('panel_opened', { type: isTrail ? 'trail' : 'activity', title: b.title });
+              onOpenPanel({
+                type: isTrail ? 'trail' : 'activity',
+                data: { ...b, trailData: b.trailData || {} },
+                thumbId,
+              });
+            }}
+            style={{
+              display: 'flex', alignItems: 'flex-start', gap: 10,
+              padding: '9px 18px',
+              borderTop: `1px solid ${C.border}`,
+              cursor: 'pointer',
+              background: tint || 'transparent',
+              transition: 'background 0.2s',
+              WebkitTapHighlightColor: 'transparent',
+            }}
+            onMouseEnter={e => { if (!tint) e.currentTarget.style.background = 'rgba(28,28,26,0.02)'; }}
+            onMouseLeave={e => { if (!tint) e.currentTarget.style.background = 'transparent'; }}
+          >
+            {/* Time */}
+            <span style={{
+              fontFamily: F, fontSize: 10, fontWeight: 400,
+              color: C.muted, width: 44, flexShrink: 0, paddingTop: 2,
+            }}>{b.time || ''}</span>
+
+            {/* Dot */}
+            <div style={{
+              width: 6, height: 6, borderRadius: '50%',
+              background: color, opacity: 0.45,
+              flexShrink: 0, marginTop: 6,
+            }} />
+
+            {/* Content */}
+            <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{
-                marginTop: 16, paddingTop: 16,
-                marginLeft: -22, marginRight: -22, paddingLeft: 22, paddingRight: 22, paddingBottom: 4,
-                background: `linear-gradient(180deg, ${C.amber}0a, ${C.cream}40, transparent)`,
-                borderTop: `1px solid ${C.amber}0c`,
-              }}>
-                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 14 }}>Recommendations</div>
-
-                {hasCompanion && (
-                  <CompanionCard companion={day.companion} onOpenPanel={onOpenPanel} />
-                )}
-
-                {day.picks && day.picks.map((p, i) => (
-                  <InlinePick key={i} category={p.category} pick={p.pick} dayIndex={dayIndex}
-                    pickIndex={i} alternatives={p.alternatives || []} isLast={i === day.picks.length - 1}
-                    onOpenPanel={onOpenPanel} activityFeedback={activityFeedback}
-                    onActivityFeedback={onActivityFeedback} />
-                ))}
+                fontFamily: F, fontSize: 14, fontWeight: 500,
+                color: C.ink, lineHeight: 1.3, marginBottom: 2,
+              }}>{b.title}</div>
+              {b.summary && (
+                <div style={{
+                  fontFamily: F, fontSize: 12, fontWeight: 400,
+                  color: C.body, lineHeight: 1.5,
+                }}>{b.summary}</div>
+              )}
+              <div style={{ marginTop: 6 }}>
+                <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
               </div>
-            </>
-          )}
+            </div>
 
-          {/* ZONE 3: Day feedback strip */}
-          <DayFeedbackStrip dayIndex={dayIndex} feedback={feedback} onFeedback={onFeedback} />
-        </div>
-      </Collapsible>
+            {/* Chevron */}
+            <Chevron open={false} color={`${C.sage}40`} />
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -2765,6 +2270,7 @@ function FirstDraftModal({ onDismiss }) {
 export default function ItineraryResults() {
   const location = useLocation();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [visible, setVisible] = useState(false);
   const [refining, setRefining] = useState(false);
 
@@ -3031,7 +2537,7 @@ export default function ItineraryResults() {
   };
 
   return (
-    <div style={{ fontFamily: F, background: C.cream, minHeight: '100vh' }}>
+    <div style={{ fontFamily: F, background: C.warm, minHeight: '100vh' }}>
       <RefiningOverlay visible={refining} iteration={iteration} />
 
       {/* First draft modal */}
@@ -3048,7 +2554,7 @@ export default function ItineraryResults() {
         position: 'sticky', top: 0, zIndex: 100,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: '12px 20px',
-        background: `${C.cream}f0`,
+        background: `${C.warm}f0`,
         backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
         borderBottom: `1px solid ${C.sage}06`,
       }}>
@@ -3062,18 +2568,30 @@ export default function ItineraryResults() {
       </div>
 
       <div style={{
-        maxWidth: 580, margin: '0 auto', padding: '16px 16px 80px',
+        maxWidth: 900, margin: '0 auto', padding: '16px 16px 80px',
         opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(12px)',
         transition: 'all 0.7s cubic-bezier(0.4,0,0.2,1)',
       }}>
 
-        {/* Hero */}
+        {/* Hero — left-aligned */}
         {isStructured && (
-          <div style={{ textAlign: 'center', padding: '18px 8px 28px' }}>
+          <div style={{ textAlign: 'left', padding: '18px 8px 28px' }}>
             <VersionBadge iteration={iteration} />
-            <h1 style={{ fontFamily: F, fontSize: 'clamp(24px, 6.5vw, 32px)', fontWeight: 600, color: C.slate, lineHeight: 1.2, marginBottom: 8, letterSpacing: '-0.01em' }}>{itinerary.title}</h1>
-            {itinerary.subtitle && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, fontStyle: 'normal', fontWeight: 400 }}>{itinerary.subtitle}</p>}
-            {itinerary.intro && <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, lineHeight: 1.75, maxWidth: 460, margin: '14px auto 0', fontWeight: 400 }}>{itinerary.intro}</p>}
+            <div style={{
+              fontFamily: F, fontSize: 10, fontWeight: 700,
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              color: C.teal, marginBottom: 8,
+            }}>Your Itinerary</div>
+            <h1 style={{
+              fontFamily: F_SERIF, fontSize: 'clamp(26px, 4.5vw, 36px)', fontWeight: 300,
+              color: C.ink, lineHeight: 1.15, marginBottom: 8,
+            }}>{itinerary.title}</h1>
+            {itinerary.subtitle && (
+              <p style={{ fontFamily: F_SERIF, fontSize: 13, color: C.muted, fontStyle: 'italic', fontWeight: 400 }}>{itinerary.subtitle}</p>
+            )}
+            {itinerary.intro && (
+              <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.75, maxWidth: 600, marginTop: 14, fontWeight: 400 }}>{itinerary.intro}</p>
+            )}
           </div>
         )}
 
@@ -3090,61 +2608,81 @@ export default function ItineraryResults() {
           />
         )}
 
-        {/* Trip Overview */}
-        {isStructured && enrichedDays.length > 1 && (
-          <TripOverview days={enrichedDays} onDayClick={scrollToDay} dayFeedback={dayFeedback} />
+        {/* Day by Day label */}
+        {isStructured && (
+          <div style={{
+            fontFamily: F, fontSize: 9, fontWeight: 700,
+            letterSpacing: '0.18em', textTransform: 'uppercase',
+            color: 'rgba(28,28,26,0.4)', marginBottom: 14, paddingLeft: 8,
+          }}>Day by Day</div>
         )}
 
-        {/* Day Cards / Markdown Fallback */}
+        {/* Day Cards + Logistics — two-col grid / Markdown Fallback */}
         {isStructured ? (
           <>
-            {enrichedDays.map((day, i) => (
-              <div key={i} ref={el => dayRefs.current[i] = el} style={{ scrollMarginTop: 60 }}>
-                <DayCard day={day} dayIndex={i} feedback={dayFeedback[i]} onFeedback={handleDayFeedback}
-                  activityFeedback={activityFeedback} onActivityFeedback={handleActivityFeedback}
-                  onOpenPanel={(panelItem) => {
-                    trackEvent('panel_opened', { type: panelItem.type, title: panelItem.data?.title || panelItem.data?.name });
-                    setActivePanel(panelItem);
-                  }} />
-              </div>
-            ))}
-
-            {/* Before You Go */}
-            {itinerary.beforeYouGo && (
-              <div ref={beforeYouGoRef} style={{ background: `linear-gradient(180deg, ${C.white}, ${C.cream}30)`, borderRadius: 2, border: `1px solid ${C.sage}18`, padding: '18px 20px', marginTop: 6, boxShadow: `0 1px 8px ${C.sage}08` }}>
-                <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 12 }}>Before You Go</div>
-                {itinerary.beforeYouGo.map((item, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 8, padding: '5px 0', borderBottom: i < itinerary.beforeYouGo.length - 1 ? `1px solid ${C.sage}06` : 'none' }}>
-                    <span style={{ color: `${C.sage}50`, flexShrink: 0, fontSize: 10, marginTop: 2 }}>{"●\uFE0E"}</span>
-                    <span style={{ fontFamily: F, fontSize: 13, color: `${C.slate}85`, lineHeight: 1.65 }}>{renderInline(item)}</span>
+            <div style={{
+              display: isMobile ? 'block' : 'grid',
+              gridTemplateColumns: '1fr 240px',
+              gap: 20,
+            }}>
+              {/* Left: Day cards */}
+              <div>
+                {enrichedDays.map((day, i) => (
+                  <div key={i} ref={el => dayRefs.current[i] = el} style={{ scrollMarginTop: 60 }}>
+                    <DayCard day={day} dayIndex={i} dimmed={i >= 2}
+                      activityFeedback={activityFeedback} onActivityFeedback={handleActivityFeedback}
+                      onOpenPanel={(panelItem) => {
+                        setActivePanel(panelItem);
+                      }} />
                   </div>
                 ))}
               </div>
-            )}
 
-            {/* Trip Pulse */}
-            <TripPulse pulse={pulse} setPulse={setPulse} overallNote={overallNote} setOverallNote={setOverallNote}
-              iteration={iteration} onPulseSelect={(val) => trackEvent('trip_pulse_selected', { pulse: val })} />
-
-            {/* Closing Note */}
-            {itinerary.closingNote && (
-              <div style={{ textAlign: 'center', padding: '28px 20px 0' }}>
-                <p style={{ fontFamily: F, fontSize: 15, fontWeight: 400, color: `${C.slate}60`, lineHeight: 1.6, fontStyle: 'normal' }}>{itinerary.closingNote}</p>
+              {/* Right: Logistics panel */}
+              <div>
+                <LogisticsPanel destination={formData?.destination} sticky={!isMobile} />
               </div>
-            )}
+            </div>
 
-            {/* Refinement error */}
-            {refineError && (
-              <div style={{ background: `${C.sunSalmon}10`, border: `1px solid ${C.sunSalmon}25`, borderRadius: 12, padding: '12px 16px', marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <span style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: C.sunSalmon, lineHeight: 1.4 }}>{refineError}</span>
-                <button onClick={() => setRefineError(null)} style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: `${C.sunSalmon}80`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', flexShrink: 0, WebkitTapHighlightColor: 'transparent' }}>Dismiss</button>
-              </div>
-            )}
+            {/* Below-fold content — centered at 580 */}
+            <div style={{ maxWidth: 580, margin: '0 auto' }}>
+              {/* Before You Go */}
+              {itinerary.beforeYouGo && (
+                <div ref={beforeYouGoRef} style={{ background: `linear-gradient(180deg, ${C.white}, ${C.cream}30)`, borderRadius: 2, border: `1px solid ${C.sage}18`, padding: '18px 20px', marginTop: 6, boxShadow: `0 1px 8px ${C.sage}08` }}>
+                  <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 12 }}>Before You Go</div>
+                  {itinerary.beforeYouGo.map((item, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 8, padding: '5px 0', borderBottom: i < itinerary.beforeYouGo.length - 1 ? `1px solid ${C.sage}06` : 'none' }}>
+                      <span style={{ color: `${C.sage}50`, flexShrink: 0, fontSize: 10, marginTop: 2 }}>{"●\uFE0E"}</span>
+                      <span style={{ fontFamily: F, fontSize: 13, color: `${C.slate}85`, lineHeight: 1.65 }}>{renderInline(item)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-            {/* Refine CTA / Premium Gate */}
-            <RefineCTA iteration={iteration} hasFeedback={hasFeedback} onRefine={handleRefine} pulse={pulse}
-              onGateShown={() => trackEvent('premium_gate_shown', { iteration })}
-              onUpgradeClick={() => trackEvent('premium_upgrade_clicked', { iteration })} />
+              {/* Trip Pulse */}
+              <TripPulse pulse={pulse} setPulse={setPulse} overallNote={overallNote} setOverallNote={setOverallNote}
+                iteration={iteration} onPulseSelect={(val) => trackEvent('trip_pulse_selected', { pulse: val })} />
+
+              {/* Closing Note */}
+              {itinerary.closingNote && (
+                <div style={{ textAlign: 'center', padding: '28px 20px 0' }}>
+                  <p style={{ fontFamily: F, fontSize: 15, fontWeight: 400, color: `${C.slate}60`, lineHeight: 1.6, fontStyle: 'normal' }}>{itinerary.closingNote}</p>
+                </div>
+              )}
+
+              {/* Refinement error */}
+              {refineError && (
+                <div style={{ background: `${C.sunSalmon}10`, border: `1px solid ${C.sunSalmon}25`, borderRadius: 12, padding: '12px 16px', marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                  <span style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: C.sunSalmon, lineHeight: 1.4 }}>{refineError}</span>
+                  <button onClick={() => setRefineError(null)} style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: `${C.sunSalmon}80`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', flexShrink: 0, WebkitTapHighlightColor: 'transparent' }}>Dismiss</button>
+                </div>
+              )}
+
+              {/* Refine CTA / Premium Gate */}
+              <RefineCTA iteration={iteration} hasFeedback={hasFeedback} onRefine={handleRefine} pulse={pulse}
+                onGateShown={() => trackEvent('premium_gate_shown', { iteration })}
+                onUpgradeClick={() => trackEvent('premium_upgrade_clicked', { iteration })} />
+            </div>
           </>
         ) : (
           <div style={{ background: C.white, borderRadius: 2, padding: '24px 22px', border: `1px solid ${C.sage}12`, boxShadow: `0 2px 10px ${C.amber}05` }}>
