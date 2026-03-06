@@ -695,11 +695,14 @@ function InlineReactions({ id, feedback, onFeedback }) {
   };
 
   const pills = [
-    { key: 'fire', emoji: '🔥', label: 'Fire',
+    { key: 'fire', label: 'Must do',
+      icon: (active, color) => <FlameIcon size={12} color={color} active={active} />,
       activeColor: C.amber, activeBg: 'rgba(200,148,26,0.06)', activeBorder: C.amber },
-    { key: 'up', emoji: '👍', label: '',
+    { key: 'up', label: 'Love it',
+      icon: (active, color) => <ThumbUp size={12} color={color} active={active} />,
       activeColor: C.sea, activeBg: 'rgba(127,181,160,0.06)', activeBorder: C.sea },
-    { key: 'down', emoji: '👎', label: '',
+    { key: 'down', label: 'Not for me',
+      icon: (active, color) => <ThumbDown size={12} color={color} active={active} />,
       activeColor: C.muted, activeBg: 'rgba(140,140,128,0.06)', activeBorder: C.muted },
   ];
 
@@ -707,6 +710,7 @@ function InlineReactions({ id, feedback, onFeedback }) {
     <div onClick={e => e.stopPropagation()} style={{ display: 'flex', gap: 5, marginTop: 6 }}>
       {pills.map(p => {
         const active = currentReaction === p.key;
+        const color = active ? p.activeColor : C.muted;
         return (
           <button key={p.key} onClick={e => toggle(p.key, e)} style={{
             display: 'flex', alignItems: 'center', gap: 4,
@@ -717,10 +721,10 @@ function InlineReactions({ id, feedback, onFeedback }) {
             cursor: 'pointer', transition: 'all 0.2s',
             WebkitTapHighlightColor: 'transparent',
             fontFamily: F, fontSize: 10, fontWeight: 600,
-            color: active ? p.activeColor : C.muted,
+            color: color,
           }}>
-            <span style={{ fontSize: 11 }}>{p.emoji}</span>
-            {p.label && <span>{p.label}</span>}
+            {p.icon(active, color)}
+            <span>{p.label}</span>
           </button>
         );
       })}
