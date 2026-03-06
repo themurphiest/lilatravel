@@ -1706,15 +1706,13 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
       {/* Companion strip — teaching + practice teasers */}
       {day.companion && (day.companion.teaching || day.companion.practice) && (
         <div style={{
-          margin: '0 18px 0', padding: '10px 14px',
-          background: `linear-gradient(135deg, ${C.amber}06, ${C.sea}06)`,
-          borderRadius: 6,
-          border: `1px solid ${C.border}`,
+          display: 'flex', gap: 8,
+          padding: '0 18px 6px',
         }}>
           {[
             day.companion.teaching && { type: 'teaching', data: day.companion.teaching, icon: TeachingIcon, accent: C.amber, label: 'Teaching', teaser: day.companion.teaching.title },
             day.companion.practice && { type: 'practice', data: day.companion.practice, icon: PracticeIcon, accent: C.sea, label: 'Practice', teaser: day.companion.practice.title },
-          ].filter(Boolean).map((item, idx, arr) => (
+          ].filter(Boolean).map((item) => (
             <button
               key={item.type}
               onClick={() => {
@@ -1726,29 +1724,31 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
                 });
               }}
               style={{
-                display: 'flex', alignItems: 'center', gap: 8, width: '100%',
-                padding: '6px 0',
-                borderTop: idx > 0 ? `1px solid ${C.border}` : 'none',
-                background: 'none', border: idx > 0 ? undefined : 'none',
-                borderLeft: 'none', borderRight: 'none', borderBottom: 'none',
+                flex: 1, minWidth: 0,
+                padding: '9px 12px',
+                borderRadius: 6,
+                background: `${item.accent}06`,
+                border: `1px solid ${item.accent}15`,
                 cursor: 'pointer', textAlign: 'left',
                 WebkitTapHighlightColor: 'transparent',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={e => e.currentTarget.style.background = `${item.accent}0c`}
+              onMouseLeave={e => e.currentTarget.style.background = `${item.accent}06`}
             >
-              <item.icon size={13} color={item.accent} />
-              <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
+                <item.icon size={10} color={item.accent} />
                 <span style={{
-                  fontFamily: F, fontSize: 9, fontWeight: 600,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
+                  fontFamily: F, fontSize: 8, fontWeight: 700,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
                   color: item.accent,
                 }}>{item.label}</span>
-                <span style={{
-                  fontFamily: F, fontSize: 11, fontWeight: 500,
-                  color: C.body, marginLeft: 8,
-                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                }}>{item.teaser}</span>
               </div>
-              <Chevron open={false} color={`${item.accent}60`} />
+              <div style={{
+                fontFamily: F_SERIF, fontSize: 13, fontWeight: 400,
+                color: C.ink, lineHeight: 1.3,
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>{item.teaser}</div>
             </button>
           ))}
         </div>
