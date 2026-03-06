@@ -853,22 +853,28 @@ function CompanionPanelContent({ type, data, id, feedback, onFeedback }) {
 
 function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedback }) {
   const { title, time, summary, details, trailData = {}, url } = data;
-  const dot = WARM_DOT;
   const resolvedUrl = url || trailData.npsUrl || lookupUrl(title);
+
+  // Consistent label style used throughout
+  const labelStyle = {
+    fontFamily: F, fontSize: 9, fontWeight: 600,
+    letterSpacing: '0.1em', textTransform: 'uppercase',
+    color: C.muted,
+  };
 
   return (
     <div style={{ maxWidth: 500, margin: '0 auto', padding: '20px 20px 60px' }}>
 
       {/* Trail badge + time */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${C.sage}0a`, border: `1px solid ${C.sage}18` }}>
-          <MountainIcon size={12} color={C.sage} />
-          <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.sage }}>Trail</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${C.teal}08`, border: `1px solid ${C.teal}18` }}>
+          <MountainIcon size={12} color={C.teal} />
+          <span style={{ ...labelStyle, color: C.teal }}>Trail</span>
         </div>
         {time && (
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${dot}0e`, border: `1px solid ${dot}18` }}>
-            <ClockIcon size={10} color={dot} />
-            <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: dot }}>{time}</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${C.teal}06`, border: `1px solid ${C.teal}12` }}>
+            <ClockIcon size={10} color={C.muted} />
+            <span style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: C.body }}>{time}</span>
           </div>
         )}
       </div>
@@ -877,7 +883,7 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
       <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.2, marginBottom: 4 }}>
         {resolvedUrl ? (
           <a href={resolvedUrl} target="_blank" rel="noopener noreferrer"
-            style={{ color: 'inherit', textDecoration: 'none', borderBottom: `2px solid ${C.teal}20` }}>
+            style={{ color: 'inherit', textDecoration: 'none', borderBottom: `1px solid ${C.teal}30` }}>
             {title}
           </a>
         ) : title}
@@ -887,15 +893,7 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
       <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
 
       {/* Summary */}
-      <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.75, marginBottom: 16 }}>{summary}</p>
-
-      {/* NPS disclaimer (Step G) */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 18 }}>
-        <ExternalLinkIcon size={9} color={C.muted} />
-        <span style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, lineHeight: 1.4 }}>
-          Trail info sourced from NPS documentation. Verify conditions before your visit.
-        </span>
-      </div>
+      <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 16 }}>{summary}</p>
 
       {/* STAT GRID */}
       {(trailData.distance || trailData.elevationGain || trailData.trailType || trailData.difficulty) && (
@@ -903,119 +901,99 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
           gap: 8,
-          marginBottom: 22,
+          marginBottom: 16,
         }}>
           {trailData.distance && (
-            <div style={{ padding: '12px 14px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 5 }}>
-                <RouteIcon size={12} color={C.sage} />
-                <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted }}>Distance</span>
-              </div>
-              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.ink }}>{trailData.distance}</div>
+            <div style={{ padding: '10px 12px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 }}>
+              <div style={{ ...labelStyle, marginBottom: 4 }}>Distance</div>
+              <div style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: C.ink }}>{trailData.distance}</div>
             </div>
           )}
           {trailData.elevationGain && (
-            <div style={{ padding: '12px 14px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 5 }}>
-                <MountainIcon size={12} color={C.sage} />
-                <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted }}>Elevation Gain</span>
-              </div>
-              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.ink }}>{trailData.elevationGain}</div>
+            <div style={{ padding: '10px 12px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 }}>
+              <div style={{ ...labelStyle, marginBottom: 4 }}>Elevation</div>
+              <div style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: C.ink }}>{trailData.elevationGain}</div>
             </div>
           )}
           {trailData.trailType && (
-            <div style={{ padding: '12px 14px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 5 }}>
-                <RouteIcon size={12} color={C.sage} />
-                <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted }}>Route Type</span>
-              </div>
-              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.ink, textTransform: 'capitalize' }}>{trailData.trailType}</div>
+            <div style={{ padding: '10px 12px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 }}>
+              <div style={{ ...labelStyle, marginBottom: 4 }}>Route Type</div>
+              <div style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: C.ink, textTransform: 'capitalize' }}>{trailData.trailType}</div>
             </div>
           )}
           {trailData.difficulty && (
-            <div style={{ padding: '12px 14px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 }}>
-              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted, marginBottom: 7 }}>Difficulty</div>
+            <div style={{ padding: '10px 12px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 }}>
+              <div style={{ ...labelStyle, marginBottom: 6 }}>Difficulty</div>
               <DifficultyBar difficulty={trailData.difficulty} />
             </div>
           )}
         </div>
       )}
 
-      {/* PERMIT BLOCK */}
-      {trailData.permitRequired && (
+      {/* TRAIL INFO — permit, trailhead, best time, conditions in a unified card */}
+      {(trailData.permitRequired !== undefined || trailData.trailheadAccess || trailData.bestStartTime || trailData.conditions) && (
         <div style={{
-          marginBottom: 20, padding: '13px 15px',
-          background: `${C.goldenAmber}07`,
-          border: `1.5px solid ${C.goldenAmber}22`,
-          borderRadius: 8,
-          display: 'flex', alignItems: 'flex-start', gap: 10,
+          background: C.white, border: `1px solid ${C.border}`, borderRadius: 8,
+          overflow: 'hidden', marginBottom: 16,
         }}>
-          <PermitIcon size={15} color={C.goldenAmber} />
-          <div>
-            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.goldenAmber, marginBottom: 4 }}>Permit Required</div>
-            {trailData.permitNote && (
-              <div style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.55 }}>{trailData.permitNote}</div>
-            )}
-          </div>
-        </div>
-      )}
+          {/* Permit */}
+          {trailData.permitRequired && (
+            <div style={{
+              padding: '10px 14px',
+              borderBottom: `1px solid ${C.border}`,
+              display: 'flex', alignItems: 'flex-start', gap: 8,
+            }}>
+              <PermitIcon size={13} color={C.amber} />
+              <div>
+                <div style={{ ...labelStyle, color: C.amber, marginBottom: 2 }}>Permit Required</div>
+                {trailData.permitNote && (
+                  <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5 }}>{trailData.permitNote}</div>
+                )}
+              </div>
+            </div>
+          )}
 
-      {/* No-permit note */}
-      {trailData.permitRequired === false && trailData.permitNote && (
-        <div style={{
-          marginBottom: 20, padding: '10px 14px',
-          background: `${C.seaGlass}08`,
-          border: `1px solid ${C.seaGlass}18`,
-          borderRadius: 8,
-          display: 'flex', alignItems: 'flex-start', gap: 9,
-        }}>
-          <CheckIcon size={13} color={C.seaGlass} />
-          <span style={{ fontFamily: F, fontSize: 12.5, color: C.body, lineHeight: 1.55 }}>{trailData.permitNote}</span>
-        </div>
-      )}
+          {/* No-permit note */}
+          {trailData.permitRequired === false && trailData.permitNote && (
+            <div style={{
+              padding: '10px 14px',
+              borderBottom: `1px solid ${C.border}`,
+              display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              <CheckIcon size={12} color={C.sea} />
+              <span style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5 }}>{trailData.permitNote}</span>
+            </div>
+          )}
 
-      {/* TRAILHEAD ACCESS */}
-      {trailData.trailheadAccess && (
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-            <TrailheadIcon size={13} color={C.sage} />
-            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted }}>Trailhead Access</div>
-          </div>
-          <div style={{
-            fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.65,
-            paddingLeft: 12, borderLeft: `2px solid ${C.sage}18`,
-          }}>
-            {trailData.trailheadAccess}
-          </div>
-        </div>
-      )}
+          {/* Trailhead Access */}
+          {trailData.trailheadAccess && (
+            <div style={{
+              padding: '10px 14px',
+              borderBottom: (trailData.bestStartTime || trailData.conditions) ? `1px solid ${C.border}` : 'none',
+            }}>
+              <div style={{ ...labelStyle, marginBottom: 3 }}>Trailhead Access</div>
+              <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5 }}>{trailData.trailheadAccess}</div>
+            </div>
+          )}
 
-      {/* BEST START TIME */}
-      {trailData.bestStartTime && (
-        <div style={{
-          marginBottom: 20, padding: '11px 14px',
-          background: `${dot}08`, borderRadius: 8,
-          borderLeft: `2px solid ${dot}35`,
-          display: 'flex', alignItems: 'flex-start', gap: 8,
-        }}>
-          <ClockIcon size={12} color={dot} />
-          <div>
-            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${dot}90`, marginBottom: 3 }}>Best Start Time</div>
-            <div style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.55 }}>{trailData.bestStartTime}</div>
-          </div>
-        </div>
-      )}
+          {/* Best Start Time */}
+          {trailData.bestStartTime && (
+            <div style={{
+              padding: '10px 14px',
+              borderBottom: trailData.conditions ? `1px solid ${C.border}` : 'none',
+            }}>
+              <div style={{ ...labelStyle, marginBottom: 3 }}>Best Start Time</div>
+              <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5 }}>{trailData.bestStartTime}</div>
+            </div>
+          )}
 
-      {/* CONDITIONS */}
-      {trailData.conditions && (
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted, marginBottom: 8 }}>Trail Conditions</div>
-          <div style={{
-            fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.65,
-            paddingLeft: 12, borderLeft: `2px solid ${C.sunSalmon}28`,
-          }}>
-            {trailData.conditions}
-          </div>
+          {/* Conditions */}
+          {trailData.conditions && (
+            <div style={{ padding: '10px 14px' }}>
+              <div style={{ ...labelStyle, marginBottom: 3 }}>Trail Conditions</div>
+              <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.5 }}>{trailData.conditions}</div>
+            </div>
+          )}
         </div>
       )}
 
@@ -1023,31 +1001,36 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
       {details && (
         <div style={{
           fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7,
-          padding: '6px 0', paddingLeft: 13,
-          borderLeft: `2px solid ${dot}22`, marginBottom: 20,
+          marginBottom: 16,
         }}>
           {renderInlineBlock(details)}
         </div>
       )}
 
-      {/* NPS CTA */}
+      {/* NPS disclaimer + CTA */}
       {resolvedUrl && (
-        <a href={resolvedUrl} target="_blank" rel="noopener noreferrer"
-          onClick={() => trackEvent('external_link_clicked', { name: title, url: resolvedUrl, link_type: 'trail_nps' })}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 7,
-            fontFamily: F, fontSize: 12, fontWeight: 700,
-            color: C.oceanTeal, textDecoration: 'none',
-            padding: '9px 18px',
-            border: `1.5px solid ${C.oceanTeal}35`,
-            background: `${C.oceanTeal}08`,
-            borderRadius: 8,
-            letterSpacing: '0.05em',
-            marginBottom: 24,
-          }}>
-          View NPS Trail Guide
-          <ExternalLinkIcon size={11} color={C.oceanTeal} />
-        </a>
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 10 }}>
+            <ExternalLinkIcon size={9} color={C.muted} />
+            <span style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: C.muted, lineHeight: 1.4 }}>
+              Trail info sourced from NPS. Verify conditions before your visit.
+            </span>
+          </div>
+          <a href={resolvedUrl} target="_blank" rel="noopener noreferrer"
+            onClick={() => trackEvent('external_link_clicked', { name: title, url: resolvedUrl, link_type: 'trail_nps' })}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              fontFamily: F, fontSize: 11, fontWeight: 600,
+              color: C.teal, textDecoration: 'none',
+              padding: '7px 14px',
+              border: `1px solid ${C.teal}25`,
+              background: `${C.teal}06`,
+              borderRadius: 20,
+            }}>
+            View NPS Trail Guide
+            <ExternalLinkIcon size={10} color={C.teal} />
+          </a>
+        </div>
       )}
 
     </div>
