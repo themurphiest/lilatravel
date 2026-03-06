@@ -1330,7 +1330,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
 
         {/* Details */}
         {data.details && (
-          <div style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, padding: '6px 0', paddingLeft: 13, borderLeft: `2px solid ${dot}22`, marginBottom: 20 }}>
+          <div style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, padding: '6px 0', paddingLeft: 13, borderLeft: `3px solid ${dot}30`, marginBottom: 20 }}>
             {renderInlineBlock(data.details)}
           </div>
         )}
@@ -1343,8 +1343,8 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
               display: 'inline-flex', alignItems: 'center', gap: 5,
               fontFamily: F, fontSize: 12, fontWeight: 600,
               color: C.oceanTeal, textDecoration: 'none',
-              padding: '6px 12px',
-              background: `${C.oceanTeal}08`, borderRadius: 8,
+              padding: '8px 16px',
+              background: `${C.oceanTeal}08`, borderRadius: 20,
               border: `1px solid ${C.oceanTeal}15`,
               marginBottom: 20,
             }}>
@@ -1386,7 +1386,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
       {data.vibe && (
         <div style={{
           fontFamily: F, fontSize: 12, fontWeight: 500,
-          color: C.muted, lineHeight: 1.4, marginBottom: 14,
+          fontStyle: 'italic', color: C.sage, lineHeight: 1.4, marginBottom: 14,
         }}>
           {data.vibe}
         </div>
@@ -1395,8 +1395,40 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
       {/* Why */}
       <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{data.why}</p>
 
-      {/* Structured detail block */}
-      <DetailBlock category={type} pick={data} color={s.color} />
+      {/* Stat grid */}
+      {(() => {
+        const gridLabel = { fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted, marginBottom: 4 };
+        const gridValue = { fontFamily: F, fontSize: 13, fontWeight: 500, color: C.ink };
+        const tile = { padding: '10px 12px', background: C.white, border: `1px solid ${C.border}`, borderRadius: 8 };
+        let cells = [];
+        if (type === 'stay') {
+          if (data.stayType) cells.push({ label: 'Type', value: data.stayType });
+          if (data.priceRange) cells.push({ label: 'Price', value: data.priceRange });
+          if (data.distanceFromPark) cells.push({ label: 'Distance from Park', value: data.distanceFromPark, span: true });
+        } else if (type === 'eat') {
+          if (data.cuisine) cells.push({ label: 'Cuisine', value: data.cuisine });
+          if (data.priceRange) cells.push({ label: 'Price', value: data.priceRange });
+          if (data.bestFor) cells.push({ label: 'Best For', value: data.bestFor, span: true });
+        } else if (type === 'gear') {
+          if (data.priceRange) cells.push({ label: 'Price Range', value: data.priceRange });
+          if (data.whereToGet) cells.push({ label: 'Where to Get', value: data.whereToGet });
+        } else if (type === 'wellness') {
+          if (data.duration) cells.push({ label: 'Duration', value: data.duration });
+          if (data.difficulty) cells.push({ label: 'Level', value: data.difficulty });
+          if (data.bestTimeOfDay) cells.push({ label: 'Best Time', value: data.bestTimeOfDay, span: true });
+        }
+        if (!cells.length) return null;
+        return (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 16 }}>
+            {cells.map((c, i) => (
+              <div key={i} style={{ ...tile, ...(c.span ? { gridColumn: 'span 2' } : {}) }}>
+                <div style={gridLabel}>{c.label}</div>
+                <div style={gridValue}>{c.value}</div>
+              </div>
+            ))}
+          </div>
+        );
+      })()}
 
       {/* CTA for stay / eat */}
       {(data.url || lookupUrl(data.name)) && (type === 'stay' || type === 'eat') && (
@@ -1409,10 +1441,10 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
             display: 'inline-flex', alignItems: 'center', gap: 7,
             fontFamily: F, fontSize: 12, fontWeight: 600,
             color: s.color, textDecoration: 'none',
-            padding: '9px 18px',
+            padding: '8px 16px',
             border: `1.5px solid ${s.color}35`,
             background: `${s.color}08`,
-            borderRadius: 8,
+            borderRadius: 20,
             letterSpacing: '0.05em',
             marginBottom: 24,
           }}
@@ -1427,21 +1459,24 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted, marginBottom: 10 }}>Other Options</div>
           {alternatives.map((alt, i) => (
-            <div key={i} style={{ padding: '12px 14px', borderRadius: 8, background: `${s.color}05`, border: `1px solid ${s.color}15`, marginBottom: 8 }}>
-              <div style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.ink, marginBottom: 4 }}>
-                {alt.name}
+            <div key={i} style={{ padding: '14px 16px', borderRadius: 8, background: C.white, border: `1px solid ${C.border}`, marginBottom: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
+                <div style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.ink }}>{alt.name}</div>
+                {alt.priceRange && (
+                  <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: s.color, letterSpacing: '0.02em', flexShrink: 0 }}>{alt.priceRange}</span>
+                )}
               </div>
               {alt.vibe && (
-                <div style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: C.muted, marginBottom: 4 }}>
+                <div style={{ fontFamily: F, fontSize: 11, fontWeight: 500, fontStyle: 'italic', color: C.sage, marginBottom: 6 }}>
                   {alt.vibe}
                 </div>
               )}
               <div style={{ fontFamily: F, fontSize: 12, color: C.body, lineHeight: 1.55 }}>{alt.why}</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 7 }}>
-                {alt.priceRange && <MetaChip label={alt.priceRange} />}
-                {alt.duration && <MetaChip label={alt.duration} />}
-                {alt.whereToGet && <MetaChip label={alt.whereToGet} />}
-              </div>
+              {(alt.duration || alt.whereToGet) && (
+                <div style={{ fontFamily: F, fontSize: 11, color: C.muted, marginTop: 6 }}>
+                  {[alt.duration, alt.whereToGet].filter(Boolean).join(' · ')}
+                </div>
+              )}
             </div>
           ))}
         </div>
