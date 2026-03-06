@@ -672,7 +672,7 @@ function reactionTint(feedback) {
   const reaction = typeof feedback === 'string' ? feedback : feedback?.reaction || null;
   if (reaction === 'fire') return 'rgba(200,148,26,0.04)';
   if (reaction === 'up') return 'rgba(127,181,160,0.04)';
-  if (reaction === 'down') return `${C.sage}08`;
+  if (reaction === 'down') return 'rgba(228,119,93,0.04)';
   return null;
 }
 
@@ -703,7 +703,7 @@ function InlineReactions({ id, feedback, onFeedback }) {
       activeColor: C.sea, activeBg: 'rgba(127,181,160,0.06)', activeBorder: C.sea },
     { key: 'down', label: 'Not for me',
       icon: (active, color) => <ThumbDown size={12} color={color} active={active} />,
-      activeColor: C.muted, activeBg: 'rgba(140,140,128,0.06)', activeBorder: C.muted },
+      activeColor: C.salmon, activeBg: 'rgba(228,119,93,0.06)', activeBorder: C.salmon },
   ];
 
   return (
