@@ -2048,7 +2048,7 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
             }}
             style={{
               display: 'flex', alignItems: 'flex-start', gap: 10,
-              padding: '9px 18px',
+              padding: '9px 18px 5px',
               borderTop: `1px solid ${C.border}`,
               cursor: 'pointer',
               background: tint || 'transparent',
@@ -2083,7 +2083,7 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
                   color: C.body, lineHeight: 1.5,
                 }}>{b.summary}</div>
               )}
-              <div style={{ marginTop: 6 }}>
+              <div style={{ marginTop: 10 }}>
                 <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
               </div>
             </div>
