@@ -1703,6 +1703,57 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
         }}>{day.title}</div>
       </div>
 
+      {/* Companion strip — teaching + practice teasers */}
+      {day.companion && (day.companion.teaching || day.companion.practice) && (
+        <div style={{
+          margin: '0 18px 0', padding: '10px 14px',
+          background: `linear-gradient(135deg, ${C.amber}06, ${C.sea}06)`,
+          borderRadius: 6,
+          border: `1px solid ${C.border}`,
+        }}>
+          {[
+            day.companion.teaching && { type: 'teaching', data: day.companion.teaching, icon: TeachingIcon, accent: C.amber, label: 'Teaching', teaser: day.companion.teaching.title },
+            day.companion.practice && { type: 'practice', data: day.companion.practice, icon: PracticeIcon, accent: C.sea, label: 'Practice', teaser: day.companion.practice.title },
+          ].filter(Boolean).map((item, idx, arr) => (
+            <button
+              key={item.type}
+              onClick={() => {
+                trackEvent('companion_opened', { type: item.type, title: item.teaser, day_index: dayIndex });
+                onOpenPanel({
+                  type: item.type,
+                  data: item.data,
+                  thumbId: `day_${dayIndex}_${item.type}`,
+                });
+              }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+                padding: '6px 0',
+                borderTop: idx > 0 ? `1px solid ${C.border}` : 'none',
+                background: 'none', border: idx > 0 ? undefined : 'none',
+                borderLeft: 'none', borderRight: 'none', borderBottom: 'none',
+                cursor: 'pointer', textAlign: 'left',
+                WebkitTapHighlightColor: 'transparent',
+              }}
+            >
+              <item.icon size={13} color={item.accent} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <span style={{
+                  fontFamily: F, fontSize: 9, fontWeight: 600,
+                  letterSpacing: '0.1em', textTransform: 'uppercase',
+                  color: item.accent,
+                }}>{item.label}</span>
+                <span style={{
+                  fontFamily: F, fontSize: 11, fontWeight: 500,
+                  color: C.body, marginLeft: 8,
+                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>{item.teaser}</span>
+              </div>
+              <Chevron open={false} color={`${item.accent}60`} />
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Activity rows */}
       {day.timeline && day.timeline.map((b, i) => {
         const thumbId = `day_${dayIndex}_timeline_${i}`;
