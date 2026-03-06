@@ -770,9 +770,9 @@ function CompanionPanelContent({ type, data, id, feedback, onFeedback }) {
   const accent = isTeaching ? C.goldenAmber : C.seaGlass;
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', padding: '26px 20px 60px' }}>
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '14px 20px 60px' }}>
       {/* Type badge */}
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${accent}0e`, border: `1px solid ${accent}18`, marginBottom: 14 }}>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${accent}0e`, border: `1px solid ${accent}18`, marginBottom: 10 }}>
         {isTeaching ? <TeachingIcon size={11} color={accent} /> : <PracticeIcon size={11} color={accent} />}
         <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: accent }}>{isTeaching ? "Today's Teaching" : "Today's Practice"}</span>
       </div>
@@ -783,20 +783,22 @@ function CompanionPanelContent({ type, data, id, feedback, onFeedback }) {
       )}
 
       {/* Title */}
-      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(21px, 6vw, 27px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
+      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
+
+      <InlineReactions id={id} feedback={feedback} onFeedback={onFeedback} />
 
       {/* Summary / essence */}
-      <p style={{ fontFamily: F, fontSize: 14.5, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{isTeaching ? data.essence : data.description}</p>
+      <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{isTeaching ? data.essence : data.description}</p>
 
       {/* Deeper content */}
       {data.deeper && (
-        <p style={{ fontFamily: F, fontSize: 14, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{data.deeper}</p>
+        <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{data.deeper}</p>
       )}
 
       {/* Quote */}
       {data.quote && (
         <div style={{ padding: '14px 16px', borderLeft: `3px solid ${accent}30`, background: `${accent}05`, borderRadius: '0 8px 8px 0', marginBottom: 20 }}>
-          <p style={{ fontFamily: F, fontSize: 14, fontStyle: 'normal', color: C.body, lineHeight: 1.6, margin: 0 }}>"{data.quote.text}"</p>
+          <p style={{ fontFamily: F, fontSize: 13, fontStyle: 'normal', color: C.body, lineHeight: 1.6, margin: 0 }}>"{data.quote.text}"</p>
           {data.quote.source && <p style={{ fontFamily: F, fontSize: 11, color: C.muted, marginTop: 6, margin: '6px 0 0' }}>— {data.quote.source}</p>}
         </div>
       )}
@@ -843,10 +845,6 @@ function CompanionPanelContent({ type, data, id, feedback, onFeedback }) {
         </div>
       )}
 
-      {/* Activity feedback */}
-      <div style={{ marginTop: 16 }}>
-        <InlineReactions id={id} feedback={feedback} onFeedback={onFeedback} />
-      </div>
     </div>
   );
 }
@@ -859,10 +857,10 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
   const resolvedUrl = url || trailData.npsUrl || lookupUrl(title);
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', padding: '26px 20px 60px' }}>
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '14px 20px 60px' }}>
 
       {/* Trail badge + time */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${C.sage}0a`, border: `1px solid ${C.sage}18` }}>
           <MountainIcon size={12} color={C.sage} />
           <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.sage }}>Trail</span>
@@ -875,11 +873,8 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
         )}
       </div>
 
-      {/* Activity feedback */}
-      <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
-
       {/* Title */}
-      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(22px, 6vw, 28px)', fontWeight: 300, color: C.ink, lineHeight: 1.2, marginBottom: 10 }}>
+      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.2, marginBottom: 10 }}>
         {resolvedUrl ? (
           <a href={resolvedUrl} target="_blank" rel="noopener noreferrer"
             style={{ color: 'inherit', textDecoration: 'none', borderBottom: `2px solid ${C.teal}20` }}>
@@ -888,8 +883,11 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
         ) : title}
       </h1>
 
+      {/* Activity feedback */}
+      <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
+
       {/* Summary */}
-      <p style={{ fontFamily: F, fontSize: 14.5, color: C.body, lineHeight: 1.75, marginBottom: 12 }}>{summary}</p>
+      <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.75, marginBottom: 12 }}>{summary}</p>
 
       {/* NPS disclaimer (Step G) */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 24 }}>
@@ -913,7 +911,7 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
                 <RouteIcon size={12} color={C.sage} />
                 <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted }}>Distance</span>
               </div>
-              <div style={{ fontFamily: F, fontSize: 16, fontWeight: 700, color: C.ink }}>{trailData.distance}</div>
+              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.ink }}>{trailData.distance}</div>
             </div>
           )}
           {trailData.elevationGain && (
@@ -922,7 +920,7 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
                 <MountainIcon size={12} color={C.sage} />
                 <span style={{ fontFamily: F, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted }}>Elevation Gain</span>
               </div>
-              <div style={{ fontFamily: F, fontSize: 16, fontWeight: 700, color: C.ink }}>{trailData.elevationGain}</div>
+              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: C.ink }}>{trailData.elevationGain}</div>
             </div>
           )}
           {trailData.trailType && (
@@ -954,7 +952,7 @@ function TrailDetailContent({ data, thumbId, activityFeedback, onActivityFeedbac
         }}>
           <PermitIcon size={15} color={C.goldenAmber} />
           <div>
-            <div style={{ fontFamily: F, fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.goldenAmber, marginBottom: 4 }}>Permit Required</div>
+            <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.goldenAmber, marginBottom: 4 }}>Permit Required</div>
             {trailData.permitNote && (
               <div style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.55 }}>{trailData.permitNote}</div>
             )}
@@ -1101,7 +1099,7 @@ function DetailBlock({ category, pick, color }) {
           }}>
             {label}
           </span>
-          <span style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.ink }}>
+          <span style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: C.ink }}>
             {value}
           </span>
         </div>
@@ -1126,7 +1124,7 @@ function WisdomDetailContent({ entry }) {
       {/* Tinted header with watermark glyph */}
       <div style={{
         position: 'relative', overflow: 'hidden',
-        padding: '28px 20px 22px',
+        padding: '18px 20px 16px',
         background: `linear-gradient(180deg, ${accent}12, ${accent}06)`,
       }}>
         {/* Watermark glyph */}
@@ -1150,17 +1148,17 @@ function WisdomDetailContent({ entry }) {
         <div style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: C.muted, marginBottom: 6 }}>{tradition?.name || entry.tradition}</div>
 
         {/* Title */}
-        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(21px, 6vw, 27px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, margin: 0 }}>{entry.name}</h1>
+        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, margin: 0 }}>{entry.name}</h1>
       </div>
 
       {/* Body */}
       <div style={{ padding: '20px 20px 60px' }}>
         {/* Summary */}
-        <p style={{ fontFamily: F, fontSize: 14.5, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{entry.summary}</p>
+        <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{entry.summary}</p>
 
         {/* Deeper */}
         {entry.deeper && (
-          <p style={{ fontFamily: F, fontSize: 14, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{entry.deeper}</p>
+          <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{entry.deeper}</p>
         )}
 
         {/* Quote block */}
@@ -1248,23 +1246,22 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
   if (type === 'activity') {
     const dot = WARM_DOT;
     return (
-      <div style={{ maxWidth: 500, margin: '0 auto', padding: '26px 20px 60px' }}>
+      <div style={{ maxWidth: 500, margin: '0 auto', padding: '14px 20px 60px' }}>
         {/* Time badge */}
         {data.time && (
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 7, background: `${dot}0e`, border: `1px solid ${dot}18`, marginBottom: 14 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${dot}0e`, border: `1px solid ${dot}18`, marginBottom: 10 }}>
             <ClockIcon size={10} color={dot} />
             <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: dot }}>{data.time}</span>
           </div>
         )}
 
-        {/* Activity feedback */}
+        {/* Title */}
+        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
+
         <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
 
-        {/* Title */}
-        <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(21px, 6vw, 27px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 12 }}>{data.title}</h1>
-
         {/* Summary */}
-        <p style={{ fontFamily: F, fontSize: 14.5, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{data.summary}</p>
+        <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{data.summary}</p>
 
         {/* Details */}
         {data.details && (
@@ -1299,9 +1296,9 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
   const alternatives = data.alternatives || [];
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', padding: '26px 20px 60px' }}>
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: '14px 20px 60px' }}>
       {/* Category badge */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 20, background: `${s.color}0e`, border: `1px solid ${s.color}18` }}>
           <CategoryIcon category={type} color={s.color} size={12} />
           <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.color }}>{s.label}</span>
@@ -1312,14 +1309,13 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
         </div>
       </div>
 
-      {/* Activity feedback */}
-      <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
-
       {/* Pick name */}
-      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(21px, 6vw, 27px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 6 }}>
+      <h1 style={{ fontFamily: F_SERIF, fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 300, color: C.ink, lineHeight: 1.25, marginBottom: 6 }}>
         <LinkedName name={data.name} url={data.url} linkType="pick" style={{ fontFamily: F, fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }} />
         {(data.url || lookupUrl(data.name)) && <> <ExternalLinkIcon size={12} color={`${C.sage}40`} /></>}
       </h1>
+
+      <InlineReactions id={thumbId} feedback={activityFeedback} onFeedback={onActivityFeedback} />
 
       {/* Vibe line */}
       {data.vibe && (
@@ -1332,7 +1328,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
       )}
 
       {/* Why */}
-      <p style={{ fontFamily: F, fontSize: 14.5, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{data.why}</p>
+      <p style={{ fontFamily: F, fontSize: 13, color: C.body, lineHeight: 1.7, marginBottom: 20 }}>{data.why}</p>
 
       {/* Structured detail block */}
       <DetailBlock category={type} pick={data} color={s.color} />
@@ -1346,7 +1342,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
           onClick={() => trackEvent('external_link_clicked', { name: data.name, link_type: type })}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 7,
-            fontFamily: F, fontSize: 12, fontWeight: 700,
+            fontFamily: F, fontSize: 12, fontWeight: 600,
             color: s.color, textDecoration: 'none',
             padding: '9px 18px',
             border: `1.5px solid ${s.color}35`,
@@ -1367,7 +1363,7 @@ function DetailPanelContent({ item, activityFeedback, onActivityFeedback }) {
           <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted, marginBottom: 10 }}>Other Options</div>
           {alternatives.map((alt, i) => (
             <div key={i} style={{ padding: '12px 14px', borderRadius: 8, background: `${s.color}05`, border: `1px solid ${s.color}15`, marginBottom: 8 }}>
-              <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 700, color: C.ink, marginBottom: 4 }}>
+              <div style={{ fontFamily: F, fontSize: 13, fontWeight: 600, color: C.ink, marginBottom: 4 }}>
                 {alt.name}
               </div>
               {alt.vibe && (
