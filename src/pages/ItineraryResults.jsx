@@ -3089,6 +3089,43 @@ export default function ItineraryResults() {
                       }} />
                   </div>
                 ))}
+
+                {/* Before You Go */}
+                {itinerary.beforeYouGo && (
+                  <div ref={beforeYouGoRef} style={{ background: `linear-gradient(180deg, ${C.white}, ${C.cream}30)`, borderRadius: 2, border: `1px solid ${C.sage}18`, padding: '18px 20px', marginTop: 6, boxShadow: `0 1px 8px ${C.sage}08` }}>
+                    <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 12 }}>Before You Go</div>
+                    {itinerary.beforeYouGo.map((item, i) => (
+                      <div key={i} style={{ display: 'flex', gap: 8, padding: '5px 0', borderBottom: i < itinerary.beforeYouGo.length - 1 ? `1px solid ${C.sage}06` : 'none' }}>
+                        <span style={{ color: `${C.sage}50`, flexShrink: 0, fontSize: 10, marginTop: 2 }}>{"●\uFE0E"}</span>
+                        <span style={{ fontFamily: F, fontSize: 13, color: `${C.slate}85`, lineHeight: 1.65 }}>{renderInline(item)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Trip Pulse */}
+                <TripPulse pulse={pulse} setPulse={setPulse} overallNote={overallNote} setOverallNote={setOverallNote}
+                  iteration={iteration} onPulseSelect={(val) => trackEvent('trip_pulse_selected', { pulse: val })} />
+
+                {/* Closing Note */}
+                {itinerary.closingNote && (
+                  <div style={{ textAlign: 'center', padding: '28px 20px 0' }}>
+                    <p style={{ fontFamily: F, fontSize: 15, fontWeight: 400, color: `${C.slate}60`, lineHeight: 1.6, fontStyle: 'normal' }}>{itinerary.closingNote}</p>
+                  </div>
+                )}
+
+                {/* Refinement error */}
+                {refineError && (
+                  <div style={{ background: `${C.sunSalmon}10`, border: `1px solid ${C.sunSalmon}25`, borderRadius: 12, padding: '12px 16px', marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                    <span style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: C.sunSalmon, lineHeight: 1.4 }}>{refineError}</span>
+                    <button onClick={() => setRefineError(null)} style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: `${C.sunSalmon}80`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', flexShrink: 0, WebkitTapHighlightColor: 'transparent' }}>Dismiss</button>
+                  </div>
+                )}
+
+                {/* Refine CTA / Premium Gate */}
+                <RefineCTA iteration={iteration} hasFeedback={hasFeedback} onRefine={handleRefine} pulse={pulse}
+                  onGateShown={() => trackEvent('premium_gate_shown', { iteration })}
+                  onUpgradeClick={() => trackEvent('premium_upgrade_clicked', { iteration })} />
               </div>
 
               {/* Right: Logistics panel */}
@@ -3113,46 +3150,6 @@ export default function ItineraryResults() {
                   }}
                 />
               </div>
-            </div>
-
-            {/* Below-fold content — centered at 580 */}
-            <div style={{ maxWidth: 580, margin: '0 auto' }}>
-              {/* Before You Go */}
-              {itinerary.beforeYouGo && (
-                <div ref={beforeYouGoRef} style={{ background: `linear-gradient(180deg, ${C.white}, ${C.cream}30)`, borderRadius: 2, border: `1px solid ${C.sage}18`, padding: '18px 20px', marginTop: 6, boxShadow: `0 1px 8px ${C.sage}08` }}>
-                  <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 12 }}>Before You Go</div>
-                  {itinerary.beforeYouGo.map((item, i) => (
-                    <div key={i} style={{ display: 'flex', gap: 8, padding: '5px 0', borderBottom: i < itinerary.beforeYouGo.length - 1 ? `1px solid ${C.sage}06` : 'none' }}>
-                      <span style={{ color: `${C.sage}50`, flexShrink: 0, fontSize: 10, marginTop: 2 }}>{"●\uFE0E"}</span>
-                      <span style={{ fontFamily: F, fontSize: 13, color: `${C.slate}85`, lineHeight: 1.65 }}>{renderInline(item)}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Trip Pulse */}
-              <TripPulse pulse={pulse} setPulse={setPulse} overallNote={overallNote} setOverallNote={setOverallNote}
-                iteration={iteration} onPulseSelect={(val) => trackEvent('trip_pulse_selected', { pulse: val })} />
-
-              {/* Closing Note */}
-              {itinerary.closingNote && (
-                <div style={{ textAlign: 'center', padding: '28px 20px 0' }}>
-                  <p style={{ fontFamily: F, fontSize: 15, fontWeight: 400, color: `${C.slate}60`, lineHeight: 1.6, fontStyle: 'normal' }}>{itinerary.closingNote}</p>
-                </div>
-              )}
-
-              {/* Refinement error */}
-              {refineError && (
-                <div style={{ background: `${C.sunSalmon}10`, border: `1px solid ${C.sunSalmon}25`, borderRadius: 12, padding: '12px 16px', marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                  <span style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: C.sunSalmon, lineHeight: 1.4 }}>{refineError}</span>
-                  <button onClick={() => setRefineError(null)} style={{ fontFamily: F, fontSize: 11, fontWeight: 600, color: `${C.sunSalmon}80`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', flexShrink: 0, WebkitTapHighlightColor: 'transparent' }}>Dismiss</button>
-                </div>
-              )}
-
-              {/* Refine CTA / Premium Gate */}
-              <RefineCTA iteration={iteration} hasFeedback={hasFeedback} onRefine={handleRefine} pulse={pulse}
-                onGateShown={() => trackEvent('premium_gate_shown', { iteration })}
-                onUpgradeClick={() => trackEvent('premium_upgrade_clicked', { iteration })} />
             </div>
           </>
         ) : (
