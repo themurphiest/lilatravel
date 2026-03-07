@@ -1994,11 +1994,26 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
         const quoteEntry = entries.find(e => e.data.quote);
         return (
           <div style={{
+            position: 'relative',
             background: 'linear-gradient(150deg, #f5f1ea 0%, #ede9e0 100%)',
             borderTop: '1.5px solid rgba(74,155,159,0.35)',
             borderBottom: '1.5px solid rgba(74,155,159,0.35)',
             padding: '20px 24px 0',
           }}>
+            {/* Breathing overlay — fades a cool sage gradient in and out */}
+            <style>{`
+              @keyframes practiceBreath {
+                0%, 100% { opacity: 0; }
+                50%      { opacity: 1; }
+              }
+            `}</style>
+            <div aria-hidden style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(150deg, #edf5f3 0%, #e2eeeb 100%)',
+              animation: 'practiceBreath 6s ease-in-out infinite',
+              pointerEvents: 'none',
+            }} />
+            <div style={{ position: 'relative' }}>
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 6 }}>
               <IconLotus size={38} color="#4A9B9F" />
@@ -2073,6 +2088,7 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
                 )}
               </div>
             )}
+            </div>{/* end relative content wrapper */}
           </div>
         );
       })()}
