@@ -7,7 +7,7 @@ import { trackEvent } from '@utils/analytics';
 import { getPracticesForItinerary, TRADITIONS, ENTRIES } from '@services/practicesService';
 import { assignCompanions } from '@services/companionAssigner';
 import { saveItinerary, saveFeedback } from '@services/feedbackService';
-import { supabase } from '@services/supabaseClient';
+
 import { clearSession } from '@services/sessionManager';
 import SavePill from '@components/SavePill';
 // CelestialMonthStrip consolidated into CelestialSnapshot below
@@ -2774,35 +2774,26 @@ export default function ItineraryResults() {
   const [metadata] = useState(() => location.state?.metadata || null);
   const [formData, setFormData] = useState(() => location.state?.formData || null);
 
-  // Hydrate from Supabase when accessed via a share link (/trip/:token)
+  // Hydrate via server-side API when accessed via a share link (/trip/:token)
+  // Uses the service role key on the server to bypass RLS policies
   useEffect(() => {
     console.log('[SharedTrip] effect fired', { shareToken, rawItinerary: !!rawItinerary });
     if (!shareToken || rawItinerary) return;
     (async () => {
       try {
-        // Fetch itinerary by share token (no join — FK not configured in Supabase)
-        const { data, error } = await supabase
-          .from('itineraries')
-          .select('id, raw_itinerary, destination, session_id')
-          .eq('share_token', shareToken)
-          .single();
-        console.log('[SharedTrip] supabase result', { data, error });
-        if (error || !data) { console.log('[SharedTrip] redirecting to /plan — error or no data'); setLoadingShared(false); navigate('/plan'); return; }
-        // Batch these together so the redirect guard sees both updates at once
-        setRawItinerary(data.raw_itinerary);
+        const res = await fetch(`/api/get-shared-trip?token=${encodeURIComponent(shareToken)}`);
+        if (!res.ok) {
+          console.log('[SharedTrip] API returned', res.status);
+          setLoadingShared(false);
+          navigate('/plan');
+          return;
+        }
+        const data = await res.json();
+        console.log('[SharedTrip] API result', { id: data.id, hasItinerary: !!data.rawItinerary });
+        setRawItinerary(data.rawItinerary);
         setItineraryId(data.id);
         setLoadingShared(false);
-        // Fetch form_data separately — optional, never redirect on failure
-        if (data.session_id) {
-          try {
-            const { data: session } = await supabase
-              .from('sessions')
-              .select('form_data')
-              .eq('id', data.session_id)
-              .single();
-            if (session?.form_data) setFormData(session.form_data);
-          } catch { /* form_data is optional — itinerary still loads without it */ }
-        }
+        if (data.formData) setFormData(data.formData);
       } catch (e) {
         console.log('[SharedTrip] redirecting to /plan — caught exception', e);
         setLoadingShared(false);
