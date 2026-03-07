@@ -481,11 +481,11 @@ function NavButtons({ onBack, onNext, nextLabel = "Continue", nextDisabled = fal
       <button onClick={onNext} disabled={nextDisabled} style={{
         fontFamily: "'Quicksand', sans-serif",
         fontSize: 13, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase",
-        background: nextDisabled ? `${C.sage}30` : C.sage,
+        background: nextDisabled ? `${C.oceanTeal}30` : C.oceanTeal,
         border: "none", color: C.white, padding: "14px 36px", borderRadius: 40,
         cursor: nextDisabled ? "not-allowed" : "pointer",
         transition: "all 0.3s", opacity: nextDisabled ? 0.5 : 1,
-        boxShadow: nextDisabled ? "none" : `0 4px 20px ${C.sage}30`,
+        boxShadow: nextDisabled ? "none" : `0 4px 20px ${C.oceanTeal}30`,
         minHeight: 48, WebkitTapHighlightColor: "transparent",
       }}>{nextLabel}</button>
     </div>
@@ -1011,11 +1011,9 @@ function StepMonth({ data, onChange, onNext, onBack }) {
         })}
       </div>
 
-      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.month} />
-
       {/* Exact dates toggle */}
       {data.month && (
-        <div style={{ maxWidth: 480, margin: '0 auto', padding: '0 20px 40px' }}>
+        <div style={{ maxWidth: 480, margin: '0 auto', padding: '0 20px' }}>
           <button onClick={toggleDates} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             width: '100%', padding: '12px 16px',
@@ -1092,6 +1090,8 @@ function StepMonth({ data, onChange, onNext, onBack }) {
           )}
         </div>
       )}
+
+      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.month} />
     </div>
   );
 }
@@ -1181,23 +1181,23 @@ function StepMovement({ data, onChange, onNext, onBack }) {
 
 const PRACTICE_LEVELS = [
   {
-    label: "I'm curious",
+    label: "Dip my toes",
     desc: "A gentle yoga class at a beautiful overlook, maybe a guided meditation at sunset. Easy to try, no experience needed.",
-    icon: IconBodhiLeaf,
+    icon: IconWave,
   },
   {
-    label: "I've dabbled",
+    label: "Find a rhythm",
     desc: "You've been to a few classes. We'll mix in some morning yoga, a breathwork session, maybe a sound bath — nothing too intense.",
-    icon: IconLotus,
+    icon: IconDharmaWheel,
   },
   {
-    label: "I've got a thing going",
-    desc: "Morning practice built into each day — yoga, breathwork, or meditation depending on the setting. Plus plenty of time to explore.",
+    label: "Go deep",
+    desc: "Morning practice woven into each day — yoga, breathwork, or meditation. Plenty of space to explore.",
     icon: IconEnso,
   },
   {
-    label: "It's kind of my whole deal",
-    desc: "Your days are anchored by practice. Serious morning sessions, afternoon breathwork, evening stillness. The landscape becomes your teacher.",
+    label: "Let it lead",
+    desc: "Your days are anchored by practice — morning sessions, breathwork, stillness. The landscape becomes your teacher.",
     icon: IconUnalome,
   },
 ];
@@ -1211,7 +1211,7 @@ function StepPracticeLevel({ data, onChange, onNext, onBack }) {
     <div>
       <StepTitle
         eyebrow="Practice"
-        title="Where are you on your wellness journey?"
+        title="How deep into your wellness practice do you want to go?"
         subtitle="This helps us know how much yoga, meditation, and wellness to weave into your days."
       />
       <div style={{ maxWidth: 460, margin: "0 auto", padding: "0 28px" }}>
@@ -1494,11 +1494,11 @@ function StepGroup({ data, onChange, onNext, onBack }) {
       </div>
       {showCounter && (
         <div style={{
-          maxWidth: 480, margin: "20px auto 0", padding: "0 20px",
+          maxWidth: 480, margin: "12px auto 0", padding: "0 20px",
           animation: "fadeScale 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
         }}>
           <div style={{
-            background: C.white, borderRadius: 2, padding: "28px 24px",
+            background: C.white, borderRadius: 2, padding: "16px 24px",
             border: `1px solid ${C.sage}12`,
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 28 }}>
@@ -1552,36 +1552,30 @@ function StepBudget({ data, onChange, onNext, onBack }) {
             const active = data.budget === tier.id;
             return (
               <button key={tier.id} onClick={() => onChange({ budget: tier.id })} style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
+                display: "flex", alignItems: "center", gap: 14,
                 background: active ? `${tier.color}08` : C.white,
                 border: `1.5px solid ${active ? tier.color : `${C.sage}18`}`,
                 borderRadius: 14, padding: "18px 20px",
                 cursor: "pointer", transition: "all 0.25s",
                 minHeight: 60, WebkitTapHighlightColor: "transparent",
                 boxShadow: active ? `0 3px 16px ${tier.color}15` : "0 1px 4px rgba(0,0,0,0.04)",
+                textAlign: "left",
               }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{
-                    width: 10, height: 10, borderRadius: "50%",
-                    background: active ? tier.color : `${C.sage}30`,
-                    transition: "background 0.25s",
-                  }} />
-                  <div>
-                    <span style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "clamp(16px, 4vw, 18px)", fontWeight: 600, color: C.slate,
-                    }}>{tier.label}</span>
-                    <span style={{
-                      fontFamily: "'Quicksand', sans-serif",
-                      fontSize: 12, color: `${C.slate}99`, marginLeft: 8,
-                    }}>{tier.desc}</span>
-                  </div>
-                </div>
                 <div style={{
                   fontFamily: "'Quicksand', sans-serif",
-                  fontSize: 12, fontWeight: 600, color: active ? tier.color : `${C.sage}70`,
-                  flexShrink: 0, whiteSpace: "nowrap",
+                  fontSize: 14, fontWeight: 700, color: active ? tier.color : `${C.sage}70`,
+                  flexShrink: 0, minWidth: 40, textAlign: "center",
                 }}>{tier.range}</div>
+                <div style={{ flex: 1 }}>
+                  <span style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: "clamp(16px, 4vw, 18px)", fontWeight: 600, color: C.slate,
+                  }}>{tier.label}</span>
+                  <span style={{
+                    fontFamily: "'Quicksand', sans-serif",
+                    fontSize: 12, color: `${C.slate}99`, marginLeft: 8,
+                  }}>{tier.desc}</span>
+                </div>
               </button>
             );
           })}
