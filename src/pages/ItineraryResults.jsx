@@ -170,7 +170,7 @@ const PracticeIcon = ({ size = 13, color = C.seaGlass }) => (
   </svg>
 );
 
-const ArrowRightIcon = ({ size = 10, color = `${C.sage}50` }) => (
+const ArrowRightIcon = ({ size = 10, color = `${C.sage}80` }) => (
   <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 8h10" /><polyline points="9,4 13,8 9,12" />
   </svg>
@@ -504,7 +504,7 @@ function TrailStatChip({ icon, label, value, accent }) {
         <div style={{
           fontFamily: F, fontSize: 9, fontWeight: 700,
           letterSpacing: '0.1em', textTransform: 'uppercase',
-          color: `${C.sage}70`, lineHeight: 1,
+          color: `${C.sage}99`, lineHeight: 1,
           marginBottom: 2,
         }}>
           {label}
@@ -615,7 +615,7 @@ function ActivityThumbs({ id, feedback, onFeedback }) {
 
   return (
     <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${C.sage}0c` }}>
-      <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${C.sage}60`, marginBottom: 8 }}>How does this feel?</div>
+      <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: `${C.sage}90`, marginBottom: 8 }}>How does this feel?</div>
       <div style={{ display: 'flex', gap: 7 }}>
         {reactions.map(r => {
           const active = currentReaction === r.key;
@@ -643,7 +643,7 @@ function ActivityThumbs({ id, feedback, onFeedback }) {
             <button onClick={() => setNoteOpen(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, color: `${C.sunSalmon}90`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', WebkitTapHighlightColor: 'transparent' }}>+ add note</button>
           )}
           {!noteOpen && currentNote && (
-            <button onClick={() => setNoteOpen(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, fontStyle: 'normal', color: `${C.slate}60`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', textAlign: 'left', WebkitTapHighlightColor: 'transparent', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
+            <button onClick={() => setNoteOpen(true)} style={{ fontFamily: F, fontSize: 11, fontWeight: 500, fontStyle: 'normal', color: `${C.slate}90`, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', textAlign: 'left', WebkitTapHighlightColor: 'transparent', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
               "{currentNote.length > 60 ? currentNote.slice(0, 60) + '…' : currentNote}" <span style={{ fontStyle: 'normal', color: `${C.sunSalmon}80` }}>edit</span>
             </button>
           )}
@@ -655,7 +655,7 @@ function ActivityThumbs({ id, feedback, onFeedback }) {
                 style={{ width: '100%', padding: '8px 10px', fontFamily: F, fontSize: 12, fontWeight: 400, color: C.slate, background: C.white, border: `1px solid ${C.sunSalmon}25`, borderRadius: 8, resize: 'vertical', lineHeight: 1.5, outline: 'none', boxSizing: 'border-box' }}
               />
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 6, marginTop: 4 }}>
-                <button onClick={() => setNoteOpen(false)} style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}70`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>Cancel</button>
+                <button onClick={() => setNoteOpen(false)} style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: `${C.sage}99`, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>Cancel</button>
                 <button onClick={() => { saveNote(noteText); setNoteOpen(false); }} style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: C.white, background: C.sunSalmon, border: 'none', borderRadius: 6, padding: '4px 12px', cursor: 'pointer' }}>Save</button>
               </div>
             </div>
@@ -2136,7 +2136,7 @@ function TripPulse({ overallNote, setOverallNote, pulse, setPulse, onPulseSelect
               cursor: 'pointer', WebkitTapHighlightColor: 'transparent', transition: 'all 0.25s',
             }}>
               {o.icon}
-              <span style={{ fontFamily: F, fontSize: 12, fontWeight: 600, color: active ? o.color : `${C.slate}60` }}>{o.label}</span>
+              <span style={{ fontFamily: F, fontSize: 12, fontWeight: 600, color: active ? o.color : `${C.slate}90` }}>{o.label}</span>
               <span style={{ fontFamily: F, fontSize: 10, fontWeight: 400, color: active ? `${o.color}90` : `${C.slate}35` }}>{o.sub}</span>
             </button>
           );
@@ -2214,7 +2214,7 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
         <div style={{ marginTop: 14 }}>
           <button onClick={onRefine} disabled={!hasFeedback} style={{
             fontFamily: F, fontSize: 13, fontWeight: 600,
-            color: hasFeedback ? C.white : `${C.sage}50`,
+            color: hasFeedback ? C.white : `${C.sage}80`,
             background: hasFeedback ? C.oceanTeal : `${C.sage}08`,
             border: hasFeedback ? 'none' : `1px solid ${C.sage}15`,
             borderRadius: 24, padding: '12px 28px',
@@ -2237,7 +2237,7 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
           <span style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.oceanTeal }}>Lila Pro</span>
         </div>
         <h3 style={{ fontFamily: F, fontSize: 18, fontWeight: 600, color: C.slate, marginBottom: 6 }}>Keep refining your perfect trip</h3>
-        <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}70`, lineHeight: 1.6, maxWidth: 380, margin: '0 auto 18px' }}>
+        <p style={{ fontFamily: F, fontSize: 13, color: `${C.slate}99`, lineHeight: 1.6, maxWidth: 380, margin: '0 auto 18px' }}>
           You've used your {maxFree} free refinements. Upgrade to continue iterating and unlock the full trip planning toolkit.
         </p>
         <div ref={featuresRef} style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 300, margin: '0 auto 20px', textAlign: 'left' }}>
@@ -2249,7 +2249,7 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
           ].map((f, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 0' }}>
               <div style={{ width: 28, height: 28, borderRadius: 8, background: `${C.oceanTeal}08`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{f.icon}</div>
-              <span style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: `${C.slate}80` }}>{f.text}</span>
+              <span style={{ fontFamily: F, fontSize: 13, fontWeight: 500, color: `${C.slate}AA` }}>{f.text}</span>
             </div>
           ))}
         </div>
@@ -2266,7 +2266,7 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
     <div style={{ textAlign: 'center', padding: '24px 20px 0' }}>
       <button onClick={onRefine} disabled={!hasFeedback} style={{
         fontFamily: F, fontSize: 13, fontWeight: 600,
-        color: hasFeedback ? C.white : `${C.sage}50`,
+        color: hasFeedback ? C.white : `${C.sage}80`,
         background: hasFeedback ? C.oceanTeal : `${C.sage}08`,
         border: hasFeedback ? 'none' : `1px solid ${C.sage}15`,
         borderRadius: 24, padding: '12px 28px',
@@ -2282,7 +2282,7 @@ function RefineCTA({ iteration, hasFeedback, onRefine, pulse, onGateShown, onUpg
         {remaining} free refinement{remaining !== 1 ? 's' : ''} remaining
       </div>
       {!hasFeedback && (
-        <div style={{ fontFamily: F, fontSize: 11, color: `${C.sage}60`, marginTop: 4, fontStyle: 'normal' }}>
+        <div style={{ fontFamily: F, fontSize: 11, color: `${C.sage}90`, marginTop: 4, fontStyle: 'normal' }}>
           Add day feedback or rate the overall trip to enable refinement
         </div>
       )}
@@ -2438,7 +2438,7 @@ function RefiningOverlay({ visible, iteration = 0 }) {
         fontFamily: F,
         fontSize: 10, fontWeight: 500,
         letterSpacing: '0.12em', textTransform: 'uppercase',
-        color: `${C.sage}70`,
+        color: `${C.sage}99`,
         marginTop: 8,
       }}>
         {allDone ? 'Finalizing...' : `${Math.max(0, completedIndex + 1)} of ${REFINING_STEPS.length}`}
@@ -2495,7 +2495,7 @@ function renderInline(text) {
     if (!earliest) { parts.push(remaining); break; }
     if (earliest.index > 0) parts.push(remaining.slice(0, earliest.index));
     if (type === 'bold') parts.push(<strong key={key++} style={{ fontWeight: 700, color: C.slate }}>{earliest[1]}</strong>);
-    else parts.push(<em key={key++} style={{ fontStyle: 'normal', color: `${C.slate}80` }}>{earliest[1]}</em>);
+    else parts.push(<em key={key++} style={{ fontStyle: 'normal', color: `${C.slate}AA` }}>{earliest[1]}</em>);
     remaining = remaining.slice(earliest.index + earliest[0].length);
   }
   return parts.length > 0 ? parts : text;
@@ -2523,7 +2523,7 @@ function MarkdownContent({ content }) {
         elements.push(<div key={key++} style={{ display: 'flex', gap: 8, padding: '3px 0' }}><span style={{ fontFamily: F, fontSize: 12, color: C.sage, fontWeight: 700, flexShrink: 0, minWidth: 18 }}>{numMatch[1]}.</span><span style={{ fontFamily: F, fontSize: 13, color: C.slate, lineHeight: 1.65 }}>{renderInline(numMatch[2])}</span></div>);
       }
     } else if (/^>\s/.test(line)) {
-      elements.push(<div key={key++} style={{ borderLeft: `3px solid ${C.oceanTeal}30`, paddingLeft: 14, margin: '12px 0', fontFamily: F, fontSize: 'clamp(15px, 4vw, 18px)', fontStyle: 'normal', color: `${C.slate}80`, lineHeight: 1.6 }}>{renderInline(line.slice(2))}</div>);
+      elements.push(<div key={key++} style={{ borderLeft: `3px solid ${C.oceanTeal}30`, paddingLeft: 14, margin: '12px 0', fontFamily: F, fontSize: 'clamp(15px, 4vw, 18px)', fontStyle: 'normal', color: `${C.slate}AA`, lineHeight: 1.6 }}>{renderInline(line.slice(2))}</div>);
     } else if (line.trim() === '') {
       elements.push(<div key={key++} style={{ height: 6 }} />);
     } else {
@@ -2649,7 +2649,7 @@ function FirstDraftModal({ onDismiss }) {
         <div style={{ height: 1, background: `${C.sage}10`, marginTop: 28, marginBottom: 20 }} />
 
         {/* Freemium note */}
-        <p style={{ fontFamily: F, fontSize: 11.5, fontWeight: 400, color: `${C.slate}80`, lineHeight: 1.65, textAlign: 'center', marginBottom: 24 }}>
+        <p style={{ fontFamily: F, fontSize: 11.5, fontWeight: 400, color: `${C.slate}AA`, lineHeight: 1.65, textAlign: 'center', marginBottom: 24 }}>
           You're in early access — refinements are unlimited for now. Shape it until it feels right.
         </p>
 
@@ -3096,7 +3096,7 @@ export default function ItineraryResults() {
                     <div style={{ fontFamily: F, fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.sage, marginBottom: 12 }}>Before You Go</div>
                     {itinerary.beforeYouGo.map((item, i) => (
                       <div key={i} style={{ display: 'flex', gap: 8, padding: '5px 0', borderBottom: i < itinerary.beforeYouGo.length - 1 ? `1px solid ${C.sage}06` : 'none' }}>
-                        <span style={{ color: `${C.sage}50`, flexShrink: 0, fontSize: 10, marginTop: 2 }}>{"●\uFE0E"}</span>
+                        <span style={{ color: `${C.sage}80`, flexShrink: 0, fontSize: 10, marginTop: 2 }}>{"●\uFE0E"}</span>
                         <span style={{ fontFamily: F, fontSize: 13, color: `${C.slate}85`, lineHeight: 1.65 }}>{renderInline(item)}</span>
                       </div>
                     ))}
@@ -3110,7 +3110,7 @@ export default function ItineraryResults() {
                 {/* Closing Note */}
                 {itinerary.closingNote && (
                   <div style={{ textAlign: 'center', padding: '28px 20px 0' }}>
-                    <p style={{ fontFamily: F, fontSize: 15, fontWeight: 400, color: `${C.slate}60`, lineHeight: 1.6, fontStyle: 'normal' }}>{itinerary.closingNote}</p>
+                    <p style={{ fontFamily: F, fontSize: 15, fontWeight: 400, color: `${C.slate}90`, lineHeight: 1.6, fontStyle: 'normal' }}>{itinerary.closingNote}</p>
                   </div>
                 )}
 
@@ -3162,7 +3162,7 @@ export default function ItineraryResults() {
         <div style={{ textAlign: 'center', marginTop: 24, paddingBottom: 16 }}>
           <button onClick={() => { clearSession(); trackEvent('new_trip_clicked', { source: 'start_over' }); navigate('/plan'); }} style={{
             fontFamily: F, fontSize: 11, fontWeight: 500,
-            color: `${C.sage}60`, background: 'none',
+            color: `${C.sage}90`, background: 'none',
             border: 'none', cursor: 'pointer', padding: '8px 16px',
             WebkitTapHighlightColor: 'transparent',
           }}>Start over with a new trip</button>
