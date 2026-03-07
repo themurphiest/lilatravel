@@ -3141,6 +3141,29 @@ export default function ItineraryResults() {
           />
         )}
 
+        {/* Logistics panel — mobile only, shown right after celestial snapshot */}
+        {isStructured && isMobile && (
+          <div style={{ marginBottom: 16 }}>
+            <LogisticsPanel
+              destination={formData?.destination}
+              sticky={false}
+              tripLogistics={tripLogistics}
+              onOpenPanel={(panelItem) => {
+                if (panelItem._updateLogistics) {
+                  setTripLogistics(prev => ({ ...prev, ...panelItem._updateLogistics }));
+                  setActivePanel(null);
+                  return;
+                }
+                if (panelItem.onSave) {
+                  const origSave = panelItem.onSave;
+                  panelItem.onSave = (d) => { origSave(d); };
+                }
+                setActivePanel(panelItem);
+              }}
+            />
+          </div>
+        )}
+
         {/* Day by Day label */}
         {isStructured && (
           <div style={{
@@ -3209,28 +3232,30 @@ export default function ItineraryResults() {
                   onUpgradeClick={() => trackEvent('premium_upgrade_clicked', { iteration })} />
               </div>
 
-              {/* Right: Logistics panel */}
-              <div>
-                <LogisticsPanel
-                  destination={formData?.destination}
-                  sticky={!isMobile}
-                  tripLogistics={tripLogistics}
-                  onOpenPanel={(panelItem) => {
-                    if (panelItem._updateLogistics) {
-                      setTripLogistics(prev => ({ ...prev, ...panelItem._updateLogistics }));
-                      setActivePanel(null);
-                      return;
-                    }
-                    if (panelItem.onSave) {
-                      const origSave = panelItem.onSave;
-                      panelItem.onSave = (d) => {
-                        origSave(d);
-                      };
-                    }
-                    setActivePanel(panelItem);
-                  }}
-                />
-              </div>
+              {/* Right: Logistics panel (desktop only — mobile renders above day cards) */}
+              {!isMobile && (
+                <div>
+                  <LogisticsPanel
+                    destination={formData?.destination}
+                    sticky={true}
+                    tripLogistics={tripLogistics}
+                    onOpenPanel={(panelItem) => {
+                      if (panelItem._updateLogistics) {
+                        setTripLogistics(prev => ({ ...prev, ...panelItem._updateLogistics }));
+                        setActivePanel(null);
+                        return;
+                      }
+                      if (panelItem.onSave) {
+                        const origSave = panelItem.onSave;
+                        panelItem.onSave = (d) => {
+                          origSave(d);
+                        };
+                      }
+                      setActivePanel(panelItem);
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </>
         ) : (
