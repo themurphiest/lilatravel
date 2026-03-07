@@ -1249,17 +1249,17 @@ function GuideNav({ isMobile }) {
       <nav
         ref={navRef}
         style={{
-          position: isSticky ? "fixed" : "relative",
-          top: isSticky ? MAIN_NAV_HEIGHT : "auto",
+          position: (isSticky && !isMobile) ? "fixed" : "relative",
+          top: (isSticky && !isMobile) ? MAIN_NAV_HEIGHT : "auto",
           left: 0,
           right: 0,
           zIndex: 90,
-          background: isSticky ? "rgba(250, 247, 243, 0.97)" : C.cream,
-          backdropFilter: isSticky ? "blur(12px)" : "none",
-          WebkitBackdropFilter: isSticky ? "blur(12px)" : "none",
-          borderBottom: `1px solid ${isSticky ? C.stone : "transparent"}`,
+          background: (isSticky && !isMobile) ? "rgba(250, 247, 243, 0.97)" : C.cream,
+          backdropFilter: (isSticky && !isMobile) ? "blur(12px)" : "none",
+          WebkitBackdropFilter: (isSticky && !isMobile) ? "blur(12px)" : "none",
+          borderBottom: `1px solid ${(isSticky && !isMobile) ? C.stone : "transparent"}`,
           transition: "border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease",
-          boxShadow: isSticky ? "0 1px 8px rgba(0,0,0,0.04)" : "none",
+          boxShadow: (isSticky && !isMobile) ? "0 1px 8px rgba(0,0,0,0.04)" : "none",
         }}
       >
         <div style={{
