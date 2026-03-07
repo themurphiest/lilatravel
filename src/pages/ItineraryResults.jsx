@@ -170,6 +170,15 @@ const PracticeIcon = ({ size = 13, color = C.seaGlass }) => (
   </svg>
 );
 
+const IconLotus = ({ size = 24, color = '#4A9B9F' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 20 C12 20 8 16 8 12 C8 8 10 5 12 3 C14 5 16 8 16 12 C16 16 12 20 12 20Z" fill={`${color}15`} />
+    <path d="M12 20 C12 20 5 15 4 11 C3 7 6 5 8 6" />
+    <path d="M12 20 C12 20 19 15 20 11 C21 7 18 5 16 6" />
+    <line x1="12" y1="20" x2="12" y2="8" strokeWidth="1" opacity="0.4" />
+  </svg>
+);
+
 const ArrowRightIcon = ({ size = 10, color = `${C.sage}80` }) => (
   <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 8h10" /><polyline points="9,4 13,8 9,12" />
@@ -1975,69 +1984,100 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
         }}>{day.title}</div>
       </div>
 
-      {/* Companion rows — teaching + practice as timeline rows */}
-      {day.companion && (day.companion.teaching || day.companion.practice) && <div style={{
-        fontFamily: F, fontSize: 9, fontWeight: 600,
-        letterSpacing: '0.12em', textTransform: 'uppercase',
-        color: C.teal, padding: '10px 18px 0',
-      }}>Mindfulness Practice</div>}
-      {day.companion && (day.companion.teaching || day.companion.practice) && [
-        day.companion.teaching && { type: 'teaching', data: day.companion.teaching, Icon: TeachingIcon, label: 'Teaching', title: day.companion.teaching.title },
-        day.companion.practice && { type: 'practice', data: day.companion.practice, Icon: PracticeIcon, label: 'Practice', title: day.companion.practice.title },
-      ].filter(Boolean).map((item) => (
-        <div
-          key={item.type}
-          onClick={() => {
-            trackEvent('companion_opened', { type: item.type, title: item.title, day_index: dayIndex });
-            onOpenPanel({
-              type: item.type,
-              data: item.data,
-              thumbId: `day_${dayIndex}_${item.type}`,
-            });
-          }}
-          style={{
-            display: 'flex', alignItems: 'flex-start', gap: 10,
-            padding: '9px 18px 5px',
-            cursor: 'pointer',
-            background: `${C.teal}06`,
-            transition: 'background 0.2s',
-            WebkitTapHighlightColor: 'transparent',
-          }}
-          onMouseEnter={e => e.currentTarget.style.background = `${C.teal}0c`}
-          onMouseLeave={e => e.currentTarget.style.background = `${C.teal}06`}
-        >
-          {/* Icon (replaces time column) */}
-          <span style={{
-            width: 44, flexShrink: 0, paddingTop: 2,
-            display: 'flex', justifyContent: 'center',
-          }}>
-            <item.Icon size={14} color={C.teal} />
-          </span>
-
-          {/* Dot */}
+      {/* Mindfulness Practice card */}
+      {day.companion && (day.companion.teaching || day.companion.practice) && (() => {
+        const entries = [
+          day.companion.teaching && { type: 'teaching', data: day.companion.teaching },
+          day.companion.practice && { type: 'practice', data: day.companion.practice },
+        ].filter(Boolean);
+        // Use the first entry's quote for the card
+        const quoteEntry = entries.find(e => e.data.quote);
+        return (
           <div style={{
-            width: 6, height: 6, borderRadius: '50%',
-            background: C.teal, opacity: 0.45,
-            flexShrink: 0, marginTop: 6,
-          }} />
+            margin: '0 18px 6px',
+            border: '1.5px solid #4A9B9F',
+            borderRadius: 14,
+            boxShadow: '0 2px 16px rgba(74,155,159,0.15)',
+            background: 'linear-gradient(150deg, #f5f1ea 0%, #ede9e0 100%)',
+            padding: '18px 18px 0',
+          }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+              <IconLotus size={38} color="#4A9B9F" />
+              <span style={{
+                fontFamily: F, fontSize: 9, fontWeight: 700,
+                letterSpacing: '0.22em', textTransform: 'uppercase',
+                color: '#4A9B9F',
+              }}>Mindfulness Practice</span>
+            </div>
 
-          {/* Content */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontFamily: F, fontSize: 9, fontWeight: 700,
-              letterSpacing: '0.12em', textTransform: 'uppercase',
-              color: C.teal, marginBottom: 2,
-            }}>{item.label}</div>
-            <div style={{
-              fontFamily: F_SERIF, fontSize: 14, fontWeight: 500,
-              color: C.ink, lineHeight: 1.3,
-            }}>{item.title}</div>
+            {/* Entries */}
+            {entries.map((item, idx) => (
+              <div
+                key={item.type}
+                onClick={() => {
+                  trackEvent('companion_opened', { type: item.type, title: item.data.title, day_index: dayIndex });
+                  onOpenPanel({ type: item.type, data: item.data, thumbId: `day_${dayIndex}_${item.type}` });
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '12px 0',
+                  borderTop: idx > 0 ? '1px solid rgba(61,90,107,0.1)' : 'none',
+                  cursor: 'pointer',
+                  WebkitTapHighlightColor: 'transparent',
+                }}
+              >
+                {item.type === 'teaching'
+                  ? <TeachingIcon size={16} color="#4A9B9F" />
+                  : <PracticeIcon size={16} color="#4A9B9F" />}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontFamily: F, fontSize: 8.5, fontWeight: 700,
+                    letterSpacing: '0.2em', textTransform: 'uppercase',
+                    color: '#4A9B9F', marginBottom: 2,
+                  }}>{item.type === 'teaching' ? 'Teaching' : 'Practice'}</div>
+                  <div style={{
+                    fontFamily: F_SERIF, fontSize: 19, fontWeight: 300,
+                    color: '#1a2530', lineHeight: 1.3,
+                  }}>{item.data.title}</div>
+                  {item.data.tradition && (
+                    <div style={{
+                      fontFamily: F, fontSize: 11, color: '#3D5A6B',
+                      opacity: 0.55, marginTop: 2,
+                    }}>{item.data.tradition}</div>
+                  )}
+                </div>
+                <span style={{ color: '#3D5A6B', opacity: 0.3, fontSize: 16, flexShrink: 0 }}>›</span>
+              </div>
+            ))}
+
+            {/* Quote */}
+            {quoteEntry && quoteEntry.data.quote && (
+              <div style={{
+                borderTop: '1px solid rgba(61,90,107,0.08)',
+                padding: '14px 0 18px',
+              }}>
+                <span style={{
+                  fontFamily: F_SERIF, fontSize: 28, color: '#D4A853',
+                  opacity: 0.6, lineHeight: 1,
+                }}>"</span>
+                <p style={{
+                  fontFamily: F_SERIF, fontSize: 14, fontStyle: 'italic',
+                  color: '#1a2530', opacity: 0.65, lineHeight: 1.65,
+                  margin: '-8px 0 0',
+                }}>{quoteEntry.data.quote}</p>
+                {quoteEntry.data.sources?.[0] && (
+                  <div style={{
+                    fontFamily: F, fontSize: 9, fontWeight: 600,
+                    letterSpacing: '0.14em', textTransform: 'uppercase',
+                    color: '#1a2530', opacity: 0.35, marginTop: 6,
+                  }}>{quoteEntry.data.sources[0]}</div>
+                )}
+              </div>
+            )}
           </div>
-
-          {/* Chevron */}
-          <Chevron open={false} color={`${C.sage}40`} />
-        </div>
-      ))}
+        );
+      })()}
 
       {/* Activity rows */}
       {day.timeline && day.timeline.map((b, i) => {
