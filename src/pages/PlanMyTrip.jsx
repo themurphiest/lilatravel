@@ -725,7 +725,7 @@ function StepWelcome({ onNext }) {
   return (
     <div style={{
       display: "flex", flexDirection: "column", alignItems: "center",
-      minHeight: "100vh", padding: "min(18vh, 120px) 20px 60px", textAlign: "center",
+      minHeight: "100vh", padding: "min(10vh, 120px) 20px 40px", textAlign: "center",
     }}>
       {/* Hero */}
       <div style={{
@@ -746,7 +746,7 @@ function StepWelcome({ onNext }) {
       {/* Three paths */}
       <div style={{
         display: "flex", flexDirection: "column", gap: 16,
-        marginTop: 36, width: "100%", maxWidth: 520,
+        marginTop: 24, width: "100%", maxWidth: 520,
       }}>
         {/* PRIMARY: DIY Path */}
         <WelcomePathCard
@@ -844,7 +844,7 @@ function StepWelcome({ onNext }) {
         opacity: visible ? 1 : 0,
         transition: "opacity 0.8s 0.6s",
         borderTop: `1px solid ${C.sage}12`,
-        paddingTop: 24, marginTop: 32, width: "100%", maxWidth: 520,
+        paddingTop: 20, marginTop: 24, width: "100%", maxWidth: 520,
         textAlign: "center",
       }}>
         <div style={{
