@@ -1965,6 +1965,7 @@ function DayFeedbackStrip({ dayIndex, feedback, onFeedback }) {
 
 function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityFeedback, feedback, onFeedback }) {
   const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
+  const [mindfulnessOpen, setMindfulnessOpen] = useState(true);
 
   return (
     <div style={{
@@ -2018,15 +2019,34 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
               pointerEvents: 'none',
             }} />
             <div style={{ position: 'relative' }}>
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+            {/* Header — clickable to toggle */}
+            <div
+              onClick={() => setMindfulnessOpen(prev => !prev)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                paddingBottom: mindfulnessOpen ? 6 : 14,
+                cursor: 'pointer', WebkitTapHighlightColor: 'transparent',
+              }}
+            >
               <IconLotus size={38} color="#4A9B9F" />
               <span style={{
                 fontFamily: F, fontSize: 9, fontWeight: 700,
                 letterSpacing: '0.22em', textTransform: 'uppercase',
-                color: '#4A9B9F',
+                color: '#4A9B9F', flex: 1,
               }}>Mindfulness Practice</span>
+              <span style={{
+                color: '#4A9B9F', opacity: 0.5, fontSize: 14, flexShrink: 0,
+                transition: 'transform 0.3s ease',
+                transform: mindfulnessOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+              }}>›</span>
             </div>
+
+            {/* Collapsible body */}
+            <div style={{
+              maxHeight: mindfulnessOpen ? 600 : 0,
+              overflow: 'hidden',
+              transition: 'max-height 0.35s ease',
+            }}>
 
             {/* Entries */}
             {entries.map((item, idx) => (
@@ -2096,6 +2116,7 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
                 </div>
               </div>
             )}
+            </div>{/* end collapsible body */}
             </div>{/* end relative content wrapper */}
           </div>
         );
