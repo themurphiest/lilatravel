@@ -2854,7 +2854,13 @@ export default function ItineraryResults() {
     if (loadingShared) return;
     if (!rawItinerary) { navigate('/plan'); return; }
     setTimeout(() => setVisible(true), 100);
-  }, [rawItinerary, navigate, loadingShared]);
+    // Register active trip in sessionStorage for global TripPill
+    const tripPath = shareToken ? `/trip/${shareToken}` : '/itinerary';
+    sessionStorage.setItem('lilaActiveTrip', JSON.stringify({
+      destination: formData?.destination || 'your trip',
+      path: tripPath,
+    }));
+  }, [rawItinerary, navigate, loadingShared, shareToken, formData]);
 
   // Parse itinerary — re-parses only when rawItinerary changes (i.e. after refinement)
   const itinerary = useMemo(() => {

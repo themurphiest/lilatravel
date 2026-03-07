@@ -72,6 +72,9 @@ import OlympicPeninsulaGuide from '@pages/guides/OlympicPeninsulaGuide';
 import VancouverIslandGuide from '@pages/guides/VancouverIslandGuide';
 import KauaiGuide from '@pages/guides/KauaiGuide';
 
+// ─── Global components ────────────────────────────────────────────────────
+import TripPill from '@components/TripPill';
+
 // ─── Itineraries ────────────────────────────────────────────────────────────
 import UtahTripGuide from './itineraries/utah/UtahTripGuide';
 // import BigSurItinerary from './itineraries/bigsur/BigSurItinerary';
@@ -97,6 +100,7 @@ export default function App() {
     }}>
       <BrowserRouter>
         <ScrollToTop />
+        <TripPill />
         <Routes>
           {/* Homepage */}
           <Route path="/" element={<HomePage />} />
