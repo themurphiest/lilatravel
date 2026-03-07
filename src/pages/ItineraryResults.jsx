@@ -2701,23 +2701,26 @@ export default function ItineraryResults() {
           .eq('share_token', shareToken)
           .single();
         console.log('[SharedTrip] supabase result', { data, error });
-        if (error || !data) { console.log('[SharedTrip] redirecting to /plan — error or no data'); navigate('/plan'); return; }
+        if (error || !data) { console.log('[SharedTrip] redirecting to /plan — error or no data'); setLoadingShared(false); navigate('/plan'); return; }
+        // Batch these together so the redirect guard sees both updates at once
         setRawItinerary(data.raw_itinerary);
         setItineraryId(data.id);
-        // Fetch form_data from the session separately
+        setLoadingShared(false);
+        // Fetch form_data separately — optional, never redirect on failure
         if (data.session_id) {
-          const { data: session } = await supabase
-            .from('sessions')
-            .select('form_data')
-            .eq('id', data.session_id)
-            .single();
-          if (session?.form_data) setFormData(session.form_data);
+          try {
+            const { data: session } = await supabase
+              .from('sessions')
+              .select('form_data')
+              .eq('id', data.session_id)
+              .single();
+            if (session?.form_data) setFormData(session.form_data);
+          } catch { /* form_data is optional — itinerary still loads without it */ }
         }
       } catch (e) {
         console.log('[SharedTrip] redirecting to /plan — caught exception', e);
-        navigate('/plan');
-      } finally {
         setLoadingShared(false);
+        navigate('/plan');
       }
     })();
   }, [shareToken]);
