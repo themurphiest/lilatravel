@@ -3062,13 +3062,13 @@ export default function ItineraryResults() {
       setPulse(null);
       setOverallNote('');
       trackEvent('refinement_completed', { iteration: nextIteration, duration_ms: Math.round(performance.now() - t0) });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       console.error('Refinement failed:', err);
       trackEvent('refinement_failed', { iteration: nextIteration, error_type: err.message || 'unknown' });
       setRefineError('Something went wrong refining your trip. Please try again.');
     } finally {
       setRefining(false);
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
     }
   };
 
