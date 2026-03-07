@@ -2070,25 +2070,29 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
             {/* Quote */}
             {quoteEntry && quoteEntry.data.quote && (
               <div style={{
+                display: 'flex', alignItems: 'flex-start', gap: 12,
                 borderTop: '1px solid rgba(61,90,107,0.08)',
                 padding: '14px 0 18px',
               }}>
                 <span style={{
                   fontFamily: F_SERIF, fontSize: 28, color: '#D4A853',
-                  opacity: 0.6, lineHeight: 1,
+                  opacity: 0.6, lineHeight: 1, flexShrink: 0,
+                  width: 16, textAlign: 'center',
                 }}>"</span>
-                <p style={{
-                  fontFamily: F_SERIF, fontSize: 14, fontStyle: 'italic',
-                  color: '#1a2530', opacity: 0.65, lineHeight: 1.65,
-                  margin: '-8px 0 0',
-                }}>{typeof quoteEntry.data.quote === 'string' ? quoteEntry.data.quote : quoteEntry.data.quote.text}</p>
-                {(quoteEntry.data.quote?.source || quoteEntry.data.sources?.[0]) && (
-                  <div style={{
-                    fontFamily: F, fontSize: 9, fontWeight: 600,
-                    letterSpacing: '0.14em', textTransform: 'uppercase',
-                    color: '#1a2530', opacity: 0.35, marginTop: 6,
-                  }}>{quoteEntry.data.quote?.source || quoteEntry.data.sources[0]}</div>
-                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{
+                    fontFamily: F_SERIF, fontSize: 14, fontStyle: 'italic',
+                    color: '#1a2530', opacity: 0.65, lineHeight: 1.65,
+                    margin: 0,
+                  }}>{typeof quoteEntry.data.quote === 'string' ? quoteEntry.data.quote : quoteEntry.data.quote.text}</p>
+                  {(quoteEntry.data.quote?.source || quoteEntry.data.sources?.[0]) && (
+                    <div style={{
+                      fontFamily: F, fontSize: 9, fontWeight: 600,
+                      letterSpacing: '0.14em', textTransform: 'uppercase',
+                      color: '#1a2530', opacity: 0.35, marginTop: 6,
+                    }}>{quoteEntry.data.quote?.source || quoteEntry.data.sources[0]}</div>
+                  )}
+                </div>
               </div>
             )}
             </div>{/* end relative content wrapper */}
