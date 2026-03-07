@@ -1439,7 +1439,6 @@ function CelestialDrawer({ isMobile }) {
   return (
     <div style={{
       position: "relative",
-      zIndex: 90,
       background: C.warmWhite,
       borderBottom: `1px solid ${C.stone}`,
     }}>
@@ -1503,9 +1502,11 @@ function CelestialDrawer({ isMobile }) {
 
       {/* Expandable content */}
       <div style={{
+        position: "relative", zIndex: 90,
         maxHeight: open ? contentHeight : 0,
         overflow: "hidden",
         transition: "max-height 0.5s ease",
+        background: C.warmWhite,
       }}>
         <div ref={contentRef} style={{
           padding: isMobile ? "16px 20px 24px" : "20px 52px 32px",
