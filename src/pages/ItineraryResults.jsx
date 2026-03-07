@@ -2001,21 +2001,22 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
             borderBottom: '1.5px solid rgba(74,155,159,0.35)',
             padding: '20px 24px 0',
           }}>
-            {/* Breathing overlay — sweeps sage color left-to-right like a breeze */}
+            {/* Breathing overlay — sage sweeps in, holds, then sweeps back */}
             <style>{`
               @keyframes practiceBreath {
-                0%   { opacity: 0; transform: translateX(-60%); }
-                8%   { opacity: 0.5; }
-                40%  { opacity: 0.3; transform: translateX(20%); }
-                60%  { opacity: 0; transform: translateX(60%); }
-                100% { opacity: 0; transform: translateX(60%); }
+                0%   { opacity: 0; transform: translateX(-80%); }
+                12%  { opacity: 0.7; transform: translateX(0%); }
+                45%  { opacity: 0.6; transform: translateX(5%); }
+                60%  { opacity: 0.7; transform: translateX(0%); }
+                75%  { opacity: 0; transform: translateX(-80%); }
+                100% { opacity: 0; transform: translateX(-80%); }
               }
             `}</style>
             <div aria-hidden style={{
               position: 'absolute', top: 0, bottom: 0,
               left: '-40%', width: '180%',
-              background: 'linear-gradient(to right, transparent 0%, #e2eeeb 30%, #edf5f3 50%, transparent 100%)',
-              animation: 'practiceBreath 12s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+              background: 'linear-gradient(to right, transparent 0%, #dceee9 25%, #e2eeeb 50%, #dceee9 75%, transparent 100%)',
+              animation: 'practiceBreath 16s ease-in-out infinite',
               pointerEvents: 'none',
             }} />
             <div style={{ position: 'relative' }}>
