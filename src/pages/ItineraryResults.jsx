@@ -2783,7 +2783,8 @@ export default function ItineraryResults() {
       try {
         const res = await fetch(`/api/get-shared-trip?token=${encodeURIComponent(shareToken)}`);
         if (!res.ok) {
-          console.log('[SharedTrip] API returned', res.status);
+          const errBody = await res.json().catch(() => ({}));
+          console.log('[SharedTrip] API returned', res.status, errBody);
           setLoadingShared(false);
           navigate('/plan');
           return;

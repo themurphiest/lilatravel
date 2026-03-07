@@ -21,7 +21,17 @@ export default async function handler(req, res) {
       .single();
 
     if (error || !data) {
-      return res.status(404).json({ error: 'Trip not found' });
+      console.error('get-shared-trip lookup failed:', { error, hasData: !!data, token });
+      return res.status(404).json({
+        error: 'Trip not found',
+        debug: {
+          supabaseError: error?.message || null,
+          supabaseCode: error?.code || null,
+          hasData: !!data,
+          hasUrl: !!process.env.VITE_SUPABASE_URL,
+          hasKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+        },
+      });
     }
 
     // Optionally fetch form_data from sessions
