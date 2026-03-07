@@ -1,9 +1,20 @@
 import { supabase } from './supabaseClient';
 
-// Stores a shareable snapshot of the itinerary and returns a URL
+// Returns a stable shareable URL — reuses the existing token if one exists
 export async function createShareableUrl({ itineraryId, rawItinerary, formData, destination }) {
   try {
-    // Update the itinerary row with a share token
+    // Check if this itinerary already has a share token
+    const { data: existing } = await supabase
+      .from('itineraries')
+      .select('share_token')
+      .eq('id', itineraryId)
+      .single();
+
+    if (existing?.share_token) {
+      return `${window.location.origin}/trip/${existing.share_token}`;
+    }
+
+    // No token yet — generate one and persist it
     const shareToken = crypto.randomUUID();
 
     const { error } = await supabase
@@ -15,7 +26,6 @@ export async function createShareableUrl({ itineraryId, rawItinerary, formData, 
 
     return `${window.location.origin}/trip/${shareToken}`;
   } catch (e) {
-    // Fallback: just use current URL
     console.error('createShareableUrl failed:', e);
     return window.location.href;
   }
