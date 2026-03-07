@@ -2035,7 +2035,8 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
                 color: '#4A9B9F', flex: 1,
               }}>Mindfulness Practice</span>
               <span style={{
-                color: '#4A9B9F', opacity: 0.5, fontSize: 14, flexShrink: 0,
+                color: '#4A9B9F', opacity: 0.7, fontSize: 18, flexShrink: 0,
+                fontWeight: 600,
                 transition: 'transform 0.3s ease',
                 transform: mindfulnessOpen ? 'rotate(90deg)' : 'rotate(0deg)',
               }}>›</span>
