@@ -763,15 +763,16 @@ export default function HomePage() {
                 fontSize: "clamp(15px, 2vw, 22px)", fontWeight: 600, color: C.darkInk,
                 lineHeight: 1.6, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 48,
               }}>
-                Travel is about finding<br />the moments of magic that<br />light up our souls.
+                Wild places have the<br />power to change us.
               </h2>
               <div style={{
                 fontFamily: "'Quicksand', sans-serif",
                 fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 400,
                 color: "#5a6a78", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
-                <p style={{ marginBottom: 28 }}>Moments when we find our truest and lightest selves.<br />Not weighed down by the past or an imagined future.<br />Connected to the entire universe through right now.</p>
-                <p style={{ marginBottom: 32 }}>We're reminded of a truth we know, but often forget.<br />That life is not about conquering the mystery.<br />It's about learning to dance with it.</p>
+                <p style={{ marginBottom: 20 }}>Traveling there is about finding the moments of magic that light up your soul — moments where we discover our truest and lightest selves.</p>
+                <p style={{ marginBottom: 20 }}>Not weighed down by the past or an imagined future. Connected to something larger than ourselves — right now.</p>
+                <p style={{ marginBottom: 32 }}>We're reminded of a truth we know but often forget. That life isn't about conquering the mystery. It's about learning to dance with it.</p>
                 <p style={{ marginBottom: 6 }}>
                   <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 3.2vw, 38px)", fontWeight: 400, fontStyle: "normal", color: C.skyBlue }}>Līlā</span>
                   {" "}<span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 2.2vw, 26px)", fontWeight: 300, fontStyle: "normal", color: "rgba(90,106,120,0.65)" }}>लीला</span>
@@ -794,36 +795,37 @@ export default function HomePage() {
                 fontSize: "clamp(15px, 2vw, 22px)", fontWeight: 600, color: "white",
                 lineHeight: 1.6, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 48,
               }}>
-                We help put people,<br />place and practice<br />together.
+                We build itineraries<br />that let them.
               </h2>
               <div style={{
                 fontFamily: "'Quicksand', sans-serif", fontSize: "clamp(13px, 1.4vw, 15px)",
                 fontWeight: 400, color: "rgba(255,255,255,0.55)", lineHeight: 2.1, letterSpacing: "0.03em",
               }}>
-                {[
-                  { label: "Sacred Terrain", icon: "△\uFE0E", color: "#7DB8A0" },
-                  { label: "Ancient Practices", icon: "◎\uFE0E", color: "#D4A853" },
-                  { label: "Elemental Encounters", icon: "✦\uFE0E", color: "#6BA4B8" },
-                ].map((callout, i) => (
-                  <div key={i} style={{
-                    display: "flex", alignItems: "center", gap: 10,
-                    marginBottom: i < 2 ? 20 : 0, paddingLeft: 16,
-                  }}>
-                    <span style={{ color: callout.color, fontSize: 18, lineHeight: 1, flexShrink: 0 }}>{callout.icon}</span>
-                    <span style={{
-                      fontFamily: "'Quicksand', sans-serif",
-                      fontSize: 10, fontWeight: 700,
-                      letterSpacing: "0.18em", textTransform: "uppercase",
-                      color: callout.color,
-                    }}>{callout.label}</span>
-                  </div>
-                ))}
-                <p style={{ marginTop: 36, marginBottom: 0, color: "rgba(255,255,255,0.7)" }}>
-                  Our tools and experts help you put it together.<br />Custom itineraries that match your intention.<br />We get rid of everything not worth your time.
-                </p>
-                <p style={{ marginTop: 28, marginBottom: 0, color: "rgba(255,255,255,0.7)" }}>
-                  Not really travel agents.<br />More like a local friend giving you the shortlist.<br />You can just focus on dancing with the mystery.
-                </p>
+                <p style={{ marginBottom: 20, color: "rgba(255,255,255,0.7)" }}>We put people, place and practice together.</p>
+                <p style={{ marginBottom: 20, color: "rgba(255,255,255,0.7)" }}>Built around the terrain, the elements, and the wisdom traditions that have understood these places for centuries.</p>
+                <p style={{ marginBottom: 20, color: "rgba(255,255,255,0.7)" }}>Custom itineraries built around your intention. We cut everything that isn't worth your time.</p>
+                <p style={{ marginBottom: 0, color: "rgba(255,255,255,0.7)" }}>DIY or full service. Solo or group. Your trip, your way.</p>
+
+                <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 28, marginTop: 36 }}>
+                  {[
+                    { label: "Sacred Terrain", icon: "△\uFE0E", color: "#7DB8A0" },
+                    { label: "Ancient Practices", icon: "◎\uFE0E", color: "#D4A853" },
+                    { label: "Elemental Encounters", icon: "✦\uFE0E", color: "#6BA4B8" },
+                  ].map((callout, i) => (
+                    <div key={i} style={{
+                      display: "flex", alignItems: "center", gap: 10,
+                      marginBottom: i < 2 ? 20 : 0, paddingLeft: 16,
+                    }}>
+                      <span style={{ color: callout.color, fontSize: 18, lineHeight: 1, flexShrink: 0 }}>{callout.icon}</span>
+                      <span style={{
+                        fontFamily: "'Quicksand', sans-serif",
+                        fontSize: 10, fontWeight: 700,
+                        letterSpacing: "0.18em", textTransform: "uppercase",
+                        color: callout.color,
+                      }}>{callout.label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </FadeIn>
           </div>
