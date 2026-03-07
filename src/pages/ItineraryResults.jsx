@@ -1995,7 +1995,8 @@ function DayCard({ day, dayIndex = 0, onOpenPanel, activityFeedback, onActivityF
         return (
           <div style={{
             background: 'linear-gradient(150deg, #f5f1ea 0%, #ede9e0 100%)',
-            borderBottom: '1px solid rgba(74,155,159,0.2)',
+            borderTop: '1.5px solid rgba(74,155,159,0.35)',
+            borderBottom: '1.5px solid rgba(74,155,159,0.35)',
             padding: '20px 24px 0',
           }}>
             {/* Header */}
