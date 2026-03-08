@@ -779,7 +779,7 @@ export default function HomePage() {
                   {" "}<span style={{ color: "rgba(90,106,120,0.6)", fontSize: "clamp(13px, 1.5vw, 15px)" }}>/lee·lah/</span>
                 </p>
                 <p style={{ marginBottom: 0, color: "#5a6a78" }}>
-                  A Hindu concept meaning <span style={{ color: C.skyBlue }}>"divine or cosmic play"</span>.<br />It suggests life is like a dance — joyous and light.<br />Learning to live this way is our living practice.
+                  A Hindu concept meaning <span style={{ color: C.skyBlue, fontWeight: 600 }}>"divine or cosmic play"</span>.<br />It suggests life is like a dance — joyous and light.<br />Learning to live this way is our living practice.
                 </p>
               </div>
             </FadeIn>
